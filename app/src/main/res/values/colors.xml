@@ -13,4 +13,10 @@
     <color name="btn_color">#804A8C74</color>
     <color name="gray">#b5b5b5</color>
     <color name="gray_light">#F5F5F5</color>
+
+    <color name="verde_menta_1">#2E594A</color>
+    <color name="verde_menta_2">#4A8C74</color>
+    <color name="verde_menta_3">#80BFA8</color>
+    <color name="verde_menta_4">#95BFB0</color>
+    <color name="verde_menta_5">#BFD9CF</color>
 </resources>

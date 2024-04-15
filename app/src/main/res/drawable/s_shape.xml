@@ -1,0 +1,23 @@
+<!-- Forma de arco en el pantalla login -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item>
+    <shape
+        android:shape="rectangle">
+        <solid android:color="#4A8C74"/>
+        <corners android:topLeftRadius="0dp"
+            android:topRightRadius="0dp"
+            android:bottomLeftRadius="0dp"
+            android:bottomRightRadius="75dp"/>
+    </shape>
+</item>
+
+<item android:top="350dp">
+    <shape
+        android:shape="rectangle">
+        <solid android:color="#FFFFFF"/>
+        <corners
+            android:topLeftRadius="50dp"
+            android:topRightRadius="50dp"/>
+    </shape>
+</item>
+</layer-list>
