@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Nueva paleta de colores -->
+    <!-- Para el login -->
+    <color name="verde_app">#4A8C74</color>
+    <color name="btn_color">#804A8C74</color>
+    <color name="gray">#b5b5b5</color>
+    <color name="gray_light">#F5F5F5</color>
 </resources>

@@ -13,10 +13,13 @@
         android:theme="@style/Theme.FacturaElectronica"
         tools:targetApi="31">
         <activity
+            android:name="ReClienteActivity"
+            android:exported="false" />
+        <activity
             android:name=".LogoActivity"
             android:exported="false" />
         <activity
-            android:name=".ReClienteActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
