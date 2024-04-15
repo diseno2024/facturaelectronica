@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#2E594A"
+    app:circularflow_defaultRadius="50dp"
+    tools:context=".ReClienteActivity">
+
+
+    <view
+        android:id="@+id/barraSup"
+        class="com.google.android.material.appbar.AppBarLayout"
+        android:layout_width="411dp"
+        android:layout_height="67dp"
+        android:layout_marginBottom="665dp"
+        android:background="#4A8C74"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="73dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#4A8C74"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:text="g"
+        android:textColor="#4A8C74"
+        app:icon="?attr/actionModeCloseDrawable"
+        app:iconPadding="0dp"
+        app:iconSize="40dp"
+        app:layout_constraintStart_toStartOf="@+id/barraSup"
+        app:layout_constraintTop_toTopOf="@+id/barraSup" />
+
+    <Button
+        android:id="@+id/btnCancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="632dp"
+        android:layout_marginEnd="260dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#4A8C74"
+        android:text="Cancelar"
+        android:textColor="@color/white"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/btnRegistrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="632dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#4A8C74"
+        android:text="Registrar"
+        android:textColor="@color/white"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/btnCancelar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="48dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="9dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barraSup"
+        app:srcCompat="@drawable/add_person" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="267dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="40dp"
+        android:text="Registrar Cliente"
+        android:textColor="#2E594A"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barraSup" />
+
+    <View
+        android:id="@+id/linea"
+        android:layout_width="355dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
+        android:background="#2E594A"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <view
+        android:id="@+id/fondoForm"
+        class="androidx.appcompat.widget.ActionMenuView"
+        android:layout_width="373dp"
+        android:layout_height="515dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="12dp"
+
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/fondo_form"
+        app:layout_constraintBottom_toTopOf="@+id/btnCancelar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linea"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <TextView
+        android:id="@+id/textNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="25dp"
+        android:text="Nombre"
+        android:textColor="#2E594A"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/nombre"
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toTopOf="@+id/fondoForm" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/nombre"
+        android:layout_width="310dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="25dp"
+
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toTopOf="@+id/textNombre">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="310dp"
+            android:layout_height="44dp"
+            android:background="#BFD9CF" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <TextView
+        android:id="@+id/textNit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginBottom="30dp"
+        android:text="NIT"
+        android:textColor="#2E594A"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/nit"
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toTopOf="@id/nombre" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/nit"
+        android:layout_width="310dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toTopOf="@+id/textNit">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="310dp"
+            android:layout_height="44dp"
+            android:background="#BFD9CF" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textContri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:layout_marginTop="10dp"
+        android:text="Tipo de Contribuyente"
+        android:textColor="#2E594A"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toBottomOf="@+id/nit" />
+
+    <Spinner
+        android:id="@+id/contribuyente"
+        android:layout_width="308dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:background="#BFD9CF"
+        android:pointerIcon="arrow"
+        android:spinnerMode="dropdown"
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toBottomOf="@+id/textContri" />
+
+    <TextView
+        android:id="@+id/textEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:text="Correo Electrónico"
+        android:textColor="#2E594A"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/email"
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toTopOf="@id/contribuyente" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email"
+        android:layout_width="310dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="35dp"
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toTopOf="@+id/textEmail">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="310dp"
+            android:layout_height="44dp"
+            android:background="#BFD9CF" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textDirec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="15dp"
+        android:text="Dirección"
+        android:textColor="#2E594A"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toBottomOf="@id/email"
+        app:layout_constraintTop_toTopOf="@id/email" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/direccion"
+        android:layout_width="310dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="35dp"
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toTopOf="@+id/textDirec">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="310dp"
+            android:layout_height="44dp"
+            android:background="#BFD9CF" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textTelefono"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="15dp"
+        android:text="Telefono"
+        android:textColor="#2E594A"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toBottomOf="@id/direccion"
+        app:layout_constraintTop_toTopOf="@id/direccion" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/telefono"
+        android:layout_width="310dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="35dp"
+        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintTop_toTopOf="@+id/textTelefono">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="310dp"
+            android:layout_height="44dp"
+            android:background="#BFD9CF" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
