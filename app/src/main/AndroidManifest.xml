@@ -13,7 +13,7 @@
         android:theme="@style/Theme.FacturaElectronica"
         tools:targetApi="31">
         <activity
-            android:name=".MenuActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
             android:name=".ReClienteActivity"
@@ -22,7 +22,7 @@
             android:name=".LogoActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".MenuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
