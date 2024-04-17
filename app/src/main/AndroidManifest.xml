@@ -22,6 +22,9 @@
             android:name=".LogoActivity"
             android:exported="false" />
         <activity
+            android:name=".RestauracionActivity"
+            android:exported="false" />
+        <activity
             android:name=".MenuActivity"
             android:exported="true">
             <intent-filter>
