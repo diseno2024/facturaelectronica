@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">FacturaElectronica</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string-array name="frecuencia_options">
+        <item>Diario</item>
+        <item>Semanal</item>
+        <item>Mensual</item>
+    </string-array>
 </resources>
+

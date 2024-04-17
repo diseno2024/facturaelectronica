@@ -115,7 +115,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <view
-        android:id="@+id/fondoForm"
+        android:id="@+id/fondoDato"
         class="androidx.appcompat.widget.ActionMenuView"
         android:layout_width="373dp"
         android:layout_height="515dp"
@@ -143,8 +143,8 @@
         android:textColor="#2E594A"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/nombre"
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
-        app:layout_constraintTop_toTopOf="@+id/fondoForm" />
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toTopOf="@+id/fondoDato" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nombre"
@@ -153,7 +153,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="25dp"
 
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
         app:layout_constraintTop_toTopOf="@+id/textNombre">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -175,7 +175,7 @@
         android:textColor="#2E594A"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/nit"
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
         app:layout_constraintTop_toTopOf="@id/nombre" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -184,7 +184,7 @@
         android:layout_height="42dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
         app:layout_constraintTop_toTopOf="@+id/textNit">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -203,7 +203,7 @@
         android:text="Tipo de Contribuyente"
         android:textColor="#2E594A"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
         app:layout_constraintTop_toBottomOf="@+id/nit" />
 
     <Spinner
@@ -215,7 +215,7 @@
         android:background="#BFD9CF"
         android:pointerIcon="arrow"
         android:spinnerMode="dropdown"
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
         app:layout_constraintTop_toBottomOf="@+id/textContri" />
 
     <TextView
@@ -229,7 +229,7 @@
         android:textColor="#2E594A"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/email"
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
         app:layout_constraintTop_toTopOf="@id/contribuyente" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -238,7 +238,7 @@
         android:layout_height="42dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="35dp"
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
         app:layout_constraintTop_toTopOf="@+id/textEmail">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -258,7 +258,7 @@
         android:text="Dirección"
         android:textColor="#2E594A"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
         app:layout_constraintTop_toBottomOf="@id/email"
         app:layout_constraintTop_toTopOf="@id/email" />
 
@@ -268,7 +268,7 @@
         android:layout_height="42dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="35dp"
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
         app:layout_constraintTop_toTopOf="@+id/textDirec">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -288,7 +288,7 @@
         android:text="Telefono"
         android:textColor="#2E594A"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
         app:layout_constraintTop_toBottomOf="@id/direccion"
         app:layout_constraintTop_toTopOf="@id/direccion" />
 
@@ -298,7 +298,7 @@
         android:layout_height="42dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="35dp"
-        app:layout_constraintStart_toStartOf="@+id/fondoForm"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
         app:layout_constraintTop_toTopOf="@+id/textTelefono">
 
         <com.google.android.material.textfield.TextInputEditText

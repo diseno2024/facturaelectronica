@@ -9,11 +9,20 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import android.widget.Button
+import android.content.Intent
 import androidx.compose.ui.tooling.preview.Preview
 
 class MenuActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+
+        val botonRespaldo = findViewById<Button>(R.id.Respaldo)
+        botonRespaldo.setOnClickListener {
+            val intent = Intent(this, BackupActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }
