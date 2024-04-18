@@ -22,7 +22,7 @@
             android:name=".ReClienteActivity"
             android:exported="false" />
         <activity
-            android:name=".LogoActivity"
+            android:name=".ReDatosContribuyenteActivity"
             android:exported="false" />
         <activity
             android:name=".BackupActivity"
@@ -31,7 +31,7 @@
             android:name=".RestauracionActivity"
             android:exported="false" />
         <activity
-            android:name=".ReDatosContribuyenteActivity"
+            android:name=".LogoActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
