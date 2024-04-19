@@ -58,7 +58,7 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/textRespaldoDatos"
+        android:id="@+id/textContribuyentes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
@@ -87,7 +87,7 @@
         android:layout_marginTop="12dp"
         android:contentDescription="Icono de respaldo de datos"
         android:src="@drawable/backup_icon"
-        app:layout_constraintEnd_toStartOf="@+id/textRespaldoDatos"
+        app:layout_constraintEnd_toStartOf="@+id/textContribuyentes"
         app:layout_constraintHorizontal_bias="0.731"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"

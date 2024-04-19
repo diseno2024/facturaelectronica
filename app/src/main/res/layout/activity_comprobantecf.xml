@@ -106,7 +106,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/btnRegistrar6"
+        android:id="@+id/btnSeleccionarContribuyente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="236dp"
@@ -246,7 +246,7 @@
         app:layout_constraintTop_toBottomOf="@+id/bordeSup" />
 
     <TextView
-        android:id="@+id/textRespaldoDatos"
+        android:id="@+id/textContribuyentes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="84dp"
@@ -342,12 +342,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textRespaldoDatos1"
+        android:id="@+id/textLetraLogo"
         android:layout_width="92dp"
         android:layout_height="35dp"
         android:layout_marginTop="136dp"
         android:layout_marginEnd="284dp"
-        android:text="Emision"
+        android:text="Emisor"
         android:textColor="#000"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -359,7 +359,7 @@
         android:layout_height="35dp"
         android:layout_marginTop="324dp"
         android:layout_marginEnd="276dp"
-        android:text="Reseptor"
+        android:text="Receptor"
         android:textColor="#000"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"

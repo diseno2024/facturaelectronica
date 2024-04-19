@@ -41,7 +41,11 @@
             android:exported="false" />
         <activity
             android:name=".Comprobantecf"
+            android:exported="true" />
+        <activity
+            android:name=".InfoReceptoresActivity"
             android:exported="true" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
