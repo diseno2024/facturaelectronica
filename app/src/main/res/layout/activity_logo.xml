@@ -116,7 +116,7 @@
         app:srcCompat="@drawable/icons8_image_upload_96" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/atras"
         android:layout_width="57dp"
         android:layout_height="51dp"
         android:layout_marginStart="8dp"

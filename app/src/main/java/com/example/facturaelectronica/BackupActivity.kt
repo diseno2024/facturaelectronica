@@ -8,9 +8,9 @@ import android.widget.ArrayAdapter
 import android.widget.AdapterView
 import android.view.View
 import android.widget.Toast
+import android.widget.ImageButton
 import android.widget.Button
 import android.widget.EditText
-import android.util.Log
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
@@ -87,9 +87,9 @@ class BackupActivity : AppCompatActivity() {
             )
             timePickerDialog.show()
         }
-        val buttonAtras = findViewById<Button>(R.id.button1)
+
+        val buttonAtras = findViewById<ImageButton>(R.id.atras)
         buttonAtras.setOnClickListener {
-            // Iniciar la actividad MenuActivity
             val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
         }

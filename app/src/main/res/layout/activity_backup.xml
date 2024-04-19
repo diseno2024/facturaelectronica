@@ -10,7 +10,7 @@
         android:id="@+id/btnRegistrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="664dp"
+        android:layout_marginTop="672dp"
         android:backgroundTint="#4A8C74"
         android:text="Realizar Respaldo"
         android:textColor="@color/white"
@@ -43,25 +43,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="71dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="-5dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#4A8C74"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            android:text="atras"
-            android:textColor="#4A8C74"
-            app:icon="?attr/actionModeCloseDrawable"
-            app:iconPadding="0dp"
-            app:iconSize="40dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+        <ImageButton
+            android:id="@+id/atras"
+            android:layout_width="57dp"
+            android:layout_height="51dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/click_effect"
+            android:clickable="true"
+            android:contentDescription="bottom"
+            android:focusable="true"
+            app:srcCompat="@drawable/icons8_back_arrow_48"
+            app:tint="#FFFFFF" />
     </FrameLayout>
 
     <TextView
@@ -264,8 +257,8 @@
     </FrameLayout>
 
     <RelativeLayout
-        android:layout_width="217dp"
-        android:layout_height="139dp"
+        android:layout_width="283dp"
+        android:layout_height="132dp"
         android:layout_centerInParent="true"
         android:layout_marginTop="508dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -277,8 +270,12 @@
             android:id="@+id/buttonSelectTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="30dp"
             android:backgroundTint="#4A8C74"
             android:text="Seleccionar Hora"
             android:textColor="@color/white"
@@ -289,11 +286,14 @@
 
         <EditText
             android:id="@+id/editTextSelectedTime"
-            android:layout_width="186dp"
-            android:layout_height="55dp"
+            android:layout_width="187dp"
+            android:layout_height="61dp"
             android:layout_below="@id/buttonSelectTime"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="11dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="16dp"
             android:cursorVisible="false"
             android:focusable="false"
             android:inputType="none"
