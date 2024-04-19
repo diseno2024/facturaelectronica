@@ -73,6 +73,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // Iniciar ResMensualesActivity al seleccionar "Resúmenes mensuales"
                 val intent = Intent(this, ResMensualActivity::class.java)
                 startActivity(intent)
+                finish()
                 return true
             }
 
@@ -88,6 +89,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // Iniciar Comprobantecf al seleccionar "Consumidor final"
                 val intent = Intent(this, Comprobantecf::class.java)
                 startActivity(intent)
+                finish()
                 return true
             }
 
@@ -95,6 +97,8 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // Iniciar ReClienteActivity al seleccionar "Registro del cliente"
                 val intent = Intent(this, ReClienteActivity::class.java)
                 startActivity(intent)
+                finish()
+                return true
             }
 
             R.id.nav_logo -> {
