@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="355dp"
+        android:layout_height="1dp"
+        android:background="#2E594A"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="128dp"
+        tools:ignore="MissingConstraints" />
+
+    <view
+        android:id="@+id/barraSup"
+        class="com.google.android.material.appbar.AppBarLayout"
+        android:layout_width="411dp"
+        android:layout_height="67dp"
+        android:layout_marginBottom="665dp"
+        android:background="#4A8C74"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/button_back"
+        android:layout_width="73dp"
+        android:layout_height="48dp"
+        android:backgroundTint="#4A8C74"
+        app:icon="?attr/actionModeCloseDrawable"
+        app:iconPadding="0dp"
+        app:iconSize="40dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="7dp"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="48dp"
+        android:layout_height="51dp"
+        app:srcCompat="#FFFFFF"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="70dp"
+        tools:srcCompat="@drawable/description_24px" />
+
+    <view
+        android:id="@+id/fondoFormConsFinal"
+        class="androidx.appcompat.widget.ActionMenuView"
+        android:layout_width="373dp"
+        android:layout_height="515dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="12dp"
+
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/fondo_form"
+        app:layout_constraintBottom_toTopOf="@+id/button_cancelar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ScrollView
+        android:layout_width="346dp"
+        android:layout_height="464dp"
+        app:layout_constraintBottom_toTopOf="@+id/fondoFormConsFinal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fondoFormConsFinal"
+        app:layout_constraintVertical_bias="0.5">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="38dp"
+            tools:layout_editor_absoluteY="-49dp">
+
+            <TextView
+                android:id="@+id/fecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha"
+                android:textColor="#2E594A"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.243"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.022" />
+
+            <View
+                android:id="@+id/input_fecha"
+                android:layout_width="195dp"
+                android:layout_height="44dp"
+                android:background="#BFD9CF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.894"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.011" />
+
+            <TextView
+                android:id="@+id/nombre_cliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre de la Cliente"
+                android:textColor="#2E594A"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.054" />
+
+            <View
+                android:id="@+id/input_nombre_cliente"
+                android:layout_width="340dp"
+                android:layout_height="36dp"
+                android:background="#BFD9CF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.079" />
+
+            <TextView
+                android:id="@+id/dui_nit_cliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NIT/DUI del Cliente"
+                android:textColor="#2E594A"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.114" />
+
+            <View
+                android:id="@+id/input_nit_dui_cliente"
+                android:layout_width="340dp"
+                android:layout_height="36dp"
+                android:background="#BFD9CF"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.14" />
+
+            <TextView
+                android:id="@+id/direccion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Direccion"
+                android:textColor="#2E594A"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.178" />
+
+            <View
+                android:id="@+id/input_direccion"
+                android:layout_width="340dp"
+                android:layout_height="36dp"
+                android:background="#BFD9CF"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.204" />
+
+            <TextView
+                android:id="@+id/orden_de_compra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Orden de Compra"
+                android:textColor="#2E594A"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.249" />
+
+            <View
+                android:id="@+id/input_orden_compra"
+                android:layout_width="154dp"
+                android:layout_height="36dp"
+                android:background="#BFD9CF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.968"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.245" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                app:srcCompat="@android:drawable/arrow_down_float"
+                tools:layout_editor_absoluteX="303dp"
+                tools:layout_editor_absoluteY="193dp"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="37dp"
+                android:layout_height="36dp"
+                app:srcCompat="@android:drawable/arrow_down_float"
+                tools:layout_editor_absoluteX="303dp"
+                tools:layout_editor_absoluteY="110dp"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="40dp"
+                android:layout_height="43dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.947"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.011"
+                app:srcCompat="@android:drawable/ic_menu_today" />
+
+            <View
+                android:id="@+id/separator2"
+                android:layout_width="355dp"
+                android:layout_height="1dp"
+                android:background="#2E594A"
+                tools:layout_editor_absoluteX="-4dp"
+                tools:layout_editor_absoluteY="389dp"
+                tools:ignore="MissingConstraints" />
+
+            <view
+                android:id="@+id/fondoFormConsFinal2"
+                class="androidx.appcompat.widget.ActionMenuView"
+                android:layout_width="356dp"
+                android:layout_height="417dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="404dp"
+
+                android:layout_marginEnd="25dp"
+                android:background="@color/gray_light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/cantidad"
+                android:layout_width="95dp"
+                android:layout_height="28dp"
+                android:text="Cantidad"
+                android:textColor="#2E594A"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.047"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.304" />
+
+            <View
+                android:id="@+id/input_cantidad"
+                android:layout_width="100dp"
+                android:layout_height="34dp"
+                android:background="#BFD9CF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.301" />
+
+            <TextView
+                android:id="@+id/descripcion"
+                android:layout_width="113dp"
+                android:layout_height="28dp"
+                android:text="Descripcion"
+                android:textColor="#2E594A"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.047"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.333" />
+
+            <View
+                android:id="@+id/input_descripcion"
+                android:layout_width="325dp"
+                android:layout_height="36dp"
+                android:background="#BFD9CF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.571"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.364" />
+
+            <TextView
+                android:id="@+id/precio_unitario"
+                android:layout_width="135dp"
+                android:layout_height="36dp"
+                android:text="Precio Unitario"
+                android:textColor="#2E594A"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.398" />
+
+<!--            Continuar-->
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+    <Button
+        android:id="@+id/button_cancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4A8C74"
+        android:text="Cancelar"
+        tools:layout_editor_absoluteX="56dp"
+        tools:layout_editor_absoluteY="667dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/button_generar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4A8C74"
+        android:text="Generar"
+        tools:layout_editor_absoluteX="254dp"
+        tools:layout_editor_absoluteY="667dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/title_factura"
+        android:layout_width="292dp"
+        android:layout_height="36dp"
+        android:text="Factura Consumidor Final"
+        android:textColor="#2E594A"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="103dp"
+        tools:layout_editor_absoluteY="85dp"
+        tools:ignore="MissingConstraints" />
+</androidx.constraintlayout.widget.ConstraintLayout>
