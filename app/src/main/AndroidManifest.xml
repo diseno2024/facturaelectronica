@@ -46,6 +46,9 @@
             android:name=".InfoEmisorActivity"
             android:exported="false" />
         <activity
+            android:name=".AgregarArticuloActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true" >
 
