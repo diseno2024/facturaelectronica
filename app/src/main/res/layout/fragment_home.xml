@@ -14,6 +14,8 @@
         android:id="@+id/frame_container">
     </FrameLayout>
 
+    <include layout="@layout/tabla"/>
+    <!-- Ejemplo de como quedaria con facturas -->
 
     <!-- BottomNavigationView -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
