@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,9 +11,9 @@
         android:layout_width="355dp"
         android:layout_height="1dp"
         android:background="#2E594A"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="128dp"
-        tools:ignore="MissingConstraints" />
+        tools:layout_editor_absoluteY="128dp" />
 
     <view
         android:id="@+id/barraSup"
@@ -36,9 +37,9 @@
         app:icon="?attr/actionModeCloseDrawable"
         app:iconPadding="0dp"
         app:iconSize="40dp"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="7dp"
-        tools:ignore="MissingConstraints" />
+        tools:layout_editor_absoluteY="7dp" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -220,18 +221,18 @@
                 android:layout_width="37dp"
                 android:layout_height="37dp"
                 app:srcCompat="@android:drawable/arrow_down_float"
+                tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="303dp"
-                tools:layout_editor_absoluteY="193dp"
-                tools:ignore="MissingConstraints" />
+                tools:layout_editor_absoluteY="193dp" />
 
             <ImageView
                 android:id="@+id/imageView4"
                 android:layout_width="37dp"
                 android:layout_height="36dp"
                 app:srcCompat="@android:drawable/arrow_down_float"
+                tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="303dp"
-                tools:layout_editor_absoluteY="110dp"
-                tools:ignore="MissingConstraints" />
+                tools:layout_editor_absoluteY="110dp" />
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -250,9 +251,9 @@
                 android:layout_width="355dp"
                 android:layout_height="1dp"
                 android:background="#2E594A"
+                tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="-4dp"
-                tools:layout_editor_absoluteY="389dp"
-                tools:ignore="MissingConstraints" />
+                tools:layout_editor_absoluteY="389dp" />
 
             <view
                 android:id="@+id/fondoFormConsFinal2"
@@ -430,18 +431,18 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#4A8C74"
                 android:text="Agregar"
+                tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="7dp"
-                tools:layout_editor_absoluteY="762dp"
-                tools:ignore="MissingConstraints" />
+                tools:layout_editor_absoluteY="762dp" />
 
             <View
                 android:id="@+id/separator3"
                 android:layout_width="355dp"
                 android:layout_height="1dp"
                 android:background="#2E594A"
+                tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="-4dp"
-                tools:layout_editor_absoluteY="834dp"
-                tools:ignore="MissingConstraints" />
+                tools:layout_editor_absoluteY="834dp" />
 
             <view
                 android:id="@+id/fondoFormConsFinal3"
@@ -478,10 +479,11 @@
                 app:layout_constraintVertical_bias="0.5">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:layout_editor_absoluteX="38dp"
-                    tools:layout_editor_absoluteY="-49dp"/>
+                    tools:layout_editor_absoluteY="-49dp" />
 
             </ScrollView>
 
@@ -628,9 +630,9 @@
                 android:text="Cant."
                 android:textColor="#D9D9D9"
                 android:textSize="20dp"
+                tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="868dp"
-                tools:ignore="MissingConstraints" />
+                tools:layout_editor_absoluteY="868dp" />
 
             <TextView
                 android:id="@+id/textView_descripcion"
@@ -639,9 +641,9 @@
                 android:text="Descripción"
                 android:textColor="#D9D9D9"
                 android:textSize="20dp"
+                tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="75dp"
-                tools:layout_editor_absoluteY="868dp"
-                tools:ignore="MissingConstraints" />
+                tools:layout_editor_absoluteY="868dp" />
 
             <TextView
                 android:id="@+id/textView_precio"
@@ -650,10 +652,9 @@
                 android:text="Precio Unitario"
                 android:textColor="#D9D9D9"
                 android:textSize="20dp"
+                tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="192dp"
-                tools:layout_editor_absoluteY="868dp"
-                tools:ignore="MissingConstraints" />
-
+                tools:layout_editor_absoluteY="868dp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -666,9 +667,9 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#4A8C74"
         android:text="Cancelar"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="56dp"
-        tools:layout_editor_absoluteY="667dp"
-        tools:ignore="MissingConstraints" />
+        tools:layout_editor_absoluteY="667dp" />
 
     <Button
         android:id="@+id/button_generar"
@@ -676,9 +677,9 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#4A8C74"
         android:text="Generar"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="254dp"
-        tools:layout_editor_absoluteY="667dp"
-        tools:ignore="MissingConstraints" />
+        tools:layout_editor_absoluteY="667dp" />
 
     <TextView
         android:id="@+id/title_factura"
@@ -688,7 +689,7 @@
         android:textColor="#2E594A"
         android:textSize="24sp"
         android:textStyle="bold"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="103dp"
-        tools:layout_editor_absoluteY="85dp"
-        tools:ignore="MissingConstraints" />
+        tools:layout_editor_absoluteY="85dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
