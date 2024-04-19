@@ -19,7 +19,7 @@
             android:name=".MenuActivity"
             android:exported="false" />
         <activity
-            android:name=".ResMensualActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
             android:name=".ReClienteActivity"
@@ -34,7 +34,7 @@
             android:name=".RestauracionActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ResMensualActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

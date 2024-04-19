@@ -8,52 +8,60 @@
     tools:context=".ResMensualActivity">
 
     <View
-        android:id="@+id/view3"
+        android:id="@+id/brSuperior1"
         android:layout_width="411dp"
         android:layout_height="67dp"
         android:background="#4A8C74"
+        app:layout_constraintBottom_toTopOf="@+id/textResMensual"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/textResMensual"
         android:layout_width="239dp"
         android:layout_height="45dp"
-        android:layout_marginTop="92dp"
-        android:layout_marginEnd="50dp"
         android:gravity="center"
         android:text="Resumen Mensual"
         android:textColor="#4A8C74"
         android:textSize="28sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textMes"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="47dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="92dp"
+        app:layout_constraintHorizontal_bias="0.675"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.796" />
+
+    <ImageView
+        android:id="@+id/imgEstadistica"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
+        app:layout_constraintBottom_toTopOf="@+id/textAnio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.164"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.81"
         app:srcCompat="@drawable/estadistica" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/textAnio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="162dp"
         android:text="Año:"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imgFondo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.162"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.795" />
 
     <TextView
-        android:id="@+id/textView16"
+        android:id="@+id/textMes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="163dp"
@@ -61,40 +69,89 @@
         android:text="Mes:"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imgFondo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.843"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/imgFondo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="232dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/fondo" />
 
     <ImageButton
-        android:id="@+id/imageButton7"
+        android:id="@+id/btnDerecho"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:backgroundTint="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/flecha_correcta___d" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imgFondo"
+        app:layout_constraintVertical_bias="0.965"
+        android:src="@drawable/btn_derecho_selector"/>
 
     <ImageButton
-        android:id="@+id/imageButton8"
+        android:id="@+id/btnIzquierda"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
         android:backgroundTint="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnDerecho"
+        app:layout_constraintHorizontal_bias="0.079"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/flecha_correcta___i" />
+        app:layout_constraintTop_toTopOf="@+id/imgFondo"
+        app:layout_constraintVertical_bias="0.965"
+        android:src="@drawable/btn_izquierda_selector" />
+
+    <TextView
+        android:id="@+id/txtMes"
+        android:layout_width="110dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:textColor="#4A8C74"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/imgFondo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textMes"
+        app:layout_constraintTop_toBottomOf="@+id/textResMensual"
+        app:layout_constraintVertical_bias="0.358" />
+
+    <TextView
+        android:id="@+id/txtAnio"
+        android:layout_width="75dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/imgFondo"
+        app:layout_constraintEnd_toStartOf="@+id/textMes"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textAnio"
+        app:layout_constraintTop_toBottomOf="@+id/textResMensual"
+        app:layout_constraintVertical_bias="0.373" />
+
+    <ImageButton
+        android:id="@+id/btnMenu"
+        android:layout_width="57dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/brSuperior1"
+        app:srcCompat="@drawable/icons8_back_arrow_48" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
