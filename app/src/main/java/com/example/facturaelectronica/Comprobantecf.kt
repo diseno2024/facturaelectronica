@@ -27,4 +27,11 @@ class Comprobantecf : AppCompatActivity() {
         }
 
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed() // Llama al método onBackPressed() de la clase base
+        val intent = Intent(this, MenuActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }
