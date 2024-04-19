@@ -76,6 +76,13 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
 
+            R.id.nav_consumidor -> {
+                // Iniciar ComprobantecfActivity al seleccionar "Consumidor final"
+                val intent = Intent(this, Comprobantecf::class.java)
+                startActivity(intent)
+                return true
+            }
+
             R.id.nav_registro -> {
                 // Iniciar RegistroClienteActivity al seleccionar "Registro del cliente"
                 val intent = Intent(this, ReClienteActivity::class.java)
