@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FacturaElectronica"
         tools:targetApi="31">
         <activity
+            android:name=".GenerarCFActivity"
+            android:exported="false" />
+        <activity
             android:name=".ReDatosContribuyenteActivity"
             android:exported="false" />
         <activity
@@ -29,7 +32,7 @@
             android:exported="false" />
         <activity
             android:name=".BackupActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".RestauracionActivity"
             android:exported="false" />
@@ -42,7 +45,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
