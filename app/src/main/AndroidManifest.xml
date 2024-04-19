@@ -34,9 +34,6 @@
             android:name=".RestauracionActivity"
             android:exported="false" />
         <activity
-            android:name=".LogoActivity"
-            android:exported="false"/>
-        <activity
             android:name=".ResMensualActivity"
             android:exported="true">
             <intent-filter>
