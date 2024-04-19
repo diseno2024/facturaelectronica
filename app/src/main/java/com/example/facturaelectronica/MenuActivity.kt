@@ -70,28 +70,44 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.nav_resumenes -> {
-                // Iniciar ResumenesMensualesActivity al seleccionar "Resúmenes mensuales"
+                // Iniciar ResMensualesActivity al seleccionar "Resúmenes mensuales"
                 val intent = Intent(this, ResMensualActivity::class.java)
                 startActivity(intent)
                 return true
             }
 
+            R.id.nav_credito -> {
+                //Iniciar Comprobantecf al selecciobar "Credito Fiscal"
+                val intent = Intent(this, GenerarCFActivity::class.java)
+                startActivity(intent)
+                finish()
+                return true
+            }
+
             R.id.nav_consumidor -> {
-                // Iniciar ComprobantecfActivity al seleccionar "Consumidor final"
+                // Iniciar Comprobantecf al seleccionar "Consumidor final"
                 val intent = Intent(this, Comprobantecf::class.java)
                 startActivity(intent)
                 return true
             }
 
             R.id.nav_registro -> {
-                // Iniciar RegistroClienteActivity al seleccionar "Registro del cliente"
+                // Iniciar ReClienteActivity al seleccionar "Registro del cliente"
                 val intent = Intent(this, ReClienteActivity::class.java)
                 startActivity(intent)
             }
 
             R.id.nav_logo -> {
-                // Iniciar SubirLogoActivity al seleccionar "Subir logo"
+                // Iniciar LogoActivity al seleccionar "Subir logo"
                 val intent = Intent(this, LogoActivity::class.java)
+                startActivity(intent)
+                finish()
+                return true
+            }
+
+            R.id.nav_DatosContribuyente -> {
+                //Iniciar ReDatosCntribuyenteActivity al selecionar "Datos Contribuyente"
+                val intent = Intent(this, ReDatosContribuyenteActivity::class.java)
                 startActivity(intent)
                 finish()
                 return true
