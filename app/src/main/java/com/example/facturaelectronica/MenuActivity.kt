@@ -17,6 +17,8 @@ import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.content.Intent
+import android.text.InputFilter
+import android.text.InputType
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
@@ -52,6 +54,42 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_crear_pin -> showCreatePinDialog()
 
+            R.id.nav_restauracion -> {
+                // Iniciar la actividad correspondiente para la restauración de datos
+                val intent = Intent(this, RestauracionActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+
+            R.id.nav_respaldo -> {
+                // Iniciar BackupActivity al seleccionar "Respaldo de datos"
+                val intent = Intent(this, BackupActivity::class.java)
+                startActivity(intent)
+                finish()
+                return true
+            }
+
+            R.id.nav_resumenes -> {
+                // Iniciar ResumenesMensualesActivity al seleccionar "Resúmenes mensuales"
+                val intent = Intent(this, ResMensualActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+
+            R.id.nav_registro -> {
+                // Iniciar RegistroClienteActivity al seleccionar "Registro del cliente"
+                val intent = Intent(this, ReClienteActivity::class.java)
+                startActivity(intent)
+            }
+
+            R.id.nav_logo -> {
+                // Iniciar SubirLogoActivity al seleccionar "Subir logo"
+                val intent = Intent(this, LogoActivity::class.java)
+                startActivity(intent)
+                finish()
+                return true
+            }
+
             R.id.nav_cerrar_sesion -> {
                 // Cerrar sesión: iniciar LoginActivity y finalizar MenuActivity
                 val intent = Intent(this, LoginActivity::class.java)
@@ -70,8 +108,8 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         builder.setTitle("Crear Nuevo PIN")
 
         val input = EditText(this)
-        input.inputType = android.text.InputType.TYPE_CLASS_NUMBER
-        input.filters = arrayOf(android.text.InputFilter.LengthFilter(6)) // Limita la entrada a 6 caracteres
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        input.filters = arrayOf(InputFilter.LengthFilter(6)) // Limita la entrada a 6 caracteres
         builder.setView(input)
 
         builder.setPositiveButton("Guardar") { dialog, _ ->
@@ -99,7 +137,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun loadPins(): MutableList<String> {
-        val sharedPreferences = getSharedPreferences(PIN_PREFS_NAME, Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences(PIN_PREFS_NAME, MODE_PRIVATE)
         val pinsString = sharedPreferences.getString("pins", null)
         return if (pinsString != null) {
             Gson().fromJson(pinsString, object : TypeToken<List<String>>() {}.type)
@@ -109,7 +147,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun savePins(pins: MutableList<String>) {
-        val sharedPreferences = getSharedPreferences(PIN_PREFS_NAME, Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences(PIN_PREFS_NAME, MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString("pins", Gson().toJson(pins))
         editor.apply()
