@@ -24,23 +24,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="73dp"
-        android:layout_height="48dp"
+    <ImageButton
+        android:id="@+id/atras"
+        android:layout_width="57dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
-        android:backgroundTint="#4A8C74"
-        android:insetLeft="0dp"
-        android:insetTop="0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        android:text="g"
-        android:textColor="#4A8C74"
-        app:icon="?attr/actionModeCloseDrawable"
-        app:iconPadding="0dp"
-        app:iconSize="40dp"
-        app:layout_constraintStart_toStartOf="@+id/barraSup"
-        app:layout_constraintTop_toTopOf="@+id/barraSup" />
+        android:background="@drawable/click_effect"
+        android:clickable="true"
+        android:contentDescription="bottom"
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icons8_back_arrow_48"
+        app:tint="#FFFFFF" />
 
     <Button
         android:id="@+id/btnCancelar"
