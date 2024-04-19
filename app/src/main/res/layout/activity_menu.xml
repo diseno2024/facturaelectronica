@@ -1,239 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:id="@+id/drawer_layout"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start"
+    tools:context=".MenuActivity">
 
-    <Button
-        android:id="@+id/contribuyente"
-        android:layout_width="234dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/btn__radius"
-        android:drawableLeft="@drawable/ic_person_add"
-        android:drawablePadding="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="Datos del contribuyente"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.455"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Titulo"
-        app:layout_constraintVertical_bias="0.97" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/Titulo"
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:id="@+id/toolbar"
+            android:elevation="4dp"
+            android:background="@color/verde_menta_2"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fragment_container"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Factura Eléctronica"
-        android:textColor="@color/verde_menta_2"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.132" />
+        android:layout_height="match_parent"
+        android:id="@+id/nav_view"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/nav_menu"
+        app:itemIconTint="@color/verde_menta_1"
+        app:itemTextColor="@color/verde_menta_2"/>
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="414dp"
-        android:layout_height="76dp"
-
-        android:background="@color/verde_menta_2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-    </FrameLayout>
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="375dp"
-        android:layout_height="1.5dp"
-        android:background="@color/verde_menta_2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/frameLayout"
-        app:layout_constraintVertical_bias="0.195" />
-
-    <Button
-        android:id="@+id/Restauracion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn__radius"
-        android:text="Restauración de Datos"
-        android:textColor="#FFFFFF"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:textStyle="bold"
-        android:drawableLeft="@drawable/ic_cloud_download"
-        android:drawablePadding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.462"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Titulo"
-        app:layout_constraintVertical_bias="0.106" />
-
-    <Button
-        android:id="@+id/Respaldo"
-        android:layout_width="226dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/btn__radius"
-        android:drawableLeft="@drawable/ic_cloud_upload"
-        android:drawablePadding="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="Respaldo de Datos"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.46"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Titulo"
-        app:layout_constraintVertical_bias="0.215" />
-
-    <Button
-        android:id="@+id/Resumenes"
-        android:layout_width="228dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/btn__radius"
-        android:drawableLeft="@drawable/ic_file_text"
-        android:drawablePadding="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="Resumenes Mensuales"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.463"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Titulo"
-        app:layout_constraintVertical_bias="0.317" />
-
-    <Button
-        android:id="@+id/Configuracion"
-        android:layout_width="227dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/btn__radius"
-        android:drawableLeft="@drawable/ic_user"
-        android:drawablePadding="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="Configuración del Contribuyente"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.467"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Titulo"
-        app:layout_constraintVertical_bias="0.424" />
-
-    <Button
-        android:id="@+id/Credito"
-        android:layout_width="229dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/btn__radius"
-        android:drawableLeft="@drawable/ic_credit_card"
-        android:drawablePadding="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="Crédito Fiscal"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.473"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Titulo"
-        app:layout_constraintVertical_bias="0.528" />
-
-    <Button
-        android:id="@+id/Consumidor"
-        android:layout_width="230dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/btn__radius"
-        android:drawableLeft="@drawable/ic_consumidor"
-        android:drawablePadding="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="Consumidor Final"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.469"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Titulo"
-        app:layout_constraintVertical_bias="0.636" />
-
-    <Button
-        android:id="@+id/Registro"
-        android:layout_width="230dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/btn__radius"
-        android:drawableLeft="@drawable/ic_person_add"
-        android:drawablePadding="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="Registro del Cliente"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.469"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Titulo"
-        app:layout_constraintVertical_bias="0.744" />
-
-    <Button
-        android:id="@+id/SubirLogo"
-        android:layout_width="234dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/btn__radius"
-        android:drawableLeft="@drawable/ic_add_photo"
-        android:drawablePadding="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="Subir Logo"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.455"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Titulo"
-        app:layout_constraintVertical_bias="0.857" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
