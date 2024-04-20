@@ -1,13 +1,13 @@
 package com.example.facturaelectronica
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
-import android.content.Intent
-import android.widget.ImageButton
-import android.widget.Button
 import androidx.core.view.WindowInsetsCompat
+import android.widget.ImageButton
 
 class Comprobantecf : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,17 +27,21 @@ class Comprobantecf : AppCompatActivity() {
             finish()
         }
 
-        val button = findViewById<Button>(R.id.btnSeleccionarContribuyente)
+        val buttonContribuyente = findViewById<Button>(R.id.btnSeleccionarContribuyente)
         // Configura el OnClickListener para el botón btnSeleccionarContribuyente
-        button.setOnClickListener {
+        buttonContribuyente.setOnClickListener {
             // Crea un intent para ir a InfoReceptoresActivity
             val intent = Intent(this, InfoReceptoresActivity::class.java)
             startActivity(intent)
         }
 
-
-
-
+        val buttonRegistrar2 = findViewById<Button>(R.id.btnRegistrar2)
+        // Configura el OnClickListener para el botón btnRegistrar2
+        buttonRegistrar2.setOnClickListener {
+            // Crea un Intent para iniciar la actividad AgregarArticuloActivity
+            val intent = Intent(this, AgregarArticuloActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onBackPressed() {
