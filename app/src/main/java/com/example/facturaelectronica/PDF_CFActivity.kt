@@ -18,6 +18,13 @@ class PDF_CFActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val btnMenuprin: Button = findViewById(R.id.btnMenuprin)
+        btnMenuprin.setOnClickListener {
+            // Crear un intent para ir a MenuActivity
+            val intent = Intent(this, MenuActivity::class.java)
+            startActivity(intent)
+            finish() // Finalizar la actividad actual si se desea
+        }
     }
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
