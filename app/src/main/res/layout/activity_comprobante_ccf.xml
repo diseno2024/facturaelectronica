@@ -490,7 +490,7 @@
         android:id="@+id/view6"
         android:layout_width="355dp"
         android:layout_height="125dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/border_estilo_view4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -527,27 +527,160 @@
         android:id="@+id/viewP4"
         android:layout_width="39dp"
         android:layout_height="25dp"
-        android:background="@drawable/border_estilo_view4"
+        android:background="@drawable/border_estilo_view5"
         app:layout_constraintStart_toStartOf="@+id/view6"
         app:layout_constraintTop_toTopOf="@+id/view6" />
 
-    <View
-        android:id="@+id/viewP5"
-        android:layout_width="37dp"
-        android:layout_height="25dp"
-        android:background="@drawable/border_estilo_view4"
-        app:layout_constraintStart_toEndOf="@+id/viewP4"
-        app:layout_constraintTop_toTopOf="@+id/view6" />
+    <TextView
+        android:id="@+id/textViewT1"
+        android:layout_width="35dp"
+        android:layout_height="10dp"
+        android:text="CÓDIGO"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="6sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/viewP4"
+        app:layout_constraintEnd_toEndOf="@+id/viewP4"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="@+id/viewP4"
+        app:layout_constraintTop_toTopOf="@+id/viewP4"
+        app:layout_constraintVertical_bias="0.533" />
 
     <View
         android:id="@+id/viewP5"
-        android:layout_width="37dp"
+        android:layout_width="38dp"
         android:layout_height="25dp"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/border_estilo_view4"
-        app:layout_constraintStart_toEndOf="@+id/viewP4"
+        android:layout_marginStart="38dp"
+        android:background="@drawable/border_estilo_view5"
+        app:layout_constraintStart_toStartOf="@+id/view6"
         app:layout_constraintTop_toTopOf="@+id/view6" />
+
+    <TextView
+        android:id="@+id/textView54"
+        android:layout_width="35dp"
+        android:layout_height="10dp"
+        android:text="CANTIDAD"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="6sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/viewP5"
+        app:layout_constraintStart_toEndOf="@+id/viewP4"
+        app:layout_constraintTop_toTopOf="@+id/viewP1" />
+
+    <View
+        android:id="@+id/viewP6"
+        android:layout_width="127dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="75dp"
+        android:background="@drawable/border_estilo_view5"
+        app:layout_constraintStart_toStartOf="@+id/view6"
+        app:layout_constraintTop_toTopOf="@+id/view6" />
+
+    <TextView
+        android:id="@+id/textViewT3"
+        android:layout_width="60dp"
+        android:layout_height="10dp"
+        android:text="DESCRIPCIÓN"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="6sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/viewP6"
+        app:layout_constraintEnd_toStartOf="@+id/viewP7"
+        app:layout_constraintStart_toEndOf="@+id/viewP5"
+        app:layout_constraintTop_toTopOf="@+id/viewP6" />
+
+    <View
+        android:id="@+id/viewP7"
+        android:layout_width="38dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="201dp"
+        android:background="@drawable/border_estilo_view5"
+        app:layout_constraintStart_toStartOf="@+id/view6"
+        app:layout_constraintTop_toTopOf="@+id/view6" />
+
+    <TextView
+        android:id="@+id/textViewT4"
+        android:layout_width="35dp"
+        android:layout_height="15dp"
+        android:text="PRECIO UNITARIO"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="6sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/viewP7"
+        app:layout_constraintStart_toStartOf="@+id/viewP7"
+        app:layout_constraintTop_toTopOf="@+id/viewP2" />
+
+    <View
+        android:id="@+id/viewP8"
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="239dp"
+        android:background="@drawable/border_estilo_view5"
+        app:layout_constraintStart_toStartOf="@+id/view6"
+        app:layout_constraintTop_toTopOf="@+id/view6" />
+
+    <TextView
+        android:id="@+id/textViewT5"
+        android:layout_width="35dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="1dp"
+        android:text="VENTA NO SUJETA"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="6sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/viewP8"
+        app:layout_constraintEnd_toEndOf="@+id/viewP8"
+        app:layout_constraintTop_toTopOf="@+id/viewP8" />
+
+    <View
+        android:id="@+id/viewP9"
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="278dp"
+        android:background="@drawable/border_estilo_view5"
+        app:layout_constraintStart_toStartOf="@+id/view6"
+        app:layout_constraintTop_toTopOf="@+id/view6" />
+
+    <TextView
+        android:id="@+id/textViewT6"
+        android:layout_width="35dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="1dp"
+        android:text="VENTA EXENTA"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="6sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/viewP9"
+        app:layout_constraintEnd_toStartOf="@+id/viewP10"
+        app:layout_constraintTop_toTopOf="@+id/viewP3" />
+
+    <View
+        android:id="@+id/viewP10"
+        android:layout_width="38dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="317dp"
+        android:background="@drawable/border_estilo_view5"
+        app:layout_constraintStart_toStartOf="@+id/view6"
+        app:layout_constraintTop_toTopOf="@+id/view6" />
+
+    <TextView
+        android:id="@+id/textViewT7"
+        android:layout_width="35dp"
+        android:layout_height="15dp"
+        android:text="VENTA GRAVADA"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="6sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/viewP10"
+        app:layout_constraintStart_toEndOf="@+id/viewP9"
+        app:layout_constraintTop_toTopOf="@+id/viewP10" />
 
     <View
         android:id="@+id/view7"
