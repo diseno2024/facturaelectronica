@@ -77,9 +77,17 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
 
+            R.id.nav_configuracion ->{
+                // Iniciar ResMensualesActivity al seleccionar "Conf.Datos del contribuyente"
+                val intent = Intent(this, ConfDatosDelContribuyenteActivity::class.java)
+                startActivity(intent)
+                finish()
+                return true
+            }
+
             R.id.nav_credito -> {
                 //Iniciar Comprobantecf al selecciobar "Credito Fiscal"
-                val intent = Intent(this, GenerarCFActivity::class.java)
+                val intent = Intent(this, Comprobantecf::class.java)
                 startActivity(intent)
                 finish()
                 return true
@@ -87,7 +95,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_consumidor -> {
                 // Iniciar Comprobantecf al seleccionar "Consumidor final"
-                val intent = Intent(this, Comprobantecf::class.java)
+                val intent = Intent(this, GenerarCFActivity::class.java)
                 startActivity(intent)
                 finish()
                 return true
