@@ -81,12 +81,12 @@
         android:id="@+id/fondoFormConsFinal"
         class="androidx.appcompat.widget.ActionMenuView"
         android:layout_width="359dp"
-        android:layout_height="586dp"
+        android:layout_height="match_parent"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="130dp"
 
         android:layout_marginEnd="25dp"
-        android:layout_marginBottom="13dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/fondo_form"
         app:layout_constraintBottom_toTopOf="@+id/button_cancelar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -96,12 +96,11 @@
         app:layout_constraintVertical_bias="1.0" />
 
 
-
-
-
     <ScrollView
         android:layout_width="359dp"
-        android:layout_height="530dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="170dp"
+        android:layout_marginBottom="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.529"
