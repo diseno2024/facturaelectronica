@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import android.content.Intent
 import android.widget.ImageButton
+import android.widget.Button
 import androidx.core.view.WindowInsetsCompat
 
 class Comprobantecf : AppCompatActivity() {
@@ -25,6 +26,17 @@ class Comprobantecf : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        val button = findViewById<Button>(R.id.btnSeleccionarContribuyente)
+        // Configura el OnClickListener para el botón btnSeleccionarContribuyente
+        button.setOnClickListener {
+            // Crea un intent para ir a InfoReceptoresActivity
+            val intent = Intent(this, InfoReceptoresActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
 
     }
 
