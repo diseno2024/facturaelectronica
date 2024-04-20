@@ -489,7 +489,7 @@
     <View
         android:id="@+id/view6"
         android:layout_width="355dp"
-        android:layout_height="125dp"
+        android:layout_height="110dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/border_estilo_view4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -499,7 +499,7 @@
     <View
         android:id="@+id/viewP1"
         android:layout_width="38dp"
-        android:layout_height="125dp"
+        android:layout_height="110dp"
         android:layout_marginStart="38dp"
         android:background="@drawable/border_estilo_view4"
         app:layout_constraintStart_toStartOf="@+id/view6"
@@ -508,7 +508,7 @@
     <View
         android:id="@+id/viewP2"
         android:layout_width="38dp"
-        android:layout_height="125dp"
+        android:layout_height="110dp"
         android:layout_marginStart="125dp"
         android:background="@drawable/border_estilo_view4"
         app:layout_constraintStart_toEndOf="@+id/viewP1"
@@ -517,7 +517,7 @@
     <View
         android:id="@+id/viewP3"
         android:layout_width="40dp"
-        android:layout_height="125dp"
+        android:layout_height="110dp"
         android:layout_marginStart="38dp"
         android:background="@drawable/border_estilo_view4"
         app:layout_constraintStart_toEndOf="@+id/viewP2"
