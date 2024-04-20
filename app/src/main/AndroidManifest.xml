@@ -19,6 +19,9 @@
             android:name=".ConfActivity"
             android:exported="false" />
         <activity
+            android:name=".ComprobanteCCFActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
