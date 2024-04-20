@@ -2,3 +2,4 @@
 ### Repositorio para el proyecto de factura electronica
 ### PIN del Login: 123456
 ### Emulación con: Pixil 3a con la API 34
+### Link de mockups: https://www.figma.com/file/YwOkLZqW8112k7t1XuXKjy
