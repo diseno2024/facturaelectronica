@@ -5,6 +5,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import android.content.Intent
+import android.widget.Button
 
 class PDF_CFActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,5 +18,11 @@ class PDF_CFActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+    override fun onBackPressed() {
+        super.onBackPressed() // Llama al método onBackPressed() de la clase base
+        val intent = Intent(this, MenuActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

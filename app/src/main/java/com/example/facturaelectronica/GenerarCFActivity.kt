@@ -2,6 +2,7 @@ package com.example.facturaelectronica
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -16,6 +17,13 @@ class GenerarCFActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+        val button_generar: Button = findViewById(R.id.button_generar)
+        button_generar.setOnClickListener {
+            // Crear un intent para ir a MenuActivity
+            val intent = Intent(this, PDF_CFActivity::class.java)
+            startActivity(intent)
+            finish() // Finalizar la actividad actual si se desea
         }
     }
     override fun onBackPressed() {
