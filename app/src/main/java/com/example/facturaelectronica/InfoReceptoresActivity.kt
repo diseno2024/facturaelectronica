@@ -15,11 +15,18 @@ class InfoReceptoresActivity : AppCompatActivity() {
 
         // Configura un OnClickListener para el botón
         botonAtras.setOnClickListener {
-            // Crea un Intent para iniciar la actividad MenuActivity
+            // Crea un Intent para iniciar la actividad Comprobantecf
             val intent = Intent(this, Comprobantecf::class.java)
-            startActivity(intent) // Inicia la actividad MenuActivity
+            startActivity(intent) // Inicia la actividad Comprobantecf
+            finish()
         }
 
 
+    }
+    override fun onBackPressed() {
+        super.onBackPressed() // Llama al método onBackPressed() de la clase base
+        val intent = Intent(this, Comprobantecf::class.java)
+        startActivity(intent)
+        finish()
     }
 }
