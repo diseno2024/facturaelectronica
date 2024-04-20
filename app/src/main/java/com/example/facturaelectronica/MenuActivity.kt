@@ -58,6 +58,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // Iniciar la actividad correspondiente para la restauración de datos
                 val intent = Intent(this, RestauracionActivity::class.java)
                 startActivity(intent)
+                finish()
                 return true
             }
 
