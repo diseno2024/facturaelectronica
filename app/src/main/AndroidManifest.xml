@@ -16,9 +16,6 @@
             android:name=".ConfDatosDelContribuyenteActivity"
             android:exported="false" />
         <activity
-            android:name=".ConfActivity"
-            android:exported="false" />
-        <activity
             android:name=".ComprobanteCCFActivity"
             android:exported="false" />
         <activity
@@ -40,7 +37,7 @@
             android:name=".InfoReceptoresActivity"
             android:exported="false" />
         <activity
-            android:name=".ReClienteActivity"
+            android:name=".PDF_CFActivity"
             android:exported="false" />
         <activity
             android:name=".LogoActivity"
@@ -61,7 +58,7 @@
             android:name=".AgregarArticuloActivity"
             android:exported="false" />
         <activity
-            android:name=".PDF_CFActivity"
+            android:name=".ReClienteActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
