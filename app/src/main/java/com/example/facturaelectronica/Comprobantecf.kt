@@ -42,6 +42,13 @@ class Comprobantecf : AppCompatActivity() {
             val intent = Intent(this, AgregarArticuloActivity::class.java)
             startActivity(intent)
         }
+        val btnGenccf: Button = findViewById(R.id.btnGenccf)
+        btnGenccf.setOnClickListener {
+            // Crear un intent para ir a MenuActivity
+            val intent = Intent(this, ComprobanteCCFActivity::class.java)
+            startActivity(intent)
+            finish() // Finalizar la actividad actual si se desea
+        }
     }
 
     override fun onBackPressed() {

@@ -974,17 +974,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textView51" />
 
     <Button
-        android:id="@+id/buttonGuardar"
-        android:layout_width="350dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="8dp"
+        android:id="@+id/btnmenu"
+        android:layout_width="316dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/boton_con_bordes"
+        android:padding="0dp"
         android:text="Menú Principal"
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 

@@ -189,7 +189,7 @@
     </FrameLayout>
 
     <Button
-        android:id="@+id/btnRegistrar"
+        android:id="@+id/btnGenccf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="136dp"
