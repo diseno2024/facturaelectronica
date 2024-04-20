@@ -429,6 +429,441 @@
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/textView5"
                 app:layout_constraintStart_toStartOf="parent" />
+            <TableLayout
+                android:id="@+id/tableLayoutA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/table_rounded"
+
+                android:stretchColumns="*"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tableLayout2">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+
+                    <TextView
+                        android:layout_width="174dp"
+                        android:layout_height="match_parent"
+                        android:padding="8dp"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="match_parent"
+                        android:padding="8dp"
+                        android:text="Suma Total de Operaciones"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:paddingStart="8dp"
+                        android:text="Valor en letras:"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+                    <TextView
+                        android:layout_width="88dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text=""
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Sumas"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/black"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="$0.00"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:paddingStart="8dp"
+                        android:text="Condicion de la operacion:"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="13% IVA"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/black"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="110dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="$0.00"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:text="Observaciones:"
+                        android:paddingStart="8dp"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Sub-Total"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/black"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="110dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="$0.00"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="IVA Percibido"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/black"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="110dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="$0.00"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="IVA Retenido"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/black"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="110dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="$0.00"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Retención Renta"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/black"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="110dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="$0.00"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Monto Total de la Operación"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/black"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="110dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="$0.00"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Total Otros Montos no Afectos"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/black"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="110dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="$0.00"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text=""
+                        android:textAlignment="viewStart" />
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Total a Pagar"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/black"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="110dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="$0.00"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="8sp" />
+
+                </TableRow>
+
+            </TableLayout>
+
+            <Button
+                android:id="@+id/btnCancelar"
+                android:layout_width="219dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="950dp"
+                android:backgroundTint="#4a8c74"
+                android:paddingStart="8dp"
+                android:paddingEnd="10dp"
+                android:text="Menu Principal"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:cornerRadius="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
 
