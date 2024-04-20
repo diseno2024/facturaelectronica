@@ -38,15 +38,17 @@
 
     <ImageView
         android:id="@+id/icon_title"
-        android:layout_width="48dp"
-        android:layout_height="51dp"
+        android:layout_width="44dp"
+        android:layout_height="40dp"
+        android:tint="#2E594A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintHorizontal_bias="0.089"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.092"
-        tools:srcCompat="@drawable/description_24px" />
+        app:layout_constraintVertical_bias="0.102"
+        tools:ignore="UseAppTint"
+        tools:srcCompat="@drawable/icons8_archivo_50" />
 
     <TextView
         android:id="@+id/title_factura"
@@ -84,7 +86,6 @@
         android:layout_height="match_parent"
         android:layout_marginStart="25dp"
         android:layout_marginTop="130dp"
-
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/fondo_form"
@@ -97,7 +98,7 @@
 
 
     <ScrollView
-        android:layout_width="359dp"
+        android:layout_width="358dp"
         android:layout_height="match_parent"
         android:layout_marginTop="170dp"
         android:layout_marginBottom="70dp"
@@ -733,6 +734,9 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#4A8C74"
         android:text="Cancelar"
+        app:icon="@drawable/icons8_cancelar_24"
+        app:iconPadding="4dp"
+        app:iconSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.160"
@@ -747,6 +751,9 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#4A8C74"
         android:text="Generar"
+        app:icon="@drawable/icons8_comprobado_24"
+        app:iconPadding="4dp"
+        app:iconSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.84"
