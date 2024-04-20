@@ -25,9 +25,6 @@
             android:name=".ResMensualActivity"
             android:exported="false" />
         <activity
-            android:name=".GenerarCFActivity"
-            android:exported="false" />
-        <activity
             android:name=".ReDatosContribuyenteActivity"
             android:exported="false" />
         <activity
@@ -56,6 +53,9 @@
             android:exported="false" />
         <activity
             android:name=".AgregarArticuloActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GenerarCFActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
