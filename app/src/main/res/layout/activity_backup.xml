@@ -6,39 +6,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Ajusta los valores según tus necesidades específicas -->
+
+
     <Button
         android:id="@+id/btnRegistrar"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="672dp"
         android:backgroundTint="#4A8C74"
         android:text="Realizar Respaldo"
         android:textColor="@color/white"
         app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintWidth_percent="0.8" />
 
     <view
         android:id="@+id/fondoDato"
         class="androidx.appcompat.widget.ActionMenuView"
-        android:layout_width="373dp"
-        android:layout_height="530dp"
-        android:layout_marginTop="128dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/fondo_form"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.7"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/bordeSup"
+        app:layout_constraintWidth_percent="0.8" />
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/bordeSup"
-        android:layout_width="411dp"
-        android:layout_height="67dp"
-        android:layout_marginBottom="665dp"
+        android:layout_width="0dp"
+        android:layout_height="66dp"
+        android:layout_marginBottom="0dp"
         android:background="#4A8C74"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
@@ -55,159 +63,173 @@
             android:focusable="true"
             app:srcCompat="@drawable/icons8_back_arrow_48"
             app:tint="#FFFFFF" />
-    </FrameLayout>
 
-    <TextView
-        android:id="@+id/textContribuyentes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="52dp"
-        android:text="Respaldo de Datos"
-        android:textColor="#2E594A"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textRespaldoDeDatos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="14dp"
+            android:text="Respaldo de Datos"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp" />
 
-    <View
-        android:id="@+id/Linea"
-        android:layout_width="350dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="52dp"
-        android:background="#4A8C74"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bordeSup" />
-
-    <ImageView
-        android:id="@+id/imageRespaldoDatos"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="12dp"
-        android:contentDescription="Icono de respaldo de datos"
-        android:src="@drawable/backup_icon"
-        app:layout_constraintEnd_toStartOf="@+id/textContribuyentes"
-        app:layout_constraintHorizontal_bias="0.731"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bordeSup" />
+        <ImageView
+            android:id="@+id/imageRespaldoDatos"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="9dp"
+            android:layout_toStartOf="@+id/textRespaldoDeDatos"
+            android:contentDescription="Icono de respaldo de datos"
+            android:src="@drawable/backup_icon" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/textInformacionRespaldo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="136dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:text="Información de Respaldo:"
+        android:textAlignment="center"
         android:textColor="#2E594A"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toTopOf="@+id/fondoDato"
+        app:layout_constraintVertical_bias="0.018"
+        app:layout_constraintWidth_percent="0.8" />
 
     <TextView
         android:id="@+id/textConfiguracionRespaldo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="268dp"
         android:text="Configuración de Respaldo"
+        android:textAlignment="center"
         android:textColor="#2E594A"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bordeSup" />
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/nuevoFondoDato"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textRespaldoAutomatico"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
         android:text="Respaldo Automático:"
+        android:textAlignment="center"
         android:textColor="#2E594A"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bordeSup" />
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textConfiguracionRespaldo"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Switch
         android:id="@+id/switchEncendido"
         android:layout_width="64dp"
         android:layout_height="48dp"
-        android:layout_marginTop="348dp"
         android:checked="false"
+        android:textAlignment="center"
         android:textOff="Apagado"
         android:textOn="Encendido"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textEstado"
+        app:layout_constraintVertical_bias="0.027" />
 
     <TextView
         android:id="@+id/textEstado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="324dp"
         android:text="Apagado"
+        android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bordeSup" />
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textRespaldoAutomatico" />
+
+    <!-- activity_backup.xml -->
 
     <TextView
         android:id="@+id/textFrecuencia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="396dp"
         android:text="Frecuencia:"
+        android:textAlignment="center"
         android:textColor="#2E594A"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/switchEncendido"
+        app:layout_constraintVertical_bias="0.0" />
+
 
     <Spinner
         android:id="@+id/spinnerFrecuencia"
         android:layout_width="123dp"
         android:layout_height="48dp"
-        android:layout_marginTop="420dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bordeSup" />
-
-    <!-- activity_backup.xml -->
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textFrecuencia"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textHorario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="472dp"
         android:text="Horario"
+        android:textAlignment="center"
         android:textColor="#2E594A"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bordeSup" />
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerFrecuencia"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/nuevoFondoDato"
-        android:layout_width="250dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="168dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/rounded_background_green_ligth"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bordeSup">
-
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textInformacionRespaldo"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.6">
+        <!-- Ajusta los valores según tus necesidades específicas -->
         <TextView
             android:id="@+id/textFechaUltimoRespaldo"
-            android:layout_width="194dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginRight="0dp"
             android:text="Fecha último respaldo:"
+            android:textAlignment="center"
             android:textColor="#2E594A"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -216,54 +238,64 @@
 
         <TextView
             android:id="@+id/textFecha"
-            android:layout_width="106dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="75dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="40dp"
+            android:layout_marginEnd="0dp"
             android:text="12/04/2024"
+            android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- TextView: Estado -->
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="65dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginBottom="25dp"
             android:text="Estado:"
+            android:textAlignment="center"
             android:textColor="#2E594A"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="140dp"
-            android:layout_marginTop="65dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="55dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="25dp"
             android:text="Exito"
-            android:textColor="#0A0B0A"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
 
-    </FrameLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="283dp"
         android:layout_height="132dp"
         android:layout_centerInParent="true"
-        android:layout_marginTop="508dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textHorario"
+        app:layout_constraintVertical_bias="0.273">
 
 
         <Button
@@ -298,6 +330,7 @@
             android:focusable="false"
             android:inputType="none"
             android:text="Hora seleccionada:"
+            android:textAlignment="center"
             android:textSize="18sp" />
     </RelativeLayout>
 
