@@ -1,8 +1,5 @@
 package com.example.facturaelectronica
 
-
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.EditText
@@ -19,6 +16,8 @@ import com.google.gson.reflect.TypeToken
 import android.content.Intent
 import android.text.InputFilter
 import android.text.InputType
+import androidx.fragment.app.Fragment
+
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
@@ -45,6 +44,12 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .replace(R.id.fragment_container, HomeFragment()).commit()
             navigationView.setCheckedItem(R.id.nav_home)
         }
+    }
+    fun navigateToFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frame_container, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

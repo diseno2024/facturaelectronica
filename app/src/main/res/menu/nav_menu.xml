@@ -12,52 +12,59 @@
             android:title="Inicio"/>
 
         <item
-            android:id="@+id/nav_restauracion"
-            android:icon="@drawable/ic_cloud_download"
-            android:title="Restauración de Datos"/>
+            android:id="@+id/nav_registro"
+            android:icon="@drawable/ic_person_add"
+            android:title="Registro del cliente"/>
+
+        <item
+            android:id="@+id/nav_resumenes"
+            android:icon="@drawable/ic_file_text"
+            android:title="Resumenes mensuales"/>
+
+        <item
+            android:id="@+id/nav_configuracion"
+            android:icon="@drawable/ic_user"
+            android:title="Conf. del contribuyente"/>
+
+        <item
+            android:id="@+id/nav_credito"
+            android:icon="@drawable/ic_credit_card"
+            android:title="Credito fiscal"/>
+
+        <item
+            android:id="@+id/nav_consumidor"
+            android:icon="@drawable/ic_consumidor"
+            android:title="Consumidor final"/>
+
+        <item
+            android:id="@+id/nav_logo"
+            android:icon="@drawable/ic_add_photo"
+            android:title="Subir logo"/>
+
+        <item
+            android:id="@+id/nav_DatosContribuyente"
+            android:icon="@drawable/ic_person_add"
+            android:title="Datos del contribuyente"/>
 
         <item
             android:id="@+id/nav_respaldo"
             android:icon="@drawable/ic_cloud_upload"
             android:title="Respaldo de datos"/>
+
         <item
-            android:id="@+id/nav_resumenes"
-            android:icon="@drawable/ic_file_text"
-            android:title="Resumenes mensuales"/>
-        <item
-            android:id="@+id/nav_configuracion"
-            android:icon="@drawable/ic_user"
-            android:title="Conf. del contribuynete"/>
-        <item
-            android:id="@+id/nav_credito"
-            android:icon="@drawable/ic_credit_card"
-            android:title="Credito fiscal"/>
-        <item
-            android:id="@+id/nav_consumidor"
-            android:icon="@drawable/ic_consumidor"
-            android:title="Consumidor final"/>
-        <item
-            android:id="@+id/nav_registro"
-            android:icon="@drawable/ic_person_add"
-            android:title="Registro del cliente"/>
-        <item
-            android:id="@+id/nav_logo"
-            android:icon="@drawable/ic_add_photo"
-            android:title="Subir logo"/>
-        <item
-            android:id="@+id/nav_DatosContribuyente"
-            android:icon="@drawable/ic_person_add"
-            android:title="Datos del contribuyente"/>
+            android:id="@+id/nav_restauracion"
+            android:icon="@drawable/ic_cloud_download"
+            android:title="Restauración de Datos"/>
+
         <item
             android:id="@+id/nav_crear_pin"
             android:icon="@drawable/add_24"
             android:title="Crear Nuevo PIN" />
+
         <item
             android:id="@+id/nav_cerrar_sesion"
             android:icon="@drawable/logout_icon_138409"
             android:title="Cerrar Sesión" />
-
-
 
     </group>
 

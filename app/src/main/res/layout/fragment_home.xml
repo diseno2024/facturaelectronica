@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout"
@@ -12,23 +12,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/frame_container">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"/>
+        <!-- android:hint=".Home Fragment"
+            android:text="Home fragment"
+            android:textColor="@color/black"
+            android:textSize="45sp" /> -->
     </FrameLayout>
 
-    <include layout="@layout/tabla"/>
-    <!-- Ejemplo de como quedaria con facturas -->
-
-    <!-- BottomNavigationView -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/boton_navegacion"
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/verde_menta_2"
-        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
-        app:itemIconSize="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/boton_menu" />
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:fabCradleMargin="10dp"
+        app:fabAlignmentMode="center"
+        app:fabCradleRoundedCornerRadius="50dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetEnd="0dp">
+
+
+        <!-- BottomNavigationView -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/boton_navegacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/verde_menta_2"
+            app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+            app:itemIconSize="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_menu" />
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
     <!-- Botón flotante -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -36,12 +57,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="26dp"
         android:src="@drawable/add_24"
-        app:layout_constraintBottom_toTopOf="@+id/boton_navegacion"
-        app:backgroundTint="@color/verde_menta_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1"
+        app:layout_anchor="@id/bottomAppBar"
+        app:backgroundTint="@color/verde_menta_3"
         android:contentDescription="Descripción del botón flotante"
-        app:layout_constraintHorizontal_bias="1"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:maxImageSize="40dp"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
