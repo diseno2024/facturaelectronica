@@ -24,12 +24,13 @@ class ReClienteActivity : AppCompatActivity() {
         }
         // Inicializa el Spinner
         spinner1 = findViewById(R.id.contribuyente)
-        val opciones = arrayOf("Crédito Fiscal", "Consumidor Final")
+        val opciones = arrayOf("Tipo de Contribuyente","Crédito Fiscal", "Consumidor Final")
 
         // Configura el adaptador para el Spinner
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, opciones)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapter = ArrayAdapter(this, R.layout.spinner_personalizado, opciones)
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_per)
         spinner1.adapter = adapter
+
 
         val btnAtras: ImageButton = findViewById(R.id.atras)
         btnAtras.setOnClickListener {

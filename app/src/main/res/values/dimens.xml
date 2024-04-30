@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="textSize_textToolbar">30sp</dimen>
+    <dimen name="textSize_button">20sp</dimen>
+    <dimen name="textSize_input">20sp</dimen>
+    <dimen name="text_check">15sp</dimen>
+</resources>
