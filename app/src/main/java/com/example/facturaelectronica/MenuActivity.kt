@@ -17,12 +17,13 @@ import android.content.Intent
 import android.text.InputFilter
 import android.text.InputType
 import androidx.fragment.app.Fragment
-
+import com.couchbase.lite.CouchbaseLite
+import com.couchbase.lite.Database
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
     private val PIN_PREFS_NAME = "pins_prefs"
-
+    private lateinit var database: Database
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
@@ -44,6 +45,8 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .replace(R.id.fragment_container, HomeFragment()).commit()
             navigationView.setCheckedItem(R.id.nav_home)
         }
+        CouchbaseLite.init(application)
+        database = Database("my_database")
     }
     fun navigateToFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
