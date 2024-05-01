@@ -101,7 +101,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_consumidor -> {
                 // Iniciar Comprobantecf al seleccionar "Consumidor final"
-                val intent = Intent(this, GenerarCFActivity::class.java)
+                val intent = Intent(this, EmitirCFActivity::class.java)
                 startActivity(intent)
                 finish()
                 return true

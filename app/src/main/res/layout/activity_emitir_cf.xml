@@ -4,762 +4,334 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".EmitirCFActivity">
 
-    <view
-        android:id="@+id/barraSup"
-        class="com.google.android.material.appbar.AppBarLayout"
-        android:layout_width="420dp"
-        android:layout_height="67dp"
-        android:layout_marginBottom="665dp"
-        android:background="#4A8C74"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#4a8c74"
+        android:minHeight="?attr/actionBarSize"
+        android:elevation="4dp"
+        app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+            android:id="@+id/atras"
+            android:layout_width="51dp"
+            android:layout_height="51dp"
+            android:background="@drawable/click_effect"
+            android:clickable="true"
+            android:contentDescription="bottom"
+            android:focusable="true"
+            android:layout_gravity="start"
+            app:srcCompat="@drawable/icons8_back_arrow_48"
+            app:tint="#FFFFFF" />
 
-    <Button
-        android:id="@+id/button_back"
-        android:layout_width="62dp"
-        android:layout_height="67dp"
-        android:backgroundTint="#4A8C74"
-        android:padding="5dp"
-        app:icon="@drawable/arrow_circle_left_24px"
-        app:iconSize="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/title_factura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Factura Consumidor Final"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
 
-    <ImageView
-        android:id="@+id/icon_title"
-        android:layout_width="44dp"
-        android:layout_height="40dp"
-        android:tint="#2E594A"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.089"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.102"
-        tools:ignore="UseAppTint"
-        tools:srcCompat="@drawable/icons8_archivo_50" />
+    </androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/title_factura"
-        android:layout_width="305dp"
-        android:layout_height="36dp"
-        android:text="Factura Consumidor Final"
-        android:textColor="#2E594A"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.720"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.108"
-        tools:ignore="MissingConstraints" />
-
-    <View
-        android:id="@+id/separator"
-        android:layout_width="355dp"
-        android:layout_height="1dp"
-        android:background="#2E594A"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.421"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.16"
-        tools:ignore="MissingConstraints" />
-
-    <view
-        android:id="@+id/fondoFormConsFinal"
-        class="androidx.appcompat.widget.ActionMenuView"
-        android:layout_width="359dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="130dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/fondo_form"
-        app:layout_constraintBottom_toTopOf="@+id/button_cancelar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
 
 
     <ScrollView
-        android:layout_width="358dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="170dp"
-        android:layout_marginBottom="70dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="163dp">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/fecha"
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fecha"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="85dp"
+                android:padding="8dp"
+                android:text="Detalles"
+                android:textStyle="bold"
+                android:textColor="#4a8c74"
+                android:textSize="@dimen/Texto"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.272"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.022" />
-
-
-            <View
-                android:id="@+id/input_fecha"
-                android:layout_width="195dp"
-                android:layout_height="44dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.951"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.013" />
-
-            <TextView
-                android:id="@+id/nombre_cliente"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nombre de la Cliente"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.028"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.052" />
-
-            <View
-                android:id="@+id/input_nombre_cliente"
-                android:layout_width="345dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.357"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.078" />
-
-            <TextView
-                android:id="@+id/dui_nit_cliente"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="NIT/DUI del Cliente"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.026"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.114" />
-
-            <View
-                android:id="@+id/input_nit_dui_cliente"
-                android:layout_width="345dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.357"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.14" />
-
-            <TextView
-                android:id="@+id/direccion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Direccion"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.018"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.178" />
-
-            <View
-                android:id="@+id/input_direccion"
-                android:layout_width="345dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.357"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.205" />
-
-            <TextView
-                android:id="@+id/orden_de_compra"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Orden de Compra"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.034"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.251" />
-
-            <View
-                android:id="@+id/input_orden_compra"
-                android:layout_width="154dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.965"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.247" />
-
-            <ImageView
-                android:id="@+id/arrow_down_dui_cliente"
-                android:layout_width="37dp"
-                android:layout_height="37dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.978"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.14"
-                app:srcCompat="@android:drawable/arrow_down_float"
-                tools:ignore="MissingConstraints" />
-
-            <ImageView
-                android:id="@+id/arrow_down_nombre_cliente"
-                android:layout_width="37dp"
-                android:layout_height="36dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.975"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.078"
-                app:srcCompat="@android:drawable/arrow_down_float"
-                tools:ignore="MissingConstraints" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="40dp"
-                android:layout_height="43dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.974"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.011"
-                app:srcCompat="@android:drawable/ic_menu_today" />
-
-            <View
-                android:id="@+id/separator2"
-                android:layout_width="355dp"
-                android:layout_height="1dp"
-                android:background="#2E594A"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.274"
-                tools:ignore="MissingConstraints" />
-
-            <view
-                android:id="@+id/fondoFormConsFinal2"
-                class="androidx.appcompat.widget.ActionMenuView"
-                android:layout_width="345dp"
-                android:layout_height="417dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="404dp"
-
-                android:layout_marginEnd="25dp"
-                android:background="@color/gray_light"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.555"
+                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/cantidad"
-                android:layout_width="95dp"
-                android:layout_height="28dp"
-                android:text="Cantidad"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.047"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.304" />
-
-            <View
-                android:id="@+id/input_cantidad"
-                android:layout_width="100dp"
-                android:layout_height="34dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.528"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.3" />
-
-            <TextView
-                android:id="@+id/descripcion"
-                android:layout_width="113dp"
-                android:layout_height="28dp"
-                android:text="Descripcion"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.048"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.334" />
-
-            <View
-                android:id="@+id/input_descripcion"
-                android:layout_width="335dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.458"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.364" />
-
-            <TextView
-                android:id="@+id/precio_unitario"
-                android:layout_width="210dp"
-                android:layout_height="36dp"
-                android:text="Precio Unitario"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.049"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.397" />
-
-            <View
-                android:id="@+id/input_precio_unitario"
-                android:layout_width="120dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.936"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.398" />
-
-            <TextView
-                android:id="@+id/ventas_no_sujetas"
-                android:layout_width="210dp"
-                android:layout_height="36dp"
-                android:text="Ventas no Sujetas"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.06"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.437" />
-
-            <View
-                android:id="@+id/input_ventas_no_sujetas"
-                android:layout_width="120dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.936"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.435" />
-
-            <TextView
-                android:id="@+id/ventas_exentas"
-                android:layout_width="210dp"
-                android:layout_height="36dp"
-                android:text="Ventas Exentas"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.058"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.474" />
-
-
-            <View
-                android:id="@+id/input_ventas_exentas"
-                android:layout_width="120dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.936"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.473" />
-
-            <TextView
-                android:id="@+id/ventas_Gravadas"
-                android:layout_width="210dp"
-                android:layout_height="36dp"
-                android:text="Ventas Gravadas"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.062"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.507" />
-
-            <View
-                android:id="@+id/input_ventas_gravadas"
-                android:layout_width="120dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.933"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.508" />
-
-            <Button
-                android:id="@+id/button_agregar"
-                android:layout_width="330dp"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/DescripcionCard"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#4A8C74"
-                android:text="Agregar"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="showDescription"
+                android:translationZ="5dp"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="2dp"
+                app:cardCornerRadius="7dp"
+                app:cardElevation="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.482"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.556"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toBottomOf="@+id/textView">
 
-            <View
-                android:id="@+id/separator3"
-                android:layout_width="355dp"
-                android:layout_height="1dp"
-                android:background="#2E594A"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.588"
-                tools:ignore="MissingConstraints" />
-
-            <view
-                android:id="@+id/fondoFormConsFinal3"
-                class="androidx.appcompat.widget.ActionMenuView"
-                android:layout_width="352dp"
-                android:layout_height="308dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="852dp"
-
-                android:layout_marginEnd="25dp"
-                android:background="@color/gray_light"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.464"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/separator4"
-                android:layout_width="330dp"
-                android:layout_height="1dp"
-                android:background="#D9D9D9"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.413"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.635"
-                tools:ignore="MissingConstraints" />
-
-            <ScrollView
-                android:layout_width="352dp"
-                android:layout_height="308dp"
-                app:layout_constraintBottom_toTopOf="@+id/fondoFormConsFinal3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fondoFormConsFinal3"
-                app:layout_constraintVertical_bias="0.5">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:layout_editor_absoluteX="38dp"
-                    tools:layout_editor_absoluteY="-49dp" />
+                    android:layout_margin="10dp">
 
-            </ScrollView>
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-            <Space
-                android:id="@+id/bottomSpace"
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="C"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="Descripcion"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Precio"
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                    </TableRow>
+                </TableLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:padding="8dp"
+                android:text="Datos del Cliente"
+                android:textStyle="bold"
+                android:textColor="#4a8c74"
+                android:textSize="@dimen/Texto"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/DescripcionCard" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/DatosdelCliente"
                 android:layout_width="match_parent"
-                android:layout_height="260dp"
-                app:layout_constraintTop_toBottomOf="@id/fondoFormConsFinal3" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="showDataClient"
+                android:translationZ="5dp"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="2dp"
+                app:cardCornerRadius="7dp"
+                app:cardElevation="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="Nombre"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="DUI/NIT"
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                    </TableRow>
+                </TableLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
-                android:id="@+id/iva_retenido"
-                android:layout_width="210dp"
-                android:layout_height="39dp"
-                android:text="(-) IVA RETENIDO"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.094"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.845" />
-
-            <View
-                android:id="@+id/input_iva_retenido"
-                android:layout_width="120dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.972"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.844" />
-
-            <TextView
-                android:id="@+id/subtotal"
-                android:layout_width="110dp"
-                android:layout_height="32dp"
-                android:text="SUBTOTAL"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.067"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.876" />
-
-            <View
-                android:id="@+id/input_subtotal"
-                android:layout_width="120dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.972"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.877" />
-
-            <TextView
-                android:id="@+id/venta_no_sujetas"
-                android:layout_width="210dp"
-                android:layout_height="36dp"
-                android:text="VENTA NO SUJETAS"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.105"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.914" />
-
-            <View
-                android:id="@+id/input_venta_no_sujetas"
-                android:layout_width="120dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.972"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.913" />
-
-            <TextView
-                android:id="@+id/ventas_exenta"
-                android:layout_width="210dp"
-                android:layout_height="36dp"
-                android:text="VENTA EXENTA"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.081"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.952" />
-
-            <View
-                android:id="@+id/input_ventas_exenta"
-                android:layout_width="120dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.972"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.951" />
-
-            <TextView
-                android:id="@+id/total"
-                android:layout_width="101dp"
-                android:layout_height="36dp"
-                android:text="TOTAL"
-                android:textColor="#2E594A"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.061"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.985" />
-
-            <View
-                android:id="@+id/input_total"
-                android:layout_width="120dp"
-                android:layout_height="36dp"
-                android:background="#BFD9CF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.972"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.984" />
-
-            <TextView
-                android:id="@+id/textView_cantidad_pro"
+                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cant."
-                android:textColor="#D9D9D9"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="35dp"
+                android:padding="8dp"
+                android:text="Condicion de Operacion"
+                android:textStyle="bold"
+                android:textColor="#4a8c74"
+                android:textSize="@dimen/Texto"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.054"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.623"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toBottomOf="@+id/DatosdelCliente" />
 
-            <TextView
-                android:id="@+id/textView_descripcion"
-                android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/ConOperacion"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Descripción"
-                android:textColor="#D9D9D9"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:translationZ="5dp"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="2dp"
+                app:cardCornerRadius="7dp"
+                app:cardElevation="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.290"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.623"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-            <TextView
-                android:id="@+id/textView_precio"
-                android:layout_width="wrap_content"
+                <Spinner
+                    android:id="@+id/ConOp_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:minHeight="48dp"
+                    android:textStyle="bold"
+                    android:textColor="#4a8c74"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <Button
+                android:id="@+id/VistaPrevia"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Precio Unitario"
-                android:textColor="#D9D9D9"
-                android:textSize="20dp"
+                android:layout_marginStart="120dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="120dp"
+                android:backgroundTint="#96D0B9"
+                android:text="Vista Previa"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/Texto"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ConOperacion"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="3dp" />
+
+            <Button
+                android:id="@+id/Generar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="100dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#96D0B9"
+                android:text="Generar"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/Texto"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.846"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.623"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toBottomOf="@+id/VistaPrevia"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="3dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
 
-    <Button
-        android:id="@+id/button_cancelar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#4A8C74"
-        android:text="Cancelar"
-        app:icon="@drawable/icons8_cancelar_24"
-        app:iconPadding="4dp"
-        app:iconSize="25dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.160"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.978"
-        tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/button_generar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#4A8C74"
-        android:text="Generar"
-        app:icon="@drawable/icons8_comprobado_24"
-        app:iconPadding="4dp"
-        app:iconSize="25dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.84"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.978"
-        tools:ignore="MissingConstraints" />
-    
 </androidx.constraintlayout.widget.ConstraintLayout>

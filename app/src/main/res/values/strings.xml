@@ -8,4 +8,25 @@
         <item>Semanal</item>
         <item>Mensual</item>
     </string-array>
+    <string-array name="CondOp_array">
+        <item>Contado</item>
+        <item>Credito</item>
+        <item>Otro</item>
+    </string-array>
+    <string-array name="TipoS">
+        <item>Bien</item>
+        <item>Servicio</item>
+        <item>Bien y Servicio</item>
+    </string-array>
+    <string-array name="Tipo_Venta">
+        <item>Gravado</item>
+        <item>Exento</item>
+        <item>No Gravado</item>
+    </string-array>
+    <string-array name="UnidadMedidaS">
+        <item>Unidad</item>
+        <item>Docena</item>
+        <item>Ciento</item>
+        <item>Otro</item>
+    </string-array>
 </resources>

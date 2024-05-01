@@ -4,4 +4,6 @@
     <dimen name="textSize_button">20sp</dimen>
     <dimen name="textSize_input">20sp</dimen>
     <dimen name="text_check">15sp</dimen>
+    <dimen name="Texto">16sp</dimen>
+
 </resources>

@@ -857,7 +857,7 @@
                 android:backgroundTint="#4a8c74"
                 android:paddingStart="8dp"
                 android:paddingEnd="10dp"
-                android:text="Menu Principal"
+                android:text="Regresar al documento"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:cornerRadius="15dp"

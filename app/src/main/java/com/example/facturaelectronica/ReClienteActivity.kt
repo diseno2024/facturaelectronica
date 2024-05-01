@@ -43,7 +43,7 @@ class ReClienteActivity : AppCompatActivity() {
         val btnCancelar: Button = findViewById(R.id.btnCancelar)
         btnCancelar.setOnClickListener {
             // Crear un intent para ir a MenuActivity
-            val intent = Intent(this, MenuActivity::class.java)
+            val intent = Intent(this, EmitirCFActivity::class.java)
             startActivity(intent)
             finish()  // Finalizar la actividad actual si se desea
         }
