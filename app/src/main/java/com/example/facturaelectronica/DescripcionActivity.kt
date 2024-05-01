@@ -22,7 +22,7 @@ class DescripcionActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        /*val spinnerTipo: Spinner = findViewById(R.id.TipoS)
+        val spinnerTipo: Spinner = findViewById(R.id.TipoS)
 // Create an ArrayAdapter using the string array and a default spinner layout.
         ArrayAdapter.createFromResource(
             this,
@@ -87,6 +87,6 @@ class DescripcionActivity : AppCompatActivity() {
 
             Item.show()
 
-        }*/
+        }
     }
 }
