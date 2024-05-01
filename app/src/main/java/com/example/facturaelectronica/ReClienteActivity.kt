@@ -31,15 +31,6 @@ class ReClienteActivity : AppCompatActivity() {
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_per)
         spinner1.adapter = adapter
 
-
-        val btnAtras: ImageButton = findViewById(R.id.atras)
-        btnAtras.setOnClickListener {
-            // Crear un intent para ir a MenuActivity
-            val intent = Intent(this, MenuActivity::class.java)
-            startActivity(intent)
-            finish()  // Finalizar la actividad actual si se desea
-        }
-
         val btnCancelar: Button = findViewById(R.id.btnCancelar)
         btnCancelar.setOnClickListener {
             // Crear un intent para ir a MenuActivity
@@ -51,7 +42,7 @@ class ReClienteActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
-        val intent = Intent(this, MenuActivity::class.java)
+        val intent = Intent(this, EmitirCFActivity::class.java)
         startActivity(intent)
         finish()
     }

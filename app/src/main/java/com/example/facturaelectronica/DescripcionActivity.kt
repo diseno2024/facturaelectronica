@@ -89,4 +89,10 @@ class DescripcionActivity : AppCompatActivity() {
 
         }
     }
+    override fun onBackPressed() {
+        super.onBackPressed() // Llama al método onBackPressed() de la clase base
+        val intent = Intent(this, EmitirCFActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }
