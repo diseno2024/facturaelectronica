@@ -68,7 +68,7 @@ class DescripcionActivity : AppCompatActivity() {
         Agregar.setOnClickListener {
             val Item = Dialog(this)
             Item.setContentView(R.layout.layout_item) // R.layout.layout_custom_dialog es tu diseño personalizado
-            val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
+            val width = (resources.displayMetrics.widthPixels * 0.92).toInt() // 80% del ancho de la pantalla
             val height = (resources.displayMetrics.heightPixels * 0.5).toInt() // 60% del alto de la pantalla
             Item.window?.setLayout(width, height)
             Item.setCanceledOnTouchOutside(false)
