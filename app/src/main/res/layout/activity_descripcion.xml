@@ -92,6 +92,7 @@
             android:inputType="number"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
+            android:textColor="#4a8c74"
             android:textAlignment="center"/>
 
     </com.google.android.material.card.MaterialCardView>
@@ -156,6 +157,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#FFFFFF"
             android:inputType="text"
+            android:textColor="#4a8c74"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:textAlignment="center"/>
@@ -220,6 +222,7 @@
             android:inputType="numberDecimal"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
+            android:textColor="#4a8c74"
             android:textAlignment="center"/>
 
     </com.google.android.material.card.MaterialCardView>
@@ -252,6 +255,7 @@
             android:inputType="numberDecimal"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
+            android:textColor="#4a8c74"
             android:textAlignment="center" />
 
     </com.google.android.material.card.MaterialCardView>
@@ -281,6 +285,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:padding="5dp"
+            android:textColor="#4a8c74"
             android:textAlignment="center"/>
 
     </com.google.android.material.card.MaterialCardView>

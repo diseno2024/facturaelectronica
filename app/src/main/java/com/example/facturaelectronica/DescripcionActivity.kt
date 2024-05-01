@@ -27,10 +27,10 @@ class DescripcionActivity : AppCompatActivity() {
         ArrayAdapter.createFromResource(
             this,
             R.array.TipoS,
-            android.R.layout.simple_spinner_item
+            R.layout.spinner_personalizado
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears.
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_per)
             // Apply the adapter to the spinner.
             spinnerTipo.adapter = adapter
         }
@@ -39,10 +39,10 @@ class DescripcionActivity : AppCompatActivity() {
         ArrayAdapter.createFromResource(
             this,
             R.array.UnidadMedidaS,
-            android.R.layout.simple_spinner_item
+            R.layout.spinner_personalizado
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears.
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_per)
             // Apply the adapter to the spinner.
             spinnerMedida.adapter = adapter
         }
@@ -51,10 +51,10 @@ class DescripcionActivity : AppCompatActivity() {
         ArrayAdapter.createFromResource(
             this,
             R.array.Tipo_Venta,
-            android.R.layout.simple_spinner_item
+            R.layout.spinner_personalizado
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears.
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_per)
             // Apply the adapter to the spinner.
             spinnerTventa.adapter = adapter
         }
