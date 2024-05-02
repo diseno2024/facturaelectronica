@@ -20,9 +20,11 @@
     <!-- Login Layout -->
     <LinearLayout
         android:id="@+id/loginLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,11 +34,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Factura Electrónica"
+            android:text="Iniciar sesión:"
             android:textColor="@color/white"
-            android:textSize="45sp"
-            android:layout_marginStart="0dp"
-            android:layout_marginBottom="25dp"
+            android:textSize="50sp"
+            android:layout_marginBottom="50dp"
             android:shadowColor="@color/black"
             android:shadowDx="1"
             android:shadowDy="1"
@@ -46,11 +47,9 @@
         <EditText
             android:id="@+id/pinEditText"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginEnd="25dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/edittext_custom"
+            android:layout_marginTop="110dp"
             android:hint="Ingrese PIN"
             android:inputType="number"
             android:maxLength="6"
@@ -62,18 +61,14 @@
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
             android:text="Ingresar"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
             android:background="@drawable/rounded_button"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-        <!-- Nuevo botón para crear un nuevo PIN -->
+            android:layout_marginBottom="20dp" />
+        
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
