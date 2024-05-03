@@ -11,4 +11,8 @@
     <dimen name="top_right_radius">50dp</dimen>
     <dimen name="bottom_right_radius">75dp</dimen>
 
+    <dimen name="textSize_bordeback">24sp</dimen>
+    <dimen name="textSize_bordeup">18sp</dimen>
+    <dimen name="textSize_suback">20sp</dimen>
+
 </resources>
