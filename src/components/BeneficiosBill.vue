@@ -25,7 +25,7 @@
     
   </template>
   <script>
-import { IntersectionObserver } from 'intersection-observer';
+import IntersectionObserver from 'intersection-observer';
 
 export default {
   mounted() {
@@ -41,16 +41,29 @@ export default {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          // La sección de beneficios está en la vista visible
-          benefitsSection.classList.remove('benefit-card-enter'); // Iniciar la animación
+          // Aplicar la clase benefit-card-enter a cada tarjeta de beneficios
+          document.querySelectorAll('.benefit-card').forEach(card => {
+            card.classList.add('benefit-card-enter');
+          });
+
+          // Detener la observación una vez que se haya activado la animación
+          observer.unobserve(benefitsSection);
         }
       });
     }, options);
 
     // Observar la sección de beneficios
     observer.observe(benefitsSection);
+
+    // Reanudar la observación cuando la sección vuelva a salir de la vista
+    window.addEventListener('scroll', () => {
+      if (!observer.rootBounds) {
+        observer.observe(benefitsSection);
+      }
+    });
   }
 }
+
   </script>
   
   <style scoped>
