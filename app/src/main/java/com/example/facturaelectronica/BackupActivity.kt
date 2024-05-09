@@ -14,7 +14,8 @@ import android.widget.EditText
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
-
+import android.provider.MediaStore
+import android.content.ContentValues
 import android.os.Environment
 import android.util.Log
 import java.io.File
@@ -123,33 +124,21 @@ class BackupActivity : AppCompatActivity() {
     }
 
     private fun createBackupFolder() {
-        // Obtener el directorio de documentos públicos
-        val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-
-// Nombre del directorio de respaldo dentro del directorio de documentos
-        val backupDirectoryName = "respaldo_factura2024"
-
-// Crear el objeto File para el directorio de respaldo
-        val backupDirectory = File(parentDir, backupDirectoryName)
-
-// Verificar si el directorio ya existe
-        if (!backupDirectory.exists()) {
-            // Intentar crear el directorio si no existe
-            if (backupDirectory.mkdirs()) {
-                // El directorio se creó exitosamente
-                Log.d("BackupActivity", "Directorio de respaldo creado exitosamente en: ${backupDirectory.absolutePath}")
-                Toast.makeText(this, "Directorio de respaldo creado exitosamente", Toast.LENGTH_SHORT).show()
-            } else {
-                // Error al crear el directorio
-                Log.e("BackupActivity", "Error al crear el directorio de respaldo")
-                Toast.makeText(this, "Error al crear el directorio de respaldo", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            // El directorio ya existe
-            Log.d("BackupActivity", "El directorio de respaldo ya existe en: ${backupDirectory.absolutePath}")
-            Toast.makeText(this, "El directorio de respaldo ya existe", Toast.LENGTH_SHORT).show()
+        val values = ContentValues().apply {
+            put(MediaStore.Files.FileColumns.DISPLAY_NAME, "backup_directory")
+            put(MediaStore.Files.FileColumns.MIME_TYPE, "application/vnd.android.package-archive")
         }
-
+        val resolver = applicationContext.contentResolver
+        val uri = resolver.insert(MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY), values)
+        uri?.let { uri ->
+            // El directorio se creó exitosamente
+            Log.d("BackupActivity", "Directorio de respaldo creado exitosamente en: $uri")
+            Toast.makeText(this, "Directorio de respaldo creado exitosamente", Toast.LENGTH_SHORT).show()
+        } ?: run {
+            // Error al crear el directorio
+            Log.e("BackupActivity", "Error al crear el directorio de respaldo")
+            Toast.makeText(this, "Error al crear el directorio de respaldo", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onRequestPermissionsResult(
