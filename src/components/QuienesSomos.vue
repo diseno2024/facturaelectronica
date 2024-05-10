@@ -1,25 +1,25 @@
 <template>
   <div class="about-us">
     <div class="left-section">
-      <section class="about-section">
+      <section class="about-section animated">
         <h1>Sobre nosotros</h1>
         <p>BillSV es una aplicación nueva en el mercado de facturación electrónica diseñada para simplificar y agilizar el proceso de emisión y gestión de facturas para pequeñas y medianas empresas. Con una interfaz intuitiva y herramientas avanzadas, ayudamos a los negocios a cumplir con los requisitos legales y mejorar su eficiencia operativa.</p>
       </section>
-      <section class="findid-section">
+      <section class="findid-section animated">
         <h2>Como encontrarnos</h2>
         <p>Nuestra aplicación de facturación electrónica ofrece múltiples opciones para encontrarnos y comenzar a utilizar nuestros servicios. Puedes descargar nuestra aplicación desde la tienda de aplicaciones de tu dispositivo móvil.</p>
       </section>
-      <section class="members-section">
+      <section class="members-section animated">
         <h2>Miembros</h2>
         <p>Nuestro equipo está formado por desarrolladores de software, diseñadores de experiencia de usuario y especialistas en cumplimiento normativo. Trabajamos en estrecha colaboración para ofrecer una plataforma robusta y segura que cumpla con los estándares más exigentes del mercado.</p>
       </section>
     </div>
     <div class="right-section">
-      <section class="mission-section">
+      <section class="mission-section animated">
         <h2>Nuestra misión</h2>
         <p>En BillSV, nuestra misión es proporcionar a las empresas una solución integral y confiable para sus necesidades de facturación electrónica. Nos esforzamos por simplificar los procesos contables y administrativos, permitiendo a nuestros usuarios centrarse en lo que realmente importa: hacer crecer sus negocios. Con un enfoque en la innovación y la excelencia en el servicio, estamos comprometidos a ser el socio de confianza de cada empresa que elija nuestra plataforma.</p>
       </section>
-      <section class="customer-service-section">
+      <section class="customer-service-section animated">
         <h2>Servicio al cliente</h2>
         <p>BillSV se compromete a brindar un servicio al cliente excepcional. Nuestro equipo de soporte técnico está disponible para resolver cualquier duda o problema que puedan tener nuestros usuarios. En nuestros contactos en linea personalizados para garantizar una experiencia fluida y sin contratiempos.</p>
       </section>
@@ -30,6 +30,37 @@
 <script>
 export default {
   name: 'AboutUs',
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  methods: {
+    handleScroll() {
+  const animatedElements = document.querySelectorAll('.animated');
+  animatedElements.forEach(element => {
+    if (this.isElementInViewport(element)) {
+      if (!element.classList.contains('fadeIn')) {
+        element.classList.add('fadeIn');
+      }
+    } else {
+      if (element.classList.contains('fadeIn')) {
+        element.classList.remove('fadeIn');
+      }
+    }
+  });
+},
+    isElementInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+      );
+    }
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
 }
 </script>
 
@@ -65,6 +96,23 @@ export default {
   min-width: 375px;
   box-sizing: border-box;
   unicode-bidi: isolate;
+}
+
+.animated {
+  opacity: 0;
+}
+
+.fadeIn {
+  animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 h1 {
