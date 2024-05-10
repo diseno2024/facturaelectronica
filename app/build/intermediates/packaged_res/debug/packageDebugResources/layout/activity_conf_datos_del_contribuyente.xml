@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ConfDatosDelContribuyenteActivity">
+
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="402dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="64dp"
+        android:gravity="center"
+        android:text="Datos de Configuracion del Contribuyente"
+        android:textColor="#4A8C74"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgFondo"
+        android:layout_width="613dp"
+        android:layout_height="645dp"
+        android:layout_marginTop="144dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/fondo" />
+
+    <Button
+        android:id="@+id/GuardarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="612dp"
+        android:layout_marginEnd="60dp"
+        android:backgroundTint="#BFD9CF"
+        android:text="GUARDAR"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/CancelarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="612dp"
+        android:backgroundTint="#BFD9CF"
+        android:text="CANCELAR"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="384dp"
+        android:layout_height="144dp"
+        android:background="@android:color/white"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="458dp"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/Text1"
+        android:layout_width="152dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="488dp"
+        android:layout_marginEnd="240dp"
+        android:background="#BFD9CF"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/Text2"
+        android:layout_width="157dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="564dp"
+        android:layout_marginEnd="40dp"
+        android:background="#BFD9CF"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/Text3"
+        android:layout_width="152dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="564dp"
+        android:layout_marginEnd="240dp"
+        android:background="#BFD9CF"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/Text4.1"
+        android:layout_width="157dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="488dp"
+        android:layout_marginEnd="40dp"
+        android:background="#BFD9CF"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="132dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="216dp"
+        android:layout_marginTop="536dp"
+        android:text="Correo Electronico"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="93dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="536dp"
+        android:text="Codigo Posta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="62dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="216dp"
+        android:layout_marginTop="468dp"
+        android:text="Ciudad"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="62dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="468dp"
+        android:text="Pais"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="125dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="340dp"
+        android:text="Direccion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="125dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="276dp"
+        android:text="Nombre comercial"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/Text4"
+        android:layout_width="357dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="296dp"
+        android:layout_marginEnd="36dp"
+        android:background="#BFD9CF"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/Text5"
+        android:layout_width="356dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="364dp"
+        android:layout_marginEnd="36dp"
+        android:background="#BFD9CF"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/Text6"
+        android:layout_width="357dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="232dp"
+        android:layout_marginEnd="36dp"
+        android:background="#BFD9CF"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="147dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="212dp"
+        android:text="Nombre o Razon Social"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/Text"
+        android:layout_width="357dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="172dp"
+        android:layout_marginEnd="36dp"
+        android:background="#BFD9CF"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="109dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="152dp"
+        android:text="Tipo de Persona"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/brSuperior1"
+        android:layout_width="411dp"
+        android:layout_height="67dp"
+        android:background="#4A8C74"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnMenu"
+        android:layout_width="57dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/brSuperior1"
+        app:srcCompat="@drawable/icons8_back_arrow_48" />
+</androidx.constraintlayout.widget.ConstraintLayout>

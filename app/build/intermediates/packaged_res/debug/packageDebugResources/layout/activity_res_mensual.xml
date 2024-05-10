@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ResMensualActivity">
+
+    <TextureView
+        android:id="@+id/textureView"
+        android:layout_width="match_parent"
+        android:layout_height="512dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <view
+        android:id="@+id/fondoDato"
+        class="androidx.appcompat.widget.ActionMenuView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_marginTop="250dp"
+        android:background="@drawable/fondo_form"
+        android:backgroundTint="#4A8B74"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <View
+        android:id="@+id/brSuperior1"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:background="#4A8C74"
+        app:layout_constraintBottom_toTopOf="@+id/textResMensual"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textResMensual"
+        android:layout_width="239dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="120dp"
+        android:gravity="center"
+        android:text="Resumen Mensual"
+        android:textColor="#4A8C74"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/brSuperior1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/imgEstadistica"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgEstadistica"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.17"
+        app:layout_constraintStart_toStartOf="@+id/brSuperior1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/estadistica" />
+
+    <TextView
+        android:id="@+id/textMes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="125dp"
+        android:text="Mes:"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.829"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textResMensual" />
+
+    <ImageButton
+        android:id="@+id/btnDerecho"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#00FFFFFF"
+        android:src="@drawable/btn_derecho_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnIzquierda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#00FFFFFF"
+        android:src="@drawable/btn_izquierda_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txtMes"
+        android:layout_width="135dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="56dp"
+        android:gravity="center"
+        android:textColor="#4A8C74"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textMes"
+        app:layout_constraintTop_toBottomOf="@+id/textResMensual" />
+
+    <TextView
+        android:id="@+id/txtAnio"
+        android:layout_width="75dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="28dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textAnio"
+        app:layout_constraintTop_toBottomOf="@+id/textResMensual" />
+
+    <TextView
+        android:id="@+id/textAnio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="8dp"
+        android:text="Año:"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.143"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textResMensual" />
+
+    <ImageButton
+        android:id="@+id/btnMenu"
+        android:layout_width="57dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/click_effect"
+        android:clickable="true"
+        android:contentDescription="bottom"
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icons8_back_arrow_48"
+        app:tint="#FFFFFF"/>
+
+    <TextView
+        android:id="@+id/txtSemana4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="264dp"
+        android:text="Semana 4"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.115"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSemana3"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/txtPorcentaje1"
+        android:layout_width="75dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="4dp"
+        android:gravity="center"
+        android:text="0%"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/progressBarSem1"
+        app:layout_constraintTop_toTopOf="@+id/progressBarSem1" />
+
+    <TextView
+        android:id="@+id/txtSemana1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="33dp"
+        android:text="Semana 1"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.121"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.443" />
+
+    <ProgressBar
+        android:id="@+id/progressBarSem1"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="125dp"
+        android:layout_marginBottom="-2dp"
+        android:indeterminateOnly="false"
+        android:maxWidth="60dip"
+        android:minWidth="60dip"
+        app:layout_constraintBottom_toBottomOf="@+id/txtSemana1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/txtSemana1" />
+
+    <ProgressBar
+        android:id="@+id/progressBarSem2"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="125dp"
+        app:layout_constraintBottom_toBottomOf="@+id/txtSemana3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintStart_toEndOf="@+id/txtSemana3" />
+
+    <ProgressBar
+        android:id="@+id/progressBarSem3"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="125dp"
+        app:layout_constraintBottom_toBottomOf="@+id/txtSemana2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/txtSemana2" />
+
+    <ProgressBar
+        android:id="@+id/progressBarSem4"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="125dp"
+        app:layout_constraintBottom_toBottomOf="@+id/txtSemana4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintStart_toEndOf="@+id/txtSemana4" />
+
+    <TextView
+        android:id="@+id/txtSemana3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="293dp"
+        android:text="Semana 3"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.115"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSemana2"
+        app:layout_constraintVertical_bias="0.422" />
+
+    <TextView
+        android:id="@+id/txtSemana2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="333dp"
+        android:text="Semana 2"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.115"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSemana1"
+        app:layout_constraintVertical_bias="0.393" />
+
+    <TextView
+        android:id="@+id/txtPorcentaje2"
+        android:layout_width="75dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="4dp"
+        android:gravity="center"
+        android:text="0%"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarSem3"
+        app:layout_constraintStart_toEndOf="@+id/progressBarSem3" />
+
+    <TextView
+        android:id="@+id/txtPorcentaje3"
+        android:layout_width="75dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="4dp"
+        android:gravity="center"
+        android:text="0%"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/progressBarSem2"
+        app:layout_constraintTop_toTopOf="@+id/progressBarSem2" />
+
+    <TextView
+        android:id="@+id/txtPorcentaje4"
+        android:layout_width="75dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="4dp"
+        android:gravity="center"
+        android:text="0%"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/progressBarSem4"
+        app:layout_constraintTop_toTopOf="@+id/progressBarSem4" />
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="108dp"
+        android:layout_marginEnd="150dp"
+        android:gravity="center"
+        android:text="Total de facturas en el mes:"
+        android:textSize="21sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSemana4" />
+
+    <TextView
+        android:id="@+id/txtTotal"
+        android:layout_width="85dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="-12dp"
+        android:gravity="center"
+        android:text="No hay registros"
+        app:layout_constraintStart_toStartOf="@+id/txtPorcentaje4"
+        app:layout_constraintTop_toTopOf="@+id/textView24" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

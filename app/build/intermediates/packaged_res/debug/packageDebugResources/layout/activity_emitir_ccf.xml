@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Comprobantecf">
+
+    <FrameLayout
+        android:id="@+id/nuevoFondoDato1"
+        android:layout_width="198dp"
+        android:layout_height="146dp"
+        android:layout_marginTop="332dp"
+        android:background="@drawable/rounded_background_green_ligth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.869"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bordeSup">
+
+        <TextView
+            android:id="@+id/textFechaUltimoRespaldo11"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="0dp"
+            android:text="Informacion del Credito Fiscal"
+            android:textColor="#000"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textFechaUltimoRespaldo24"
+            android:layout_width="184dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="110dp"
+            android:layout_marginRight="0dp"
+            android:text="####-RES-IN-####-####"
+            android:textColor="#000"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textFechaUltimoRespaldo23"
+            android:layout_width="93dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="90dp"
+            android:layout_marginRight="0dp"
+            android:text="Resolucion:"
+            android:textColor="#000"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textFechaUltimoRespaldo22"
+            android:layout_width="93dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginRight="0dp"
+            android:text="Serie.####"
+            android:textColor="#000"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textFechaUltimoRespaldo21"
+            android:layout_width="71dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="0dp"
+            android:text="No.####"
+            android:textColor="#000"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btnRegistrar2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="132dp"
+        android:layout_marginBottom="220dp"
+        android:backgroundTint="#BFD9CF"
+        android:text="+ Agregar Articulo"
+        android:textColor="@color/black"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btnSeleccionarContribuyente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="236dp"
+        android:layout_marginBottom="332dp"
+        android:backgroundTint="#BFD9CF"
+        android:text="Agregar Cliente"
+        android:textColor="@color/black"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/nuevoFondoDato"
+        android:layout_width="234dp"
+        android:layout_height="122dp"
+        android:layout_marginTop="184dp"
+        android:background="@drawable/rounded_background_green_ligth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.155"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bordeSup">
+
+        <TextView
+            android:id="@+id/textFechaUltimoRespaldo1"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="0dp"
+            android:text="Nombre Comercial"
+            android:textColor="#2E594A"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textFechaUltimoRespaldo2"
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginRight="0dp"
+            android:text="Correo Electronico"
+            android:textColor="#2E594A"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textFechaUltimoRespaldo3"
+            android:layout_width="98dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginRight="0dp"
+            android:text="Telefono"
+            android:textColor="#2E594A"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textFechaUltimoRespaldo4"
+            android:layout_width="98dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="90dp"
+            android:layout_marginRight="0dp"
+            android:text="NIT"
+            android:textColor="#2E594A"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btnGenccf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="136dp"
+        android:layout_marginBottom="4dp"
+        android:backgroundTint="#4A8C74"
+        android:text="Generar"
+        android:textColor="@color/black"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/Linea1"
+        android:layout_width="360dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="53dp"
+        android:background="#000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bordeSup" />
+
+    <View
+        android:id="@+id/Linea2"
+        android:layout_width="360dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="248dp"
+        android:background="#000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bordeSup" />
+
+    <View
+        android:id="@+id/Linea3"
+        android:layout_width="360dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="424dp"
+        android:background="#000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bordeSup" />
+
+    <View
+        android:id="@+id/Linea4"
+        android:layout_width="360dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="472dp"
+        android:background="#000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.606"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bordeSup" />
+
+    <TextView
+        android:id="@+id/textContribuyentes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="32dp"
+        android:text="Comprobante de Credito Fiscal"
+        android:textColor="#000"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textRespaldoDatos38"
+        android:layout_width="137dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="692dp"
+        android:layout_marginEnd="2dp"
+        android:text="VENTAS TOTAL $0.00"
+        android:textColor="#000"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textRespaldoDatos44"
+        android:layout_width="171dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="644dp"
+        android:layout_marginEnd="2dp"
+        android:text="VENTAS NO SUJETAS $0.00"
+        android:textColor="#000"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textRespaldoDatos36"
+        android:layout_width="158dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="664dp"
+        android:layout_marginEnd="2dp"
+        android:text="VENTAS EXTERNAS $0.00"
+        android:textColor="#000"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textRespaldoDatos35"
+        android:layout_width="110dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="588dp"
+        android:layout_marginEnd="4dp"
+        android:text="SUB-TOTAL $0.00"
+        android:textColor="#000"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textRespaldoDatos32"
+        android:layout_width="143dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="616dp"
+        android:layout_marginEnd="4dp"
+        android:text="(-) IVA RETENIDO $0.00"
+        android:textColor="#000"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textRespaldoDatos33"
+        android:layout_width="87dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="560dp"
+        android:layout_marginEnd="4dp"
+        android:text="13% IVA $0.00"
+        android:textColor="#000"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textRespaldoDatos31"
+        android:layout_width="80dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="540dp"
+        android:layout_marginEnd="6dp"
+        android:text="SUMAS $0.00"
+        android:textColor="#000"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textLetraLogo"
+        android:layout_width="92dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="136dp"
+        android:layout_marginEnd="284dp"
+        android:text="Emisor"
+        android:textColor="#000"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textRespaldoDatos22"
+        android:layout_width="92dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="324dp"
+        android:layout_marginEnd="276dp"
+        android:text="Receptor"
+        android:textColor="#000"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/bordeSup"
+        android:layout_width="411dp"
+        android:layout_height="67dp"
+        android:layout_marginBottom="665dp"
+        android:background="#4A8C74"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageButton
+            android:id="@+id/atras"
+            android:layout_width="57dp"
+            android:layout_height="51dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/click_effect"
+            android:clickable="true"
+            android:contentDescription="bottom"
+            android:focusable="true"
+            app:srcCompat="@drawable/icons8_back_arrow_48"
+            app:tint="#FFFFFF" />
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="89dp"
+        android:layout_height="83dp"
+        android:layout_marginStart="284dp"
+        android:layout_marginTop="200dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/recurso" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

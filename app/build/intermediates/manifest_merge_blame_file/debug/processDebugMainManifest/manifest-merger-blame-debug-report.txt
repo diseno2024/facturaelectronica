@@ -1,0 +1,244 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.facturaelectronica"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="34" />
+10
+11    <permission
+11-->[androidx.core:core:1.12.0] /home/gadielvides/.gradle/caches/transforms-3/b221b4cbee23a850adbc994bf4659a88/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+12        android:name="com.example.facturaelectronica.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+12-->[androidx.core:core:1.12.0] /home/gadielvides/.gradle/caches/transforms-3/b221b4cbee23a850adbc994bf4659a88/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+13        android:protectionLevel="signature" />
+13-->[androidx.core:core:1.12.0] /home/gadielvides/.gradle/caches/transforms-3/b221b4cbee23a850adbc994bf4659a88/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+14
+15    <uses-permission android:name="com.example.facturaelectronica.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+15-->[androidx.core:core:1.12.0] /home/gadielvides/.gradle/caches/transforms-3/b221b4cbee23a850adbc994bf4659a88/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+15-->[androidx.core:core:1.12.0] /home/gadielvides/.gradle/caches/transforms-3/b221b4cbee23a850adbc994bf4659a88/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+16    <uses-permission android:name="android.permission.INTERNET" />
+16-->[com.couchbase.lite:couchbase-lite-android-ktx:3.1.6] /home/gadielvides/.gradle/caches/transforms-3/4cb99c9d8e77594adb13b50d76fd5ebf/transformed/couchbase-lite-android-ktx-3.1.6/AndroidManifest.xml:27:5-67
+16-->[com.couchbase.lite:couchbase-lite-android-ktx:3.1.6] /home/gadielvides/.gradle/caches/transforms-3/4cb99c9d8e77594adb13b50d76fd5ebf/transformed/couchbase-lite-android-ktx-3.1.6/AndroidManifest.xml:27:22-64
+17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+17-->[com.couchbase.lite:couchbase-lite-android-ktx:3.1.6] /home/gadielvides/.gradle/caches/transforms-3/4cb99c9d8e77594adb13b50d76fd5ebf/transformed/couchbase-lite-android-ktx-3.1.6/AndroidManifest.xml:28:5-79
+17-->[com.couchbase.lite:couchbase-lite-android-ktx:3.1.6] /home/gadielvides/.gradle/caches/transforms-3/4cb99c9d8e77594adb13b50d76fd5ebf/transformed/couchbase-lite-android-ktx-3.1.6/AndroidManifest.xml:28:22-76
+18
+19    <application
+19-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:5:5-72:19
+20        android:allowBackup="true"
+20-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:6:9-35
+21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+21-->[androidx.core:core:1.12.0] /home/gadielvides/.gradle/caches/transforms-3/b221b4cbee23a850adbc994bf4659a88/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+22        android:dataExtractionRules="@xml/data_extraction_rules"
+22-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:7:9-65
+23        android:debuggable="true"
+24        android:extractNativeLibs="false"
+25        android:fullBackupContent="@xml/backup_rules"
+25-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:8:9-54
+26        android:icon="@mipmap/ic_launcher"
+26-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:9:9-43
+27        android:label="@string/app_name"
+27-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:10:9-41
+28        android:roundIcon="@mipmap/ic_launcher_round"
+28-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:11:9-54
+29        android:supportsRtl="true"
+29-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:12:9-35
+30        android:testOnly="true"
+31        android:theme="@style/Base.Theme.FacturaElectronica" >
+31-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:13:9-61
+32        <activity
+32-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:15:9-17:40
+33            android:name="com.example.facturaelectronica.DescripcionActivity"
+33-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:16:13-48
+34            android:exported="false" />
+34-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:17:13-37
+35        <activity
+35-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:18:9-20:40
+36            android:name="com.example.facturaelectronica.ConfDatosDelContribuyenteActivity"
+36-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:19:13-62
+37            android:exported="false" />
+37-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:20:13-37
+38        <activity
+38-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:21:9-23:40
+39            android:name="com.example.facturaelectronica.ReClienteActivity"
+39-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:22:13-46
+40            android:exported="false" />
+40-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:23:13-37
+41        <activity
+41-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:24:9-26:40
+42            android:name="com.example.facturaelectronica.ComprobanteCCFActivity"
+42-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:25:13-51
+43            android:exported="false" />
+43-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:26:13-37
+44        <activity
+44-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:27:9-29:40
+45            android:name="com.example.facturaelectronica.ResMensualActivity"
+45-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:28:13-47
+46            android:exported="false" />
+46-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:29:13-37
+47        <activity
+47-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:30:9-32:40
+48            android:name="com.example.facturaelectronica.ReDatosContribuyenteActivity"
+48-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:31:13-57
+49            android:exported="false" />
+49-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:32:13-37
+50        <activity
+50-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:33:9-35:40
+51            android:name="com.example.facturaelectronica.MenuActivity"
+51-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:34:13-41
+52            android:exported="false" />
+52-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:35:13-37
+53        <activity
+53-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:36:9-38:40
+54            android:name="com.example.facturaelectronica.InfoReceptoresActivity"
+54-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:37:13-51
+55            android:exported="false" />
+55-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:38:13-37
+56        <activity
+56-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:39:9-41:40
+57            android:name="com.example.facturaelectronica.PDF_CFActivity"
+57-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:40:13-43
+58            android:exported="false" />
+58-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:41:13-37
+59        <activity
+59-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:42:9-44:40
+60            android:name="com.example.facturaelectronica.LogoActivity"
+60-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:43:13-41
+61            android:exported="false" />
+61-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:44:13-37
+62        <activity
+62-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:45:9-47:40
+63            android:name="com.example.facturaelectronica.BackupActivity"
+63-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:46:13-43
+64            android:exported="false" />
+64-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:47:13-37
+65        <activity
+65-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:48:9-50:40
+66            android:name="com.example.facturaelectronica.RestauracionActivity"
+66-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:49:13-49
+67            android:exported="false" />
+67-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:50:13-37
+68        <activity
+68-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:51:9-53:40
+69            android:name="com.example.facturaelectronica.Comprobantecf"
+69-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:52:13-42
+70            android:exported="false" />
+70-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:53:13-37
+71        <activity
+71-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:54:9-56:40
+72            android:name="com.example.facturaelectronica.InfoEmisorActivity"
+72-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:55:13-47
+73            android:exported="false" />
+73-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:56:13-37
+74        <activity
+74-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:57:9-59:40
+75            android:name="com.example.facturaelectronica.EmitirCFActivity"
+75-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:58:13-45
+76            android:exported="false" />
+76-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:59:13-37
+77        <activity
+77-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:60:9-62:40
+78            android:name="com.example.facturaelectronica.AgregarArticuloActivity"
+78-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:61:13-52
+79            android:exported="false" />
+79-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:62:13-37
+80        <activity
+80-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:63:9-71:20
+81            android:name="com.example.facturaelectronica.LoginActivity"
+81-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:64:13-42
+82            android:exported="true" >
+82-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:65:13-36
+83            <intent-filter>
+83-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:66:13-70:29
+84                <action android:name="android.intent.action.MAIN" />
+84-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:67:17-69
+84-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:67:25-66
+85
+86                <category android:name="android.intent.category.LAUNCHER" />
+86-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:69:17-77
+86-->/home/gadielvides/Documentos/GitHub/facturaelectronica/app/src/main/AndroidManifest.xml:69:27-74
+87            </intent-filter>
+88        </activity>
+89        <activity
+89-->[androidx.compose.ui:ui-tooling-android:1.6.6] /home/gadielvides/.gradle/caches/transforms-3/a670433d9a781b69d73124761d94c2eb/transformed/ui-tooling-release/AndroidManifest.xml:23:9-25:39
+90            android:name="androidx.compose.ui.tooling.PreviewActivity"
+90-->[androidx.compose.ui:ui-tooling-android:1.6.6] /home/gadielvides/.gradle/caches/transforms-3/a670433d9a781b69d73124761d94c2eb/transformed/ui-tooling-release/AndroidManifest.xml:24:13-71
+91            android:exported="true" />
+91-->[androidx.compose.ui:ui-tooling-android:1.6.6] /home/gadielvides/.gradle/caches/transforms-3/a670433d9a781b69d73124761d94c2eb/transformed/ui-tooling-release/AndroidManifest.xml:25:13-36
+92        <activity
+92-->[androidx.compose.ui:ui-test-manifest:1.6.6] /home/gadielvides/.gradle/caches/transforms-3/c2342d667fb18f112fad727885b72e1b/transformed/ui-test-manifest-1.6.6/AndroidManifest.xml:23:9-25:39
+93            android:name="androidx.activity.ComponentActivity"
+93-->[androidx.compose.ui:ui-test-manifest:1.6.6] /home/gadielvides/.gradle/caches/transforms-3/c2342d667fb18f112fad727885b72e1b/transformed/ui-test-manifest-1.6.6/AndroidManifest.xml:24:13-63
+94            android:exported="true" />
+94-->[androidx.compose.ui:ui-test-manifest:1.6.6] /home/gadielvides/.gradle/caches/transforms-3/c2342d667fb18f112fad727885b72e1b/transformed/ui-test-manifest-1.6.6/AndroidManifest.xml:25:13-36
+95
+96        <provider
+96-->[androidx.emoji2:emoji2:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/314900d2ff5218d91fb56883d2822a4b/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+97            android:name="androidx.startup.InitializationProvider"
+97-->[androidx.emoji2:emoji2:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/314900d2ff5218d91fb56883d2822a4b/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+98            android:authorities="com.example.facturaelectronica.androidx-startup"
+98-->[androidx.emoji2:emoji2:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/314900d2ff5218d91fb56883d2822a4b/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+99            android:exported="false" >
+99-->[androidx.emoji2:emoji2:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/314900d2ff5218d91fb56883d2822a4b/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+100            <meta-data
+100-->[androidx.emoji2:emoji2:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/314900d2ff5218d91fb56883d2822a4b/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+101                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+101-->[androidx.emoji2:emoji2:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/314900d2ff5218d91fb56883d2822a4b/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+102                android:value="androidx.startup" />
+102-->[androidx.emoji2:emoji2:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/314900d2ff5218d91fb56883d2822a4b/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+103            <meta-data
+103-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/gadielvides/.gradle/caches/transforms-3/21b6e75bf59bbd6a537700b9da81b22a/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+104                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+104-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/gadielvides/.gradle/caches/transforms-3/21b6e75bf59bbd6a537700b9da81b22a/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+105                android:value="androidx.startup" />
+105-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/gadielvides/.gradle/caches/transforms-3/21b6e75bf59bbd6a537700b9da81b22a/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+106            <meta-data
+106-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+107                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+107-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+108                android:value="androidx.startup" />
+108-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+109        </provider>
+110
+111        <receiver
+111-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+112            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+112-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+113            android:directBootAware="false"
+113-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+114            android:enabled="true"
+114-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+115            android:exported="true"
+115-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+116            android:permission="android.permission.DUMP" >
+116-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+117            <intent-filter>
+117-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+118                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+118-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+118-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+119            </intent-filter>
+120            <intent-filter>
+120-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+121                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+121-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+121-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+122            </intent-filter>
+123            <intent-filter>
+123-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+124                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+124-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+124-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+125            </intent-filter>
+126            <intent-filter>
+126-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+127                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+127-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+127-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/gadielvides/.gradle/caches/transforms-3/d7cb804b7663c4232d8aa2fc899e7384/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+128            </intent-filter>
+129        </receiver>
+130    </application>
+131
+132</manifest>

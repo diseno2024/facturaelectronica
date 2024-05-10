@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="Texto">28sp</dimen>
+    <dimen name="bottom_right_radius">100dp</dimen>
+    <dimen name="textSize_button">30sp</dimen>
+    <dimen name="textSize_input">30sp</dimen>
+    <dimen name="textSize_textToolbar">45sp</dimen>
+    <dimen name="text_check">25sp</dimen>
+    <dimen name="top_left_radius">75dp</dimen>
+    <dimen name="top_margin">150dp</dimen>
+    <dimen name="top_right_radius">75dp</dimen>
+</resources>
