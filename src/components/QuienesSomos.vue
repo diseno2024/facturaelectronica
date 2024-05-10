@@ -103,4 +103,15 @@ p {
   line-height: 24px;
   letter-spacing: 0px;
 }
+@media (max-width: 768px) {
+  .about-us {
+    flex-direction: column;
+  }
+  .left-section,
+  .right-section {
+    min-width: unset;
+    margin-right: 0;
+  }
+}
+
 </style>
