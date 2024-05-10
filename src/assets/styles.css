@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
+/* Estilos de animación */
 @keyframes desplazamiento {
     0% {
         transform: translateY(-20px); /* Empieza 20px arriba de su posición normal */
@@ -17,21 +18,16 @@
         background-color: #051937; /* Color de fondo inicial (azul) */
     }
     40.5% {
-        background: linear-gradient(to right, #2E594A, #80BFA8);
-/* Color de fondo que se mantiene durante casi toda la animación */
+        background: linear-gradient(to right, #2E594A, #80BFA8); /* Color de fondo que se mantiene durante casi toda la animación */
     }
     100% {
-        background: linear-gradient(to bottom right, #2E594A 20%, #95BFB0);/* Color de fondo final (color normal) */
+        background: linear-gradient(to bottom right, #2E594A 20%, #95BFB0); /* Color de fondo final (color normal) */
     }
 }
 
-body {
-    margin: 0;
-    padding: 0;
-  }
 
+/* Estilos básicos de la sección */
 .seccion {
-    
     color: white;
     margin-left: -10px;
     margin-right: -10px;
@@ -40,10 +36,12 @@ body {
     display: flex; /* Usa flexbox para alinear los elementos */
     justify-content: space-between; /* Alinea los elementos a los extremos */
     align-items: center; /* Centra verticalmente los elementos */
-    animation: cambio-color 3s ease-in-out forwards;
-    
-    /* Otros estilos para tu sección */
-  }
+    animation: cambio-color 3s ease-in-out forwards; /* Animación de cambio de color */
+}
+
+.animate {
+    animation: desplazamiento 1s ease-in-out forwards,cambio-color 1s ease-in-out forwards /* Aplica la animación de desplazamiento */
+}
 
   /* Estilos para el título */
 .titulo {
@@ -69,9 +67,9 @@ body {
   }
 
  /* Aplica la animación a todos los elementos */
-.titulo,
-.contenido,
-.imagen-telefono {
+.animate.titulo,
+.animate.contenido,
+.animate.imagen-telefono {
     animation: desplazamiento 1s ease-in-out; /* Aplica la animación con duración de 1 segundo y efecto de entrada y salida suave */
 }
 
