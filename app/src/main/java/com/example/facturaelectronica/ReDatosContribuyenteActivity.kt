@@ -77,7 +77,45 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         val docId = "datos_contribuyentes"
         val doc = datosContribuyente.getDocument(docId) ?: MutableDocument(docId)
 
+        val nuevoContribuyente = MutableDocument().apply {
+            setString("RazonSocial", razonSocialText)
+            setString("NIT", nitText)
+            setString("ActividadEconomica", actividadEconomica)
+            setString("NRC", nrc)
+            setString("Direccion", direccion)
+            setString("Email", email)
+            setString("NombreComercial", nombreComercial)
+            setString("Telefono", telefono)
+        }
 
+        try {
+            datosContribuyente.save(nuevoContribuyente)
+            Log.d("GuardandoDatos", "Datos guardados correctamente")
+            Log.d("GuardandoDatos", "Datos guardados: $doc")
+
+            val query = QueryBuilder.select(SelectResult.all())
+                .from(DataSource.database(datosContribuyente))
+            val result = query.execute()
+            result.allResults().forEach {
+                val dict = it.getDictionary(datosContribuyente.name)
+                Log.d("GuardandoDatos", "Datos guardados: $dict")
+            }
+            returnToMenu()
+            limpiarEditText()
+        } catch (e: Exception) {
+            Log.e("GuardandoDatos", "Error al guardar los datos: ${e.message}")
+        }
+    }
+
+    private fun limpiarEditText() {
+        findViewById<android.widget.EditText>(R.id.RazonSocialText).setText("")
+        findViewById<android.widget.EditText>(R.id.NitText).setText("")
+        findViewById<android.widget.EditText>(R.id.ActividadEcoText).setText("")
+        findViewById<android.widget.EditText>(R.id.NRCText).setText("")
+        findViewById<android.widget.EditText>(R.id.DireccionText).setText("")
+        findViewById<android.widget.EditText>(R.id.correoText).setText("")
+        findViewById<android.widget.EditText>(R.id.NomComercialText).setText("")
+        findViewById<android.widget.EditText>(R.id.TelefonoText).setText("")
     }
 
     private fun returnToMenu() {
