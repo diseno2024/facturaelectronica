@@ -234,7 +234,8 @@
         android:layout_marginTop="40dp"
         android:text="Descuento"
         app:layout_constraintStart_toStartOf="@+id/editTextText4"
-        app:layout_constraintTop_toBottomOf="@+id/TipodeVenta" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/editTextText4"
         android:layout_width="0dp"
@@ -284,9 +285,11 @@
             android:id="@+id/Total"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:minHeight="45dp"
             android:padding="5dp"
+            android:textAlignment="center"
             android:textColor="#4a8c74"
-            android:textAlignment="center"/>
+            android:textSize="18sp" />
 
     </com.google.android.material.card.MaterialCardView>
 
