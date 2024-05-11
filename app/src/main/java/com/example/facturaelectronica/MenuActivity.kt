@@ -120,7 +120,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_logo -> {
                 // Iniciar LogoActivity al seleccionar "Subir logo"
-                val intent = Intent(this, LogoActivity::class.java)
+                val intent = Intent(this, InfoEmisorActivity::class.java)
                 startActivity(intent)
                 finish()
                 return true
