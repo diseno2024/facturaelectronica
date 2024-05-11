@@ -20,14 +20,14 @@
         app:srcCompat="@drawable/icons8_cancelar_24"
         app:tint="#EF0000" />
     <Button
-        android:id="@+id/btnImportar"
+        android:id="@+id/btnAgregar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#96D0B9"
-        android:text="Importar"
+        android:text="No"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
@@ -35,19 +35,19 @@
         android:textStyle="bold"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnAgregar"
+        app:layout_constraintEnd_toStartOf="@+id/btnImportar"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="#4a8c74"
         app:strokeWidth="3dp" />
 
     <Button
-        android:id="@+id/btnAgregar"
+        android:id="@+id/btnImportar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#96D0B9"
-        android:text="Agregar"
+        android:text="Si"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
@@ -56,7 +56,7 @@
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnImportar"
+        app:layout_constraintStart_toEndOf="@+id/btnAgregar"
         app:strokeColor="#4a8c74"
         app:strokeWidth="3dp" />
 
@@ -64,7 +64,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="¿Deseas importar datos existentes de un cliente o agregar datos nuevos?"
+        android:text="¿Desea cargar datos de un cliente existente?"
         android:textAlignment="center"
         android:textColor="#4a8c74"
         android:textSize="33sp"

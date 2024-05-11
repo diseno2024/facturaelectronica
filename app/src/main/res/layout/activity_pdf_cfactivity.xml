@@ -850,14 +850,14 @@
             </TableLayout>
 
             <Button
-                android:id="@+id/btnMenuprin"
+                android:id="@+id/Generar"
                 android:layout_width="219dp"
                 android:layout_height="42dp"
                 android:layout_marginTop="950dp"
                 android:backgroundTint="#4a8c74"
                 android:paddingStart="8dp"
                 android:paddingEnd="10dp"
-                android:text="Regresar al documento"
+                android:text="Generar Factura"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:cornerRadius="15dp"

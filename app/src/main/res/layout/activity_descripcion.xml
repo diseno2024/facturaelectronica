@@ -199,7 +199,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Precio"
+        android:text="Precio Unitario"
         app:layout_constraintStart_toStartOf="@+id/editTextText3"
         app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
     <com.google.android.material.card.MaterialCardView
@@ -227,72 +227,6 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Descuento"
-        app:layout_constraintStart_toStartOf="@+id/editTextText4"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/editTextText4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintWidth_percent="0.38"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8"
-        app:strokeColor="#4a8c74"
-        app:strokeWidth="2dp">
-
-        <EditText
-            android:id="@+id/Descuento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#FFFFFF"
-            android:inputType="numberDecimal"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:textColor="#4a8c74"
-            android:textAlignment="center" />
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Total"
-        app:layout_constraintStart_toStartOf="@+id/textView13"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/textView13"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintWidth_percent="0.38"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11"
-        app:strokeColor="#4a8c74"
-        app:strokeWidth="2dp">
-
-        <TextView
-            android:id="@+id/Total"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:minHeight="45dp"
-            android:padding="5dp"
-            android:textAlignment="center"
-            android:textColor="#4a8c74"
-            android:textSize="18sp" />
-
-    </com.google.android.material.card.MaterialCardView>
-
     <Button
         android:id="@+id/Agregar"
         android:layout_width="0dp"
@@ -308,7 +242,7 @@
         android:textStyle="bold"
         app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText3"
         app:layout_constraintWidth_percent="0.3"
         app:strokeColor="#4a8c74"
         app:strokeWidth="3dp" />
@@ -328,7 +262,7 @@
         android:textStyle="bold"
         app:cornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText4"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText3"
         app:layout_constraintWidth_percent="0.3"
         app:strokeColor="#4a8c74"
         app:strokeWidth="3dp" />

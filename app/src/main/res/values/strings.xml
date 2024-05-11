@@ -8,11 +8,6 @@
         <item>Semanal</item>
         <item>Mensual</item>
     </string-array>
-    <string-array name="CondOp_array">
-        <item>Contado</item>
-        <item>Credito</item>
-        <item>Otro</item>
-    </string-array>
     <string-array name="TipoS">
         <item>Bien</item>
         <item>Servicio</item>

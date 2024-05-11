@@ -27,7 +27,7 @@ class DescripcionActivity : AppCompatActivity() {
         ArrayAdapter.createFromResource(
             this,
             R.array.TipoS,
-            R.layout.spinner_personalizado
+            R.layout.spinner_descripcion
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears.
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_per)
@@ -39,7 +39,7 @@ class DescripcionActivity : AppCompatActivity() {
         ArrayAdapter.createFromResource(
             this,
             R.array.UnidadMedidaS,
-            R.layout.spinner_personalizado
+            R.layout.spinner_descripcion
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears.
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_per)
@@ -51,7 +51,7 @@ class DescripcionActivity : AppCompatActivity() {
         ArrayAdapter.createFromResource(
             this,
             R.array.Tipo_Venta,
-            R.layout.spinner_personalizado
+            R.layout.spinner_descripcion
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears.
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_per)
