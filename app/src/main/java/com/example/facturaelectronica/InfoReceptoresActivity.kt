@@ -5,6 +5,10 @@ import android.content.Intent
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.couchbase.lite.DataSource
+import com.couchbase.lite.Database
+import com.couchbase.lite.QueryBuilder
+import com.couchbase.lite.SelectResult
 
 class InfoReceptoresActivity : AppCompatActivity() {
 
@@ -41,10 +45,36 @@ class InfoReceptoresActivity : AppCompatActivity() {
             finish()
         }
     }
+
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
         val intent = Intent(this, Comprobantecf::class.java)
         startActivity(intent)
         finish()
+    }
+
+    private fun obtenerDatosGuardados(): List<String> {
+        val datosContribuyente = Database("datosContribuyente")
+
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(datosContribuyente))
+        val result = query.execute()
+        val dataList = mutableListOf<String>()
+        result.allResults().forEach { result ->
+            val dict = result.getDictionary(datosContribuyente.name)
+            val razonSocial = dict?.getString("RazonSocial")
+            val nit = dict?.getString("NIT")
+            val actividadEconomica = dict?.getString("ActividadEconomica")
+            val nrc = dict?.getString("NRC")
+            val direccion = dict?.getString("Direccion")
+            val email = dict?.getString("Email")
+            val nombreComercial = dict?.getString("NombreComercial")
+            val telefono = dict?.getString("Telefono")
+
+            val dataString = "Nombre Comercial: $nombreComercial\nCorreo: $email\nTeléfono: $telefono\nNIT: $nit\nDUI: $nrc"
+            dataList.add(dataString)
+        }
+        datosContribuyente.close()
+        return dataList
     }
 }
