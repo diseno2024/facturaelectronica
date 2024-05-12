@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PrinReClienteActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#4a8c74"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:contentInsetStart="0dp">
+        <ImageButton
+            android:id="@+id/atras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/click_effect"
+            android:clickable="true"
+            android:contentDescription="bottom"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="@+id/toolbar"
+            app:layout_constraintHorizontal_bias="0.04"
+            app:layout_constraintStart_toStartOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3"
+            app:srcCompat="@drawable/icons8_back_arrow_48"
+            app:tint="#FFFFFF" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Datos del Cliente"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/textSize_textToolbar"
+            app:layout_constraintVertical_bias="0.35"
+            app:layout_constraintHorizontal_bias="0.4"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
+            />
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+
+
+    <EditText
+        android:id="@+id/nombre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Nombre"
+        android:inputType="text"
+        android:textColor="#4a8c74"
+        android:textColorHint="#4a8c74"
+        android:textSize="@dimen/textSize_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15"
+        app:layout_constraintWidth_percent="0.8"
+        android:backgroundTint="#2E594A"
+        />
+
+    <EditText
+        android:id="@+id/nit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#2E594A"
+        android:ems="10"
+        android:hint="NIT"
+        android:inputType="number"
+        android:textColor="#4a8c74"
+        android:textSize="@dimen/textSize_input"
+        android:textColorHint="#4a8c74"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.27"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Correo Electronico"
+        android:inputType="textEmailAddress"
+        android:textColor="#4a8c74"
+        android:textColorHint="#4a8c74"
+        android:textSize="@dimen/textSize_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.39"
+        app:layout_constraintWidth_percent="0.8"
+        android:backgroundTint="#2E594A"/>
+
+    <EditText
+        android:id="@+id/direccion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Direccion"
+        android:inputType="text"
+        android:textColor="#4a8c74"
+        android:textColorHint="#4a8c74"
+        android:textSize="@dimen/textSize_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.66"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Departamento"
+        android:textColor="#4A8C74"
+        app:layout_constraintBottom_toTopOf="@+id/departamento"
+        app:layout_constraintStart_toStartOf="@+id/departamento" />
+
+    <Spinner
+        android:id="@+id/departamento"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_text"
+        android:textSize="@dimen/textSize_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.165"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.54"
+        app:layout_constraintWidth_percent="0.38"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Municipio"
+        android:textColor="#4A8C74"
+        app:layout_constraintBottom_toTopOf="@+id/municipio"
+        app:layout_constraintStart_toStartOf="@+id/municipio" />
+
+    <Spinner
+        android:id="@+id/municipio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_text"
+        android:textSize="@dimen/textSize_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.836"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.54"
+        app:layout_constraintWidth_percent="0.38" />
+
+    <EditText
+        android:id="@+id/telefono"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="8"
+        android:hint="Telefono"
+        android:inputType="number"
+        android:textColor="#4a8c74"
+        android:textColorHint="#4a8c74"
+        android:textSize="@dimen/textSize_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.78"
+        app:layout_constraintWidth_percent="0.8"
+        android:backgroundTint="#2E594A"/>
+
+    <Button
+        android:id="@+id/btnCancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4A8C74"
+        android:text="Cancelar"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSize_button"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.215"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.951" />
+
+    <Button
+        android:id="@+id/btnRegistrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4A8C74"
+        android:text="Agregar"
+        android:textSize="@dimen/textSize_button"
+        android:textColor="@color/white"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toEndOf="@+id/btnCancelar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.951" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

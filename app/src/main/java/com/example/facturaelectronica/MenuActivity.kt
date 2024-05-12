@@ -45,8 +45,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .replace(R.id.fragment_container, HomeFragment()).commit()
             navigationView.setCheckedItem(R.id.nav_home)
         }
-        CouchbaseLite.init(application)
-        database = Database("my_database")
     }
     fun navigateToFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
@@ -112,7 +110,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_registro -> {
                 // Iniciar ReClienteActivity al seleccionar "Registro del cliente"
-                val intent = Intent(this, ReClienteActivity::class.java)
+                val intent = Intent(this, PrinReClienteActivity::class.java)
                 startActivity(intent)
                 finish()
                 return true

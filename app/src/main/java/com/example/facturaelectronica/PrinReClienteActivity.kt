@@ -16,8 +16,7 @@ import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.Database
 
-
-class ReClienteActivity : AppCompatActivity() {
+class PrinReClienteActivity : AppCompatActivity() {
     private lateinit var spinnerDep: Spinner
     private lateinit var spinnerMun: Spinner
     private lateinit var nombre: EditText
@@ -30,12 +29,10 @@ class ReClienteActivity : AppCompatActivity() {
     private lateinit var agregarButton: Button
     private lateinit var cancelarButton: Button
     private lateinit var database: Database
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_re_cliente)
+        setContentView(R.layout.activity_prin_re_cliente)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -69,7 +66,7 @@ class ReClienteActivity : AppCompatActivity() {
         departamento = findViewById(R.id.departamento)
         municipio = findViewById(R.id.municipio)
         telefono=findViewById(R.id.telefono)
-        agregarButton = findViewById(R.id.btnAgregar)
+        agregarButton = findViewById(R.id.btnRegistrar)
         cancelarButton=findViewById(R.id.btnCancelar)
 
         // Configurar evento de clic para el botón "Agregar"
@@ -83,12 +80,12 @@ class ReClienteActivity : AppCompatActivity() {
             telefono.text.clear()
 
             // Iniciar otra actividad
-            val intent = Intent(this, EmitirCFActivity::class.java)
+            val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
         }
         cancelarButton.setOnClickListener {
             // Iniciar otra actividad
-            val intent = Intent(this, EmitirCFActivity::class.java)
+            val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
         }
 
@@ -126,7 +123,10 @@ class ReClienteActivity : AppCompatActivity() {
             Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
-
+    override fun onBackPressed() {
+        super.onBackPressed() // Llama al método onBackPressed() de la clase base
+        val intent = Intent(this, MenuActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }
-
-
