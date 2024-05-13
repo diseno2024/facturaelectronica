@@ -3,6 +3,7 @@ package com.example.facturaelectronica
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -17,6 +18,18 @@ import android.widget.Button
 class RestauracionActivity : AppCompatActivity() {
 
     private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
+    private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 33) {
+        listOf(
+            Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.READ_MEDIA_VIDEO,
+            Manifest.permission.READ_MEDIA_IMAGES
+        )
+    } else {
+        listOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,21 +44,23 @@ class RestauracionActivity : AppCompatActivity() {
 
         val btnRealizarRecuperacion: Button = findViewById(R.id.buttonSelectTime)
         btnRealizarRecuperacion.setOnClickListener {
-            requestWriteExternalStoragePermission()
+            requestPermissions()
         }
     }
 
+    private fun requestPermissions() {
+        val permissionsToRequest = mutableListOf<String>()
 
+        for (permission in permissionList) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission)
+            }
+        }
 
-    private fun requestWriteExternalStoragePermission() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (permissionsToRequest.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                permissionsToRequest.toTypedArray(),
                 WRITE_EXTERNAL_STORAGE_REQUEST_CODE
             )
         } else {
@@ -61,9 +76,9 @@ class RestauracionActivity : AppCompatActivity() {
         val backupDirectory = File(parentDir, backupDirectoryName)
         val restorationDirectory = File(backupDirectory, restorationDirectoryName)
 
-        if (backupDirectory.exists()) { // Verificar si la carpeta de respaldo existe
-            if (!restorationDirectory.exists()) { // Verificar si la carpeta de restauración no existe
-                if (restorationDirectory.mkdirs()) { // Intentar crear la carpeta de restauración
+        if (backupDirectory.exists()) {
+            if (!restorationDirectory.exists()) {
+                if (restorationDirectory.mkdirs()) {
                     Log.d("RestauracionActivity", "Directorio de restauración creado en: ${restorationDirectory.absolutePath}")
                     Toast.makeText(this, "Directorio de restauración creado exitosamente", Toast.LENGTH_SHORT).show()
                 } else {
@@ -87,7 +102,7 @@ class RestauracionActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 createRestorationFolder()
             } else {
                 Toast.makeText(

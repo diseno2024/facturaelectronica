@@ -14,7 +14,7 @@ import android.widget.EditText
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
-
+import android.os.Build
 import android.os.Environment
 import android.util.Log
 import java.io.File
@@ -31,6 +31,18 @@ class BackupActivity : AppCompatActivity() {
     private lateinit var buttonSelectTime: Button
     private lateinit var editTextSelectedTime: EditText
     private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
+    private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 34) {
+        listOf(
+            Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.READ_MEDIA_VIDEO,
+            Manifest.permission.READ_MEDIA_IMAGES
+        )
+    } else {
+        listOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,17 +51,13 @@ class BackupActivity : AppCompatActivity() {
         val switchEncendido = findViewById<Switch>(R.id.switchEncendido)
         val textEstado = findViewById<TextView>(R.id.textEstado)
 
-        switchEncendido.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                textEstado.text = "Encendido"
-            } else {
-                textEstado.text = "Apagado"
-            }
+        switchEncendido.setOnCheckedChangeListener { _, isChecked ->
+            textEstado.text = if (isChecked) "Encendido" else "Apagado"
         }
 
         val btnRegistrar = findViewById<Button>(R.id.btnRegistrar)
         btnRegistrar.setOnClickListener {
-            requestWriteExternalStoragePermission()
+            requestPermissions()
         }
 
         val spinnerFrecuencia = findViewById<Spinner>(R.id.spinnerFrecuencia)
@@ -64,8 +72,7 @@ class BackupActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Seleccionaste: $opcionSeleccionada", Toast.LENGTH_SHORT).show()
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         buttonSelectTime = findViewById(R.id.buttonSelectTime)
@@ -106,15 +113,19 @@ class BackupActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun requestWriteExternalStoragePermission() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+    private fun requestPermissions() {
+        val permissionsToRequest = mutableListOf<String>()
+
+        for (permission in permissionList) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission)
+            }
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                permissionsToRequest.toTypedArray(),
                 WRITE_EXTERNAL_STORAGE_REQUEST_CODE
             )
         } else {
@@ -123,33 +134,22 @@ class BackupActivity : AppCompatActivity() {
     }
 
     private fun createBackupFolder() {
-        // Obtener el directorio de documentos públicos
         val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-
-// Nombre del directorio de respaldo dentro del directorio de documentos
         val backupDirectoryName = "respaldo_factura2024"
-
-// Crear el objeto File para el directorio de respaldo
         val backupDirectory = File(parentDir, backupDirectoryName)
 
-// Verificar si el directorio ya existe
         if (!backupDirectory.exists()) {
-            // Intentar crear el directorio si no existe
             if (backupDirectory.mkdirs()) {
-                // El directorio se creó exitosamente
-                Log.d("BackupActivity", "Directorio de respaldo creado exitosamente en: ${backupDirectory.absolutePath}")
+                Log.d("BackupActivity", "Directorio de respaldo creado en: ${backupDirectory.absolutePath}")
                 Toast.makeText(this, "Directorio de respaldo creado exitosamente", Toast.LENGTH_SHORT).show()
             } else {
-                // Error al crear el directorio
                 Log.e("BackupActivity", "Error al crear el directorio de respaldo")
                 Toast.makeText(this, "Error al crear el directorio de respaldo", Toast.LENGTH_SHORT).show()
             }
         } else {
-            // El directorio ya existe
             Log.d("BackupActivity", "El directorio de respaldo ya existe en: ${backupDirectory.absolutePath}")
             Toast.makeText(this, "El directorio de respaldo ya existe", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     override fun onRequestPermissionsResult(
@@ -159,7 +159,7 @@ class BackupActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 createBackupFolder()
             } else {
                 Toast.makeText(
