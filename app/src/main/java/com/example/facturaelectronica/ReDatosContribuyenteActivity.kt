@@ -31,8 +31,8 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
 
         datosContribuyente = Database("datosContribuyente")
 
-        val btnGuardar = findViewById<android.widget.Button>(R.id.GuardarButton)
-        val btnCancelar = findViewById<android.widget.Button>(R.id.CancelarButton)
+        val btnGuardar = findViewById<android.widget.Button>(R.id.guardarButton)
+        val btnCancelar = findViewById<android.widget.Button>(R.id.cancelarButton)
 
         btnGuardar.setOnClickListener{
             guardarDatosContribuyente(
