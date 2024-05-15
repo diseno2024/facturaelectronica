@@ -6,8 +6,7 @@
             <!-- Definición del radio del borde inferior derecho como el 10% del ancho de la pantalla -->
             <corners android:topLeftRadius="0dp"
                 android:topRightRadius="0dp"
-                android:bottomLeftRadius="0dp"
-                android:bottomRightRadius="@dimen/bottom_right_radius"/>
+                android:bottomLeftRadius="0dp"/>
         </shape>
     </item>
     <!-- Fondo inferior -->

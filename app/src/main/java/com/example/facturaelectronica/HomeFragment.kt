@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.boton_creditoFiscal -> {
-                    floatingActionButton.backgroundTintList = ColorStateList.valueOf(hexToColorInt("#892026"))
+                    floatingActionButton.backgroundTintList = ColorStateList.valueOf(hexToColorInt("#2E594A"))
                     (activity as MenuActivity).navigateToFragment(CFiscalFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
