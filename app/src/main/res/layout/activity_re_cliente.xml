@@ -83,8 +83,9 @@
         android:id="@+id/email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="#2E594A"
         android:ems="10"
-        android:hint="Correo Electronico"
+        android:hint="Correo Electrónico"
         android:inputType="textEmailAddress"
         android:textColor="#4a8c74"
         android:textColorHint="#4a8c74"
@@ -95,15 +96,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.39"
-        app:layout_constraintWidth_percent="0.8"
-        android:backgroundTint="#2E594A"/>
+        app:layout_constraintWidth_percent="0.8" />
 
     <EditText
         android:id="@+id/direccion"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Direccion"
+        android:hint="Dirección"
         android:inputType="text"
         android:textColor="#4a8c74"
         android:textColorHint="#4a8c74"
@@ -165,8 +165,9 @@
         android:id="@+id/telefono"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="#2E594A"
         android:ems="8"
-        android:hint="Telefono"
+        android:hint="Teléfono"
         android:inputType="number"
         android:textColor="#4a8c74"
         android:textColorHint="#4a8c74"
@@ -177,8 +178,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.75"
-        app:layout_constraintWidth_percent="0.8"
-        android:backgroundTint="#2E594A"/>
+        app:layout_constraintWidth_percent="0.8" />
 
     <Button
         android:id="@+id/btnCancelar"
@@ -216,7 +216,7 @@
         android:id="@+id/checkGuardar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Guardar datos del ciente permanentemente"
+        android:text="Guardar datos del cliente permanentemente"
         android:textColor="#4A8C74"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
