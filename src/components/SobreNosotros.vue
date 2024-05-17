@@ -1,15 +1,23 @@
 <template>
-  <div class="whowe-are">
+  <div class="about-us">
     <div class="left-section">
-      <section class="team-section animated">
-         <h1>Equipo de Expertos</h1>
-    <p>Nuestra organización cuenta con un equipo altamente capacitado y diverso, conformado por profesionales apasionados y dedicados que abarcan una amplia gama de disciplinas. Desde desarrolladores de software hasta diseñadores de experiencia de usuario y expertos en cumplimiento normativo, cada miembro aporta habilidades únicas que se combinan para impulsar el éxito de nuestra plataforma.</p>
+      <section class="about-section animated">
+        <h1>Sobre nosotros</h1>
+        <p>BillSV es una aplicación nueva en el mercado de facturación electrónica diseñada para simplificar y agilizar el proceso de emisión y gestión de facturas para pequeñas y medianas empresas. Con una interfaz intuitiva y herramientas avanzadas, ayudamos a los negocios a cumplir con los requisitos legales y mejorar su eficiencia operativa.</p>
+      </section>
+            <section class="mission-section animated">
+        <h2>Nuestra misión</h2>
+        <p>En BillSV, nuestra misión es proporcionar a las empresas una solución integral y confiable para sus necesidades de facturación electrónica. Nos esforzamos por simplificar los procesos contables y administrativos, permitiendo a nuestros usuarios centrarse en lo que realmente importa: hacer crecer sus negocios. Con un enfoque en la innovación y la excelencia en el servicio, estamos comprometidos a ser el socio de confianza de cada empresa que elija nuestra plataforma.</p>
       </section>
     </div>
     <div class="right-section">
-  <section class="Dev-section animated">
-        <h2>Desarrolladores de Software</h2>
-    <p>Nuestros desarrolladores de software son los arquitectos de la innovación. Con experiencia en una variedad de lenguajes de programación y tecnologías, están constantemente trabajando en la mejora y expansión de nuestra plataforma. Desde la codificación de nuevas características hasta la optimización del rendimiento, su dedicación y experiencia son fundamentales para ofrecer una experiencia de usuario excepcional.</p>
+  <section class="customer-service-section animated">
+        <h2>Servicio al cliente</h2>
+        <p>BillSV se compromete a brindar un servicio al cliente excepcional. Nuestro equipo de soporte técnico está disponible para resolver cualquier duda o problema que puedan tener nuestros usuarios. En nuestros contactos en linea personalizados para garantizar una experiencia fluida y sin contratiempos.</p>
+      </section>
+            <section class="findid-section animated">
+        <h2>Como encontrarnos</h2>
+        <p>Nuestra aplicación de facturación electrónica ofrece múltiples opciones para encontrarnos y comenzar a utilizar nuestros servicios. Puedes descargar nuestra aplicación desde la tienda de aplicaciones de tu dispositivo móvil.</p>
       </section>
     </div>
   </div>
@@ -17,7 +25,7 @@
 
 <script>
 export default {
-  name: 'WhoweAre',
+  name: 'AboutUs',
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
   },
@@ -53,7 +61,7 @@ export default {
 </script>
 
 <style scoped>
-.whowe-are {
+.about-us {
   display: flex;
   flex-wrap: wrap;
   flex-flow: row;
@@ -140,7 +148,7 @@ p {
   letter-spacing: 0px;
 }
 @media (max-width: 768px) {
-  .whowe-are {
+  .about-us {
     flex-direction: column;
   }
   .left-section,
