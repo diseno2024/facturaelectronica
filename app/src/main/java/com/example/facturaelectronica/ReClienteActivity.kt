@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -33,6 +35,41 @@ class ReClienteActivity : AppCompatActivity() {
     private lateinit var cancelarButton: Button
     private lateinit var database: Database
 
+    private val municipiosMap = mapOf(
+        "Ahuachapán" to listOf("Ahuachapán", "Apaneca", "Atiquizaya", "Concepción de Ataco",
+            "El Refugio", "Guaymango", "Jujutla", "San Francisco Menéndez", "San Lorenzo",
+            "San Pedro Puxtla", "Tacuba", "Turín"),
+        "Santa Ana" to listOf("Candelaria de la Frontera","Coatepeque","Chalchuapa","El Congo",
+            "El Porvenir", "Masahuat","Metapán","San Antonio Pajonal","San Sebastián Salitrillo",
+            "Santa Ana","Sta Rosa Guachipilin","Stgo de la Frontera","Texistepeque"),
+        "Sonsonate" to listOf("Acajutla","Armenia","Caluco","Cusinahuat","Sta Ishuatan","Izalco",
+            "Juayúa","Nahuizalco", "Nahuilingo","Salcoatitan","San Antonio del Monte","San Julián",
+            "Sta C Masahuat","Santo Domingo Gúzman", "Sonsonate","Sonzacate"),
+        "Chalatenango" to listOf("Agua Caliente","Arcatao","Azacualpa","Citalá","Comalapa",
+            "Concepción Quezaltepeque","Chalatenango","Dulce Nombre de María","El Carrizal", "EL paraíso",
+            "La Laguna","La Palma","La Reina","Las Vueltas", "Nombre de Jesus","Nueva Concepción",
+            "Nueva Trinidad","Ojos de Agua","Potonico","San Antonio de La Cruz","San Ant Ranchos",
+            "San Fernando","San Francisco Lempa","San Francisco Morazán","San Ingnacio","San I Labrador",
+            "San J Cancasque", "San Jose Flores","San Luis Carmen","San Mig Mercedes","San Rafael",
+            "Santa Rita", "Tejutla"),
+        "La Libertad" to listOf("Antiguo Cuscatlán", "Ciudad Arce","Colón","Comasagua", "Chiltupan",
+            "Huizúcar","Jayaque","Jicalapa","La Libertad","Nuevo Cuscatlán","Santa Tecla","Quezaltepeque",
+            "Sacacoyo","San J Villanueva","San Juan Opico","San P Tacachico","Tamanique","Talnique",
+            "Teotepeque","Tepecoyo","Zaragoza"),
+        "San Salvador" to listOf("Aguilares","Apopa","Ayutuxtepeque","Cuscatancingo","El Paisnal",
+            "Guazapa","Ilopango","Mejicanos","Nejapa","Panchimalco","Rosario de Mora","San Marcos",
+            "San Martin","San Salvador","Stg Texacuangos","Santo Tomas","Soyapango","Tonacatepeque",
+            "Ciudad Delgado"),
+        "Cuscatlan" to listOf("Candelaria","Cojutepeque","El Carmen","El Rosario","Monte San Juan",
+            "Orat Concepción","San B PeruliapA","San Cristóbal","San J Guayabal","San P Perulapán",
+            "San Raf Cedros","San Ramón","Sta C Analquito","Sta C Michapa","Suchitoto","Tenancingo"),
+        "La Paz" to listOf("Cuyultitán","El Rosario","Jesuralén","Merced La Ceiba","Olocuilta",
+            "Paraíso Osorio", "San Ant Masahuat","San Emigdio","San Fco Chinamec","San J Nonualco",
+            "San Juan Talpa","Sam Juan Tepezontes","San Juan Luis Talpa","San Miguel Tepezontes",
+            "San pedro Masahuat","San Pedro Nonualco","San R Obrajuela","Sta Ma Ostuma","Stgo Nonualco",
+            "Tapalhuaca","Zacatecoluca","San Luis La Herr","Cinquera", "Guacotecti"),
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,12 +92,27 @@ class ReClienteActivity : AppCompatActivity() {
 
         // Inicializa el Spinner de municipio
         spinnerMun = findViewById(R.id.municipio)
-        val municipios = arrayOf("Municipios", "de", "cada", "departamento")
+        val initialMunicipios = arrayOf("Seleccione un municipio")
 
         // Configura el adaptador para el Spinner de municipio
-        val adapterMun = ArrayAdapter(this, R.layout.spinner_personalizado, municipios)
+        val adapterMun = ArrayAdapter(this, R.layout.spinner_personalizado, initialMunicipios)
         adapterMun.setDropDownViewResource(R.layout.spinner_dropdown_per)
         spinnerMun.adapter = adapterMun
+
+        // Agrega un listener al Spinner de departamento
+        spinnerDep.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedDept = parent.getItemAtPosition(position).toString()
+                val municipios = municipiosMap[selectedDept] ?: listOf("Seleccione un municipio")
+                val adapterMun = ArrayAdapter(this@ReClienteActivity, R.layout.spinner_personalizado, municipios)
+                adapterMun.setDropDownViewResource(R.layout.spinner_dropdown_per)
+                spinnerMun.adapter = adapterMun
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // No hacer nada
+            }
+        }
 
         // Inicializar vistas
         nombre = findViewById(R.id.nombre)
