@@ -114,25 +114,28 @@ class InfoEmisorActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_IMAGE_PICKER && resultCode == RESULT_OK) {
             val uri = data?.data
             if (uri != null) {
-                val contentResolver = contentResolver
-                val mimeType = contentResolver.getType(uri)
-
-                if (mimeType != null) {
-                    if (mimeType == "image/jpeg" || mimeType == "image/png") {
-                        // La imagen es válida (JPEG o PNG)
-                        guardarURI(uri)
-                        mostrarImagen()
-                    } else {
-                        // La imagen no es válida (otro formato)
-                        showToast("Selecciona una imagen en formato JPEG o PNG")
-                    }
-                } else {
-                    // No se pudo determinar el tipo MIME
-                    showToast("Error al obtener el tipo de la imagen")
-                }
+                onHandleresult(uri)
             } else {
                 showToast("Error al obtener la URI de la imagen seleccionada")
             }
+        }
+    }
+    private fun onHandleresult(uri: Uri){
+        val contentResolver = contentResolver
+        val mimeType = contentResolver.getType(uri)
+
+        if (mimeType != null) {
+            if (mimeType == "image/jpeg" || mimeType == "image/png") {
+                // La imagen es válida (JPEG o PNG)
+                guardarURI(uri)
+                mostrarImagen()
+            } else {
+                // La imagen no es válida (otro formato)
+                showToast("Selecciona una imagen en formato JPEG o PNG")
+            }
+        } else {
+            // No se pudo determinar el tipo MIME
+            showToast("Error al obtener el tipo de la imagen")
         }
     }
     private fun guardarURI(uri: Uri) {

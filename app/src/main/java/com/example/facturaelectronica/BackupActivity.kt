@@ -31,7 +31,7 @@ class BackupActivity : AppCompatActivity() {
     private lateinit var buttonSelectTime: Button
     private lateinit var editTextSelectedTime: EditText
     private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
-    private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 34) {
+    private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 33) {
         listOf(
             Manifest.permission.READ_MEDIA_AUDIO,
             Manifest.permission.READ_MEDIA_VIDEO,
