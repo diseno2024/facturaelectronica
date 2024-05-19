@@ -114,35 +114,33 @@ class InfoEmisorActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_IMAGE_PICKER && resultCode == RESULT_OK) {
             val uri = data?.data
             if (uri != null) {
-                onHandleresult(uri)
+                val contentResolver = contentResolver
+                val mimeType = contentResolver.getType(uri)
+
+                if (mimeType != null) {
+                    if (mimeType == "image/jpeg" || mimeType == "image/png") {
+                        // La imagen es válida (JPEG o PNG)
+                        guardarURI(uri)
+                        mostrarImagen()
+                    } else {
+                        // La imagen no es válida (otro formato)
+                        showToast("Selecciona una imagen en formato JPEG o PNG")
+                    }
+                } else {
+                    // No se pudo determinar el tipo MIME
+                    showToast("Error al obtener el tipo de la imagen")
+                }
             } else {
                 showToast("Error al obtener la URI de la imagen seleccionada")
             }
         }
     }
-    private fun onHandleresult(uri: Uri){
-        val contentResolver = contentResolver
-        val mimeType = contentResolver.getType(uri)
-
-        if (mimeType != null) {
-            if (mimeType == "image/jpeg" || mimeType == "image/png") {
-                // La imagen es válida (JPEG o PNG)
-                guardarURI(uri)
-            } else {
-                // La imagen no es válida (otro formato)
-                showToast("Selecciona una imagen en formato JPEG o PNG")
-            }
-        } else {
-            // No se pudo determinar el tipo MIME
-            showToast("Error al obtener el tipo de la imagen")
-        }
-    }
     private fun guardarURI(uri: Uri) {
         val uriString = uri.toString()
         // Consulta para verificar si la URI ya existe
-        val query = QueryBuilder.select(SelectResult.all())
+        val query = QueryBuilder.select(SelectResult.property("URI"))
             .from(DataSource.database(database))
-            .where(Expression.property("URI").equalTo(Expression.string(uriString)))
+            .where(Expression.property("tipo").equalTo(Expression.string("Imagen")))
 
         try {
             val resultSet = query.execute()
@@ -164,7 +162,6 @@ class InfoEmisorActivity : AppCompatActivity() {
             Log.e("Prin_Re_Cliente", "Error al consultar o guardar los datos en la base de datos: ${e.message}", e)
             Toast.makeText(this, "Error al consultar o guardar los datos", Toast.LENGTH_SHORT).show()
         }
-        mostrarImagen()
     }
     private fun borrarImagen(){
         // Eliminar la imagen seleccionada (puedes reiniciar la variable 'logo' a null)
@@ -179,6 +176,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         // Realiza una consulta para obtener todos los documentos que contienen URI
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Imagen")))
 
         try {
             val resultSet = query.execute()
