@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -29,8 +30,8 @@ class PrinReClienteActivity : AppCompatActivity() {
     private lateinit var departamento: Spinner
     private lateinit var municipio: Spinner
     private lateinit var agregarButton: Button
-    private lateinit var cancelarButton: Button
     private lateinit var database: Database
+    private lateinit var regresar: ImageButton
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +71,7 @@ class PrinReClienteActivity : AppCompatActivity() {
         municipio = findViewById(R.id.municipio)
         telefono = findViewById(R.id.telefono)
         agregarButton = findViewById(R.id.btnAgregar)
-        cancelarButton = findViewById(R.id.btnCancelar)
+        regresar = findViewById(R.id.atras)
 
         // Agregar TextWatcher para el campo de teléfono
         telefono.addTextChangedListener(object : TextWatcher {
@@ -159,20 +160,32 @@ class PrinReClienteActivity : AppCompatActivity() {
                 telefono.text.clear()
 
                 // Iniciar otra actividad
-                val intent = Intent(this, EmitirCFActivity::class.java)
+                val intent = Intent(this, MenuActivity::class.java)
                 startActivity(intent)
             }
         }
 
-        cancelarButton.setOnClickListener {
+        regresar.setOnClickListener {
             // Iniciar otra actividad
             val intent = Intent(this, EmitirCFActivity::class.java)
             startActivity(intent)
+        }
+        val botonAtras = findViewById<ImageButton>(R.id.atras)
+        botonAtras.setOnClickListener {
+            val intent = Intent(this, EmitirCFActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         // Inicializar la base de datos
         val app = application as MyApp
         database = app.database
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MenuActivity ::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun validarEntradas(): Boolean {
