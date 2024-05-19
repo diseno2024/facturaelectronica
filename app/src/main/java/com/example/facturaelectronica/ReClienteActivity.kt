@@ -2,6 +2,8 @@ package com.example.facturaelectronica
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -41,11 +43,10 @@ class ReClienteActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         // Inicializa el Spinner de departamento
         spinnerDep = findViewById(R.id.departamento)
-        val departamentos = arrayOf("Ahuachapán", "Cabañas", "Chalatenango", "Cuscatlán",
-            "La Libertad", "La paz", "La Unión", "Morazán", "San Miguel", "San Vicente", "Santa Ana",
-            "Sonsonate", "Usulután")
+        val departamentos = arrayOf("Ahuachapán", "Cabañas", "Chalatenango", "Cuscatlán", "La Libertad", "La paz", "La Unión", "Morazán", "San Miguel", "San Vicente", "Santa Ana", "Sonsonate", "Usulután")
 
         // Configura el adaptador para el Spinner de departamento
         val adapterDep = ArrayAdapter(this, R.layout.spinner_personalizado, departamentos)
@@ -68,24 +69,102 @@ class ReClienteActivity : AppCompatActivity() {
         direccion = findViewById(R.id.direccion)
         departamento = findViewById(R.id.departamento)
         municipio = findViewById(R.id.municipio)
-        telefono=findViewById(R.id.telefono)
+        telefono = findViewById(R.id.telefono)
         agregarButton = findViewById(R.id.btnAgregar)
-        cancelarButton=findViewById(R.id.btnCancelar)
+        cancelarButton = findViewById(R.id.btnCancelar)
+
+        // Agregar TextWatcher para el campo de teléfono
+        telefono.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            private val mask = "####-####"
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating) return
+
+                isUpdating = true
+                val formatted = formatPhoneNumber(s.toString())
+                telefono.setText(formatted)
+                telefono.setSelection(formatted.length)
+                isUpdating = false
+            }
+
+            private fun formatPhoneNumber(phone: String): String {
+                val digits = phone.replace(Regex("\\D"), "")
+                val formatted = StringBuilder()
+
+                var i = 0
+                for (m in mask.toCharArray()) {
+                    if (m != '#') {
+                        formatted.append(m)
+                        continue
+                    }
+                    if (i >= digits.length) break
+                    formatted.append(digits[i])
+                    i++
+                }
+                return formatted.toString()
+            }
+
+        })
+        nit.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            private val mask = "####-######-###-#" // La máscara del NIT
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating) return
+
+                isUpdating = true
+                val formatted = formatNIT(s.toString())
+                nit.setText(formatted)
+                nit.setSelection(formatted.length)
+                isUpdating = false
+            }
+
+            private fun formatNIT(nit: String): String {
+                // Eliminar todos los caracteres no numéricos del NIT
+                val digits = nit.replace(Regex("\\D"), "")
+                val formatted = StringBuilder()
+
+                var i = 0
+                for (m in mask.toCharArray()) {
+                    if (m != '#') {
+                        formatted.append(m)
+                        continue
+                    }
+                    if (i >= digits.length) break
+                    formatted.append(digits[i])
+                    i++
+                }
+                return formatted.toString()
+            }
+        })
+
 
         // Configurar evento de clic para el botón "Agregar"
         agregarButton.setOnClickListener {
-            guardarInformacion()
-            // Limpiar los EditText
-            nombre.text.clear()
-            nit.text.clear()
-            email.text.clear()
-            direccion.text.clear()
-            telefono.text.clear()
+            if (validarEntradas()) {
+                guardarInformacion()
+                // Limpiar los EditText
+                nombre.text.clear()
+                nit.text.clear()
+                email.text.clear()
+                direccion.text.clear()
+                telefono.text.clear()
 
-            // Iniciar otra actividad
-            val intent = Intent(this, EmitirCFActivity::class.java)
-            startActivity(intent)
+                // Iniciar otra actividad
+                val intent = Intent(this, EmitirCFActivity::class.java)
+                startActivity(intent)
+            }
         }
+
         cancelarButton.setOnClickListener {
             // Iniciar otra actividad
             val intent = Intent(this, EmitirCFActivity::class.java)
@@ -97,6 +176,40 @@ class ReClienteActivity : AppCompatActivity() {
         database = app.database
     }
 
+    private fun validarEntradas(): Boolean {
+        val nombreText = nombre.text.toString()
+        val nitText = nit.text.toString().replace("-", "")
+        val emailText = email.text.toString()
+        val direccionText = direccion.text.toString()
+        val telefonoText = telefono.text.toString().replace("-", "")
+
+        // Verifica que todos los campos estén llenos
+        if (nombreText.isEmpty() || nitText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty()) {
+            Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Verifica que el correo electrónico tenga un formato válido
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
+            Toast.makeText(this, "Correo electrónico no válido", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Verifica que el NIT sea un número válido
+        if (!nitText.matches(Regex("\\d{14}"))) {
+            Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Verifica que el teléfono sea un número válido de 8 dígitos
+        if (!telefonoText.matches(Regex("\\d{8}"))) {
+            Toast.makeText(this, "Teléfono debe ser un número válido de 8 dígitos", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
+    }
+
     private fun guardarInformacion() {
         val nombreText = nombre.text.toString()
         val nitText = nit.text.toString()
@@ -104,7 +217,8 @@ class ReClienteActivity : AppCompatActivity() {
         val direccionText = direccion.text.toString()
         val departamentoText = departamento.selectedItem.toString()
         val municipioText = municipio.selectedItem.toString()
-        val telefonoText=telefono.toString()
+        val telefonoText = telefono.text.toString().replace("-", "")
+
 
         // Crear un documento mutable para guardar en la base de datos
         val document = MutableDocument()
@@ -113,20 +227,18 @@ class ReClienteActivity : AppCompatActivity() {
             .setString("email", emailText)
             .setString("direccion", direccionText)
             .setString("departamento", departamentoText)
-            .setString("municipio",municipioText)
-            .setString("telefono",telefonoText)
+            .setString("municipio", municipioText)
+            .setString("telefono", telefonoText)
+            .setString("tipo", "cliente")
 
         try {
             // Guardar el documento en la base de datos
             database.save(document)
-            Log.d("Prin_Re_Cliente", "Datos guardados correctamente: \n $document")
+            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
             Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
         } catch (e: CouchbaseLiteException) {
-            Log.e("Prin_Re_Cliente", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
             Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
-
 }
-
-

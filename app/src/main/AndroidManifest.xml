@@ -20,6 +20,9 @@
         android:theme="@style/Base.Theme.FacturaElectronica"
         tools:targetApi="31">
         <activity
+            android:name=".ImportarClientes"
+            android:exported="false" />
+        <activity
             android:name=".PrinReClienteActivity"
             android:exported="false" />
         <activity

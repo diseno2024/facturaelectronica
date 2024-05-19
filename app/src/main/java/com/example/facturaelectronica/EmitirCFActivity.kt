@@ -66,6 +66,12 @@ class EmitirCFActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        btnImportar.setOnClickListener {
+            //Pagina para agregar datos de clientes
+            val intent = Intent(this, ImportarClientes::class.java)
+            startActivity(intent)
+            finish()
+        }
         btnExit.setOnClickListener {
             // Acción al hacer clic en el botón "Cancelar"
             dialogoCliente.dismiss()
