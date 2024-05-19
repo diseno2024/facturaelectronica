@@ -99,7 +99,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Correo Electronico"
+        android:hint="Correo Electrónico"
         android:inputType="textEmailAddress"
         android:textColor="#4a8c74"
         android:textColorHint="#4a8c74"
@@ -118,7 +118,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Direccion"
+        android:hint="Dirección"
         android:inputType="text"
         android:textColor="#4a8c74"
         android:textColorHint="#4a8c74"
@@ -181,7 +181,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="8"
-        android:hint="Telefono"
+        android:hint="Teléfono"
         android:inputType="number"
         android:textColor="#4a8c74"
         android:textColorHint="#4a8c74"
@@ -212,7 +212,7 @@
         app:layout_constraintVertical_bias="0.951" />
 
     <Button
-        android:id="@+id/btnRegistrar"
+        android:id="@+id/btnAgregar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#4A8C74"
