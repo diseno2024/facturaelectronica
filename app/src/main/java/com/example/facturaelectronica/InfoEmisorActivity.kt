@@ -92,7 +92,7 @@ class InfoEmisorActivity : AppCompatActivity() {
 
         val query = QueryBuilder.select(SelectResult.property("URI"))
             .from(DataSource.database(database))
-            .limit(Expression.intValue(1)) // Limitamos a un resultado por simplicidad
+            .where(Expression.property("tipo").equalTo(Expression.string("Imagen")))
 
         return try {
             val resultSet = query.execute()
@@ -150,6 +150,7 @@ class InfoEmisorActivity : AppCompatActivity() {
                 // Crear un documento mutable para guardar en la base de datos
                 val document = MutableDocument()
                     .setString("URI", uriString)
+                    .setString("tipo", "Imagen")
 
                 // Guardar el documento en la base de datos
                 database.save(document)
