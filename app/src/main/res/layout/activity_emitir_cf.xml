@@ -112,7 +112,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:padding="8dp"
-                            android:text="DUI/NIT"
+                            android:text="NIT"
                             android:textAlignment="center" />
 
                     </TableRow>
@@ -122,6 +122,7 @@
                         android:layout_height="wrap_content">
 
                         <TextView
+                            android:id="@+id/nombre"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -130,6 +131,7 @@
                             android:textAlignment="center" />
 
                         <TextView
+                            android:id="@+id/nit"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -255,48 +257,28 @@
                 app:layout_constraintStart_toStartOf="@+id/ConOperacion"
                 app:layout_constraintTop_toBottomOf="@+id/DescripcionCard" />
 
-            <com.google.android.material.button.MaterialButtonToggleGroup
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/ConOperacion"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
+                app:cardCornerRadius="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3"
-                app:singleSelection="true">
+                app:layout_constraintWidth_percent="0.38"
+                app:singleSelection="true"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="2dp">
 
-                <Button
-                    android:id="@+id/Contado"
-                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                    android:layout_width="wrap_content"
+                <Spinner
+                    android:id="@+id/CoOperacion"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Contado"
-                    app:cornerRadius="7dp"
-                    app:rippleColor="#c2e7d8"
-                    app:strokeColor="#4a8c74"
-                    app:strokeWidth="2dp" />
+                    android:layout_margin="5dp"
+                    android:minHeight="35dp" />
 
-                <Button
-                    android:id="@+id/Credito"
-                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Credito"
-                    app:rippleColor="#c2e7d8"
-                    app:strokeColor="#4a8c74"
-                    app:strokeWidth="2dp" />
+            </com.google.android.material.card.MaterialCardView>
 
-                <Button
-                    android:id="@+id/Otro"
-                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Otro"
-                    app:cornerRadius="7dp"
-                    app:rippleColor="#c2e7d8"
-                    app:strokeColor="#4a8c74"
-                    app:strokeWidth="2dp" />
-
-            </com.google.android.material.button.MaterialButtonToggleGroup>
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"

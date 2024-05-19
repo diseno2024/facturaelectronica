@@ -2,6 +2,7 @@ package com.example.facturaelectronica
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -11,13 +12,13 @@ import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
+import com.google.android.material.card.MaterialCardView
 
 class ImportarClientes : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_importar_clientes)
-
         val linearLayout = findViewById<LinearLayout>(R.id.containerLayout)
         val dataList = obtenerDatosGuardados()
 
@@ -33,7 +34,13 @@ class ImportarClientes : AppCompatActivity() {
             textViewNombre.text = datos[0]
             textViewEmail.text = datos[1]
             textViewTelefono.text = datos[2]
-            textViewNit.text = datos[3]
+            textViewNit.text = datos[4]
+
+            // Establece un onClickListener para cada tarjeta
+            itemLayout.setOnClickListener {
+                Pasardata(data)
+            }
+
             linearLayout.addView(itemLayout)
         }
 
@@ -87,5 +94,13 @@ class ImportarClientes : AppCompatActivity() {
 
         // Devuelve la lista de datos
         return dataList
+    }
+
+    private fun Pasardata(data: String) {
+        val intent = Intent(this, EmitirCFActivity::class.java)
+        // Pasa los datos de la carta seleccionada a la siguiente actividad
+        intent.putExtra("Cliente", data)
+        startActivity(intent)
+        finish()
     }
 }

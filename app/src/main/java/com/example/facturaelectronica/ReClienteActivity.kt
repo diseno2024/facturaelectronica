@@ -68,6 +68,26 @@ class ReClienteActivity : AppCompatActivity() {
             "San Juan Talpa","Sam Juan Tepezontes","San Juan Luis Talpa","San Miguel Tepezontes",
             "San pedro Masahuat","San Pedro Nonualco","San R Obrajuela","Sta Ma Ostuma","Stgo Nonualco",
             "Tapalhuaca","Zacatecoluca","San Luis La Herr","Cinquera", "Guacotecti"),
+        "Cabañas" to listOf("Cinquera","Guacotecti","Ilobasco","Jutiapa","San Isidro","Sensuntepeque",
+            "Tejutepeque","Victoria","Dolores"),
+        "San Vicente" to listOf("Apastepeque","Guadalupe","San Cay Istepeq","Santa Clara",
+            "Santo Domingo","SN EST Cartarina","San Ildefonso","San Lorenzo", "San Sebastián",
+            "San Vicente","Tecoluca","Tepetitán","Verapaz"),
+        "Usulatán" to listOf("Alegría","Berlín","California","Concep Batres","El Triunfo","Ereguayquín",
+            "Estanzuelas","Jiquilisco","Jucuapa","Jucuarán","Mercedes Umaña","Nueva Granada",
+            "Ozatlán","Puerto El Triunfo","San Agustín","SN Buenaventura","San Dionisio","Santa Elena",
+            "San FCO Javier","Santa María","Santiago De María","Tecapán","Usulután"),
+        "San Miguel" to listOf("Carolina","Ciudad Barrios","Comacarán","Chapeltique","Chinameca",
+            "Chirilagua","El Transito","Lolotique","Moncagua","Nueva Guadalupe","Nuevo Edén San Juan",
+            "Quelepa","San Antonio De Mosco","San Gerardo","San Jorge","San Luis Reina","San Miguel",
+            "San Rafael Oriente","Sesori","Uluazapa"),
+        "Morazán" to listOf("Arambala","Cacaopera","Corinto","Chilanga","Delic De Concep","El Divisadero","El Rosario",
+            "Gualococti","Guatajiagua","Joateca","Jocoaitique","Jocoro","Lolotiquillo","Meanguera",
+            "Osicala","Perquín","San Carlos","San Fernando","San Francisco Gotera","San Isidro",
+            "San Simón","Sensembra","Sociedad","Torola","Yamabal","Yoloaiquín"),
+        "La Unión" to listOf("Anamoros","Bolívar","Concep De OTE","Conchagua","El Carmen","El Sauce",
+            "Intipucá","La Unión","Lislique","Meang Del Golfo","Nueva Esparta","Pasaquina","Polorós",
+            "San Alejo","San Jose","Santa Rosa Lima","Yayantique","Yucuaiquín")
     )
 
 

@@ -5,8 +5,11 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,6 +26,18 @@ class EmitirCFActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val spinnerOp: Spinner = findViewById(R.id.CoOperacion)
+// Create an ArrayAdapter using the string array and a default spinner layout.
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.Operacion,
+            R.layout.spinner_descripcion
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears.
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_per)
+            // Apply the adapter to the spinner.
+            spinnerOp.adapter = adapter
+        }
         val btnAtras: ImageButton = findViewById(R.id.atras)
         btnAtras.setOnClickListener {
             // Crear un intent para ir a MenuActivity
@@ -35,6 +50,16 @@ class EmitirCFActivity : AppCompatActivity() {
             val intent = Intent(this, PDF_CFActivity::class.java)
             startActivity(intent)
             finish()
+        }
+        // Recupera los datos pasados desde la otra actividad
+        val datosGuardados = intent.getStringExtra("Cliente")
+        val Nombre: TextView = findViewById(R.id.nombre)
+        val Nit: TextView = findViewById(R.id.nit)
+        // Aquí puedes usar los datos como necesites
+        datosGuardados?.let{
+            val datos = it.split("\n")
+            Nombre.text = datos[0]
+            Nit.text = datos[4]
         }
 
 
