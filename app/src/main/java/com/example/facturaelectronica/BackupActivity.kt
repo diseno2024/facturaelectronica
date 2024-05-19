@@ -1,4 +1,5 @@
 package com.example.facturaelectronica
+
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.Switch
@@ -18,13 +19,14 @@ import android.os.Build
 import android.os.Environment
 import android.util.Log
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-
-
-
+import com.couchbase.lite.Database
 
 class BackupActivity : AppCompatActivity() {
 
@@ -150,6 +152,9 @@ class BackupActivity : AppCompatActivity() {
             Log.d("BackupActivity", "El directorio de respaldo ya existe en: ${backupDirectory.absolutePath}")
             Toast.makeText(this, "El directorio de respaldo ya existe", Toast.LENGTH_SHORT).show()
         }
+
+        // Realizar respaldo de la base de datos después de crear el directorio
+        backupDatabase(backupDirectory)
     }
 
     override fun onRequestPermissionsResult(
@@ -170,4 +175,44 @@ class BackupActivity : AppCompatActivity() {
             }
         }
     }
+
+    // Método para realizar el respaldo de la base de datos
+    private fun backupDatabase(backupDir: File) {
+        // Supongamos que tienes una instancia de la base de datos de Couchbase Lite llamada `database`
+        val database = Database("nombre_de_tu_base_de_datos")
+
+        val dbDir = File(database.path)
+        val backupDirDb = File(backupDir, dbDir.name)
+
+        try {
+            copyDirectory(dbDir, backupDirDb)
+            Log.d("BackupActivity", "Respaldo realizado con éxito: ${backupDirDb.absolutePath}")
+            Toast.makeText(this, "Respaldo realizado con éxito", Toast.LENGTH_SHORT).show()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Log.e("BackupActivity", "Error al realizar el respaldo: ${e.message}")
+            Toast.makeText(this, "Error al realizar el respaldo", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun copyDirectory(srcDir: File, destDir: File) {
+        if (srcDir.isDirectory) {
+            if (!destDir.exists()) {
+                destDir.mkdirs()
+            }
+
+            val children = srcDir.list()
+            for (i in children.indices) {
+                copyDirectory(File(srcDir, children[i]), File(destDir, children[i]))
+            }
+        } else {
+            FileInputStream(srcDir).use { input ->
+                FileOutputStream(destDir).use { output ->
+                    input.copyTo(output)
+                }
+            }
+        }
+    }
 }
+
