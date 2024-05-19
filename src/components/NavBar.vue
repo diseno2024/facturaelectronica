@@ -3,12 +3,16 @@
     <div class="logo">
       <span>BillSv</span>
     </div>
-    <ul class="nav-links">
+    <div class="menu-icon" @click="toggleMenu">
+      <span class="material-symbols-outlined">menu</span>
+    </div>
+    <ul :class="{ 'nav-links': true, 'nav-links-mobile': showMenu }">
       <li><a @click.prevent="scrollToSection('inicio')">Inicio</a></li>
       <li><a @click.prevent="scrollToSection('beneficios')">Beneficios de BillSv</a></li>
       <li><a @click.prevent="scrollToSection('sobre-nosotros')">Sobre nosotros</a></li>
       <li><a @click.prevent="scrollToSection('quienes-somos')">Equipo desarrollador</a></li>
       <li><a @click.prevent="scrollToSection('descarga-app')">Descaga BillSv</a></li>
+      <li><a @click="Verterminos">Términos de Uso</a></li>
     </ul>
   </nav>
 </template>
@@ -16,12 +20,23 @@
 <script>
 export default {
   name: "NavBar",
+  data() {
+    return {
+      showMenu: false
+    };
+  },
   methods: {
+    toggleMenu() {
+      this.showMenu = !this.showMenu;
+    },
     scrollToSection(sectionId) {
       const element = document.getElementById(sectionId);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
+    },
+    Verterminos() {
+      this.$router.push({ name: 'TerminosDeUso' });
     },
   },
 };
@@ -30,15 +45,8 @@ export default {
 <style scoped>
 .navbar {
   width: 100vw;
-  unicode-bidi: isolate;
-  -webkit-text-size-adjust: 100%;
   box-sizing: border-box;
-  border-style: solid;
-  tab-size: 4;
-  border-width: 0;
   display: flex;
-  margin-left: auto;
-  margin-right: auto;
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 1rem;
@@ -54,23 +62,19 @@ export default {
   align-items: center;
 }
 
-.logo img {
-  height: 24px;
-  margin-right: 0.5rem;
-}
-
 .logo span {
   font-size: 1.2rem;
-  text-align: left;
-  font-weight: 900;
-  letter-spacing: -1px;
-  line-height: 40px;
-  color: inherit;
-  padding: 0px 0px 0.3em;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  color: #80bfa8;
   font-weight: bold;
+  color: #80bfa8;
+}
+
+.menu-icon {
+  display: none;
+  cursor: pointer;
+}
+
+.menu-icon img {
+  height: 24px;
 }
 
 .nav-links {
@@ -84,20 +88,45 @@ export default {
 
 .nav-links a {
   text-decoration: none;
-  font-family: "Helveltica", sans-serif;
-  padding: 0px 0px 0.75em;
-  margin-top: 0px;
-  margin-bottom: 0px;
+  font-family: "Helvetica", sans-serif;
   color: inherit;
   font-size: 18px;
   font-weight: 900;
-  text-align: left;
-  letter-spacing: -0.25px;
-  line-height: 36px;
   cursor: pointer;
 }
 
 .nav-links a:hover {
   color: #80bfa8;
+}
+
+.nav-links-mobile {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-links.nav-links-mobile {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+  }
+
+  .nav-links li {
+    margin: 1rem 0;
+  }
 }
 </style>
