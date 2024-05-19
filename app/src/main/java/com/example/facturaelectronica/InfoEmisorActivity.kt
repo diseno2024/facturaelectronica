@@ -128,7 +128,6 @@ class InfoEmisorActivity : AppCompatActivity() {
             if (mimeType == "image/jpeg" || mimeType == "image/png") {
                 // La imagen es válida (JPEG o PNG)
                 guardarURI(uri)
-                mostrarImagen()
             } else {
                 // La imagen no es válida (otro formato)
                 showToast("Selecciona una imagen en formato JPEG o PNG")
@@ -164,6 +163,7 @@ class InfoEmisorActivity : AppCompatActivity() {
             Log.e("Prin_Re_Cliente", "Error al consultar o guardar los datos en la base de datos: ${e.message}", e)
             Toast.makeText(this, "Error al consultar o guardar los datos", Toast.LENGTH_SHORT).show()
         }
+        mostrarImagen()
     }
     private fun borrarImagen(){
         // Eliminar la imagen seleccionada (puedes reiniciar la variable 'logo' a null)
