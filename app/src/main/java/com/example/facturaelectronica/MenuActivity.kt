@@ -91,22 +91,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
 
-            R.id.nav_credito -> {
-                //Iniciar Comprobantecf al selecciobar "Credito Fiscal"
-                val intent = Intent(this, EmitirCCFActivity::class.java)
-                startActivity(intent)
-                finish()
-                return true
-            }
-
-            R.id.nav_consumidor -> {
-                // Iniciar Comprobantecf al seleccionar "Consumidor final"
-                val intent = Intent(this, EmitirCFActivity::class.java)
-                startActivity(intent)
-                finish()
-                return true
-            }
-
             R.id.nav_registro -> {
                 // Iniciar ReClienteActivity al seleccionar "Registro del cliente"
                 val intent = Intent(this, PrinReClienteActivity::class.java)
