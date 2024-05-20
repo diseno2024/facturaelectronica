@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
                     floatingActionButton.backgroundTintList = ColorStateList.valueOf(hexToColorInt("#2E594A"))
                     (activity as MenuActivity).navigateToFragment(CFiscalFragment())
                     floatingButtonAction = {
-                        val intent = Intent(activity, Comprobantecf::class.java)
+                        val intent = Intent(activity, EmitirCCFActivity::class.java)
                         startActivity(intent)
                     }
                     return@setOnNavigationItemSelectedListener true
