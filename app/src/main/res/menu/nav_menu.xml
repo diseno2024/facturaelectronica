@@ -15,42 +15,29 @@
             android:id="@+id/nav_registro"
             android:icon="@drawable/ic_person_add"
             android:title="Registro del cliente"/>
-
         <item
-            android:id="@+id/nav_resumenes"
-            android:icon="@drawable/ic_file_text"
-            android:title="Resumenes mensuales"/>
-
+            android:id="@+id/nav_DatosContribuyente"
+            android:icon="@drawable/ic_person_add"
+            android:title="Datos del contribuyente" />
         <item
             android:id="@+id/nav_configuracion"
             android:icon="@drawable/ic_user"
             android:title="Conf. del Emisor"/>
 
         <item
-            android:id="@+id/nav_credito"
-            android:icon="@drawable/ic_credit_card"
-            android:title="Credito fiscal"/>
-
+            android:id="@+id/nav_resumenes"
+            android:icon="@drawable/ic_file_text"
+            android:title="Resumenes mensuales"/>
         <item
-            android:id="@+id/nav_consumidor"
-            android:icon="@drawable/ic_consumidor"
-            android:title="Consumidor final"/>
-
-
-        <item
-            android:id="@+id/nav_DatosContribuyente"
-            android:icon="@drawable/ic_person_add"
-            android:title="Datos del contribuyente"/>
-
+            android:id="@+id/nav_restauracion"
+            android:icon="@drawable/ic_cloud_download"
+            android:title="Restauración de Datos"/>
         <item
             android:id="@+id/nav_respaldo"
             android:icon="@drawable/ic_cloud_upload"
             android:title="Respaldo de datos"/>
 
-        <item
-            android:id="@+id/nav_restauracion"
-            android:icon="@drawable/ic_cloud_download"
-            android:title="Restauración de Datos"/>
+
 
         <item
             android:id="@+id/nav_crear_pin"

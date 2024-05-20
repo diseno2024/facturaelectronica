@@ -22,73 +22,91 @@
         <activity
             android:name=".ImportarClientes"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".PrinReClienteActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".DescripcionActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ReClienteActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ComprobanteCCFActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".ResMensualActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".ReDatosContribuyenteActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".MenuActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".InfoReceptoresActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".PDF_CFActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".BackupActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".RestauracionActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".EmitirCCFActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".InfoEmisorActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
           />
         <activity
             android:name=".EmitirCFActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".AgregarArticuloActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".LoginActivity"
-            android:exported="false"/>
+            android:exported="false"
+            android:screenOrientation="portrait"/>
             <activity
                 android:name=".SplashScreen"
-                android:exported="true">
+                android:exported="true"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

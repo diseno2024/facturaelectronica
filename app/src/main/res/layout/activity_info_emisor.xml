@@ -94,6 +94,17 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="72dp"
+                android:layout_marginBottom="1dp"
+                android:text="Logo "
+                android:textColor="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintBottom_toTopOf="@+id/Imagen"
+                app:layout_constraintStart_toStartOf="@+id/Imagen" />
+
             <EditText
                 android:id="@+id/nombre"
                 android:layout_width="0dp"
