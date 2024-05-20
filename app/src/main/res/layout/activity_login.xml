@@ -68,6 +68,14 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
+        <TextView
+            android:id="@+id/linkTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Leer mas sobre nosotros aquí"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="15sp"
+            android:layout_marginTop="20dp"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
