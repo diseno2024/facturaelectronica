@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -37,6 +38,7 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
     private lateinit var municipio: Spinner
     private lateinit var spinnerDep: Spinner
     private lateinit var spinnerMun: Spinner
+    private lateinit var regresar: ImageButton
 
     private val municipiosMap = mapOf(
         "Ahuachapán" to listOf("Ahuachapán", "Apaneca", "Atiquizaya", "Concepción de Ataco",
@@ -119,6 +121,7 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         telefono = findViewById(R.id.TelefonoText)
         departamento = findViewById(R.id.departamento)
         municipio = findViewById(R.id.municipio)
+        regresar = findViewById(R.id.atras)
 
         // Agregar TextWatcher para el campo de teléfono
         telefono.addTextChangedListener(object : TextWatcher {
@@ -232,6 +235,11 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
             if(validarEntradas()){
                 guardarDatosContribuyente()
             }
+        }
+        regresar.setOnClickListener {
+            // Iniciar otra actividad
+            val intent = Intent(this, MenuActivity::class.java)
+            startActivity(intent)
         }
 
 

@@ -6,6 +6,7 @@
     <dimen name="textSize_input">20sp</dimen>
     <dimen name="text_check">15sp</dimen>
     <dimen name="Texto">16sp</dimen>
+    <dimen name="TextoEtiquetas">14sp</dimen>
 
     <dimen name="top_margin">350dp</dimen>
     <dimen name="top_left_radius">50dp</dimen>

@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="Detalles de la Factura"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="@dimen/textSize_textToolbarC"
             android:textStyle="bold"
             android:layout_gravity="center"/>
 
@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Tipo"
+        android:textSize="@dimen/TextoEtiquetas"
         app:layout_constraintStart_toStartOf="@+id/Tipo"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
@@ -69,6 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Cantidad"
+        android:textSize="@dimen/TextoEtiquetas"
         app:layout_constraintStart_toStartOf="@+id/editTextText"
         app:layout_constraintTop_toBottomOf="@+id/Tipo" />
 
@@ -90,6 +92,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#FFFFFF"
             android:inputType="number"
+            android:textSize="18sp"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:textColor="#4a8c74"
@@ -103,6 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Unidad de Medida"
+        android:textSize="@dimen/TextoEtiquetas"
         app:layout_constraintStart_toStartOf="@+id/UnidadMedida"
         app:layout_constraintTop_toBottomOf="@+id/Tipo" />
 
@@ -134,6 +138,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"
         android:text="Producto"
+        android:textSize="@dimen/TextoEtiquetas"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextText" />
 
@@ -157,6 +162,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#FFFFFF"
             android:inputType="text"
+            android:textSize="18sp"
             android:textColor="#4a8c74"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
@@ -169,6 +175,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:textSize="@dimen/TextoEtiquetas"
         android:text="Tipo de Venta"
         app:layout_constraintStart_toStartOf="@+id/TipodeVenta"
         app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
@@ -200,6 +207,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Precio Unitario"
+        android:textSize="@dimen/TextoEtiquetas"
         app:layout_constraintStart_toStartOf="@+id/editTextText3"
         app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
     <com.google.android.material.card.MaterialCardView
@@ -220,6 +228,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#FFFFFF"
             android:inputType="numberDecimal"
+            android:textSize="18sp"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:textColor="#4a8c74"
