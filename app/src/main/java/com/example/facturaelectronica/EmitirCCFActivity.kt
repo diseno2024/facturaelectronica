@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.ImageButton
+import android.widget.TextView
 
 class EmitirCCFActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +26,16 @@ class EmitirCCFActivity : AppCompatActivity() {
             val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
             finish()
+        }
+        // Recupera los datos pasados desde la otra actividad
+        val datosGuardados = intent.getStringExtra("Contribuyente")
+        val Nombre: TextView = findViewById(R.id.nombreR)
+        val NRC: TextView = findViewById(R.id.nrcR)
+        // Aquí puedes usar los datos como necesites
+        datosGuardados?.let{
+            val datos = it.split("\n")
+            Nombre.text = datos[0]
+            NRC.text = datos[4]
         }
 
     }

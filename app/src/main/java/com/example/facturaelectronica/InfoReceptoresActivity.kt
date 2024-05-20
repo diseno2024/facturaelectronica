@@ -2,11 +2,16 @@ package com.example.facturaelectronica
 import android.os.Bundle
 import android.widget.ImageButton
 import android.content.Intent
+import android.util.Log
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
+import com.couchbase.lite.Meta
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
 
@@ -22,18 +27,24 @@ class InfoReceptoresActivity : AppCompatActivity() {
         dataList.forEach { data ->
             val itemLayout = layoutInflater.inflate(R.layout.layout_list_item_contribuyentes, null)
 
+            val borrar = itemLayout.findViewById<ImageButton>(R.id.btnBorrarData)
             val textViewNombreComercial = itemLayout.findViewById<TextView>(R.id.textViewNombreComercial)
-            val textViewCorreo = itemLayout.findViewById<TextView>(R.id.textViewCorreo)
             val textViewTelefono = itemLayout.findViewById<TextView>(R.id.textViewTelefono)
-            val textViewNIT = itemLayout.findViewById<TextView>(R.id.textViewNIT)
-            val textViewDUI = itemLayout.findViewById<TextView>(R.id.textViewNrc)
+            val textViewNRC = itemLayout.findViewById<TextView>(R.id.textViewNrc)
 
             val datos = data.split("\n")
             textViewNombreComercial.text = datos[0]
-            textViewCorreo.text = datos[1]
             textViewTelefono.text = datos[2]
-            textViewNIT.text = datos[3]
-            textViewDUI.text = datos[4]
+            textViewNRC.text = datos[4]
+            // Establece un onClickListener para cada tarjeta
+            itemLayout.setOnClickListener {
+                Pasardata(data)
+            }
+
+            borrar.setOnClickListener {
+                Borrardatos(data, itemLayout, linearLayout)
+            }
+
             linearLayout.addView(itemLayout)
         }
 
@@ -75,10 +86,57 @@ class InfoReceptoresActivity : AppCompatActivity() {
             val nombreComercial = dict?.getString("NombreComercial")
             val telefono = dict?.getString("Telefono")
 
-            val dataString = "Nombre Comercial: $nombreComercial\nCorreo: $email\nTeléfono: $telefono\nNIT: $nit\nNRC: $nrc"
+            val dataString = "$nombreComercial\n$email\n$telefono\n$nit\n$nrc\n$razonSocial\n$actividadEconomica\n$direccion"
             dataList.add(dataString)
         }
         return dataList
+    }
+    private fun Pasardata(data: String) {
+        val intent = Intent(this, EmitirCCFActivity::class.java)
+        // Pasa los datos de la carta seleccionada a la siguiente actividad
+        intent.putExtra("Contribuyente", data)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun Borrardatos(data: String, itemLayout: View, linearLayout: LinearLayout) {
+        val app = application as MyApp
+        val database = app.database
+        val datos = data.split("\n")
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("RazonSocial").equalTo(Expression.string(datos[5])))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Itera sobre los resultados y elimina cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                // Elimina la tarjeta de la vista
+                linearLayout.removeView(itemLayout)
+
+                Log.d("Prin_Re_Cliente", "Se eliminó el Contribuyente")
+                showToast("Contribuyente eliminado")
+            } else {
+                Log.d("Prin_Re_Cliente", "No existe el Contribuyente")
+                showToast("No se encontró el cliente para eliminar")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al eliminar al Contribuyente: ${e.message}", e)
+        }
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 }
