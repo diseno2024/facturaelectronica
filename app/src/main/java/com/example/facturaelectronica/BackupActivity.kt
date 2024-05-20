@@ -69,9 +69,18 @@ class BackupActivity : AppCompatActivity() {
         spinnerFrecuencia.adapter = adapter
 
         spinnerFrecuencia.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val opcionSeleccionada = opciones[position]
-                Toast.makeText(applicationContext, "Seleccionaste: $opcionSeleccionada", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Seleccionaste: $opcionSeleccionada",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -90,7 +99,8 @@ class BackupActivity : AppCompatActivity() {
                 TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
                     val period = if (selectedHour < 12) "AM" else "PM"
                     val hour12Format = if (selectedHour > 12) selectedHour - 12 else selectedHour
-                    val selectedTime = String.format("%02d:%02d %s", hour12Format, selectedMinute, period)
+                    val selectedTime =
+                        String.format("%02d:%02d %s", hour12Format, selectedMinute, period)
                     editTextSelectedTime.setText("Hora seleccionada: $selectedTime")
                 },
                 hour,
@@ -119,7 +129,11 @@ class BackupActivity : AppCompatActivity() {
         val permissionsToRequest = mutableListOf<String>()
 
         for (permission in permissionList) {
-            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
                 permissionsToRequest.add(permission)
             }
         }
@@ -136,20 +150,32 @@ class BackupActivity : AppCompatActivity() {
     }
 
     private fun createBackupFolder() {
-        val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+        val parentDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
         val backupDirectoryName = "respaldo_factura2024"
         val backupDirectory = File(parentDir, backupDirectoryName)
 
         if (!backupDirectory.exists()) {
             if (backupDirectory.mkdirs()) {
-                Log.d("BackupActivity", "Directorio de respaldo creado en: ${backupDirectory.absolutePath}")
-                Toast.makeText(this, "Directorio de respaldo creado exitosamente", Toast.LENGTH_SHORT).show()
+                Log.d(
+                    "BackupActivity",
+                    "Directorio de respaldo creado en: ${backupDirectory.absolutePath}"
+                )
+                Toast.makeText(
+                    this,
+                    "Directorio de respaldo creado exitosamente",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 Log.e("BackupActivity", "Error al crear el directorio de respaldo")
-                Toast.makeText(this, "Error al crear el directorio de respaldo", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error al crear el directorio de respaldo", Toast.LENGTH_SHORT)
+                    .show()
             }
         } else {
-            Log.d("BackupActivity", "El directorio de respaldo ya existe en: ${backupDirectory.absolutePath}")
+            Log.d(
+                "BackupActivity",
+                "El directorio de respaldo ya existe en: ${backupDirectory.absolutePath}"
+            )
             Toast.makeText(this, "El directorio de respaldo ya existe", Toast.LENGTH_SHORT).show()
         }
 
@@ -179,19 +205,36 @@ class BackupActivity : AppCompatActivity() {
     // Método para realizar el respaldo de la base de datos
     private fun backupDatabase(backupDir: File) {
         // Supongamos que tienes una instancia de la base de datos de Couchbase Lite llamada `database`
-        val database = Database("nombre_de_tu_base_de_datos")
+        val database = Database("my_database")  // Corrige el nombre de la base de datos
 
         val dbDir = File(database.path)
         val backupDirDb = File(backupDir, dbDir.name)
 
-        try {
-            copyDirectory(dbDir, backupDirDb)
-            Log.d("BackupActivity", "Respaldo realizado con éxito: ${backupDirDb.absolutePath}")
-            Toast.makeText(this, "Respaldo realizado con éxito", Toast.LENGTH_SHORT).show()
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Log.e("BackupActivity", "Error al realizar el respaldo: ${e.message}")
-            Toast.makeText(this, "Error al realizar el respaldo", Toast.LENGTH_SHORT).show()
+        // Verificar si el archivo de destino ya existe
+        if (backupDirDb.exists()) {
+            try {
+                // Eliminar el archivo existente
+                backupDirDb.deleteRecursively()  // Utiliza deleteRecursively para eliminar directorios
+                // Copiar todos los archivos al directorio de respaldo
+                copyDirectory(dbDir, backupDirDb)
+                Log.d("BackupActivity", "Respaldo actualizado con éxito: ${backupDirDb.absolutePath}")
+                Toast.makeText(this, "Respaldo actualizado con éxito", Toast.LENGTH_SHORT).show()
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Log.e("BackupActivity", "Error al actualizar el respaldo: ${e.message}")
+                Toast.makeText(this, "Error al actualizar el respaldo", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            try {
+                // Si el archivo de respaldo no existe, simplemente copiar todos los archivos
+                copyDirectory(dbDir, backupDirDb)
+                Log.d("BackupActivity", "Respaldo realizado con éxito: ${backupDirDb.absolutePath}")
+                Toast.makeText(this, "Respaldo realizado con éxito", Toast.LENGTH_SHORT).show()
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Log.e("BackupActivity", "Error al realizar el respaldo: ${e.message}")
+                Toast.makeText(this, "Error al realizar el respaldo", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -203,8 +246,10 @@ class BackupActivity : AppCompatActivity() {
             }
 
             val children = srcDir.list()
-            for (i in children.indices) {
-                copyDirectory(File(srcDir, children[i]), File(destDir, children[i]))
+            if (children != null) {
+                for (i in children.indices) {
+                    copyDirectory(File(srcDir, children[i]), File(destDir, children[i]))
+                }
             }
         } else {
             FileInputStream(srcDir).use { input ->
@@ -215,4 +260,3 @@ class BackupActivity : AppCompatActivity() {
         }
     }
 }
-
