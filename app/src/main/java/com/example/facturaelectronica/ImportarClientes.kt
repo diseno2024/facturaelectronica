@@ -2,16 +2,20 @@ package com.example.facturaelectronica
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.Database
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
+import com.couchbase.lite.Meta
 import com.google.android.material.card.MaterialCardView
 
 class ImportarClientes : AppCompatActivity() {
@@ -25,20 +29,23 @@ class ImportarClientes : AppCompatActivity() {
         dataList.forEach { data ->
             val itemLayout = layoutInflater.inflate(R.layout.layout_list_item_cliente, null)
 
+            val borrar = itemLayout.findViewById<ImageButton>(R.id.btnBorrarData)
             val textViewNombre = itemLayout.findViewById<TextView>(R.id.textViewNombre)
-            val textViewEmail = itemLayout.findViewById<TextView>(R.id.textViewEmail)
             val textViewTelefono = itemLayout.findViewById<TextView>(R.id.textViewTelefono)
             val textViewNit = itemLayout.findViewById<TextView>(R.id.textViewNit)
 
             val datos = data.split("\n")
             textViewNombre.text = datos[0]
-            textViewEmail.text = datos[1]
             textViewTelefono.text = datos[2]
             textViewNit.text = datos[4]
 
             // Establece un onClickListener para cada tarjeta
             itemLayout.setOnClickListener {
                 Pasardata(data)
+            }
+
+            borrar.setOnClickListener {
+                Borrardatos(data, itemLayout, linearLayout)
             }
 
             linearLayout.addView(itemLayout)
@@ -102,5 +109,46 @@ class ImportarClientes : AppCompatActivity() {
         intent.putExtra("Cliente", data)
         startActivity(intent)
         finish()
+    }
+
+    private fun Borrardatos(data: String, itemLayout: View, linearLayout: LinearLayout) {
+        val app = application as MyApp
+        val database = app.database
+        val datos = data.split("\n")
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("nombre").equalTo(Expression.string(datos[0])))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Itera sobre los resultados y elimina cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                // Elimina la tarjeta de la vista
+                linearLayout.removeView(itemLayout)
+
+                Log.d("Prin_Re_Cliente", "Se eliminó el cliente")
+                showToast("Cliente eliminado")
+            } else {
+                Log.d("Prin_Re_Cliente", "No existe el cliente")
+                showToast("No se encontró el cliente para eliminar")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al eliminar al cliente: ${e.message}", e)
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
