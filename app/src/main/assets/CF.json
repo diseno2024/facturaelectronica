@@ -1,0 +1,144 @@
+{
+  "identificacion": {
+    "version": 1,
+    "ambiente": "01",
+    "tipoDte": "01",
+    "numeroControl": "DTE-01-00010000-000000000027179",
+    "codigoGeneracion": "6687B5F1-021F-4693-B17C-E0089CD64759",
+    "tipoModelo": 1,
+    "tipoOperacion": 1,
+    "tipoContingencia": null,
+    "motivoContin": null,
+    "fecEmi": "2024-04-11",
+    "horEmi": "10:09:08",
+    "tipoMoneda": "USD"
+  },
+  "documentoRelacionado": null,
+  "emisor": {
+    "nit": "06140402001036",
+    "nrc": "1190905",
+    "nombre": "GLOBAL CARGO DE EL SALVADOR, S.A. DE C.V.",
+    "codActividad": "96092",
+    "descActividad": "Servicios n.c.p.",
+    "nombreComercial": "CASA MATRIZ SAN FRANCISCO",
+    "tipoEstablecimiento": "02",
+    "direccion": {
+      "departamento": "06",
+      "municipio": "14",
+      "complemento": "Av. Las Bugambilias"
+    },
+    "telefono": "25303030",
+    "codEstableMH": "0001",
+    "codEstable": "0001",
+    "codPuntoVentaMH": null,
+    "codPuntoVenta": null,
+    "correo": "gerenciafinancierasal@c807.com"
+  },
+  "receptor": {
+    "tipoDocumento": null,
+    "numDocumento": null,
+    "nrc": null,
+    "nit": null,
+    "nombre": "Jesus Alejandro Gochez Paiz",
+    "codActividad": null,
+    "descActividad": null,
+    "direccion": {
+      "departamento": null,
+      "municipio": null,
+      "complemento": null
+    },
+    "telefono": "76702294",
+    "correo": "pide400@gmail.com"
+  },
+  "extension": {
+    "nombEntrega": null,
+    "docuEntrega": null,
+    "nombRecibe": null,
+    "docuRecibe": null,
+    "observaciones": null,
+    "placaVehiculo": null
+  },
+  "apendice": [
+    {
+      "campo": "Linea 1",
+      "etiqueta": "Impuesto aduana:",
+      "valor": "$1.30"
+    },
+    {
+      "campo": "Linea 2",
+      "etiqueta": "Total Cuenta Ajena",
+      "valor": "$1.30"
+    },
+    {
+      "campo": "Linea 3",
+      "etiqueta": "Total a Cancelar",
+      "valor": "$3.74"
+    }
+  ],
+  "ventaTercero": null,
+  "otrosDocumentos": null,
+  "cuerpoDocumento": [
+    {
+      "ventaGravada": 2.44,
+      "ventaExenta": 0,
+      "ventaNoSuj": 0,
+      "noGravado": 0,
+      "numItem": 1,
+      "tipoItem": 2,
+      "numeroDocumento": null,
+      "cantidad": 1,
+      "codigo": null,
+      "codTributo": null,
+      "uniMedida": 59,
+      "descripcion": "RP124471228MU MANEJO",
+      "precioUni": 2.44,
+      "montoDescu": 0,
+      "ivaItem": 0.28070796,
+      "tributos": null,
+      "psv": 0
+    }
+  ],
+  "resumen": {
+    "totalNoSuj": 0,
+    "totalExenta": 0,
+    "totalGravada": 2.44,
+    "subTotalVentas": 2.44,
+    "descuNoSuj": 0,
+    "descuExenta": 0,
+    "descuGravada": 0,
+    "porcentajeDescuento": 0,
+    "totalDescu": 0,
+    "tributos": [
+      {
+        "codigo": "20",
+        "descripcion": "Impuesto al Valor Agregado 13%",
+        "valor": 1.59
+      }
+    ],
+    "subTotal": 2.44,
+    "ivaPerci1": 0.0,
+    "ivaRete1": 0,
+    "reteRenta": 0,
+    "montoTotalOperacion": 2.44,
+    "totalNoGravado": 0,
+    "totalPagar": 2.44,
+    "totalLetras": "dos dólares con cuarenta y cuatro centavos",
+    "saldoFavor": 0.0,
+    "condicionOperacion": 1,
+    "pagos": [
+      {
+        "codigo": "01",
+        "montoPago": 2.44,
+        "referencia": null,
+        "plazo": null,
+        "periodo": null
+      }
+    ],
+    "numPagoElectronico": null,
+    "totalIva": 0.28
+  },
+  "respuestaHacienda": {
+    "firmaElectronica": "eyJhbGciOiJSUzUxMiJ9.eyJpZGVudGlmaWNhY2lvbiI6eyJ2ZXJzaW9uIjoxLCJhbWJpZW50ZSI6IjAxIiwidGlwb0R0ZSI6IjAxIiwibnVtZXJvQ29udHJvbCI6IkRURS0wMS0wMDAxMDAwMC0wMDAwMDAwMDAwMjcxNzkiLCJjb2RpZ29HZW5lcmFjaW9uIjoiNjY4N0I1RjEtMDIxRi00NjkzLUIxN0MtRTAwODlDRDY0NzU5IiwidGlwb01vZGVsbyI6MSwidGlwb09wZXJhY2lvbiI6MSwidGlwb0NvbnRpbmdlbmNpYSI6bnVsbCwibW90aXZvQ29udGluIjpudWxsLCJmZWNFbWkiOiIyMDI0LTA0LTExIiwiaG9yRW1pIjoiMTA6MDk6MDgiLCJ0aXBvTW9uZWRhIjoiVVNEIn0sImRvY3VtZW50b1JlbGFjaW9uYWRvIjpudWxsLCJlbWlzb3IiOnsibml0IjoiMDYxNDA0MDIwMDEwMzYiLCJucmMiOiIxMTkwOTA1Iiwibm9tYnJlIjoiR0xPQkFMIENBUkdPIERFIEVMIFNBTFZBRE9SLCBTLkEuIERFIEMuVi4iLCJjb2RBY3RpdmlkYWQiOiI5NjA5MiIsImRlc2NBY3RpdmlkYWQiOiJTZXJ2aWNpb3Mgbi5jLnAuIiwibm9tYnJlQ29tZXJjaWFsIjoiQ0FTQSBNQVRSSVogU0FOIEZSQU5DSVNDTyIsInRpcG9Fc3RhYmxlY2ltaWVudG8iOiIwMiIsImRpcmVjY2lvbiI6eyJkZXBhcnRhbWVudG8iOiIwNiIsIm11bmljaXBpbyI6IjE0IiwiY29tcGxlbWVudG8iOiJBdi4gTGFzIEJ1Z2FtYmlsaWFzIn0sInRlbGVmb25vIjoiMjUzMDMwMzAiLCJjb2RFc3RhYmxlTUgiOiIwMDAxIiwiY29kRXN0YWJsZSI6IjAwMDEiLCJjb2RQdW50b1ZlbnRhTUgiOm51bGwsImNvZFB1bnRvVmVudGEiOm51bGwsImNvcnJlbyI6ImdlcmVuY2lhZmluYW5jaWVyYXNhbEBjODA3LmNvbSJ9LCJyZWNlcHRvciI6eyJ0aXBvRG9jdW1lbnRvIjpudWxsLCJudW1Eb2N1bWVudG8iOm51bGwsIm5yYyI6bnVsbCwibm9tYnJlIjoiSmVzdXMgQWxlamFuZHJvIEdvY2hleiBQYWl6IiwiY29kQWN0aXZpZGFkIjpudWxsLCJkZXNjQWN0aXZpZGFkIjpudWxsLCJkaXJlY2Npb24iOm51bGwsInRlbGVmb25vIjoiNzY3MDIyOTQiLCJjb3JyZW8iOiJwaWRlNDAwQGdtYWlsLmNvbSJ9LCJleHRlbnNpb24iOnsibm9tYkVudHJlZ2EiOm51bGwsImRvY3VFbnRyZWdhIjpudWxsLCJub21iUmVjaWJlIjpudWxsLCJkb2N1UmVjaWJlIjpudWxsLCJvYnNlcnZhY2lvbmVzIjpudWxsLCJwbGFjYVZlaGljdWxvIjpudWxsfSwiYXBlbmRpY2UiOlt7ImNhbXBvIjoiTGluZWEgMSIsImV0aXF1ZXRhIjoiSW1wdWVzdG8gYWR1YW5hOiIsInZhbG9yIjoiJDEuMzAifSx7ImNhbXBvIjoiTGluZWEgMiIsImV0aXF1ZXRhIjoiVG90YWwgQ3VlbnRhIEFqZW5hIiwidmFsb3IiOiIkMS4zMCJ9LHsiY2FtcG8iOiJMaW5lYSAzIiwiZXRpcXVldGEiOiJUb3RhbCBhIENhbmNlbGFyIiwidmFsb3IiOiIkMy43NCJ9XSwidmVudGFUZXJjZXJvIjpudWxsLCJvdHJvc0RvY3VtZW50b3MiOm51bGwsImN1ZXJwb0RvY3VtZW50byI6W3sidmVudGFHcmF2YWRhIjoyLjQ0LCJ2ZW50YUV4ZW50YSI6MCwidmVudGFOb1N1aiI6MCwibm9HcmF2YWRvIjowLCJudW1JdGVtIjoxLCJ0aXBvSXRlbSI6MiwibnVtZXJvRG9jdW1lbnRvIjpudWxsLCJjYW50aWRhZCI6MSwiY29kaWdvIjpudWxsLCJjb2RUcmlidXRvIjpudWxsLCJ1bmlNZWRpZGEiOjU5LCJkZXNjcmlwY2lvbiI6IlJQMTI0NDcxMjI4TVUgTUFORUpPIiwicHJlY2lvVW5pIjoyLjQ0LCJtb250b0Rlc2N1IjowLCJpdmFJdGVtIjowLjI4MDcwNzk2LCJ0cmlidXRvcyI6bnVsbCwicHN2IjowfV0sInJlc3VtZW4iOnsidG90YWxOb1N1aiI6MCwidG90YWxFeGVudGEiOjAsInRvdGFsR3JhdmFkYSI6Mi40NCwic3ViVG90YWxWZW50YXMiOjIuNDQsImRlc2N1Tm9TdWoiOjAsImRlc2N1RXhlbnRhIjowLCJkZXNjdUdyYXZhZGEiOjAsInBvcmNlbnRhamVEZXNjdWVudG8iOjAsInRvdGFsRGVzY3UiOjAsInRyaWJ1dG9zIjpbXSwic3ViVG90YWwiOjIuNDQsIml2YVJldGUxIjowLCJyZXRlUmVudGEiOjAsIm1vbnRvVG90YWxPcGVyYWNpb24iOjIuNDQsInRvdGFsTm9HcmF2YWRvIjowLCJ0b3RhbFBhZ2FyIjoyLjQ0LCJ0b3RhbExldHJhcyI6ImRvcyBkw7NsYXJlcyBjb24gY3VhcmVudGEgeSBjdWF0cm8gY2VudGF2b3MiLCJzYWxkb0Zhdm9yIjowLjAsImNvbmRpY2lvbk9wZXJhY2lvbiI6MSwicGFnb3MiOlt7ImNvZGlnbyI6IjAxIiwibW9udG9QYWdvIjoyLjQ0LCJyZWZlcmVuY2lhIjpudWxsLCJwbGF6byI6bnVsbCwicGVyaW9kbyI6bnVsbH1dLCJudW1QYWdvRWxlY3Ryb25pY28iOm51bGwsInRvdGFsSXZhIjowLjI4fX0.bbLDGUsBmLWoCEXqtOZ8P45SVQap5ixStU2vh3NtCVXShAb6zs0UfjhsYnDaZnDvzw9j0ikqQ2RzN7BQLKUGlqdsrCuBI-2ts8SbWDIVwDBr8bs9As9szrMFYk3oj-ZlSosWIRQfUZpS35z_c31KK5RCrag7Nc1tHuGzySdZ12lJznMArAEB3JXdz_T-PTMzwfQ0GRSEsyDJkl1aTqgc4K4vQNMqzCFc7CajBCIhmprIX4gES750tuo_8CMquaYLhMqmszmM-qYkZoGg310BCUW3Pm0l325eVBK146FBchLG1m8SHf9W6C3dSzO4HVjxOpyhNETqEL2pY6s7XP4j3w",
+    "selloRecibido": "2024F9DA894418724C609476CAE638B29D2EKC3S"
+  }
+}
