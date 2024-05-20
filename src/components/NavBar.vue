@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="logo">
-      <span>BillSv</span>
+      <img src="../assets/Logo_Billsv.png" alt="Icono de BillSV">
     </div>
     <div class="menu-icon" @click="toggleMenu">
       <span class="material-symbols-outlined">menu</span>
@@ -61,12 +61,11 @@ export default {
   display: flex;
   align-items: center;
 }
-
-.logo span {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #80bfa8;
-}
+.logo img {
+  width: 80px;
+  height: 80px;
+  margin-right: 20px;
+  }
 
 .menu-icon {
   display: none;

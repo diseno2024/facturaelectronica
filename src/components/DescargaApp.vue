@@ -3,8 +3,7 @@
       <div class="container">
         <h2>Descarga BillSV</h2>
         <div class="app-info">
-          <img src="" alt="Icono de BillSV">
-          <h3>BillSV</h3>
+          <img src="../assets/Logo_Billsv.png" alt="Icono de BillSV">
           <p>Facilita la gestión de tu negocio con BillSV.</p>
         </div>
         <div class="download-buttons">
@@ -29,22 +28,16 @@
   }
   
   .app-info {
-    display: flex;
+    display: wrap;
     align-items: center;
     margin-bottom: 20px;
   }
   
   .app-info img {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     margin-right: 20px;
   }
-  
-  .app-info h3 {
-    font-size: 24px;
-    font-weight: 600;
-  }
-  
   .app-info p {
     font-size: 16px;
     line-height: 1.5;

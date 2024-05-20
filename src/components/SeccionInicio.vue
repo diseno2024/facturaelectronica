@@ -2,6 +2,7 @@
   <section class="seccion" ref="seccion">
     <div>
       <h5 class="titulo">{{ titulo }}</h5>
+       
       <h2 class="contenido">{{ contenido }}</h2>
     </div>
     <img src="../assets/telefono.png" alt="Teléfono" class="imagen-telefono">
@@ -60,4 +61,5 @@ onUnmounted(() => {
 .animate {
   animation: desplazamiento 1s ease forwards;
 }
+
 </style>
