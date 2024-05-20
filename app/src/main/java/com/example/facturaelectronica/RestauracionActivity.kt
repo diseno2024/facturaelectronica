@@ -1,19 +1,19 @@
 package com.example.facturaelectronica
 
-import android.Manifest
 import android.content.Intent
+import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.File
-import android.widget.Button
 
 class RestauracionActivity : AppCompatActivity() {
 
@@ -64,34 +64,37 @@ class RestauracionActivity : AppCompatActivity() {
                 WRITE_EXTERNAL_STORAGE_REQUEST_CODE
             )
         } else {
-            createRestorationFolder()
+            restoreDatabase()
         }
     }
 
-    private fun createRestorationFolder() {
-        val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+    private fun restoreDatabase() {
         val backupDirectoryName = "respaldo_factura2024"
         val restorationDirectoryName = "restauracion_factura"
 
-        val backupDirectory = File(parentDir, backupDirectoryName)
+        val backupDirectory = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), backupDirectoryName)
         val restorationDirectory = File(backupDirectory, restorationDirectoryName)
 
-        if (backupDirectory.exists()) {
-            if (!restorationDirectory.exists()) {
-                if (restorationDirectory.mkdirs()) {
-                    Log.d("RestauracionActivity", "Directorio de restauración creado en: ${restorationDirectory.absolutePath}")
-                    Toast.makeText(this, "Directorio de restauración creado exitosamente", Toast.LENGTH_SHORT).show()
-                } else {
-                    Log.e("RestauracionActivity", "Error al crear el directorio de restauración")
-                    Toast.makeText(this, "Error al crear el directorio de restauración", Toast.LENGTH_SHORT).show()
+        if (restorationDirectory.exists()) {
+            val databaseDirectory = File(getDatabasePath("my_database").parent)
+
+            try {
+                if (databaseDirectory.exists()) {
+                    // Eliminar la base de datos actual si existe
+                    databaseDirectory.deleteRecursively()
                 }
-            } else {
-                Log.d("RestauracionActivity", "El directorio de restauración ya existe en: ${restorationDirectory.absolutePath}")
-                Toast.makeText(this, "El directorio de restauración ya existe", Toast.LENGTH_SHORT).show()
+
+                // Copiar los archivos de restauración al directorio de la base de datos actual
+                restorationDirectory.copyRecursively(databaseDirectory, overwrite = true)
+
+                Toast.makeText(this, "Restauración realizada exitosamente", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Log.e("RestauracionActivity", "Error al restaurar la base de datos: ${e.message}")
+                Toast.makeText(this, "Error al restaurar la base de datos", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Log.e("RestauracionActivity", "La carpeta de respaldo no existe")
-            Toast.makeText(this, "La carpeta de respaldo no existe", Toast.LENGTH_SHORT).show()
+            Log.e("RestauracionActivity", "El directorio de restauración no existe")
+            Toast.makeText(this, "El directorio de restauración no existe", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -103,7 +106,7 @@ class RestauracionActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                createRestorationFolder()
+                restoreDatabase()
             } else {
                 Toast.makeText(
                     this,
@@ -114,5 +117,3 @@ class RestauracionActivity : AppCompatActivity() {
         }
     }
 }
-
-

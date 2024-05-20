@@ -155,21 +155,30 @@ class BackupActivity : AppCompatActivity() {
         val backupDirectoryName = "respaldo_factura2024"
         val backupDirectory = File(parentDir, backupDirectoryName)
 
+        // Verificar si el directorio de respaldo existe y manejar errores de creación
         if (!backupDirectory.exists()) {
-            if (backupDirectory.mkdirs()) {
-                Log.d(
-                    "BackupActivity",
-                    "Directorio de respaldo creado en: ${backupDirectory.absolutePath}"
-                )
-                Toast.makeText(
-                    this,
-                    "Directorio de respaldo creado exitosamente",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                Log.e("BackupActivity", "Error al crear el directorio de respaldo")
-                Toast.makeText(this, "Error al crear el directorio de respaldo", Toast.LENGTH_SHORT)
+            try {
+                if (backupDirectory.mkdirs()) {
+                    Log.d(
+                        "BackupActivity",
+                        "Directorio de respaldo creado en: ${backupDirectory.absolutePath}"
+                    )
+                    Toast.makeText(
+                        this,
+                        "Directorio de respaldo creado exitosamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Log.e("BackupActivity", "Error al crear el directorio de respaldo")
+                    Toast.makeText(this, "Error al crear el directorio de respaldo", Toast.LENGTH_SHORT)
+                        .show()
+                    return
+                }
+            } catch (e: Exception) {
+                Log.e("BackupActivity", "Excepción al crear el directorio de respaldo: ${e.message}")
+                Toast.makeText(this, "Excepción al crear el directorio de respaldo", Toast.LENGTH_SHORT)
                     .show()
+                return
             }
         } else {
             Log.d(
@@ -210,31 +219,19 @@ class BackupActivity : AppCompatActivity() {
         val dbDir = File(database.path)
         val backupDirDb = File(backupDir, dbDir.name)
 
-        // Verificar si el archivo de destino ya existe
-        if (backupDirDb.exists()) {
-            try {
-                // Eliminar el archivo existente
+        try {
+            // Verificar si el archivo de destino ya existe y eliminarlo si es necesario
+            if (backupDirDb.exists()) {
                 backupDirDb.deleteRecursively()  // Utiliza deleteRecursively para eliminar directorios
-                // Copiar todos los archivos al directorio de respaldo
-                copyDirectory(dbDir, backupDirDb)
-                Log.d("BackupActivity", "Respaldo actualizado con éxito: ${backupDirDb.absolutePath}")
-                Toast.makeText(this, "Respaldo actualizado con éxito", Toast.LENGTH_SHORT).show()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                Log.e("BackupActivity", "Error al actualizar el respaldo: ${e.message}")
-                Toast.makeText(this, "Error al actualizar el respaldo", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            try {
-                // Si el archivo de respaldo no existe, simplemente copiar todos los archivos
-                copyDirectory(dbDir, backupDirDb)
-                Log.d("BackupActivity", "Respaldo realizado con éxito: ${backupDirDb.absolutePath}")
-                Toast.makeText(this, "Respaldo realizado con éxito", Toast.LENGTH_SHORT).show()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                Log.e("BackupActivity", "Error al realizar el respaldo: ${e.message}")
-                Toast.makeText(this, "Error al realizar el respaldo", Toast.LENGTH_SHORT).show()
-            }
+            // Copiar todos los archivos al directorio de respaldo
+            copyDirectory(dbDir, backupDirDb)
+            Log.d("BackupActivity", "Respaldo realizado con éxito: ${backupDirDb.absolutePath}")
+            Toast.makeText(this, "Respaldo realizado con éxito", Toast.LENGTH_SHORT).show()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Log.e("BackupActivity", "Error al realizar el respaldo: ${e.message}")
+            Toast.makeText(this, "Error al realizar el respaldo", Toast.LENGTH_SHORT).show()
         }
     }
 
