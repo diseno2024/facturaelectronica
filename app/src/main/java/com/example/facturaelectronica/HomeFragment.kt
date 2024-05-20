@@ -1,5 +1,6 @@
 package com.example.facturaelectronica
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -11,6 +12,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeFragment : Fragment() {
+
+    private var floatingButtonAction: (() -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,23 +29,37 @@ class HomeFragment : Fragment() {
         // Maneja la navegación a través de BottomNavigationView
         val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.boton_navegacion)
         val floatingActionButton = view.findViewById<FloatingActionButton>(R.id.floatingActionButton)
+
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.boton_factura -> {
                     floatingActionButton.backgroundTintList = ColorStateList.valueOf(hexToColorInt("#80BFA8"))
                     (activity as MenuActivity).navigateToFragment(FacturaFragment())
+                    floatingButtonAction = {
+                        val intent = Intent(activity, EmitirCFActivity::class.java)
+                        startActivity(intent)
+                    }
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.boton_creditoFiscal -> {
                     floatingActionButton.backgroundTintList = ColorStateList.valueOf(hexToColorInt("#2E594A"))
                     (activity as MenuActivity).navigateToFragment(CFiscalFragment())
+                    floatingButtonAction = {
+                        val intent = Intent(activity, Comprobantecf::class.java)
+                        startActivity(intent)
+                    }
                     return@setOnNavigationItemSelectedListener true
                 }
                 // Agrega más casos según sea necesario para más fragmentos
                 else -> return@setOnNavigationItemSelectedListener false
             }
         }
+
+        floatingActionButton.setOnClickListener {
+            floatingButtonAction?.invoke()
+        }
     }
+
     fun hexToColorInt(hex: String): Int {
         return try {
             Color.parseColor(hex)
