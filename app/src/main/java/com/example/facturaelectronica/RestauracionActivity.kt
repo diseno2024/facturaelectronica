@@ -75,18 +75,14 @@ class RestauracionActivity : AppCompatActivity() {
         val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
         val backupDirectoryName = "respaldo_factura2024"
         val restorationDirectoryName = "restauracion_factura"
-        val additionalBackupDirectoryName = "additional_backup"
 
         val backupDirectory = File(parentDir, backupDirectoryName)
         val restorationDirectory = File(backupDirectory, restorationDirectoryName)
-        val additionalBackupDirectory = File(parentDir, additionalBackupDirectoryName)
 
-        val sourceDirectory = if (restorationDirectory.exists()) restorationDirectory else additionalBackupDirectory
-
-        if (sourceDirectory.exists()) {
+        if (restorationDirectory.exists()) {
             try {
-                // Copiar los archivos desde la carpeta de respaldo o la ubicación adicional a la carpeta de restauración
-                copyDirectory(sourceDirectory, parentDir)
+                // Copiar los archivos desde la carpeta de respaldo a la carpeta de restauración
+                copyDirectory(backupDirectory, restorationDirectory)
                 Log.d("RestauracionActivity", "Datos restaurados con éxito")
                 Toast.makeText(this, "Datos restaurados con éxito", Toast.LENGTH_SHORT).show()
             } catch (e: IOException) {
@@ -95,8 +91,8 @@ class RestauracionActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error al restaurar datos", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Log.e("RestauracionActivity", "No se pudo encontrar la carpeta de respaldo ni la ubicación adicional")
-            Toast.makeText(this, "No se pudo encontrar la carpeta de respaldo ni la ubicación adicional", Toast.LENGTH_SHORT).show()
+            Log.e("RestauracionActivity", "La carpeta de restauración no existe")
+            Toast.makeText(this, "La carpeta de restauración no existe", Toast.LENGTH_SHORT).show()
         }
     }
 

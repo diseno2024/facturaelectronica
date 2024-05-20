@@ -9,7 +9,7 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
-            android:title="Inicio"/>
+            android:title="Inicio" />
 
         <item
             android:id="@+id/nav_registro"
@@ -24,7 +24,7 @@
         <item
             android:id="@+id/nav_configuracion"
             android:icon="@drawable/ic_user"
-            android:title="Conf. del contribuyente"/>
+            android:title="Conf. del Emisor"/>
 
         <item
             android:id="@+id/nav_credito"
@@ -36,10 +36,6 @@
             android:icon="@drawable/ic_consumidor"
             android:title="Consumidor final"/>
 
-        <item
-            android:id="@+id/nav_logo"
-            android:icon="@drawable/ic_add_photo"
-            android:title="Subir logo"/>
 
         <item
             android:id="@+id/nav_DatosContribuyente"
