@@ -12,29 +12,46 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="#4a8c74"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/nombreSlide"
+        app:layout_constraintTop_toTopOf="parent"
+        app:contentInsetStart="0dp">
+        <ImageButton
+            android:id="@+id/atras"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/click_effect"
+            android:clickable="true"
+            android:contentDescription="bottom"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="@+id/toolbar"
+            app:layout_constraintHorizontal_bias="0.04"
+            app:layout_constraintStart_toStartOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3"
+            app:srcCompat="@drawable/icons8_back_arrow_48"
+            app:tint="#FFFFFF" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Datos del Contribuyente"
             android:textColor="#FFFFFF"
-            android:textSize="25sp"
+            android:textSize="@dimen/textSize_textToolbarC"
             app:layout_constraintVertical_bias="0.35"
             app:layout_constraintHorizontal_bias="0.4"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-            android:text="REGISTRO DE DATOS DEL CONTRIBUYENTE"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_gravity="center"/>
-        />
+            android:layout_gravity="center"
+            />
+
     </androidx.appcompat.widget.Toolbar>
 
     <EditText
@@ -52,7 +69,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.149"
+        app:layout_constraintVertical_bias="0.12"
         app:layout_constraintWidth_percent="0.8" />
 
     <EditText
@@ -70,7 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.24"
+        app:layout_constraintVertical_bias="0.21"
         app:layout_constraintWidth_percent="0.8" />
 
     <EditText
@@ -88,7 +105,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.329"
+        app:layout_constraintVertical_bias="0.3"
         app:layout_constraintWidth_percent="0.8" />
 
     <EditText
@@ -106,7 +123,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.418"
+        app:layout_constraintVertical_bias="0.39"
         app:layout_constraintWidth_percent="0.8" />
 
     <EditText
@@ -124,8 +141,52 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.512"
+        app:layout_constraintVertical_bias="0.48"
         app:layout_constraintWidth_percent="0.8" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Departamento"
+        android:textColor="#4A8C74"
+        app:layout_constraintBottom_toTopOf="@+id/departamento"
+        app:layout_constraintStart_toStartOf="@+id/departamento" />
+
+    <Spinner
+        android:id="@+id/departamento"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_text"
+        android:textSize="@dimen/textSize_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.165"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.38"
+        app:layout_constraintVertical_bias="0.6"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Municipio"
+        android:textColor="#4A8C74"
+        app:layout_constraintBottom_toTopOf="@+id/municipio"
+        app:layout_constraintStart_toStartOf="@+id/municipio" />
+
+    <Spinner
+        android:id="@+id/municipio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_text"
+        android:textSize="@dimen/textSize_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.836"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintWidth_percent="0.38" />
 
     <EditText
         android:id="@+id/DireccionText"
@@ -142,7 +203,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.607"
+        app:layout_constraintVertical_bias="0.69"
         app:layout_constraintWidth_percent="0.8" />
 
     <EditText
@@ -160,7 +221,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.695"
+        app:layout_constraintVertical_bias="0.78"
         app:layout_constraintWidth_percent="0.8" />
 
     <EditText
@@ -178,24 +239,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.78"
+        app:layout_constraintVertical_bias="0.87"
         app:layout_constraintWidth_percent="0.8" />
 
-    <Button
-        android:id="@+id/cancelarButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#4A8C74"
-        android:text="Cancelar"
-        android:textColor="@color/white"
-        android:textSize="@dimen/textSize_button"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.215"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.951" />
 
     <Button
         android:id="@+id/guardarButton"
@@ -203,29 +249,17 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#4A8C74"
         android:text="Agregar"
-        android:textSize="@dimen/textSize_button"
         android:textColor="@color/white"
+        android:textSize="@dimen/textSize_button"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toEndOf="@+id/cancelarButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.951" />
-
-    <CheckBox
-        android:id="@+id/checkGuardar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Guardar datos del contribuyente permanentemente"
-        android:textColor="#4A8C74"
-        android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.45"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.85" />
+        app:layout_constraintVertical_bias="0.97" />
+
+
 
 
 
