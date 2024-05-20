@@ -241,14 +241,8 @@ class PrinReClienteActivity : AppCompatActivity() {
 
         regresar.setOnClickListener {
             // Iniciar otra actividad
-            val intent = Intent(this, EmitirCFActivity::class.java)
+            val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
-        }
-        val botonAtras = findViewById<ImageButton>(R.id.atras)
-        botonAtras.setOnClickListener {
-            val intent = Intent(this, EmitirCFActivity::class.java)
-            startActivity(intent)
-            finish()
         }
 
         // Inicializar la base de datos
