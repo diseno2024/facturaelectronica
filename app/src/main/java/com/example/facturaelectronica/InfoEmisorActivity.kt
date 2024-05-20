@@ -1,6 +1,7 @@
 package com.example.facturaelectronica
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -57,6 +58,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         val uri = obtenerUriGuardada()?.toUri()
         if(uri!=null){
             val Imagen: ImageView = findViewById(R.id.Logo)
+            Imagen.setBackgroundColor(Color.TRANSPARENT)
             Imagen.setImageURI(uri)
             // Mostrar el botón de borrar
             val btnBorrarImagen: ImageButton = findViewById(R.id.btnBorrarImagen)
@@ -73,6 +75,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         val uri = obtenerUriGuardada()?.toUri()
         if(uri!=null){
             val Imagen: ImageView = findViewById(R.id.Logo)
+            Imagen.setBackgroundColor(Color.TRANSPARENT)
             Imagen.setImageURI(uri)
             // Mostrar el botón de borrar
             val btnBorrarImagen: ImageButton = findViewById(R.id.btnBorrarImagen)
@@ -165,6 +168,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         // Eliminar la imagen seleccionada (puedes reiniciar la variable 'logo' a null)
         val Imagen: ImageView = findViewById(R.id.Logo)
         val drawable = ContextCompat.getDrawable(this, R.drawable.ic_add_photo)
+        Imagen.setBackgroundColor(hexToColorInt("#EFEEEE"))
         Imagen.setImageDrawable(drawable)
         // Ocultar el botón de borrar
         val btnBorrarImagen: ImageButton = findViewById(R.id.btnBorrarImagen)
@@ -199,6 +203,14 @@ class InfoEmisorActivity : AppCompatActivity() {
             }
         } catch (e: CouchbaseLiteException) {
             Log.e("Prin_Re_Cliente", "Error al eliminar las URI de la base de datos: ${e.message}", e)
+        }
+    }
+    fun hexToColorInt(hex: String): Int {
+        return try {
+            Color.parseColor(hex)
+        } catch (e: IllegalArgumentException) {
+            // Manejar errores si el formato del color hexadecimal es incorrecto
+            Color.BLACK // Valor predeterminado en caso de error
         }
     }
 

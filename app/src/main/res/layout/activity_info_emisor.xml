@@ -77,18 +77,18 @@
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
                     android:background="#EFEEEE"/>
+
                 <ImageButton
                     android:id="@+id/btnBorrarImagen"
                     android:layout_width="51dp"
                     android:layout_height="51dp"
+                    android:layout_gravity="end"
                     android:background="@drawable/click_effect"
                     android:clickable="true"
-                    android:layout_gravity="end"
                     android:contentDescription="bottom"
                     android:focusable="true"
                     android:visibility="gone"
-                    app:srcCompat="@drawable/icons8_cancelar_24"
-                    app:tint="#EF0000" />
+                    app:srcCompat="@drawable/icons8_delete_32_1_" />
 
 
             </com.google.android.material.card.MaterialCardView>
