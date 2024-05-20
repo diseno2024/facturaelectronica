@@ -55,22 +55,20 @@ class EmitirCCFActivity : AppCompatActivity() {
         }
 
 
-        // Aquí Empieza
+        // Botón para poder crear el documento PDF
         val btnGenerarPdf = findViewById<Button>(R.id.btnCrearPdf)
-
+        // Verifica los permisos si están aceptados cuando vamos a hacer la generación
         if (checkPermission()) {
+            // El permiso está aceptado
             Toast.makeText(this, "Permiso Aceptado", Toast.LENGTH_LONG).show()
         } else {
+            // Vuelve a pedir el permiso
             requestPermissions()
         }
-
+        // Llama la función para poder generar el archivo PDF
         btnGenerarPdf.setOnClickListener {
             generarPdf()
         }
-        // Aquí Termina
-
-
-
     }
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
@@ -88,57 +86,54 @@ class EmitirCCFActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
-
-
-    // Aquí Empieza
+    // Función para poder generar el PDF
     private fun generarPdf() {
+        // Variable para poder almacenar el contenido del json através de una función
         val jsonData = leerJsonDesdeAssets("archivo.json")
         val pdfDocument = PdfDocument()
-
+        // Crea una página tamaño carta para el PDF
         val paginaInfo = PdfDocument.PageInfo.Builder(612, 792, 1).create() // Tamaño carta
         val pagina1 = pdfDocument.startPage(paginaInfo)
         val canvas = pagina1.canvas
 
-        // Estilo de Letra 1
+        // Estilo de Letra 1 - Para el encabezado del documento
         val paintEncabezado = Paint().apply {
             color = Color.BLACK
             textSize = 12f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         }
-        // Estilo de Letra 2
+        // Estilo de Letra 2 - Para la mayoría de información del documento
         val paintInfoDocumento = Paint().apply {
             color = Color.BLACK
             textSize = 7f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         }
-        // Estilo de Letra 3
+        // Estilo de Letra 3 - Para los títulos
         val paintTITULO = Paint().apply {
             color = Color.BLACK
             textSize = 8f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         }
-        // Estilo de Letra 4
+        // Estilo de Letra 4 - Para la info del emisor y receptor
         val paintInfoContribuyentes = Paint().apply {
             color = Color.BLACK
             textSize = 7f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         }
-
-        // Estilo de Rectángulo 1
+        // Estilo de Rectángulo 1 - Estilo de los rectángulo del emisor y receptor
         val paintRect1 = Paint().apply {
             style = Paint.Style.STROKE // Solo dibujar el contorno
             color = Color.BLACK // Color del contorno
             strokeWidth = 2f // Ancho del contorno
         }
-
-        // Estilo de Borde 1
+        // Estilo de Borde 1 - Para el rectángulo del emisor y receptor
         val cornerRadius1 = 5f
-
 
         // Extraer y mostrar información del JSON
         try {
             val jsonObject = JSONObject(jsonData)
+
+            // Aquí se empieza a generar el PDF en base a toda la info
 
             // Dibujar el Encabezado
             canvas.drawText("DOCUMENTO TRIBUTARIO ELECTRÓNICO", 210f, 25f, paintEncabezado)
@@ -150,7 +145,9 @@ class EmitirCCFActivity : AppCompatActivity() {
             val codigoGeneracion = identificacion.getString("codigoGeneracion")
             val numeroControl = identificacion.getString("numeroControl")
             // Dibujar el texto en el PDF
+            // Info Código de Generación
             canvas.drawText("Código de Generación: $codigoGeneracion", 25f, 175f, paintInfoDocumento)
+            // Info Número de Control
             canvas.drawText("Número de Control: $numeroControl", 25f, 185f, paintInfoDocumento)
             /*   Lado derecho   */
             val tipoModelo = identificacion.getInt("tipoModelo")
@@ -158,16 +155,19 @@ class EmitirCCFActivity : AppCompatActivity() {
             val fecEmi = identificacion.getString("fecEmi")
             val horEmi = identificacion.getString("horEmi")
             // Dibujar el texto en el PDF
+            // Info Modelo de Facturación
             if (tipoModelo == 1) {
                 canvas.drawText("Modelo de Facturación: Modelo Facturación Previo", 375f, 175f, paintInfoDocumento)
             } else if (tipoModelo == 2) {
                 canvas.drawText("Modelo de Facturación: Modelo Facturación Diferido", 375f, 175f, paintInfoDocumento)
             }
+            // Info Tipo de Transmisión
             if (tipoOperacion == 1) {
                 canvas.drawText("Tipo de Transmisión: Transmisión Normal", 375f, 185f, paintInfoDocumento)
             } else if (tipoOperacion == 2) {
                 canvas.drawText("Tipo de Transmisión: Transmisión por Contingencia", 375f, 185f, paintInfoDocumento)
             }
+            // Info de fecha y hora de generación
             canvas.drawText("Fecha y Hora de Generación: $fecEmi $horEmi", 375f, 195f, paintInfoDocumento)
 
 
@@ -175,6 +175,7 @@ class EmitirCCFActivity : AppCompatActivity() {
             // SELLO DE RECEPCIÓN
             val respuestaHacienda = jsonObject.getJSONObject("respuestaHacienda")
             val selloRecibido = respuestaHacienda.getString("selloRecibido")
+            // Este es el sello de recibido otrogado por el Ministerio de Hacienda
             canvas.drawText("Sello de Recepción: $selloRecibido", 25f, 195f, paintInfoDocumento)
 
 
@@ -288,6 +289,7 @@ class EmitirCCFActivity : AppCompatActivity() {
 
 
             // RESUMEN
+            // Info sobre todas las ventas que se realizaron
             canvas.drawText("SUMA DE VENTAS:", startX + 325, startY, paintTITULO)
             val resumen = jsonObject.getJSONObject("resumen")
             val totalNoSuj = resumen.getString("totalNoSuj")
@@ -303,19 +305,22 @@ class EmitirCCFActivity : AppCompatActivity() {
             // Para mover a la izquierda: Decrementa finalPosition (por ejemplo, startX + 350).
             val finalPosition1 = startX + 495
             val finalPosition2 = startX + 530
-
+            // Info de Suma Total de Operaciones con su respectivo monto
             val subTotalVentas = resumen.getString("subTotalVentas")
             canvas.drawText("Suma Total de Operaciones:", finalPosition1 - paintTITULO.measureText("Suma Total de Operaciones:"), startY + 15, paintTITULO)
             canvas.drawText("$$subTotalVentas", finalPosition2 - paintTITULO.measureText(subTotalVentas), startY + 15, paintInfoDocumento)
 
+            // Info de Descuento para Ventas no sujetas con su respectivo monto
             val descuNoSuj = resumen.getString("descuNoSuj")
             canvas.drawText("Monto global Desc., Rebajas y otros a ventas no sujetas:", finalPosition1 - paintTITULO.measureText("Monto global Desc., Rebajas y otros a ventas no sujetas:"), startY + 26, paintTITULO)
             canvas.drawText("$$descuNoSuj", finalPosition2 - paintTITULO.measureText(descuNoSuj), startY + 26, paintInfoDocumento)
 
+            // Info de Descuento para Ventas exentas con su respectivo monto
             val descuExenta = resumen.getString("descuExenta")
             canvas.drawText("Monto global Desc., Rebajas y otros a ventas exentas:", finalPosition1 - paintTITULO.measureText("Monto global Desc., Rebajas y otros a ventas exentas:"), startY + 37, paintTITULO)
             canvas.drawText("$$descuExenta", finalPosition2 - paintTITULO.measureText(descuExenta), startY + 37, paintInfoDocumento)
 
+            // Info de Descuento para Ventas gravadas con su respectivo monto
             val descuGravada = resumen.getString("descuGravada")
             canvas.drawText("Monto global Desc., Rebajas y otros a ventas gravadas:", finalPosition1 - paintTITULO.measureText("Monto global Desc., Rebajas y otros a ventas gravadas:"), startY + 48, paintTITULO)
             canvas.drawText("$$descuGravada", finalPosition2 - paintTITULO.measureText(descuGravada), startY + 48, paintInfoDocumento)
@@ -334,54 +339,66 @@ class EmitirCCFActivity : AppCompatActivity() {
                     break  // Suponiendo que solo hay un tributo con código "20"
                 }
             }
+            // Dibuja lo que es el monto de IVA (13%) sobre el total de la venta
             canvas.drawText(descripcion20, finalPosition1 - paintTITULO.measureText(descripcion20), startY + 59, paintTITULO)
             canvas.drawText("$$valor20", finalPosition2 - paintTITULO.measureText(valor20.toString()), startY + 59, paintInfoDocumento)
 
+            // Muesta Info sobre el Sub-Total
             val subTotal = resumen.getString("subTotal")
             canvas.drawText("Sub-Total:", finalPosition1 - paintTITULO.measureText("Sub-Total:"), startY + 70, paintTITULO)
             canvas.drawText("$$subTotal", finalPosition2 - paintTITULO.measureText(subTotal), startY + 70, paintInfoDocumento)
 
+            // Muesta Info sobre el IVA Percibido
             val ivaPerci1 = resumen.getString("ivaPerci1")
             canvas.drawText("IVA Percibido:", finalPosition1 - paintTITULO.measureText("IVA Percibido:"), startY + 81, paintTITULO)
             canvas.drawText("$$ivaPerci1", finalPosition2 - paintTITULO.measureText(ivaPerci1), startY + 81, paintInfoDocumento)
 
+            // Muesta Info sobre el IVA Retenido
             val ivaRete1 = resumen.getString("ivaRete1")
             canvas.drawText("IVA Retenido:", finalPosition1 - paintTITULO.measureText("IVA Retenido:"), startY + 92, paintTITULO)
             canvas.drawText("$$ivaRete1", finalPosition2 - paintTITULO.measureText(ivaRete1), startY + 92, paintInfoDocumento)
 
+            // Muesta Info sobre Retención Renta
             val reteRenta = resumen.getString("reteRenta")
             canvas.drawText("Retención Renta:", finalPosition1 - paintTITULO.measureText("Retención Renta:"), startY + 103, paintTITULO)
             canvas.drawText("$$reteRenta", finalPosition2 - paintTITULO.measureText(reteRenta), startY + 103, paintInfoDocumento)
 
+            // Muesta Info sobre el Monto Total de la Operación
             val montoTotalOperacion = resumen.getString("montoTotalOperacion")
             canvas.drawText("Monto Total de la Operación:", finalPosition1 - paintTITULO.measureText("Monto Total de la Operación:"), startY + 114, paintTITULO)
             canvas.drawText("$$montoTotalOperacion", finalPosition2 - paintTITULO.measureText(montoTotalOperacion), startY + 114, paintInfoDocumento)
 
+            // Muesta Info sobre Otros montos posibles no afectos
             val totalNoGravado = resumen.getString("totalNoGravado")
             canvas.drawText("Total Otros montos no afectos:", finalPosition1 - paintTITULO.measureText("Total Otros montos no afectos:"), startY + 125, paintTITULO)
             canvas.drawText("$$totalNoGravado", finalPosition2 - paintTITULO.measureText(totalNoGravado), startY + 125, paintInfoDocumento)
 
+            // Muesta Info sobre el Total a Pagar
             val totalPagar = resumen.getString("totalPagar")
             canvas.drawText("Total a Pagar:", finalPosition1 - paintTITULO.measureText("Total a Pagar:"), startY + 136, paintTITULO)
             canvas.drawText("$$totalPagar", finalPosition2 - paintTITULO.measureText(totalPagar), startY + 136, paintInfoDocumento)
 
-            // Valor en Letras
+            // Muestra Info de Valor en Letras
             val totalLetras = resumen.getString("totalLetras")
             canvas.drawText("Valor en Letras: $totalLetras", startX, startY + 15, paintTITULO)
 
-            // Condición de la Operación
+            // Muestra Info de Condición de la Operación
             val condicionOperacion = resumen.getInt("condicionOperacion")
             if (condicionOperacion == 1) {
+                // Si la operación fue al Contado
                 canvas.drawText("Condición de la Operación: $condicionOperacion - Contado", startX, startY + 30, paintTITULO)
             } else if (condicionOperacion == 2) {
+                // Si la operación fue al Crédito
                 canvas.drawText("Condición de la Operación: $condicionOperacion - A crédito", startX, startY + 30, paintTITULO)
             } else if (condicionOperacion == 3){
+                // Si la operación fue otra
                 canvas.drawText("Condición de la Operación: $condicionOperacion - Otro", startX, startY + 30, paintTITULO)
             }
 
 
 
             // EXTENSIÓN
+            // Muestra información extra que requiere hacienda
             canvas.drawText("EXTENSIÓN", startX + 125, startY + 45, paintTITULO)
 
             canvas.drawText("Emisor Responsable:", startX, startY + 60, paintTITULO)
@@ -394,32 +411,41 @@ class EmitirCCFActivity : AppCompatActivity() {
 
 
 
-            // Agregar número de página
+            // Agregar el número de página
             canvas.drawText("Página 1 de 1", 550f, 775f, paintInfoDocumento)
 
 
 
+            // Valida si hubo algún problema para poder validar el archivo json
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(this, "Error al procesar el JSON: ${e.message}", Toast.LENGTH_LONG).show()
         }
 
+        // Aquí dejan de generarse páginas del pdf
         pdfDocument.finishPage(pagina1)
 
+        // Accede al directorio de descargas del dispositivo, ya sea virtual o físico
+        // El acceso lo hace através del directorio de la descargas
         val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        // Con ese nombre se le va a guardar el PDF
         val outputFilePath = File(downloadsDir, "midocumento.pdf")
 
+        // Valida si el PDF no tuvo errores para generarse
         try {
             pdfDocument.writeTo(FileOutputStream(outputFilePath))
             Toast.makeText(this, "Se creó el PDF correctamente en: ${outputFilePath.absolutePath}", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
+            // En caso de que los haya habido muestra un mensaje
             e.printStackTrace()
             Toast.makeText(this, "Error al crear el PDF: ${e.message}", Toast.LENGTH_LONG).show()
         }
 
+        // Aquí finaliza la generación del documento pdf
         pdfDocument.close()
     }
 
+    // Función para poder leer el archivo json
     private fun leerJsonDesdeAssets(fileName: String): String {
         var json = ""
         try {
@@ -431,35 +457,22 @@ class EmitirCCFActivity : AppCompatActivity() {
         return json
     }
 
+    // Función para verificar si los permisos están otorgados dentro del dispositivo
     private fun checkPermission(): Boolean {
+        // El permiso de escritura
         val permission1 = ContextCompat.checkSelfPermission(applicationContext, WRITE_EXTERNAL_STORAGE)
+        // El permiso de lectura
         val permission2 = ContextCompat.checkSelfPermission(applicationContext, READ_EXTERNAL_STORAGE)
         return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED
     }
 
+    // Función para pedirle los permisos al usuario
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(
             this,
+            // Pide permisos de escritura y lectura
             arrayOf(WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE),
             200
         )
     }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 200) {
-            if (grantResults.isNotEmpty()) {
-                val writeStorage = grantResults[0] == PackageManager.PERMISSION_GRANTED
-                val readStorage = grantResults[1] == PackageManager.PERMISSION_GRANTED
-
-                /*if (writeStorage && readStorage) {
-                    Toast.makeText(this, "Permisos Concedidos", Toast.LENGTH_LONG).show()
-                } else {
-                    Toast.makeText(this, "Permisos Rechazados", Toast.LENGTH_LONG).show()
-                    finish()
-                }*/
-            }
-        }
-    }
-    // Aquí Termina
 }
