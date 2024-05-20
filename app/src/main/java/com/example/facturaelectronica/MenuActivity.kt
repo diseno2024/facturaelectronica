@@ -86,7 +86,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_configuracion ->{
                 // Iniciar ResMensualesActivity al seleccionar "Conf.Datos del contribuyente"
-                val intent = Intent(this, ConfDatosDelContribuyenteActivity::class.java)
+                val intent = Intent(this, InfoEmisorActivity::class.java)
                 startActivity(intent)
                 finish()
                 return true
@@ -116,13 +116,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
 
-            R.id.nav_logo -> {
-                // Iniciar LogoActivity al seleccionar "Subir logo"
-                val intent = Intent(this, InfoEmisorActivity::class.java)
-                startActivity(intent)
-                finish()
-                return true
-            }
 
             R.id.nav_DatosContribuyente -> {
                 //Iniciar ReDatosCntribuyenteActivity al selecionar "Datos Contribuyente"

@@ -32,10 +32,6 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".ConfDatosDelContribuyenteActivity"
-            android:exported="false"
-            />
-        <activity
             android:name=".ReClienteActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
@@ -61,10 +57,6 @@
             />
         <activity
             android:name=".PDF_CFActivity"
-            android:exported="false"
-            />
-        <activity
-            android:name=".LogoActivity"
             android:exported="false"
             />
         <activity
