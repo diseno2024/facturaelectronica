@@ -263,7 +263,7 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         val actividadEconomicaText = actividadEconomica.text.toString()
         val nrcText = nrc.text.toString()
         val direccionText = direccion.text.toString()
-        val emailText = email.text.toString()
+        val emailText = email.text.toString().trim()
         val nombreComercialText = nombreComercial.text.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
         val departamentoText = departamento.selectedItem.toString()
@@ -313,7 +313,7 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         val razonSocialText = razonSocial.text.toString()
         val nombreComercialText = nombreComercial.text.toString()
         val nitText = nit.text.toString().replace("-", "")
-        val emailText = email.text.toString()
+        val emailText = email.text.toString().trim()
         val direccionText = direccion.text.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
 
