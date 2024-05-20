@@ -229,7 +229,9 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         }
 
         btnGuardar.setOnClickListener{
-            guardarDatosContribuyente()
+            if(validarEntradas()){
+                guardarDatosContribuyente()
+            }
         }
 
 
@@ -296,6 +298,42 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         email.setText("")
         nombreComercial.setText("")
         telefono.setText("")
+    }
+    private fun validarEntradas(): Boolean {
+        val actividadEconomicaText = actividadEconomica.text.toString()
+        val nrcText = nrc.text.toString()
+        val razonSocialText = razonSocial.text.toString()
+        val nombreComercialText = nombreComercial.text.toString()
+        val nitText = nit.text.toString().replace("-", "")
+        val emailText = email.text.toString()
+        val direccionText = direccion.text.toString()
+        val telefonoText = telefono.text.toString().replace("-", "")
+
+        // Verifica que todos los campos estén llenos
+        if (nrcText.isEmpty() || actividadEconomicaText.isEmpty() || nombreComercialText.isEmpty() || nitText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() || razonSocialText.isEmpty()) {
+            Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Verifica que el correo electrónico tenga un formato válido
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
+            Toast.makeText(this, "Correo electrónico no válido", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Verifica que el NIT sea un número válido
+        if (!nitText.matches(Regex("\\d{14}"))) {
+            Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Verifica que el teléfono sea un número válido de 8 dígitos
+        if (!telefonoText.matches(Regex("\\d{8}"))) {
+            Toast.makeText(this, "Teléfono debe ser un número válido de 8 dígitos", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
     }
 
     private fun returnToMenu() {
