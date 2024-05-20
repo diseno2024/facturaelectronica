@@ -27,28 +27,6 @@ class Comprobantecf : AppCompatActivity() {
             finish()
         }
 
-        val buttonContribuyente = findViewById<Button>(R.id.btnSeleccionarContribuyente)
-        // Configura el OnClickListener para el botón btnSeleccionarContribuyente
-        buttonContribuyente.setOnClickListener {
-            // Crea un intent para ir a InfoReceptoresActivity
-            val intent = Intent(this, InfoReceptoresActivity::class.java)
-            startActivity(intent)
-        }
-
-        val buttonRegistrar2 = findViewById<Button>(R.id.btnRegistrar2)
-        // Configura el OnClickListener para el botón btnRegistrar2
-        buttonRegistrar2.setOnClickListener {
-            // Crea un Intent para iniciar la actividad AgregarArticuloActivity
-            val intent = Intent(this, AgregarArticuloActivity::class.java)
-            startActivity(intent)
-        }
-        val btnGenccf: Button = findViewById(R.id.btnGenccf)
-        btnGenccf.setOnClickListener {
-            // Crear un intent para ir a MenuActivity
-            val intent = Intent(this, ComprobanteCCFActivity::class.java)
-            startActivity(intent)
-            finish() // Finalizar la actividad actual si se desea
-        }
     }
 
     override fun onBackPressed() {

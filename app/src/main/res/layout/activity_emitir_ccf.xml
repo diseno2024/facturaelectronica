@@ -8,398 +8,657 @@
     android:layout_height="match_parent"
     tools:context=".Comprobantecf">
 
-    <FrameLayout
-        android:id="@+id/nuevoFondoDato1"
-        android:layout_width="198dp"
-        android:layout_height="146dp"
-        android:layout_marginTop="332dp"
-        android:background="@drawable/rounded_background_green_ligth"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.869"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bordeSup">
-
-        <TextView
-            android:id="@+id/textFechaUltimoRespaldo11"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="0dp"
-            android:text="Informacion del Credito Fiscal"
-            android:textColor="#000"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textFechaUltimoRespaldo24"
-            android:layout_width="184dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="110dp"
-            android:layout_marginRight="0dp"
-            android:text="####-RES-IN-####-####"
-            android:textColor="#000"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textFechaUltimoRespaldo23"
-            android:layout_width="93dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="90dp"
-            android:layout_marginRight="0dp"
-            android:text="Resolucion:"
-            android:textColor="#000"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textFechaUltimoRespaldo22"
-            android:layout_width="93dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="70dp"
-            android:layout_marginRight="0dp"
-            android:text="Serie.####"
-            android:textColor="#000"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textFechaUltimoRespaldo21"
-            android:layout_width="71dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginRight="0dp"
-            android:text="No.####"
-            android:textColor="#000"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </FrameLayout>
-
-    <Button
-        android:id="@+id/btnRegistrar2"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="132dp"
-        android:layout_marginBottom="220dp"
-        android:backgroundTint="#BFD9CF"
-        android:text="+ Agregar Articulo"
-        android:textColor="@color/black"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/btnSeleccionarContribuyente"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="236dp"
-        android:layout_marginBottom="332dp"
-        android:backgroundTint="#BFD9CF"
-        android:text="Agregar Cliente"
-        android:textColor="@color/black"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/nuevoFondoDato"
-        android:layout_width="234dp"
-        android:layout_height="122dp"
-        android:layout_marginTop="184dp"
-        android:background="@drawable/rounded_background_green_ligth"
+        android:background="#4a8c74"
+        android:minHeight="?attr/actionBarSize"
+        android:elevation="4dp"
+        app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.155"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bordeSup">
-
-        <TextView
-            android:id="@+id/textFechaUltimoRespaldo1"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="0dp"
-            android:text="Nombre Comercial"
-            android:textColor="#2E594A"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textFechaUltimoRespaldo2"
-            android:layout_width="159dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginRight="0dp"
-            android:text="Correo Electronico"
-            android:textColor="#2E594A"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textFechaUltimoRespaldo3"
-            android:layout_width="98dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginRight="0dp"
-            android:text="Telefono"
-            android:textColor="#2E594A"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textFechaUltimoRespaldo4"
-            android:layout_width="98dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="90dp"
-            android:layout_marginRight="0dp"
-            android:text="NIT"
-            android:textColor="#2E594A"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </FrameLayout>
-
-    <Button
-        android:id="@+id/btnGenccf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="136dp"
-        android:layout_marginBottom="4dp"
-        android:backgroundTint="#4A8C74"
-        android:text="Generar"
-        android:textColor="@color/black"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <View
-        android:id="@+id/Linea1"
-        android:layout_width="360dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="53dp"
-        android:background="#000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bordeSup" />
-
-    <View
-        android:id="@+id/Linea2"
-        android:layout_width="360dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="248dp"
-        android:background="#000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bordeSup" />
-
-    <View
-        android:id="@+id/Linea3"
-        android:layout_width="360dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="424dp"
-        android:background="#000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bordeSup" />
-
-    <View
-        android:id="@+id/Linea4"
-        android:layout_width="360dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="472dp"
-        android:background="#000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.606"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bordeSup" />
-
-    <TextView
-        android:id="@+id/textContribuyentes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="32dp"
-        android:text="Comprobante de Credito Fiscal"
-        android:textColor="#000"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textRespaldoDatos38"
-        android:layout_width="137dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="692dp"
-        android:layout_marginEnd="2dp"
-        android:text="VENTAS TOTAL $0.00"
-        android:textColor="#000"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textRespaldoDatos44"
-        android:layout_width="171dp"
-        android:layout_height="19dp"
-        android:layout_marginTop="644dp"
-        android:layout_marginEnd="2dp"
-        android:text="VENTAS NO SUJETAS $0.00"
-        android:textColor="#000"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textRespaldoDatos36"
-        android:layout_width="158dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="664dp"
-        android:layout_marginEnd="2dp"
-        android:text="VENTAS EXTERNAS $0.00"
-        android:textColor="#000"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textRespaldoDatos35"
-        android:layout_width="110dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="588dp"
-        android:layout_marginEnd="4dp"
-        android:text="SUB-TOTAL $0.00"
-        android:textColor="#000"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textRespaldoDatos32"
-        android:layout_width="143dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="616dp"
-        android:layout_marginEnd="4dp"
-        android:text="(-) IVA RETENIDO $0.00"
-        android:textColor="#000"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textRespaldoDatos33"
-        android:layout_width="87dp"
-        android:layout_height="27dp"
-        android:layout_marginTop="560dp"
-        android:layout_marginEnd="4dp"
-        android:text="13% IVA $0.00"
-        android:textColor="#000"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textRespaldoDatos31"
-        android:layout_width="80dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="540dp"
-        android:layout_marginEnd="6dp"
-        android:text="SUMAS $0.00"
-        android:textColor="#000"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textLetraLogo"
-        android:layout_width="92dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="136dp"
-        android:layout_marginEnd="284dp"
-        android:text="Emisor"
-        android:textColor="#000"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textRespaldoDatos22"
-        android:layout_width="92dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="324dp"
-        android:layout_marginEnd="276dp"
-        android:text="Receptor"
-        android:textColor="#000"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/bordeSup"
-        android:layout_width="411dp"
-        android:layout_height="67dp"
-        android:layout_marginBottom="665dp"
-        android:background="#4A8C74"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/atras"
-            android:layout_width="57dp"
+            android:layout_width="51dp"
             android:layout_height="51dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="8dp"
             android:background="@drawable/click_effect"
             android:clickable="true"
             android:contentDescription="bottom"
             android:focusable="true"
+            android:layout_gravity="start"
             app:srcCompat="@drawable/icons8_back_arrow_48"
             app:tint="#FFFFFF" />
-    </FrameLayout>
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="89dp"
-        android:layout_height="83dp"
-        android:layout_marginStart="284dp"
-        android:layout_marginTop="200dp"
+        <TextView
+            android:id="@+id/title_factura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comprobante Credito Fiscal"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/recurso" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/Totall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="30dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="showDescription"
+                android:translationZ="5dp"
+                app:cardCornerRadius="7dp"
+                app:cardElevation="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Siguiente"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="2dp">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="SUMAS"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="$0.00"
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="13% IVA"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="$0.00"
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="SUB-TOTAL"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="$0.00"
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="(-) IVA RETENIDO"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="$0.00"
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="VENTAS NO SUJETAS"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="$0.00"
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="VENTAS EXTERNAS"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="$0.00"
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="VENTA TOTAL"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="$0.00"
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                </TableLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/Generar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="144dp"
+                android:backgroundTint="#96D0B9"
+                android:text="GENERAR"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/Texto"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Totall"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="3dp"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="8dp"
+                android:text="RESEPTOR"
+                android:textColor="#4a8c74"
+                android:textSize="@dimen/Texto"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.533"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Receptor" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/Receptor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="showDescription"
+                android:translationZ="5dp"
+                app:cardCornerRadius="7dp"
+                app:cardElevation="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="2dp">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                </TableLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:padding="8dp"
+                android:text="DETALLES"
+                android:textColor="#4a8c74"
+                android:textSize="@dimen/Texto"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/DatosdelCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="showDataClient"
+                android:translationZ="5dp"
+                app:cardCornerRadius="7dp"
+                app:cardElevation="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="2dp">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="No."
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="Fecha:"
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/serie"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="Serie:"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:id="@+id/serie1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/resolucion"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="Resolucion:"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:id="@+id/resolucion1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                </TableLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/textView133"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="8dp"
+                android:text="ARTICULO"
+                android:textColor="#4a8c74"
+                android:textSize="@dimen/Texto"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.525"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/DescripcionCard" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:padding="8dp"
+                android:text="EMISOR"
+                android:textColor="#4a8c74"
+                android:textSize="@dimen/Texto"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/DatosdelCliente" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/Articulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="30dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="showDescription"
+                android:translationZ="5dp"
+                app:cardCornerRadius="7dp"
+                app:cardElevation="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView133"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="2dp">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="Ningun Articulo Agregado"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="68dp"
+                            android:layout_height="match_parent"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                </TableLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/Siguiente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="92dp"
+                android:backgroundTint="#96D0B9"
+                android:text="AGREGAR ARTICULO"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/Texto"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="3dp"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteY="551dp"
+                app:layout_constraintTop_toBottomOf="@id/Articulo"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/DescripcionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="30dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="showDescription"
+                android:translationZ="5dp"
+                app:cardCornerRadius="7dp"
+                app:cardElevation="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView13"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="2dp">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text=""
+                            android:textAlignment="center" />
+
+                    </TableRow>
+
+                </TableLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
