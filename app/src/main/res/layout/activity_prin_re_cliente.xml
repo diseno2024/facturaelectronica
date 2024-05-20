@@ -136,6 +136,7 @@
         android:layout_height="wrap_content"
         android:text="Departamento"
         android:textColor="#4A8C74"
+        android:textSize="@dimen/TextoEtiquetas"
         app:layout_constraintBottom_toTopOf="@+id/departamento"
         app:layout_constraintStart_toStartOf="@+id/departamento" />
 
@@ -159,6 +160,7 @@
         android:layout_height="wrap_content"
         android:text="Municipio"
         android:textColor="#4A8C74"
+        android:textSize="@dimen/TextoEtiquetas"
         app:layout_constraintBottom_toTopOf="@+id/municipio"
         app:layout_constraintStart_toStartOf="@+id/municipio" />
 

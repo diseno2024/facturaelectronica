@@ -51,7 +51,7 @@ class ImportarClientes : AppCompatActivity() {
             linearLayout.addView(itemLayout)
         }
 
-        val botonAtras = findViewById<ImageButton>(R.id.BotonAtras)
+        val botonAtras = findViewById<ImageButton>(R.id.atras)
         botonAtras.setOnClickListener {
             val intent = Intent(this, EmitirCFActivity::class.java)
             startActivity(intent)

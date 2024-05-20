@@ -6,72 +6,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ImportarClientes">
-    <FrameLayout
-        android:id="@+id/BordeSuperior"
-        android:layout_width="411dp"
-        android:layout_height="67dp"
-        android:layout_marginBottom="665dp"
-        android:background="#4A8C74"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#4a8c74"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
+        app:contentInsetStart="0dp">
         <ImageButton
-            android:id="@+id/BotonAtras"
-            android:layout_width="57dp"
-            android:layout_height="51dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="8dp"
+            android:id="@+id/atras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/click_effect"
             android:clickable="true"
             android:contentDescription="bottom"
             android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="@+id/toolbar"
+            app:layout_constraintHorizontal_bias="0.04"
+            app:layout_constraintStart_toStartOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3"
             app:srcCompat="@drawable/icons8_back_arrow_48"
             app:tint="#FFFFFF" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clientes"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/textSize_textToolbar"
+            app:layout_constraintVertical_bias="0.35"
+            app:layout_constraintHorizontal_bias="0.4"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
+            />
 
-    </FrameLayout>
+    </androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/textContribuyentes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="284dp"
-        android:text="Clientes"
-        android:textColor="#000"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/Linea1"
-        android:layout_width="335dp"
-        android:layout_height="2dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="1dp"
-        android:background="#000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textContribuyentes" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/Linea1"
+        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="1206dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="10dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <LinearLayout
             android:id="@+id/containerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </LinearLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
     </ScrollView>
 

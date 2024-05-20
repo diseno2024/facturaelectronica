@@ -37,13 +37,14 @@ class InfoReceptoresActivity : AppCompatActivity() {
             linearLayout.addView(itemLayout)
         }
 
-        val botonAtras = findViewById<ImageButton>(R.id.BotonAtras)
+        val botonAtras = findViewById<ImageButton>(R.id.atras)
         botonAtras.setOnClickListener {
             // Crea un Intent para iniciar la actividad Comprobantecf
             val intent = Intent(this, EmitirCCFActivity::class.java)
             startActivity(intent) // Inicia la actividad Comprobantecf
             finish()
         }
+
     }
 
     override fun onBackPressed() {

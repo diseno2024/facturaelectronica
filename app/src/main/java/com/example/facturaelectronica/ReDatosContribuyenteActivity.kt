@@ -252,10 +252,7 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         finish()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        datosContribuyente.close()
-    }
+
 
     private fun guardarDatosContribuyente() {
         val razonSocialText = razonSocial.text.toString()

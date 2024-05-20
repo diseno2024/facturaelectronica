@@ -220,7 +220,7 @@
         android:layout_height="wrap_content"
         android:text="Guardar datos del cliente permanentemente"
         android:textColor="#4A8C74"
-        android:textSize="15dp"
+        android:textSize="@dimen/TextoEtiquetas"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.45"
