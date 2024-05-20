@@ -13,10 +13,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import org.apache.commons.io.FileUtils
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
 
 class RestauracionActivity : AppCompatActivity() {
 
@@ -85,11 +83,16 @@ class RestauracionActivity : AppCompatActivity() {
 
         if (sourceDirectory.exists()) {
             try {
+<<<<<<< HEAD
                 // Copiar los archivos desde la carpeta de respaldo o la ubicación adicional a la carpeta de restauración
                 copyDirectory(sourceDirectory, parentDir)
+=======
+                // Copiar los archivos desde la carpeta de respaldo a la carpeta de restauración
+                FileUtils.copyDirectory(restorationDirectory, parentDir)
+>>>>>>> a48ea32 (Arreglo Restauracion)
                 Log.d("RestauracionActivity", "Datos restaurados con éxito")
                 Toast.makeText(this, "Datos restaurados con éxito", Toast.LENGTH_SHORT).show()
-            } catch (e: IOException) {
+            } catch (e: Exception) {
                 e.printStackTrace()
                 Log.e("RestauracionActivity", "Error al restaurar datos: ${e.message}")
                 Toast.makeText(this, "Error al restaurar datos", Toast.LENGTH_SHORT).show()
@@ -118,6 +121,7 @@ class RestauracionActivity : AppCompatActivity() {
             }
         }
     }
+<<<<<<< HEAD
 
     @Throws(IOException::class)
     private fun copyDirectory(srcDir: File, destDir: File) {
@@ -141,3 +145,6 @@ class RestauracionActivity : AppCompatActivity() {
         }
     }
 }
+=======
+}
+>>>>>>> a48ea32 (Arreglo Restauracion)
