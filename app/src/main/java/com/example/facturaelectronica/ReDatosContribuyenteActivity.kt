@@ -2,11 +2,14 @@ package com.example.facturaelectronica
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.couchbase.lite.CouchbaseLite
+import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Database
 import com.couchbase.lite.MutableDocument
@@ -16,6 +19,14 @@ import com.couchbase.lite.SelectResult
 class ReDatosContribuyenteActivity : AppCompatActivity() {
 
     private lateinit var datosContribuyente: Database
+    private lateinit var razonSocial: EditText
+    private lateinit var nit: EditText
+    private lateinit var actividadEconomica: EditText
+    private lateinit var nrc: EditText
+    private lateinit var direccion: EditText
+    private lateinit var email: EditText
+    private lateinit var nombreComercial: EditText
+    private lateinit var telefono: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,24 +38,23 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
             insets
         }
 
-        CouchbaseLite.init(applicationContext)
-
-        datosContribuyente = Database("datosContribuyente")
+        val app = application as MyApp
+        datosContribuyente = app.database
 
         val btnGuardar = findViewById<android.widget.Button>(R.id.guardarButton)
         val btnCancelar = findViewById<android.widget.Button>(R.id.cancelarButton)
 
+        // Inicializar las vistas
+        razonSocial = findViewById(R.id.RazonSocialText)
+        nit = findViewById(R.id.NitText)
+        actividadEconomica = findViewById(R.id.ActividadEcoText)
+        nrc = findViewById(R.id.NRCText)
+        direccion = findViewById(R.id.DireccionText)
+        email = findViewById(R.id.correoText)
+        nombreComercial = findViewById(R.id.NomComercialText)
+        telefono = findViewById(R.id.TelefonoText)
         btnGuardar.setOnClickListener{
-            guardarDatosContribuyente(
-                findViewById<android.widget.EditText>(R.id.RazonSocialText).text.toString(),
-                findViewById<android.widget.EditText>(R.id.NitText).text.toString(),
-                findViewById<android.widget.EditText>(R.id.ActividadEcoText).text.toString(),
-                findViewById<android.widget.EditText>(R.id.NRCText).text.toString(),
-                findViewById<android.widget.EditText>(R.id.DireccionText).text.toString(),
-                findViewById<android.widget.EditText>(R.id.correoText).text.toString(),
-                findViewById<android.widget.EditText>(R.id.NomComercialText).text.toString(),
-                findViewById<android.widget.EditText>(R.id.TelefonoText).text.toString()
-            )
+            guardarDatosContribuyente()
         }
 
         btnCancelar.setOnClickListener{
@@ -66,56 +76,51 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         datosContribuyente.close()
     }
 
-    private fun guardarDatosContribuyente(razonSocialText: String,
-                                          nitText: String,
-                                          actividadEconomica: String,
-                                          nrc: String,
-                                          direccion: String,
-                                          email: String,
-                                          nombreComercial: String,
-                                          telefono: String) {
-        val docId = "datos_contribuyentes"
-        val doc = datosContribuyente.getDocument(docId) ?: MutableDocument(docId)
+    private fun guardarDatosContribuyente() {
+        val razonSocialText = razonSocial.text.toString()
+        val nitText = nit.text.toString()
+        val actividadEconomicaText = actividadEconomica.text.toString()
+        val nrcText = nrc.text.toString()
+        val direccionText = direccion.text.toString()
+        val emailText = email.text.toString()
+        val nombreComercialText = nombreComercial.text.toString()
+        val telefonoText = telefono.text.toString().replace("-", "")
 
-        val nuevoContribuyente = MutableDocument().apply {
-            setString("RazonSocial", razonSocialText)
-            setString("NIT", nitText)
-            setString("ActividadEconomica", actividadEconomica)
-            setString("NRC", nrc)
-            setString("Direccion", direccion)
-            setString("Email", email)
-            setString("NombreComercial", nombreComercial)
-            setString("Telefono", telefono)
-        }
+        // Crear un documento mutable para guardar en la base de datos
+        val document = MutableDocument()
+            .setString("RazonSocial", razonSocialText)
+            .setString("NIT", nitText)
+            .setString("ActividadEconomica", actividadEconomicaText)
+            .setString("NRC", nrcText)
+            .setString("Direccion", direccionText)
+            .setString("Email", emailText)
+            .setString("NombreComercial", nombreComercialText)
+            .setString("Telefono", telefonoText)
+            .setString("tipo", "contribuyente")
 
         try {
-            datosContribuyente.save(nuevoContribuyente)
-            Log.d("GuardandoDatos", "Datos guardados correctamente")
-            Log.d("GuardandoDatos", "Datos guardados: $doc")
-
-            val query = QueryBuilder.select(SelectResult.all())
-                .from(DataSource.database(datosContribuyente))
-            val result = query.execute()
-            result.allResults().forEach {
-                val dict = it.getDictionary(datosContribuyente.name)
-                Log.d("GuardandoDatos", "Datos guardados: $dict")
-            }
-            returnToMenu()
-            limpiarEditText()
-        } catch (e: Exception) {
-            Log.e("GuardandoDatos", "Error al guardar los datos: ${e.message}")
+            // Guardar el documento en la base de datos
+            datosContribuyente.save(document)
+            Log.d("ContribuyenteActivity", "Datos guardados correctamente: \n $document")
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+            limpiarEditText()  // Limpiar los EditTexts
+            returnToMenu()  // Regresar al menú
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ContribuyenteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
 
+
     private fun limpiarEditText() {
-        findViewById<android.widget.EditText>(R.id.RazonSocialText).setText("")
-        findViewById<android.widget.EditText>(R.id.NitText).setText("")
-        findViewById<android.widget.EditText>(R.id.ActividadEcoText).setText("")
-        findViewById<android.widget.EditText>(R.id.NRCText).setText("")
-        findViewById<android.widget.EditText>(R.id.DireccionText).setText("")
-        findViewById<android.widget.EditText>(R.id.correoText).setText("")
-        findViewById<android.widget.EditText>(R.id.NomComercialText).setText("")
-        findViewById<android.widget.EditText>(R.id.TelefonoText).setText("")
+        razonSocial.setText("")
+        nit.setText("")
+        actividadEconomica.setText("")
+        nrc.setText("")
+        direccion.setText("")
+        email.setText("")
+        nombreComercial.setText("")
+        telefono.setText("")
     }
 
     private fun returnToMenu() {
