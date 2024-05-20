@@ -13,10 +13,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import org.apache.commons.io.FileUtils
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
 
 class RestauracionActivity : AppCompatActivity() {
 
@@ -82,10 +80,10 @@ class RestauracionActivity : AppCompatActivity() {
         if (restorationDirectory.exists()) {
             try {
                 // Copiar los archivos desde la carpeta de respaldo a la carpeta de restauración
-                copyDirectory(backupDirectory, restorationDirectory)
+                FileUtils.copyDirectory(restorationDirectory, parentDir)
                 Log.d("RestauracionActivity", "Datos restaurados con éxito")
                 Toast.makeText(this, "Datos restaurados con éxito", Toast.LENGTH_SHORT).show()
-            } catch (e: IOException) {
+            } catch (e: Exception) {
                 e.printStackTrace()
                 Log.e("RestauracionActivity", "Error al restaurar datos: ${e.message}")
                 Toast.makeText(this, "Error al restaurar datos", Toast.LENGTH_SHORT).show()
@@ -111,28 +109,6 @@ class RestauracionActivity : AppCompatActivity() {
                     "Los permisos son necesarios para realizar la restauración",
                     Toast.LENGTH_SHORT
                 ).show()
-            }
-        }
-    }
-
-    @Throws(IOException::class)
-    private fun copyDirectory(srcDir: File, destDir: File) {
-        if (srcDir.isDirectory) {
-            if (!destDir.exists()) {
-                destDir.mkdirs()
-            }
-
-            val children = srcDir.list()
-            if (children != null) {
-                for (child in children) {
-                    copyDirectory(File(srcDir, child), File(destDir, child))
-                }
-            }
-        } else {
-            FileInputStream(srcDir).use { input ->
-                FileOutputStream(destDir).use { output ->
-                    input.copyTo(output)
-                }
             }
         }
     }
