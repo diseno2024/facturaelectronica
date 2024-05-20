@@ -1,0 +1,151 @@
+{
+  "identificacion": {
+    "version": 3,
+    "ambiente": "01",
+    "tipoDte": "03",
+    "numeroControl": "DTE-03-M001P001-000000000006380",
+    "codigoGeneracion": "3110B99E-E286-1749-3250-581656960134",
+    "tipoModelo": 1,
+    "tipoOperacion": 1,
+    "tipoContingencia": null,
+    "motivoContin": null,
+    "fecEmi": "2024-02-06",
+    "horEmi": "10:15:09",
+    "tipoMoneda": "USD"
+  },
+  "documentoRelacionado": null,
+  "emisor": {
+    "nit": "06142604071063",
+    "nrc": "1931029",
+    "nombre": "INVERSIONES RAMIREZ QUINTANILLA, S.A. DE C.V.",
+    "codActividad": "47300",
+    "descActividad": "Venta de combustibles, lubricantes y otros (gasolineras)",
+    "nombreComercial": "INVERSIONES RAMIREZ QUINTANILLA, S.A. DE C.V.",
+    "tipoEstablecimiento": "01",
+    "direccion": {
+      "departamento": "06",
+      "municipio": "14",
+      "complemento": "km60 Carretera Panamericana a San Salvador"
+    },
+    "telefono": "25228856",
+    "correo": "soporte.dte@gruporvq.com",
+    "codEstableMH": "0000",
+    "codEstable": "0000",
+    "codPuntoVentaMH": "0000",
+    "codPuntoVenta": "0000"
+  },
+  "receptor": {
+    "nit": "02100503811040",
+    "nrc": "2833857",
+    "nombre": "JESSICA IVETHGIRON DE VASQUEZ",
+    "codActividad": "46491",
+    "descActividad": "Venta al por mayor de productos medicinales",
+    "nombreComercial": "JESSICA IVETHGIRON DE VASQUEZ",
+    "direccion": {
+      "departamento": "02",
+      "municipio": "10",
+      "complemento": "D PSJ, GERANIOS, REPTO. SANTA JULIA, #18, SANTA ANA."
+    },
+    "telefono": "24060433",
+    "correo": "facturacion.dcs19vas@gmail.com"
+  },
+  "otrosDocumentos": null,
+  "ventaTercero": null,
+  "cuerpoDocumento": [
+    {
+      "numItem": 1,
+      "tipoItem": 1,
+      "numeroDocumento": null,
+      "codigo": null,
+      "codTributo": null,
+      "descripcion": "DIESEL-1",
+      "cantidad": 3.88601,
+      "uniMedida": 22,
+      "precioUni": 3.150442,
+      "montoDescu": 0.0,
+      "ventaNoSuj": 0.0,
+      "ventaExenta": 0.0,
+      "ventaGravada": 12.242651,
+      "tributos": ["20", "D1", "C8"],
+      "psv": 0.0,
+      "noGravado": 0.0
+    }
+  ],
+  "resumen": {
+    "totalNoSuj": 0.0,
+    "totalExenta": 0.0,
+    "totalGravada": 12.24,
+    "subTotalVentas": 12.24,
+    "descuNoSuj": 0.0,
+    "descuExenta": 0.0,
+    "descuGravada": 0.0,
+    "porcentajeDescuento": 0.0,
+    "totalDescu": 0.0,
+    "tributos": [
+      {
+        "codigo": "20",
+        "descripcion": "Impuesto al Valor Agregado 13%",
+        "valor": 1.59
+      },
+      {
+        "codigo": "C8",
+        "descripcion": "COTRANS ($0.10 Ctvs. por galón)",
+        "valor": 0.39
+      },
+      {
+        "codigo": "D1",
+        "descripcion": "FOVIAL ($0.20 Ctvs. por galón)",
+        "valor": 0.78
+      }
+    ],
+    "subTotal": 12.24,
+    "ivaPerci1": 0.0,
+    "ivaRete1": 0.0,
+    "reteRenta": 0.0,
+    "montoTotalOperacion": 15.0,
+    "totalNoGravado": 0.0,
+    "totalPagar": 15.0,
+    "totalLetras": "quince 00/100 dolares",
+    "saldoFavor": 0.0,
+    "condicionOperacion": 1,
+    "pagos": null,
+    "numPagoElectronico": null
+  },
+  "extension": null,
+  "apendice": [
+    {
+      "campo": "EMP",
+      "etiqueta": "EMPLEADO",
+      "valor": "199"
+    },
+    {
+      "campo": "NO_UNICO",
+      "etiqueta": "NO_UNICO",
+      "valor": "4124080"
+    },
+    {
+      "campo": "OBSERVACION",
+      "etiqueta": "OBSERVACION",
+      "valor": "-"
+    },
+    {
+      "campo": "SUCURSAL",
+      "etiqueta": "SUCURSAL",
+      "valor": "TEXACO LAS ARBOLEDAS"
+    }
+  ],
+  "respuestaHacienda": {
+    "version": 2,
+    "ambiente": "01",
+    "versionApp": "2",
+    "estado": "PROCESADO",
+    "codigoGeneracion": "3110B99E-E286-1749-3250-581656960134",
+    "selloRecibido": "20247EE1942CAC9F45E1A36100DDA4F0855DGKBB",
+    "fhProcesamiento": "06/02/2024 10:15:16",
+    "clasificaMsg": "10",
+    "codigoMsg": "002",
+    "descripcionMsg": "RECIBIDO CON OBSERVACIONES",
+    "observaciones": null
+  },
+  "firma":"eyJhbGciOiJSUzUxMiJ9.ew0KICAiaWRlbnRpZmljYWNpb24iIDogew0KICAgICJ2ZXJzaW9uIiA6IDMsDQogICAgImFtYmllbnRlIiA6ICIwMSIsDQogICAgInRpcG9EdGUiIDogIjAzIiwNCiAgICAibnVtZXJvQ29udHJvbCIgOiAiRFRFLTAzLU0wMDFQMDAxLTAwMDAwMDAwMDAwNjM4MCIsDQogICAgImNvZGlnb0dlbmVyYWNpb24iIDogIjMxMTBCOTlFLUUyODYtMTc0OS0zMjUwLTU4MTY1Njk2MDEzNCIsDQogICAgInRpcG9Nb2RlbG8iIDogMSwNCiAgICAidGlwb09wZXJhY2lvbiIgOiAxLA0KICAgICJ0aXBvQ29udGluZ2VuY2lhIiA6IG51bGwsDQogICAgIm1vdGl2b0NvbnRpbiIgOiBudWxsLA0KICAgICJmZWNFbWkiIDogIjIwMjQtMDItMDYiLA0KICAgICJob3JFbWkiIDogIjEwOjE1OjA5IiwNCiAgICAidGlwb01vbmVkYSIgOiAiVVNEIg0KICB9LA0KICAiZG9jdW1lbnRvUmVsYWNpb25hZG8iIDogbnVsbCwNCiAgImVtaXNvciIgOiB7DQogICAgIm5pdCIgOiAiMDYxNDI2MDQwNzEwNjMiLA0KICAgICJucmMiIDogIjE5MzEwMjkiLA0KICAgICJub21icmUiIDogIklOVkVSU0lPTkVTIFJBTUlSRVogUVVJTlRBTklMTEEsIFMuQS4gREUgQy5WLiIsDQogICAgImNvZEFjdGl2aWRhZCIgOiAiNDczMDAiLA0KICAgICJkZXNjQWN0aXZpZGFkIiA6ICJWZW50YSBkZSBjb21idXN0aWJsZXMsIGx1YnJpY2FudGVzIHkgb3Ryb3MgKGdhc29saW5lcmFzKSIsDQogICAgIm5vbWJyZUNvbWVyY2lhbCIgOiAiSU5WRVJTSU9ORVMgUkFNSVJFWiBRVUlOVEFOSUxMQSwgUy5BLiBERSBDLlYuIiwNCiAgICAidGlwb0VzdGFibGVjaW1pZW50byIgOiAiMDEiLA0KICAgICJkaXJlY2Npb24iIDogew0KICAgICAgImRlcGFydGFtZW50byIgOiAiMDYiLA0KICAgICAgIm11bmljaXBpbyIgOiAiMTQiLA0KICAgICAgImNvbXBsZW1lbnRvIiA6ICJrbTYwIENhcnJldGVyYSBQYW5hbWVyaWNhbmEgYSBTYW4gU2FsdmFkb3IiDQogICAgfSwNCiAgICAidGVsZWZvbm8iIDogIjI1MjI4ODU2IiwNCiAgICAiY29ycmVvIiA6ICJzb3BvcnRlLmR0ZUBncnVwb3J2cS5jb20iLA0KICAgICJjb2RFc3RhYmxlTUgiIDogIjAwMDAiLA0KICAgICJjb2RFc3RhYmxlIiA6ICIwMDAwIiwNCiAgICAiY29kUHVudG9WZW50YU1IIiA6ICIwMDAwIiwNCiAgICAiY29kUHVudG9WZW50YSIgOiAiMDAwMCINCiAgfSwNCiAgInJlY2VwdG9yIiA6IHsNCiAgICAibml0IiA6ICIwMjEwMDUwMzgxMTA0MCIsDQogICAgIm5yYyIgOiAiMjgzMzg1NyIsDQogICAgIm5vbWJyZSIgOiAiSkVTU0lDQSBJVkVUSEdJUk9OIERFIFZBU1FVRVoiLA0KICAgICJjb2RBY3RpdmlkYWQiIDogIjQ2NDkxIiwNCiAgICAiZGVzY0FjdGl2aWRhZCIgOiAiVmVudGEgYWwgcG9yIG1heW9yIGRlIHByb2R1Y3RvcyBtZWRpY2luYWxlcywgY29zbcOpdGljb3MsXHJcbnBlcmZ1bWVyw61hIHkgcHJvZHVjdG9zIGRlIGxpbXBpZXphIiwNCiAgICAibm9tYnJlQ29tZXJjaWFsIiA6ICJKRVNTSUNBIElWRVRIR0lST04gREUgVkFTUVVFWiIsDQogICAgImRpcmVjY2lvbiIgOiB7DQogICAgICAiZGVwYXJ0YW1lbnRvIiA6ICIwMiIsDQogICAgICAibXVuaWNpcGlvIiA6ICIxMCIsDQogICAgICAiY29tcGxlbWVudG8iIDogIkQgUFNKLCBHRVJBTklPUywgUkVQVE8uIFNBTlRBIEpVTElBLCAjMTgsIFNBTlRBIEFOQSwgU0FOVEEgQU5BLiINCiAgICB9LA0KICAgICJ0ZWxlZm9ubyIgOiAiMjQwNjA0MzMiLA0KICAgICJjb3JyZW8iIDogImZhY3R1cmFjaW9uLmRjczE5dmFzQGdtYWlsLmNvbSINCiAgfSwNCiAgIm90cm9zRG9jdW1lbnRvcyIgOiBudWxsLA0KICAidmVudGFUZXJjZXJvIiA6IG51bGwsDQogICJjdWVycG9Eb2N1bWVudG8iIDogWyB7DQogICAgIm51bUl0ZW0iIDogMSwNCiAgICAidGlwb0l0ZW0iIDogMSwNCiAgICAibnVtZXJvRG9jdW1lbnRvIiA6IG51bGwsDQogICAgImNvZGlnbyIgOiAiMyIsDQogICAgImNvZFRyaWJ1dG8iIDogbnVsbCwNCiAgICAiZGVzY3JpcGNpb24iIDogIkRJRVNFTC0xIiwNCiAgICAiY2FudGlkYWQiIDogMy44ODYwMSwNCiAgICAidW5pTWVkaWRhIiA6IDIyLA0KICAgICJwcmVjaW9VbmkiIDogMy4xNTA0NDIsDQogICAgIm1vbnRvRGVzY3UiIDogMC4wLA0KICAgICJ2ZW50YU5vU3VqIiA6IDAuMCwNCiAgICAidmVudGFFeGVudGEiIDogMC4wLA0KICAgICJ2ZW50YUdyYXZhZGEiIDogMTIuMjQyNjUxLA0KICAgICJ0cmlidXRvcyIgOiBbICIyMCIsICJEMSIsICJDOCIgXSwNCiAgICAicHN2IiA6IDAuMCwNCiAgICAibm9HcmF2YWRvIiA6IDAuMA0KICB9IF0sDQogICJyZXN1bWVuIiA6IHsNCiAgICAidG90YWxOb1N1aiIgOiAwLjAsDQogICAgInRvdGFsRXhlbnRhIiA6IDAuMCwNCiAgICAidG90YWxHcmF2YWRhIiA6IDEyLjI0LA0KICAgICJzdWJUb3RhbFZlbnRhcyIgOiAxMi4yNCwNCiAgICAiZGVzY3VOb1N1aiIgOiAwLjAsDQogICAgImRlc2N1RXhlbnRhIiA6IDAuMCwNCiAgICAiZGVzY3VHcmF2YWRhIiA6IDAuMCwNCiAgICAicG9yY2VudGFqZURlc2N1ZW50byIgOiAwLjAsDQogICAgInRvdGFsRGVzY3UiIDogMC4wLA0KICAgICJ0cmlidXRvcyIgOiBbIHsNCiAgICAgICJjb2RpZ28iIDogIjIwIiwNCiAgICAgICJkZXNjcmlwY2lvbiIgOiAiSW1wdWVzdG8gYWwgVmFsb3IgQWdyZWdhZG8gMTMlICIsDQogICAgICAidmFsb3IiIDogMS41OQ0KICAgIH0sIHsNCiAgICAgICJjb2RpZ28iIDogIkM4IiwNCiAgICAgICJkZXNjcmlwY2lvbiIgOiAiQ09UUkFOUyAoJDAuMTAgQ3R2cy4gcG9yIGdhbMOzbikiLA0KICAgICAgInZhbG9yIiA6IDAuMzkNCiAgICB9LCB7DQogICAgICAiY29kaWdvIiA6ICJEMSIsDQogICAgICAiZGVzY3JpcGNpb24iIDogIkZPVklBTCAoJDAuMjAgQ3R2cy4gcG9yIGdhbMOzbikgIiwNCiAgICAgICJ2YWxvciIgOiAwLjc4DQogICAgfSBdLA0KICAgICJzdWJUb3RhbCIgOiAxMi4yNCwNCiAgICAiaXZhUGVyY2kxIiA6IDAuMCwNCiAgICAiaXZhUmV0ZTEiIDogMC4wLA0KICAgICJyZXRlUmVudGEiIDogMC4wLA0KICAgICJtb250b1RvdGFsT3BlcmFjaW9uIiA6IDE1LjAsDQogICAgInRvdGFsTm9HcmF2YWRvIiA6IDAuMCwNCiAgICAidG90YWxQYWdhciIgOiAxNS4wLA0KICAgICJ0b3RhbExldHJhcyIgOiAicXVpbmNlIDAwLzEwMCBkb2xhcmVzIiwNCiAgICAic2FsZG9GYXZvciIgOiAwLjAsDQogICAgImNvbmRpY2lvbk9wZXJhY2lvbiIgOiAxLA0KICAgICJwYWdvcyIgOiBudWxsLA0KICAgICJudW1QYWdvRWxlY3Ryb25pY28iIDogbnVsbA0KICB9LA0KICAiZXh0ZW5zaW9uIiA6IG51bGwsDQogICJhcGVuZGljZSIgOiBbIHsNCiAgICAiY2FtcG8iIDogIkVNUCIsDQogICAgImV0aXF1ZXRhIiA6ICJFTVBMRUFETyIsDQogICAgInZhbG9yIiA6ICIxOTkiDQogIH0sIHsNCiAgICAiY2FtcG8iIDogIk5PX1VOSUNPIiwNCiAgICAiZXRpcXVldGEiIDogIk5PX1VOSUNPIiwNCiAgICAidmFsb3IiIDogIjQxMjQwODAiDQogIH0sIHsNCiAgICAiY2FtcG8iIDogIk9CU0VSVkFDSU9OIiwNCiAgICAiZXRpcXVldGEiIDogIk9CU0VSVkFDSU9OIiwNCiAgICAidmFsb3IiIDogIi0iDQogIH0sIHsNCiAgICAiY2FtcG8iIDogIlNVQ1VSU0FMIiwNCiAgICAiZXRpcXVldGEiIDogIlNVQ1VSU0FMIiwNCiAgICAidmFsb3IiIDogIlRFWEFDTyBMQVMgQVJCT0xFREFTIg0KICB9IF0NCn0.qijLoC1DhvweTOvRyyqn3qZEC5cHcsTsY1Txe99e9br3LHMeFcsQVarTz_ngLaJbuSVn1FcoxcURUEhhELNbe4JRUMREBbvKFJI8IHYXll_0LZ6IzjLFcoiOwuw752O-ry1zvi0K71IV359O3kNFR1zaxQTKJXaNecUOb_V5-S4di4NQAW774DkOAjX3eGFU5rfXDyYdfYxXPPLp3AmTwwEsIIQAIC1LIlWjzxjgwDhYLHL1UxSD2GbGayp7kyjT-PjVhqAkTqK2PWp74YwAeCdGN7htd6G1QQTEI39sRtzg53E819iiKymUWts65HtvaMdyCb_r3Z1tbVN680LF-w"
+  }
