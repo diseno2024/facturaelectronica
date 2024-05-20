@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Database
+import com.couchbase.lite.Expression
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
 
@@ -26,7 +27,7 @@ class InfoReceptoresActivity : AppCompatActivity() {
             val textViewCorreo = itemLayout.findViewById<TextView>(R.id.textViewCorreo)
             val textViewTelefono = itemLayout.findViewById<TextView>(R.id.textViewTelefono)
             val textViewNIT = itemLayout.findViewById<TextView>(R.id.textViewNIT)
-            val textViewDUI = itemLayout.findViewById<TextView>(R.id.textViewDUI)
+            val textViewDUI = itemLayout.findViewById<TextView>(R.id.textViewNrc)
 
             val datos = data.split("\n")
             textViewNombreComercial.text = datos[0]
@@ -54,14 +55,17 @@ class InfoReceptoresActivity : AppCompatActivity() {
     }
 
     private fun obtenerDatosGuardados(): List<String> {
-        val datosContribuyente = Database("datosContribuyente")
+        // Obtén la instancia de la base de datos desde la aplicación
+        val app = application as MyApp
+        val database = app.database
 
         val query = QueryBuilder.select(SelectResult.all())
-            .from(DataSource.database(datosContribuyente))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("contribuyente")))
         val result = query.execute()
         val dataList = mutableListOf<String>()
         result.allResults().forEach { result ->
-            val dict = result.getDictionary(datosContribuyente.name)
+            val dict = result.getDictionary(database.name)
             val razonSocial = dict?.getString("RazonSocial")
             val nit = dict?.getString("NIT")
             val actividadEconomica = dict?.getString("ActividadEconomica")
@@ -71,10 +75,10 @@ class InfoReceptoresActivity : AppCompatActivity() {
             val nombreComercial = dict?.getString("NombreComercial")
             val telefono = dict?.getString("Telefono")
 
-            val dataString = "Nombre Comercial: $nombreComercial\nCorreo: $email\nTeléfono: $telefono\nNIT: $nit\nDUI: $nrc"
+            val dataString = "Nombre Comercial: $nombreComercial\nCorreo: $email\nTeléfono: $telefono\nNIT: $nit\nNRC: $nrc"
             dataList.add(dataString)
         }
-        datosContribuyente.close()
         return dataList
     }
+
 }

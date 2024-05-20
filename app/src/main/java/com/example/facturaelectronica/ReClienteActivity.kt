@@ -9,16 +9,22 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.couchbase.lite.CouchbaseLiteException
+import com.couchbase.lite.DataSource
 import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.Database
+import com.couchbase.lite.Expression
+import com.couchbase.lite.QueryBuilder
+import com.couchbase.lite.SelectResult
 
 
 class ReClienteActivity : AppCompatActivity() {
@@ -219,21 +225,68 @@ class ReClienteActivity : AppCompatActivity() {
             }
         })
 
-
+        val Check: CheckBox = findViewById(R.id.checkGuardar)
+        //val isCheck = false
+        Check.isChecked
+        /*Check.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                // El CheckBox está marcado
+                // Realiza las acciones que desees cuando se marque
+                // Por ejemplo, muestra un mensaje o actualiza algún dato
+                // Puedes usar "isChecked" para saber si está marcado o no
+            } else {
+                // El CheckBox está desmarcado
+                // Realiza las acciones que desees cuando se desmarque
+            }
+        }*/
+        //datos a pasar
         // Configurar evento de clic para el botón "Agregar"
         agregarButton.setOnClickListener {
-            if (validarEntradas()) {
+            if (validarEntradas() && Check.isChecked) {
                 guardarInformacion()
+                val nombreValue = nombre.text.toString()
+                val nitValue = nit.text.toString()
+                val emailValue = email.text.toString()
+                val direccionValue = direccion.text.toString()
+                val telefonoValue = telefono.text.toString()
+                // Iniciar otra actividad
+                val intent = Intent(this, EmitirCFActivity::class.java)
+                // Crear un Intent y agregar los datos
+                intent.putExtra("nombre", nombreValue)
+                intent.putExtra("nit", nitValue)
+                intent.putExtra("email", emailValue)
+                intent.putExtra("direccion", direccionValue)
+                intent.putExtra("telefono", telefonoValue)
+                startActivity(intent)
                 // Limpiar los EditText
                 nombre.text.clear()
                 nit.text.clear()
                 email.text.clear()
                 direccion.text.clear()
                 telefono.text.clear()
-
+                finish()
+            }else if(validarEntradas()){
+                val nombreValue = nombre.text.toString()
+                val nitValue = nit.text.toString()
+                val emailValue = email.text.toString()
+                val direccionValue = direccion.text.toString()
+                val telefonoValue = telefono.text.toString()
                 // Iniciar otra actividad
                 val intent = Intent(this, EmitirCFActivity::class.java)
+                // Crear un Intent y agregar los datos
+                intent.putExtra("nombre", nombreValue)
+                intent.putExtra("nit", nitValue)
+                intent.putExtra("email", emailValue)
+                intent.putExtra("direccion", direccionValue)
+                intent.putExtra("telefono", telefonoValue)
                 startActivity(intent)
+                // Limpiar los EditText
+                nombre.text.clear()
+                nit.text.clear()
+                email.text.clear()
+                direccion.text.clear()
+                telefono.text.clear()
+                finish()
             }
         }
 
