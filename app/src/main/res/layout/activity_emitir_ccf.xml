@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Comprobantecf">
+    tools:context=".EmitirCCFActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -307,7 +307,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:padding="8dp"
-                android:text="Reseptor"
+                android:text="Receptor"
                 android:textColor="#4a8c74"
                 android:textSize="@dimen/Texto"
                 android:textStyle="bold"

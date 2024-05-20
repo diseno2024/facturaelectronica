@@ -17,7 +17,6 @@ import android.content.Intent
 import android.text.InputFilter
 import android.text.InputType
 import androidx.fragment.app.Fragment
-import com.couchbase.lite.CouchbaseLite
 import com.couchbase.lite.Database
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -94,7 +93,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_credito -> {
                 //Iniciar Comprobantecf al selecciobar "Credito Fiscal"
-                val intent = Intent(this, Comprobantecf::class.java)
+                val intent = Intent(this, EmitirCCFActivity::class.java)
                 startActivity(intent)
                 finish()
                 return true

@@ -68,7 +68,7 @@
             android:exported="false"
             />
         <activity
-            android:name=".Comprobantecf"
+            android:name=".EmitirCCFActivity"
             android:exported="false"
             />
         <activity

@@ -6,7 +6,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.couchbase.lite.DataSource
-import com.couchbase.lite.Database
 import com.couchbase.lite.Expression
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
@@ -41,7 +40,7 @@ class InfoReceptoresActivity : AppCompatActivity() {
         val botonAtras = findViewById<ImageButton>(R.id.BotonAtras)
         botonAtras.setOnClickListener {
             // Crea un Intent para iniciar la actividad Comprobantecf
-            val intent = Intent(this, Comprobantecf::class.java)
+            val intent = Intent(this, EmitirCCFActivity::class.java)
             startActivity(intent) // Inicia la actividad Comprobantecf
             finish()
         }
@@ -49,7 +48,7 @@ class InfoReceptoresActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
-        val intent = Intent(this, Comprobantecf::class.java)
+        val intent = Intent(this, EmitirCCFActivity::class.java)
         startActivity(intent)
         finish()
     }

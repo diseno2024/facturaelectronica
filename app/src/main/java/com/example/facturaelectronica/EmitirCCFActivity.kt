@@ -3,14 +3,13 @@ package com.example.facturaelectronica
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.ImageButton
 
-class Comprobantecf : AppCompatActivity() {
+class EmitirCCFActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -37,6 +36,14 @@ class Comprobantecf : AppCompatActivity() {
         finish()
     }
 
-    fun DataReceptor(view: View) {}
-    fun DataArticulo(view: View) {}
+    fun DataReceptor(view: View) {
+        val intent = Intent(this, InfoReceptoresActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+    fun DataArticulo(view: View) {
+        val intent = Intent(this, AgregarArticuloActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }

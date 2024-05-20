@@ -16,7 +16,7 @@ class AgregarArticuloActivity : AppCompatActivity() {
         // Configura un OnClickListener para el botón
         botonAtras.setOnClickListener {
             // Crea un Intent para iniciar la actividad Comprobantecf
-            val intent = Intent(this, Comprobantecf::class.java)
+            val intent = Intent(this, EmitirCCFActivity::class.java)
             startActivity(intent) // Inicia la actividad Comprobantecf
             finish()
         }
@@ -25,7 +25,7 @@ class AgregarArticuloActivity : AppCompatActivity() {
     }
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
-        val intent = Intent(this, Comprobantecf::class.java)
+        val intent = Intent(this, EmitirCCFActivity::class.java)
         startActivity(intent)
         finish()
     }
