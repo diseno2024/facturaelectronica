@@ -61,6 +61,15 @@ class EmitirCFActivity : AppCompatActivity() {
             Nombre.text = datos[0]
             Nit.text = datos[4]
         }
+        val nombreRecibido = intent.getStringExtra("nombre")
+        val nitRecibido = intent.getStringExtra("nit")
+        val emailRecibida = intent.getStringExtra("email")
+        val direccionRecibida = intent.getStringExtra("direccion")
+        val telefonoRecibida = intent.getStringExtra("telefono")
+        if(nombreRecibido!=null){
+            Nombre.text = nombreRecibido
+            Nit.text = nitRecibido
+        }
 
 
     }
