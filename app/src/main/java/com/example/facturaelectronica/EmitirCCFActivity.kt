@@ -122,11 +122,17 @@ class EmitirCCFActivity : AppCompatActivity() {
             textSize = 7f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         }
-        // Estilo de Rectángulo 1 - Estilo de los rectángulo del emisor y receptor
+        // Estilo de Rectángulo 1
         val paintRect1 = Paint().apply {
             style = Paint.Style.STROKE // Solo dibujar el contorno
             color = Color.BLACK // Color del contorno
             strokeWidth = 2f // Ancho del contorno
+        }
+        // Estilo de Rectángulo 2
+        val paintRect2 = Paint().apply {
+            style = Paint.Style.STROKE // Solo dibujar el contorno
+            color = Color.BLACK // Color del contorno
+            strokeWidth = 0.5f // Ancho del contorno
         }
         // Estilo de Borde 1 - Para el rectángulo del emisor y receptor
         val cornerRadius1 = 5f
@@ -380,28 +386,76 @@ class EmitirCCFActivity : AppCompatActivity() {
             canvas.drawText("Total a Pagar:", finalPosition1 - paintTITULO.measureText("Total a Pagar:"), startY + 136, paintTITULO)
             canvas.drawText("$$totalPagar", finalPosition2 - paintTITULO.measureText(totalPagar), startY + 136, paintInfoDocumento)
 
+            // Principal 1 - Coordenadas del rectángulo que encierra valor en letras y demás información
+            val rectanguloLeft1 = startX - 10
+            val rectanguloTop1 = startY - 14
+            val rectanguloRight1 = 315f
+            val rectanguloBottom1 = startY + 145
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft1, rectanguloTop1, rectanguloRight1, rectanguloBottom1, paintRect1)
+
+            // Secundario 1.1 - Encierra valor en letras con tipo de condición de operación
+            val rectanguloLeft11 = startX - 10
+            val rectanguloTop11 = startY - 14
+            val rectanguloRight11 = 315f
+            val rectanguloBottom11 = startY + 31
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft11, rectanguloTop11, rectanguloRight11, rectanguloBottom11, paintRect2)
+
+            // Secundario 1.2 - Encierra Emisor Responsable
+            val rectanguloLeft12 = startX - 10
+            val rectanguloTop12 = startY + 48
+            val rectanguloRight12 = 315f
+            val rectanguloBottom12 = startY + 78
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft12, rectanguloTop12, rectanguloRight12, rectanguloBottom12, paintRect2)
+
+            // Secundario 1.3 - Encierra Receptor Responsable
+            val rectanguloLeft13 = startX - 10
+            val rectanguloTop13 = startY + 78
+            val rectanguloRight13 = 315f
+            val rectanguloBottom13 = startY + 108
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft13, rectanguloTop13, rectanguloRight13, rectanguloBottom13, paintRect2)
+
+            // Secundario 1.3 - Encierra Receptor Responsable
+            val rectanguloLeft14 = startX - 10
+            val rectanguloTop14 = startY + 78
+            val rectanguloRight14 = 315f
+            val rectanguloBottom14 = startY + 108
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft14, rectanguloTop14, rectanguloRight14, rectanguloBottom13, paintRect2)
+
+            // Coordenadas del rectángulo que encierra info de las Ventas
+            val rectanguloLeft2 = 315f
+            val rectanguloTop2 = startY - 14
+            val rectanguloRight2 = 585f
+            val rectanguloBottom2 = startY + 145
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft2, rectanguloTop2, rectanguloRight2, rectanguloBottom2, paintRect1)
+
             // Muestra Info de Valor en Letras
             val totalLetras = resumen.getString("totalLetras")
-            canvas.drawText("Valor en Letras: $totalLetras", startX, startY + 15, paintTITULO)
+            canvas.drawText("Valor en Letras: $totalLetras", startX, startY + 5, paintTITULO)
 
             // Muestra Info de Condición de la Operación
             val condicionOperacion = resumen.getInt("condicionOperacion")
             if (condicionOperacion == 1) {
                 // Si la operación fue al Contado
-                canvas.drawText("Condición de la Operación: $condicionOperacion - Contado", startX, startY + 30, paintTITULO)
+                canvas.drawText("Condición de la Operación: $condicionOperacion - Contado", startX, startY + 20, paintTITULO)
             } else if (condicionOperacion == 2) {
                 // Si la operación fue al Crédito
-                canvas.drawText("Condición de la Operación: $condicionOperacion - A crédito", startX, startY + 30, paintTITULO)
+                canvas.drawText("Condición de la Operación: $condicionOperacion - A crédito", startX, startY + 20, paintTITULO)
             } else if (condicionOperacion == 3){
                 // Si la operación fue otra
-                canvas.drawText("Condición de la Operación: $condicionOperacion - Otro", startX, startY + 30, paintTITULO)
+                canvas.drawText("Condición de la Operación: $condicionOperacion - Otro", startX, startY + 20, paintTITULO)
             }
 
 
 
             // EXTENSIÓN
             // Muestra información extra que requiere hacienda
-            canvas.drawText("EXTENSIÓN", startX + 125, startY + 45, paintTITULO)
+            canvas.drawText("EXTENSIÓN", startX + 125, startY + 42, paintTITULO)
 
             canvas.drawText("Emisor Responsable:", startX, startY + 60, paintTITULO)
             canvas.drawText("No. documento:", startX, startY + 70, paintTITULO)
@@ -431,7 +485,7 @@ class EmitirCCFActivity : AppCompatActivity() {
         // El acceso lo hace através del directorio de la descargas
         val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         // Con ese nombre se le va a guardar el PDF
-        val outputFilePath = File(downloadsDir, "midocumento.pdf")
+        val outputFilePath = File(downloadsDir, "Comprobante de Crédito Fiscal.pdf")
 
         // Valida si el PDF no tuvo errores para generarse
         try {
