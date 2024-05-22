@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.facturaelectronica"
+    namespace = "com.billsv.facturaelectronica"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.facturaelectronica"
+        applicationId = "com.billsv.facturaelectronica"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

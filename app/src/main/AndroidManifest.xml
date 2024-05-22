@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.facturaelectronica">
+    package="com.billsv.facturaelectronica">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -94,7 +94,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AgregarArticuloActivity"
+            android:name="com.billsv.facturaelectronica.AgregarArticuloActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
