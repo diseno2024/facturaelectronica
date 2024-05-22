@@ -37,17 +37,17 @@
   "receptor": {
     "nit": "0123456789",
     "nrc": "0123456",
-    "nombre": "Nombre Apellido",
+    "nombre": "Nombre Nombre Apellido Apellido",
     "codActividad": "00000",
     "descActividad": "Ventas",
     "nombreComercial": "Nombre Apellido",
     "direccion": {
       "departamento": "02",
       "municipio": "10",
-      "complemento": "Dirección"
+      "complemento": "Santa Ana, Santa Ana"
     },
     "telefono": "00000000",
-    "correo": "Correo"
+    "correo": "correo@gmail.com"
   },
   "otrosDocumentos": null,
   "ventaTercero": null,

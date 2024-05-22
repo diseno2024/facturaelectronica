@@ -91,7 +91,7 @@ class EmitirCCFActivity : AppCompatActivity() {
     // Función para poder generar el PDF
     private fun generarPdf() {
         // Variable para poder almacenar el contenido del json através de una función
-        val jsonData = leerJsonDesdeAssets("archivo.json")
+        val jsonData = leerJsonDesdeAssets("CCF.json")
         val pdfDocument = PdfDocument()
         // Crea una página tamaño carta para el PDF
         val paginaInfo = PdfDocument.PageInfo.Builder(612, 792, 1).create() // Tamaño carta
@@ -145,7 +145,7 @@ class EmitirCCFActivity : AppCompatActivity() {
 
             // Dibujar el Encabezado
             canvas.drawText("DOCUMENTO TRIBUTARIO ELECTRÓNICO", 210f, 25f, paintEncabezado)
-            canvas.drawText("COMPROBANTE DE CREDITO FISCAL", 220f, 40f, paintEncabezado)
+            canvas.drawText("COMPROBANTE DE CRÉDITO FISCAL", 220f, 40f, paintEncabezado)
 
             // IDENTIFICACIÓN
             /*   Lado izquierdo   */
@@ -491,6 +491,10 @@ class EmitirCCFActivity : AppCompatActivity() {
         try {
             pdfDocument.writeTo(FileOutputStream(outputFilePath))
             Toast.makeText(this, "Se creó el PDF correctamente en: ${outputFilePath.absolutePath}", Toast.LENGTH_LONG).show()
+
+            val intentCCF = Intent(applicationContext, VerPdfCCF::class.java)
+            startActivity(intentCCF)
+
         } catch (e: Exception) {
             // En caso de que los haya habido muestra un mensaje
             e.printStackTrace()

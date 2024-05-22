@@ -557,7 +557,7 @@
         app:layout_constraintTop_toTopOf="@+id/view6" />
 
     <TextView
-        android:id="@+id/textView54"
+        android:id="@+id/textView00"
         android:layout_width="35dp"
         android:layout_height="10dp"
         android:text="CANTIDAD"

@@ -63,9 +63,9 @@ class EmitirCFActivity : AppCompatActivity() {
         val siguiente: Button = findViewById(R.id.Siguiente)
         siguiente.setOnClickListener {
             generarPdf()
-            val intent = Intent(this, PDF_CFActivity::class.java)
+            /*val intent = Intent(this, PDF_CFActivity::class.java)
             startActivity(intent)
-            finish()
+            finish()*/
         }
         // Recupera los datos pasados desde la otra actividad
         val datosGuardados = intent.getStringExtra("Cliente")
@@ -478,26 +478,26 @@ class EmitirCFActivity : AppCompatActivity() {
 
             // Muestra Info de Valor en Letras
             val totalLetras = resumen.getString("totalLetras")
-            canvas.drawText("Valor en Letras: $totalLetras", startX, startY + 15, paintTITULO)
+            canvas.drawText("Valor en Letras: $totalLetras", startX, startY + 5, paintTITULO)
 
             // Muestra Info de Condición de la Operación
             val condicionOperacion = resumen.getInt("condicionOperacion")
             if (condicionOperacion == 1) {
                 // Si la operación fue al Contado
-                canvas.drawText("Condición de la Operación: $condicionOperacion - Contado", startX, startY + 30, paintTITULO)
+                canvas.drawText("Condición de la Operación: $condicionOperacion - Contado", startX, startY + 20, paintTITULO)
             } else if (condicionOperacion == 2) {
                 // Si la operación fue al Crédito
-                canvas.drawText("Condición de la Operación: $condicionOperacion - A crédito", startX, startY + 30, paintTITULO)
+                canvas.drawText("Condición de la Operación: $condicionOperacion - A crédito", startX, startY + 20, paintTITULO)
             } else if (condicionOperacion == 3){
                 // Si la operación fue otra
-                canvas.drawText("Condición de la Operación: $condicionOperacion - Otro", startX, startY + 30, paintTITULO)
+                canvas.drawText("Condición de la Operación: $condicionOperacion - Otro", startX, startY + 20, paintTITULO)
             }
 
 
 
             // EXTENSIÓN
             // Muestra información extra que requiere hacienda
-            canvas.drawText("EXTENSIÓN", startX + 125, startY + 45, paintTITULO)
+            canvas.drawText("EXTENSIÓN", startX + 125, startY + 42, paintTITULO)
 
             canvas.drawText("Emisor Responsable:", startX, startY + 60, paintTITULO)
             canvas.drawText("No. documento:", startX, startY + 70, paintTITULO)
@@ -533,6 +533,10 @@ class EmitirCFActivity : AppCompatActivity() {
         try {
             pdfDocument.writeTo(FileOutputStream(outputFilePath))
             Toast.makeText(this, "Se creó el PDF correctamente en: ${outputFilePath.absolutePath}", Toast.LENGTH_LONG).show()
+
+            val intentCF = Intent(applicationContext, VerPdfCF::class.java)
+            startActivity(intentCF)
+
         } catch (e: Exception) {
             // En caso de que los haya habido muestra un mensaje
             e.printStackTrace()

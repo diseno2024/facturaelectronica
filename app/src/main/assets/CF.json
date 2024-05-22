@@ -37,18 +37,18 @@
   "receptor": {
     "tipoDocumento": null,
     "numDocumento": null,
-    "nrc": null,
-    "nit": null,
-    "nombre": "Jesus Alejandro Gochez Paiz",
-    "codActividad": null,
-    "descActividad": null,
+    "nrc": "0123456789",
+    "nit": "0123456",
+    "nombre": "Nombre Nombre Apellido Apellido",
+    "codActividad": "0000",
+    "descActividad": "Ventas",
     "direccion": {
-      "departamento": null,
+      "departamento": "Santa Ana, Santa Ana",
       "municipio": null,
       "complemento": null
     },
-    "telefono": "76702294",
-    "correo": "pide400@gmail.com"
+    "telefono": "00000000",
+    "correo": "correo@gmail.com"
   },
   "extension": {
     "nombEntrega": null,
