@@ -82,25 +82,11 @@
             android:textSize="@dimen/textSize_textToolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5" />
 
-        <ImageView
-            android:id="@+id/imageRespaldoDatos"
-            android:layout_width="50dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/textRespaldoDeDatos"
-            android:contentDescription="Icono de respaldo de datos"
-            android:src="@drawable/backup_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textRespaldoDeDatos"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/atras"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
