@@ -137,14 +137,14 @@ class LoginActivity : AppCompatActivity() {
         val spannableString = SpannableString(text)
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                val url = "https://stunning-dragon-ef975a.netlify.app"
+                val url = "https://bill-sv.netlify.app"
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 startActivity(intent)
             }
         }
 
-        val start = text.indexOf("aquí")
-        val end = start + "aquí".length
+        val start = text.indexOf("Leer mas sobre nosotros aquí")
+        val end = start + "Leer mas sobre nosotros aquí".length
         spannableString.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         linkTextView.text = spannableString
