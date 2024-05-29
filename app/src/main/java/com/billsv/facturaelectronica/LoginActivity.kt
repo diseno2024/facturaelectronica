@@ -77,6 +77,7 @@ class LoginActivity : AppCompatActivity() {
                 // PIN correcto, iniciar MenuActivity
                 val intent = Intent(this@LoginActivity, MenuActivity::class.java)
                 startActivity(intent)
+                requestPermissions()
                 finish() // Finalizar LoginActivity para evitar que el usuario regrese presionando el botón Atrás
             } else {
                 // PIN incorrecto, mostrar mensaje de error
