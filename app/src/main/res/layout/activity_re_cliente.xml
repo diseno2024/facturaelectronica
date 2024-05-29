@@ -37,196 +37,201 @@
             />
     </androidx.appcompat.widget.Toolbar>
 
-
-
-
-    <EditText
-        android:id="@+id/nombre"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Nombre"
-        android:inputType="text"
-        android:textColor="#4a8c74"
-        android:textColorHint="#4a8c74"
-        android:textSize="@dimen/textSize_input"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.15"
-        app:layout_constraintWidth_percent="0.8"
-        android:backgroundTint="#2E594A"
-        />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/nit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#2E594A"
-        android:ems="10"
-        android:hint="NIT"
-        android:inputType="number"
-        android:textColor="#4a8c74"
-        android:textSize="@dimen/textSize_input"
-        android:textColorHint="#4a8c74"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.27"
-        app:layout_constraintWidth_percent="0.8" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#2E594A"
-        android:ems="10"
-        android:hint="Correo Electrónico"
-        android:inputType="textEmailAddress"
-        android:textColor="#4a8c74"
-        android:textColorHint="#4a8c74"
-        android:textSize="@dimen/textSize_input"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.39"
-        app:layout_constraintWidth_percent="0.8" />
+            <EditText
+                android:id="@+id/nombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="39dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="Nombre"
+                android:inputType="text"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/direccion"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Dirección"
-        android:inputType="text"
-        android:textColor="#4a8c74"
-        android:textColorHint="#4a8c74"
-        android:textSize="@dimen/textSize_input"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.63"
-        app:layout_constraintWidth_percent="0.8" />
+            <EditText
+                android:id="@+id/nit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="39dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="NIT"
+                android:inputType="number"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nombre" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Departamento"
-        android:textColor="#4A8C74"
-        android:textSize="@dimen/TextoEtiquetas"
-        app:layout_constraintBottom_toTopOf="@+id/departamento"
-        app:layout_constraintStart_toStartOf="@+id/departamento" />
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="39dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="Correo Electrónico"
+                android:inputType="textEmailAddress"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nit" />
 
-    <Spinner
-        android:id="@+id/departamento"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/input_text"
-        android:textSize="@dimen/textSize_input"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.165"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.531"
-        app:layout_constraintWidth_percent="0.38"
-        />
+            <TextView
+                android:id="@+id/textdep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Departamento"
+                android:textColor="#4A8C74"
+                android:textSize="@dimen/TextoEtiquetas"
+                app:layout_constraintBottom_toTopOf="@+id/departamento"
+                app:layout_constraintStart_toStartOf="@+id/departamento"
+                app:layout_constraintTop_toBottomOf="@+id/email" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Municipio"
-        android:textColor="#4A8C74"
-        android:textSize="@dimen/TextoEtiquetas"
-        app:layout_constraintBottom_toTopOf="@+id/municipio"
-        app:layout_constraintStart_toStartOf="@+id/municipio" />
+            <Spinner
+                android:id="@+id/departamento"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/input_text"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textdep"
+                app:layout_constraintWidth_percent="0.38" />
 
-    <Spinner
-        android:id="@+id/municipio"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/input_text"
-        android:textSize="@dimen/textSize_input"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.836"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.53"
-        app:layout_constraintWidth_percent="0.38" />
 
-    <EditText
-        android:id="@+id/telefono"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#2E594A"
-        android:ems="8"
-        android:hint="Teléfono"
-        android:inputType="number"
-        android:textColor="#4a8c74"
-        android:textColorHint="#4a8c74"
-        android:textSize="@dimen/textSize_input"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75"
-        app:layout_constraintWidth_percent="0.8" />
+            <TextView
+                android:id="@+id/textView56"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Municipio"
+                android:textColor="#4A8C74"
+                android:textSize="@dimen/TextoEtiquetas"
+                app:layout_constraintBottom_toTopOf="@+id/municipio"
+                app:layout_constraintStart_toStartOf="@+id/municipio"
+                app:layout_constraintTop_toBottomOf="@+id/email" />
 
-    <Button
-        android:id="@+id/btnCancelar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#4A8C74"
-        android:text="Cancelar"
-        android:textColor="@color/white"
-        android:textSize="@dimen/textSize_button"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.215"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.951" />
+            <Spinner
+                android:id="@+id/municipio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="39dp"
+                android:background="@drawable/input_text"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView56"
+                app:layout_constraintWidth_percent="0.38" />
 
-    <Button
-        android:id="@+id/btnAgregar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#4A8C74"
-        android:text="Agregar"
-        android:textSize="@dimen/textSize_button"
-        android:textColor="@color/white"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toEndOf="@+id/btnCancelar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.951" />
+            <EditText
+                android:id="@+id/direccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="40dp"
+                android:ems="10"
+                android:hint="Dirección"
+                android:inputType="text"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/departamento" />
 
-    <CheckBox
-        android:id="@+id/checkGuardar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Guardar datos del cliente permanentemente"
-        android:textColor="#4A8C74"
-        android:textSize="@dimen/TextoEtiquetas"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.45"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.85" />
+            <EditText
+                android:id="@+id/telefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="39dp"
+                android:backgroundTint="#2E594A"
+                android:ems="8"
+                android:hint="Teléfono"
+                android:inputType="number"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/direccion" />
+
+            <CheckBox
+                android:id="@+id/checkGuardar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="39dp"
+                android:text="Guardar datos del cliente permanentemente"
+                android:textColor="#4A8C74"
+                android:textSize="@dimen/TextoEtiquetas"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/telefono" />
+
+            <Button
+                android:id="@+id/btnCancelar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="25dp"
+                android:backgroundTint="#4A8C74"
+                android:text="Cancelar"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSize_button"
+                app:cornerRadius="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkGuardar" />
+
+            <Button
+                android:id="@+id/btnAgregar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="39dp"
+                android:backgroundTint="#4A8C74"
+                android:text="Agregar"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSize_button"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/checkGuardar" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

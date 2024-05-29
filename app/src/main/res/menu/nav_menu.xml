@@ -31,13 +31,14 @@
             android:icon="@drawable/ic_file_text"
             android:title="Resumenes mensuales"/>
         <item
-            android:id="@+id/nav_restauracion"
-            android:icon="@drawable/ic_cloud_download"
-            android:title="Restauración de Datos"/>
-        <item
             android:id="@+id/nav_respaldo"
             android:icon="@drawable/ic_cloud_upload"
             android:title="Respaldo de datos"/>
+        <item
+            android:id="@+id/nav_restauracion"
+            android:icon="@drawable/ic_cloud_download"
+            android:title="Restauración de Datos"/>
+
 
 
 
