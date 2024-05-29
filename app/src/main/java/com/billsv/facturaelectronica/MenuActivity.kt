@@ -93,7 +93,8 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_registro -> {
                 // Iniciar ReClienteActivity al seleccionar "Registro del cliente"
-                val intent = Intent(this, PrinReClienteActivity::class.java)
+                val intent = Intent(this, ImportarClientes::class.java)
+                intent.putExtra("letra", "s")
                 startActivity(intent)
                 finish()
                 return true

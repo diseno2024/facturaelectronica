@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -19,6 +20,7 @@ import com.couchbase.lite.Meta
 import com.google.android.material.card.MaterialCardView
 
 class ImportarClientes : AppCompatActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +51,18 @@ class ImportarClientes : AppCompatActivity() {
             }
 
             linearLayout.addView(itemLayout)
+        }
+        // Obtener la letra pasada en el Intent
+        val letra = intent.getStringExtra("letra")
+
+        // Encontrar el botón en el diseño
+        val button = findViewById<ImageButton>(R.id.btnAgregar)
+
+        // Mostrar el botón solo si la letra es 's'
+        if (letra == "s") {
+            button.visibility = View.VISIBLE
+        } else {
+            button.visibility = View.GONE
         }
 
         val botonAtras = findViewById<ImageButton>(R.id.atras)
