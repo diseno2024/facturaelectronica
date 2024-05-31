@@ -20,6 +20,7 @@ import com.couchbase.lite.Meta
 import com.google.android.material.card.MaterialCardView
 
 class ImportarClientes : AppCompatActivity() {
+    private var letra:String?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,10 +65,18 @@ class ImportarClientes : AppCompatActivity() {
         } else {
             button.visibility = View.GONE
         }
+        button.setOnClickListener{
+            val intent=Intent(this, PrinReClienteActivity::class.java)
+            startActivity(intent)
+        }
 
         val botonAtras = findViewById<ImageButton>(R.id.atras)
         botonAtras.setOnClickListener {
-            val intent = Intent(this, EmitirCFActivity::class.java)
+            val intent = if (letra == "s") {
+                Intent(this, MenuActivity::class.java)
+            } else {
+                Intent(this, EmitirCFActivity::class.java)
+            }
             startActivity(intent)
             finish()
         }
@@ -75,7 +84,12 @@ class ImportarClientes : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val intent = Intent(this, EmitirCFActivity::class.java)
+        val letra=intent.getStringExtra("letra")
+        val intent = if (letra == "s") {
+            Intent(this, MenuActivity::class.java)
+        } else {
+            Intent(this, EmitirCFActivity::class.java)
+        }
         startActivity(intent)
         finish()
     }

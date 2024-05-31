@@ -241,7 +241,8 @@ class PrinReClienteActivity : AppCompatActivity() {
 
         regresar.setOnClickListener {
             // Iniciar otra actividad
-            val intent = Intent(this, MenuActivity::class.java)
+            val intent = Intent(this, ImportarClientes::class.java)
+            intent.putExtra("letra", "s")
             startActivity(intent)
         }
 
@@ -251,7 +252,8 @@ class PrinReClienteActivity : AppCompatActivity() {
     }
     override fun onBackPressed() {
         super.onBackPressed()
-        val intent = Intent(this, MenuActivity ::class.java)
+        val intent = Intent(this, ImportarClientes ::class.java)
+        intent.putExtra("letra", "s")
         startActivity(intent)
         finish()
     }
