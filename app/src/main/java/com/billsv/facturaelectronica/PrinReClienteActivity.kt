@@ -400,7 +400,7 @@ class PrinReClienteActivity : AppCompatActivity() {
         nombre = findViewById(R.id.nombre)
         nit = findViewById(R.id.nit)
         email = findViewById(R.id.email)
-        direccion = findViewById(R.id.direccion)
+        direccion = findViewById(R.id.complemento)
         departamento = findViewById(R.id.departamento)
         municipio = findViewById(R.id.municipio)
         telefono = findViewById(R.id.telefono)

@@ -17,7 +17,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:contentInsetStart="0dp">
+        app:contentInsetStart="0dp"
+        android:elevation="4dp">
 
         <TextView
             android:id="@+id/textView"
@@ -67,7 +68,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/nit"
+                android:id="@+id/dui"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="39dp"
@@ -75,7 +76,7 @@
                 android:layout_marginEnd="39dp"
                 android:backgroundTint="#2E594A"
                 android:ems="10"
-                android:hint="NIT"
+                android:hint="DUI"
                 android:inputType="number"
                 android:textColor="#4a8c74"
                 android:textColorHint="#4a8c74"
@@ -84,23 +85,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nombre" />
 
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="39dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="39dp"
-                android:backgroundTint="#2E594A"
-                android:ems="10"
-                android:hint="Correo Electrónico"
-                android:inputType="textEmailAddress"
-                android:textColor="#4a8c74"
-                android:textColorHint="#4a8c74"
-                android:textSize="@dimen/textSize_input"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nit" />
 
             <TextView
                 android:id="@+id/textdep"
@@ -110,9 +94,8 @@
                 android:text="Departamento"
                 android:textColor="#4A8C74"
                 android:textSize="@dimen/TextoEtiquetas"
-                app:layout_constraintBottom_toTopOf="@+id/departamento"
-                app:layout_constraintStart_toStartOf="@+id/departamento"
-                app:layout_constraintTop_toBottomOf="@+id/email" />
+                app:layout_constraintTop_toBottomOf="@+id/dui"
+                app:layout_constraintStart_toStartOf="@+id/departamento" />
 
             <Spinner
                 android:id="@+id/departamento"
@@ -137,7 +120,7 @@
                 android:textSize="@dimen/TextoEtiquetas"
                 app:layout_constraintBottom_toTopOf="@+id/municipio"
                 app:layout_constraintStart_toStartOf="@+id/municipio"
-                app:layout_constraintTop_toBottomOf="@+id/email" />
+                app:layout_constraintTop_toBottomOf="@+id/dui" />
 
             <Spinner
                 android:id="@+id/municipio"
@@ -150,8 +133,9 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView56"
                 app:layout_constraintWidth_percent="0.38" />
 
+
             <EditText
-                android:id="@+id/direccion"
+                android:id="@+id/complemento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
@@ -166,6 +150,24 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/departamento" />
+
+            <EditText
+                android:id="@+id/correo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="39dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="Correo Electrónico"
+                android:inputType="textEmailAddress"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/complemento" />
 
             <EditText
                 android:id="@+id/telefono"
@@ -183,7 +185,86 @@
                 android:textSize="@dimen/textSize_input"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/direccion" />
+                app:layout_constraintTop_toBottomOf="@+id/correo" />
+
+            <TextView
+                android:id="@+id/texttipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Tipo de contribuyente"
+                android:textColor="#4A8C74"
+                android:textSize="@dimen/TextoEtiquetas"
+                app:layout_constraintTop_toBottomOf="@+id/telefono"
+                app:layout_constraintStart_toStartOf="@+id/departamento" />
+
+            <Spinner
+                android:id="@+id/tipoCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginEnd="39dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/input_text"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/texttipo"
+                />
+            <EditText
+                android:id="@+id/nit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="39dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="NIT"
+                android:inputType="number"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tipoCliente" />
+
+            <EditText
+                android:id="@+id/nrc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="39dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="NRC"
+                android:inputType="number"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nit" />
+            <EditText
+                android:id="@+id/actividadEconomica"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="39dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="Actividad Económica"
+                android:inputType="text"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nrc" />
 
             <CheckBox
                 android:id="@+id/checkGuardar"
@@ -197,7 +278,7 @@
                 android:textSize="@dimen/TextoEtiquetas"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/telefono" />
+                app:layout_constraintTop_toBottomOf="@+id/actividadEconomica" />
 
             <Button
                 android:id="@+id/btnCancelar"

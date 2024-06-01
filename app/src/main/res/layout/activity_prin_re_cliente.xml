@@ -70,6 +70,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.8" />
+            <EditText
+                android:id="@+id/dui"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="DUI"
+                android:inputType="number"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nombre"
+                app:layout_constraintWidth_percent="0.8" />
 
             <EditText
                 android:id="@+id/nit"
@@ -87,7 +104,8 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/nombre"
-                app:layout_constraintWidth_percent="0.8" />
+                app:layout_constraintWidth_percent="0.8"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/email"
@@ -104,11 +122,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nit"
+                app:layout_constraintTop_toBottomOf="@id/dui"
                 app:layout_constraintWidth_percent="0.8" />
 
             <EditText
-                android:id="@+id/direccion"
+                android:id="@+id/complemento"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
@@ -121,7 +139,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/email"
+                app:layout_constraintTop_toBottomOf="@id/departamento"
                 app:layout_constraintWidth_percent="0.8" />
 
             <TextView
@@ -143,7 +161,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.165"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/direccion"
+                app:layout_constraintTop_toBottomOf="@id/email"
                 app:layout_constraintWidth_percent="0.38" />
 
             <TextView
@@ -165,7 +183,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.836"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/direccion"
+                app:layout_constraintTop_toBottomOf="@id/email"
                 app:layout_constraintWidth_percent="0.38" />
 
             <EditText
@@ -183,7 +201,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/municipio"
+                app:layout_constraintTop_toBottomOf="@+id/complemento"
                 app:layout_constraintWidth_percent="0.8" />
 
 

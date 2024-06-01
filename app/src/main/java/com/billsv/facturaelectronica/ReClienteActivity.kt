@@ -30,13 +30,17 @@ import com.couchbase.lite.SelectResult
 class ReClienteActivity : AppCompatActivity() {
     private lateinit var spinnerDep: Spinner
     private lateinit var spinnerMun: Spinner
+    private lateinit var departamento: Spinner
+    private lateinit var municipio: Spinner
+    private lateinit var tipoC:Spinner
     private lateinit var nombre: EditText
     private lateinit var nit: EditText
     private lateinit var email: EditText
     private lateinit var direccion: EditText
     private lateinit var telefono: EditText
-    private lateinit var departamento: Spinner
-    private lateinit var municipio: Spinner
+    private lateinit var dui: EditText
+    private lateinit var nrc: EditText
+    private lateinit var actividadEconomica: EditText
     private lateinit var agregarButton: Button
     private lateinit var cancelarButton: Button
     private lateinit var database: Database
@@ -403,13 +407,17 @@ class ReClienteActivity : AppCompatActivity() {
         // Inicializar vistas
         nombre = findViewById(R.id.nombre)
         nit = findViewById(R.id.nit)
-        email = findViewById(R.id.email)
-        direccion = findViewById(R.id.direccion)
+        email = findViewById(R.id.correo)
+        direccion = findViewById(R.id.complemento)
         departamento = findViewById(R.id.departamento)
         municipio = findViewById(R.id.municipio)
         telefono = findViewById(R.id.telefono)
         agregarButton = findViewById(R.id.btnAgregar)
         cancelarButton = findViewById(R.id.btnCancelar)
+        tipoC =findViewById(R.id.tipoCliente)
+        dui=findViewById(R.id.dui)
+        nrc=findViewById(R.id.nrc)
+        actividadEconomica=findViewById(R.id.actividadEconomica)
 
         // Agregar TextWatcher para el campo de teléfono
         telefono.addTextChangedListener(object : TextWatcher {
@@ -484,6 +492,49 @@ class ReClienteActivity : AppCompatActivity() {
                 return formatted.toString()
             }
         })
+        //mascara del dui
+        dui.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            private val mask = "########-#" // La máscara del NIT
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating) return
+
+                isUpdating = true
+                val formatted = formatDui(s.toString())
+                dui.setText(formatted)
+                dui.setSelection(formatted.length)
+                isUpdating = false
+            }
+
+            private fun formatDui(dui: String): String {
+                // Eliminar todos los caracteres no numéricos del NIT
+                val digits = dui.replace(Regex("\\D"), "")
+                val formatted = StringBuilder()
+
+                var i = 0
+                for (m in mask.toCharArray()) {
+                    if (m != '#') {
+                        formatted.append(m)
+                        continue
+                    }
+                    if (i >= digits.length) break
+                    formatted.append(digits[i])
+                    i++
+                }
+                return formatted.toString()
+            }
+        })
+        //spinner tipoC
+        val opcionesT = arrayOf("Contribuyente", "Consumidor Final")
+        val adapterT = ArrayAdapter(this, R.layout.spinner_personalizado, opcionesT)
+        adapterT.setDropDownViewResource(R.layout.spinner_dropdown_per)
+        tipoC.adapter = adapterT
+        val tipoSeleccionado = tipoC.selectedItem.toString()
 
         val Check: CheckBox = findViewById(R.id.checkGuardar)
         //val isCheck = false
@@ -509,6 +560,10 @@ class ReClienteActivity : AppCompatActivity() {
                 val emailValue = email.text.toString()
                 val direccionValue = direccion.text.toString()
                 val telefonoValue = telefono.text.toString()
+                val tipoSeleccionado = tipoC.selectedItem.toString()
+                val actividadEconomicaValue=actividadEconomica.toString()
+                val duivalue=dui.toString()
+                val nrcValue=nrc.toString()
                 // Iniciar otra actividad
                 val intent = Intent(this, EmitirCFActivity::class.java)
                 // Crear un Intent y agregar los datos
@@ -517,6 +572,10 @@ class ReClienteActivity : AppCompatActivity() {
                 intent.putExtra("email", emailValue)
                 intent.putExtra("direccion", direccionValue)
                 intent.putExtra("telefono", telefonoValue)
+                intent.putExtra("tipoCliente", tipoSeleccionado)
+                intent.putExtra("actividad", actividadEconomicaValue)
+                intent.putExtra("dui", duivalue)
+                intent.putExtra("nrc", nrcValue)
                 startActivity(intent)
                 // Limpiar los EditText
                 nombre.text.clear()
@@ -524,6 +583,9 @@ class ReClienteActivity : AppCompatActivity() {
                 email.text.clear()
                 direccion.text.clear()
                 telefono.text.clear()
+                actividadEconomica.text.clear()
+                dui.text.clear()
+                nrc.text.clear()
                 finish()
             }else if(validarEntradas()){
                 val nombreValue = nombre.text.toString()
@@ -531,6 +593,10 @@ class ReClienteActivity : AppCompatActivity() {
                 val emailValue = email.text.toString()
                 val direccionValue = direccion.text.toString()
                 val telefonoValue = telefono.text.toString()
+                val tipoSeleccionado = tipoC.selectedItem.toString()
+                val actividadEconomicaValue=actividadEconomica.toString()
+                val duivalue=dui.toString()
+                val nrcValue=nrc.toString()
                 // Iniciar otra actividad
                 val intent = Intent(this, EmitirCFActivity::class.java)
                 // Crear un Intent y agregar los datos
@@ -539,6 +605,10 @@ class ReClienteActivity : AppCompatActivity() {
                 intent.putExtra("email", emailValue)
                 intent.putExtra("direccion", direccionValue)
                 intent.putExtra("telefono", telefonoValue)
+                intent.putExtra("tipoCliente", tipoSeleccionado)
+                intent.putExtra("actividad", actividadEconomicaValue)
+                intent.putExtra("dui", duivalue)
+                intent.putExtra("nrc", nrcValue)
                 startActivity(intent)
                 // Limpiar los EditText
                 nombre.text.clear()
@@ -546,6 +616,9 @@ class ReClienteActivity : AppCompatActivity() {
                 email.text.clear()
                 direccion.text.clear()
                 telefono.text.clear()
+                actividadEconomica.text.clear()
+                dui.text.clear()
+                nrc.text.clear()
                 finish()
             }
         }
@@ -559,6 +632,7 @@ class ReClienteActivity : AppCompatActivity() {
         // Inicializar la base de datos
         val app = application as MyApp
         database = app.database
+
     }
 
     private fun validarEntradas(): Boolean {
@@ -567,10 +641,19 @@ class ReClienteActivity : AppCompatActivity() {
         val emailText = email.text.toString()
         val direccionText = direccion.text.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
+        val duiText=dui.text.toString().replace("-","")
+        val nrcText= nrc.text.toString()
+        val actividadEcoText=actividadEconomica.text.toString()
+        val tipoCText=tipoC.selectedItem.toString()
 
         // Verifica que todos los campos estén llenos
-        if (nombreText.isEmpty() || nitText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty()) {
-            Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+        if (nombreText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() ) {
+            Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        // Verifica que el dui sea un número válido de 8 dígitos
+        if (!duiText.matches(Regex("\\d{9}"))) {
+            Toast.makeText(this, "DUI debe ser un número válido de 9 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -579,18 +662,32 @@ class ReClienteActivity : AppCompatActivity() {
             Toast.makeText(this, "Correo electrónico no válido", Toast.LENGTH_SHORT).show()
             return false
         }
-
-        // Verifica que el NIT sea un número válido
-        if (!nitText.matches(Regex("\\d{14}"))) {
-            Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
         // Verifica que el teléfono sea un número válido de 8 dígitos
         if (!telefonoText.matches(Regex("\\d{8}"))) {
             Toast.makeText(this, "Teléfono debe ser un número válido de 8 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
+        if (tipoCText=="Contribuyente"){
+            // Verifica que todos los campos estén llenos
+            if (nrcText.isEmpty() || nitText.isEmpty()  ||   actividadEcoText.isEmpty()) {
+                Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            // Verifica que el NIT sea un número válido
+            if (!nitText.matches(Regex("\\d{14}"))) {
+                Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
+                return false
+            }
+            // Verifica que el nrc sea un número válido de 8 dígitos
+            if (!nrcText.matches(Regex("\\d{7}"))) {
+                Toast.makeText(this, "NRC debe ser un número válido de 7 dígitos", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            return true
+        }
+
 
         return true
     }
@@ -603,10 +700,12 @@ class ReClienteActivity : AppCompatActivity() {
         val departamentoText = departamento.selectedItem.toString()
         val municipioText = municipio.selectedItem.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
-
+        val tipoSeleccionado = tipoC.selectedItem.toString()
         val departamentoCodigo = departamentosMap[departamentoText]
-        val municipioCodigo =
-            municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
+        val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
+        val duiText=dui.text.toString()
+        val nrcText=nrc.text.toString()
+        val actividadEcoText=actividadEconomica.text.toString()
         // Crear un documento mutable para guardar en la base de datos
         if (departamentoCodigo != null && municipioCodigo != null) {
             // Crear un documento mutable para guardar en la base de datos
@@ -618,6 +717,10 @@ class ReClienteActivity : AppCompatActivity() {
                 .setString("departamento", departamentoCodigo)
                 .setString("municipio", municipioCodigo)
                 .setString("telefono", telefonoText)
+                .setString("tipoCliente",tipoSeleccionado)
+                .setString("dui",duiText)
+                .setString("nrc",nrcText)
+                .setString("actividadEconomica",actividadEcoText)
                 .setString("tipo", "cliente")
 
             try {
