@@ -1,5 +1,6 @@
 package com.billsv.facturaelectronica
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -37,6 +38,7 @@ class ImportarClientes : AppCompatActivity() {
                 val itemLayout2 = layoutInflater.inflate(R.layout.layout_list_item_contribuyentes, null)
 
                 val borrar2 = itemLayout2.findViewById<ImageButton>(R.id.btnBorrarData)
+                val Editar2 = itemLayout2.findViewById<ImageButton>(R.id.btnEditarData)
                 val textViewNombre2 = itemLayout2.findViewById<TextView>(R.id.textViewNombreComercial)
                 val textViewNRC = itemLayout2.findViewById<TextView>(R.id.textViewNrc)
                 val textViewTelefono = itemLayout2.findViewById<TextView>(R.id.textViewTelefono)
@@ -47,11 +49,18 @@ class ImportarClientes : AppCompatActivity() {
 
                 // Establece un onClickListener para cada tarjeta
                 itemLayout2.setOnClickListener {
-                    Pasardata(data)
+                    if(letra=="r" || letra=="c"){
+                        Pasardata(data)
+                    }else if(letra=="s"){
+                        mostrardialogo(data)
+                    }
                 }
 
                 borrar2.setOnClickListener {
                     Borrardatos(data, itemLayout2, linearLayout)
+                }
+                Editar2.setOnClickListener{
+                    editardatos(data)
                 }
 
                 linearLayout.addView(itemLayout2)
@@ -60,6 +69,7 @@ class ImportarClientes : AppCompatActivity() {
                 val itemLayout = layoutInflater.inflate(R.layout.layout_list_item_cliente, null)
 
                 val borrar = itemLayout.findViewById<ImageButton>(R.id.btnBorrarData)
+                val Editar = itemLayout.findViewById<ImageButton>(R.id.btnEditarData)
                 val textViewNombre = itemLayout.findViewById<TextView>(R.id.textViewNombre)
                 val textViewTelefono = itemLayout.findViewById<TextView>(R.id.textViewTelefono)
                 val textViewNit = itemLayout.findViewById<TextView>(R.id.textViewNit)
@@ -72,12 +82,20 @@ class ImportarClientes : AppCompatActivity() {
 
                 // Establece un onClickListener para cada tarjeta
                 itemLayout.setOnClickListener {
-                    Pasardata(data)
+                    if(letra=="c"){
+                        Pasardata(data)
+                    }else if(letra=="s"){
+                        mostrardialogo(data)
+                    }
                 }
 
                 borrar.setOnClickListener {
                     Borrardatos(data, itemLayout, linearLayout)
                 }
+                Editar.setOnClickListener{
+                    editardatos(data)
+                }
+
                 if(letra=="r"){
                     //solo muestra nrc
                     //linearLayout.addView(itemLayout)
@@ -118,6 +136,43 @@ class ImportarClientes : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun editardatos(data: String) {
+        val intent = Intent(this, ReClienteActivity::class.java)
+        intent.putExtra("datos",data)
+        startActivity(intent)
+    }
+
+    private fun mostrardialogo(data: String) {
+        val dialogoCliente = Dialog(this)
+        dialogoCliente.setContentView(R.layout.layout_dialogo_cliente) // R.layout.layout_custom_dialog es tu diseño personalizado
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
+        val height = (resources.displayMetrics.heightPixels * 0.7).toInt() // 60% del alto de la pantalla
+        dialogoCliente.window?.setLayout(width, height)
+        dialogoCliente.setCanceledOnTouchOutside(false)
+        val btnImportar = dialogoCliente.findViewById<Button>(R.id.btnImportar)
+        val btnAgregar = dialogoCliente.findViewById<Button>(R.id.btnAgregar)
+        val btnExit = dialogoCliente.findViewById<ImageButton>(R.id.exit)
+        btnAgregar.setOnClickListener {
+            //Pagina para agregar datos de clientes
+            val intent = Intent(this, ReClienteActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        btnImportar.setOnClickListener {
+            //Pagina para agregar datos de clientes
+            val intent = Intent(this, ImportarClientes::class.java)
+            intent.putExtra("letra","c")
+            startActivity(intent)
+            finish()
+        }
+        btnExit.setOnClickListener {
+            // Acción al hacer clic en el botón "Cancelar"
+            dialogoCliente.dismiss()
+        }
+
+        dialogoCliente.show()
     }
 
     override fun onBackPressed() {
@@ -182,11 +237,20 @@ class ImportarClientes : AppCompatActivity() {
     }
 
     private fun Pasardata(data: String) {
-        val intent = Intent(this, EmitirCFActivity::class.java)
-        // Pasa los datos de la carta seleccionada a la siguiente actividad
-        intent.putExtra("Cliente", data)
-        startActivity(intent)
-        finish()
+        val letra = intent.getStringExtra("letra")
+        if(letra=="r"){
+            val intent = Intent(this, EmitirCCFActivity::class.java)
+            // Pasa los datos de la carta seleccionada a la siguiente actividad
+            intent.putExtra("Cliente", data)
+            startActivity(intent)
+            finish()
+        }else if(letra=="c"){
+            val intent = Intent(this, EmitirCFActivity::class.java)
+            // Pasa los datos de la carta seleccionada a la siguiente actividad
+            intent.putExtra("Cliente", data)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun Borrardatos(data: String, itemLayout: View, linearLayout: LinearLayout) {
@@ -230,4 +294,5 @@ class ImportarClientes : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
 }

@@ -115,6 +115,7 @@ class EmitirCFActivity : AppCompatActivity() {
         btnImportar.setOnClickListener {
             //Pagina para agregar datos de clientes
             val intent = Intent(this, ImportarClientes::class.java)
+            intent.putExtra("letra","c")
             startActivity(intent)
             finish()
         }

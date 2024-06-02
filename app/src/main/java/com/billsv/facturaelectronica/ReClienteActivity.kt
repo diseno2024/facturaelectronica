@@ -23,8 +23,10 @@ import com.couchbase.lite.DataSource
 import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.Database
 import com.couchbase.lite.Expression
+import com.couchbase.lite.Meta
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
+
 
 
 class ReClienteActivity : AppCompatActivity() {
@@ -366,7 +368,8 @@ class ReClienteActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        val datos = intent.getStringExtra("datos")
+        if(datos!=null){edicion(datos)}
         // Inicializa el Spinner de departamento
         spinnerDep = findViewById(R.id.departamento)
         val departamentos = departamentosMap.keys.toTypedArray()
@@ -534,7 +537,6 @@ class ReClienteActivity : AppCompatActivity() {
         val adapterT = ArrayAdapter(this, R.layout.spinner_personalizado, opcionesT)
         adapterT.setDropDownViewResource(R.layout.spinner_dropdown_per)
         tipoC.adapter = adapterT
-        val tipoSeleccionado = tipoC.selectedItem.toString()
 
         val Check: CheckBox = findViewById(R.id.checkGuardar)
         //val isCheck = false
@@ -634,6 +636,130 @@ class ReClienteActivity : AppCompatActivity() {
         database = app.database
 
     }
+
+    private fun edicion(datos: String) {
+        nombre = findViewById(R.id.nombre)
+        dui = findViewById(R.id.dui)
+        spinnerDep = findViewById(R.id.departamento)
+        spinnerMun = findViewById(R.id.municipio)
+        direccion = findViewById(R.id.complemento)
+        email = findViewById(R.id.correo)
+        telefono = findViewById(R.id.telefono)
+        tipoC = findViewById(R.id.tipoCliente)
+        nit = findViewById(R.id.nit)
+        nrc = findViewById(R.id.nrc)
+        actividadEconomica = findViewById(R.id.actividadEconomica)
+
+        val Check: CheckBox = findViewById(R.id.checkGuardar)
+        Check.visibility = View.GONE
+
+        agregarButton = findViewById(R.id.btnAgregar)
+        agregarButton.visibility = View.GONE
+
+        cancelarButton = findViewById(R.id.btnCancelar)
+        cancelarButton.visibility = View.GONE
+
+        val guardar: Button = findViewById(R.id.btnGuardar)
+        guardar.visibility = View.VISIBLE
+
+        datos.let{
+            val dato = it.split("\n")
+            val nombred = dato[0]
+            val duid = dato[8]
+            val spinnerDepd = dato[4]
+            val spinnerMund = dato[5]
+            val direcciond = dato[3]
+            val emaild = dato[2]
+            val telefonod = dato[6]
+            val tipoCd = dato[7]
+            val nitd = dato[1]
+            val nrcd = dato[9]
+            val actividadEconomicad = dato[10]
+
+            nombre.setText(nombred)
+            dui.setText(duid)
+            //spinnerDep.setSelection()
+            //spinnerMun.setSelection()
+            direccion.setText(direcciond)
+            email.setText(emaild)
+            telefono.setText(telefonod)
+            //tipoC.setSelection()
+            nit.setText(nitd)
+            nrc.setText(nrcd)
+            actividadEconomica.setText(actividadEconomicad)
+
+        }
+        guardar.setOnClickListener {
+            actualizardatos(datos)
+            val intent = Intent(this, ImportarClientes::class.java)
+            intent.putExtra("letra", "s")
+            startActivity(intent)
+        }
+    }
+
+    private fun actualizardatos(datos: String) {
+        val app = application as MyApp
+        val database = app.database
+        val dato = datos.split("\n")
+        val nombreText = nombre.text.toString()
+        val nitText = nit.text.toString()
+        val emailText = email.text.toString()
+        val direccionText = direccion.text.toString()
+        val departamentoText = departamento.selectedItem.toString()
+        val municipioText = municipio.selectedItem.toString()
+        val telefonoText = telefono.text.toString().replace("-", "")
+        val tipoSeleccionado = tipoC.selectedItem.toString()
+        val departamentoCodigo = departamentosMap[departamentoText]
+        val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
+        val duiText=dui.text.toString()
+        val nrcText=nrc.text.toString()
+        val actividadEcoText=actividadEconomica.text.toString()
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("dui").equalTo(Expression.string(dato[8])))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Itera sobre los resultados y actualiza cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)?.toMutable()
+                        document?.let { doc ->
+                            // Actualizar los campos del documento
+                            doc.setString("nombre", nombreText)
+                            doc.setString("nit", nitText)
+                            doc.setString("email", emailText)
+                            doc.setString("direccion", direccionText)
+                            doc.setString("departamento", departamentoCodigo)
+                            doc.setString("municipio", municipioCodigo)
+                            doc.setString("telefono", telefonoText)
+                            doc.setString("tipoCliente",tipoSeleccionado)
+                            doc.setString("dui",duiText)
+                            doc.setString("nrc",nrcText)
+                            doc.setString("actividadEconomica",actividadEcoText)
+                            doc.setString("tipo", "cliente")
+
+                            // Guardar el documento actualizado en la base de datos
+                            database.save(doc)
+                        }
+                    }
+                }
+                Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
+                showToast("Datos actualizados correctamente")
+            } else {
+                Log.d("Prin_Re_Cliente", "No existe el documento con el dui especificado")
+                showToast("No se encontró el documento para actualizar")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+            showToast("Error al actualizar el documento")
+        }
+    }
+
 
     private fun validarEntradas(): Boolean {
         val nombreText = nombre.text.toString()
@@ -743,5 +869,8 @@ class ReClienteActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

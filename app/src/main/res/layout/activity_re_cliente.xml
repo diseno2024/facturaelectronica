@@ -310,6 +310,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/checkGuardar" />
 
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:backgroundTint="#4A8C74"
+                android:text="Guardar"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSize_button"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/actividadEconomica" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
