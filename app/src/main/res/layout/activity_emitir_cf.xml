@@ -112,7 +112,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:padding="8dp"
-                            android:text="NIT"
+                            android:text="DUI"
                             android:textAlignment="center" />
 
                     </TableRow>
@@ -131,7 +131,7 @@
                             android:textAlignment="center" />
 
                         <TextView
-                            android:id="@+id/nit"
+                            android:id="@+id/dui"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

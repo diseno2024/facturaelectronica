@@ -79,12 +79,13 @@ class EmitirCCFActivity : AppCompatActivity() {
         finish()
     }
     fun DataReceptor(view: View) {
-        val intent = Intent(this, InfoReceptoresActivity::class.java)
+        val intent = Intent(this, ImportarClientes::class.java)
+        intent.putExtra("letra", "r")
         startActivity(intent)
         finish()
     }
     fun DataArticulo(view: View) {
-        val intent = Intent(this, com.billsv.facturaelectronica.AgregarArticuloActivity::class.java)
+        val intent = Intent(this, AgregarArticuloActivity::class.java)
         startActivity(intent)
         finish()
     }

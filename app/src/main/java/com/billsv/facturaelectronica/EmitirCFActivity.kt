@@ -70,21 +70,21 @@ class EmitirCFActivity : AppCompatActivity() {
         // Recupera los datos pasados desde la otra actividad
         val datosGuardados = intent.getStringExtra("Cliente")
         val Nombre: TextView = findViewById(R.id.nombre)
-        val Nit: TextView = findViewById(R.id.nit)
+        val DUI: TextView = findViewById(R.id.dui)
         // Aquí puedes usar los datos como necesites
         datosGuardados?.let{
             val datos = it.split("\n")
             Nombre.text = datos[0]
-            Nit.text = datos[4]
+            DUI.text = datos[8]
         }
         val nombreRecibido = intent.getStringExtra("nombre")
-        val nitRecibido = intent.getStringExtra("nit")
+        val duiRecibido = intent.getStringExtra("dui")
         val emailRecibida = intent.getStringExtra("email")
         val direccionRecibida = intent.getStringExtra("direccion")
         val telefonoRecibida = intent.getStringExtra("telefono")
         if(nombreRecibido!=null){
             Nombre.text = nombreRecibido
-            Nit.text = nitRecibido
+            DUI.text = duiRecibido
         }
 
 

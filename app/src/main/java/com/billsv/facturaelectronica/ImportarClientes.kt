@@ -28,33 +28,65 @@ class ImportarClientes : AppCompatActivity() {
         setContentView(R.layout.activity_importar_clientes)
         val linearLayout = findViewById<LinearLayout>(R.id.containerLayout)
         val dataList = obtenerDatosGuardados()
-
-        dataList.forEach { data ->
-            val itemLayout = layoutInflater.inflate(R.layout.layout_list_item_cliente, null)
-
-            val borrar = itemLayout.findViewById<ImageButton>(R.id.btnBorrarData)
-            val textViewNombre = itemLayout.findViewById<TextView>(R.id.textViewNombre)
-            val textViewTelefono = itemLayout.findViewById<TextView>(R.id.textViewTelefono)
-            val textViewNit = itemLayout.findViewById<TextView>(R.id.textViewNit)
-
-            val datos = data.split("\n")
-            textViewNombre.text = datos[0]
-            textViewTelefono.text = datos[2]
-            textViewNit.text = datos[4]
-
-            // Establece un onClickListener para cada tarjeta
-            itemLayout.setOnClickListener {
-                Pasardata(data)
-            }
-
-            borrar.setOnClickListener {
-                Borrardatos(data, itemLayout, linearLayout)
-            }
-
-            linearLayout.addView(itemLayout)
-        }
         // Obtener la letra pasada en el Intent
         val letra = intent.getStringExtra("letra")
+
+        dataList.forEach { data ->
+            val datosv = data.split("\n")
+            if(datosv[7]=="Contribuyente"){
+                val itemLayout2 = layoutInflater.inflate(R.layout.layout_list_item_contribuyentes, null)
+
+                val borrar2 = itemLayout2.findViewById<ImageButton>(R.id.btnBorrarData)
+                val textViewNombre2 = itemLayout2.findViewById<TextView>(R.id.textViewNombreComercial)
+                val textViewNRC = itemLayout2.findViewById<TextView>(R.id.textViewNrc)
+                val textViewTelefono = itemLayout2.findViewById<TextView>(R.id.textViewTelefono)
+                val datos = data.split("\n")
+                textViewNombre2.text = datos[0]
+                textViewNRC.text = datos[9]
+                textViewTelefono.text = datos[6]
+
+                // Establece un onClickListener para cada tarjeta
+                itemLayout2.setOnClickListener {
+                    Pasardata(data)
+                }
+
+                borrar2.setOnClickListener {
+                    Borrardatos(data, itemLayout2, linearLayout)
+                }
+
+                linearLayout.addView(itemLayout2)
+
+            }else{
+                val itemLayout = layoutInflater.inflate(R.layout.layout_list_item_cliente, null)
+
+                val borrar = itemLayout.findViewById<ImageButton>(R.id.btnBorrarData)
+                val textViewNombre = itemLayout.findViewById<TextView>(R.id.textViewNombre)
+                val textViewTelefono = itemLayout.findViewById<TextView>(R.id.textViewTelefono)
+                val textViewNit = itemLayout.findViewById<TextView>(R.id.textViewNit)
+
+
+                val datos = data.split("\n")
+                textViewNombre.text = datos[0]
+                textViewTelefono.text = datos[6]
+                textViewNit.text = datos[8]
+
+                // Establece un onClickListener para cada tarjeta
+                itemLayout.setOnClickListener {
+                    Pasardata(data)
+                }
+
+                borrar.setOnClickListener {
+                    Borrardatos(data, itemLayout, linearLayout)
+                }
+                if(letra=="r"){
+                    //solo muestra nrc
+                    //linearLayout.addView(itemLayout)
+                }else{
+                    linearLayout.addView(itemLayout)
+                }
+
+            }
+        }
 
         // Encontrar el botón en el diseño
         val button = findViewById<ImageButton>(R.id.btnAgregar)
@@ -72,10 +104,16 @@ class ImportarClientes : AppCompatActivity() {
 
         val botonAtras = findViewById<ImageButton>(R.id.atras)
         botonAtras.setOnClickListener {
-            val intent = if (letra == "s") {
-                Intent(this, MenuActivity::class.java)
-            } else {
-                Intent(this, EmitirCFActivity::class.java)
+            val intent = when (letra) {
+                "s" -> {
+                    Intent(this, MenuActivity::class.java)
+                }
+                "r" -> {
+                    Intent(this, EmitirCCFActivity::class.java)
+                }
+                else -> {
+                    Intent(this, EmitirCFActivity::class.java)
+                }
             }
             startActivity(intent)
             finish()
@@ -85,10 +123,16 @@ class ImportarClientes : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         val letra=intent.getStringExtra("letra")
-        val intent = if (letra == "s") {
-            Intent(this, MenuActivity::class.java)
-        } else {
-            Intent(this, EmitirCFActivity::class.java)
+        val intent = when (letra) {
+            "s" -> {
+                Intent(this, MenuActivity::class.java)
+            }
+            "r" -> {
+                Intent(this, EmitirCCFActivity::class.java)
+            }
+            else -> {
+                Intent(this, EmitirCFActivity::class.java)
+            }
         }
         startActivity(intent)
         finish()
@@ -120,10 +164,16 @@ class ImportarClientes : AppCompatActivity() {
             val nit = dict?.getString("nit")
             val email = dict?.getString("email")
             val direccion = dict?.getString("direccion")
+            val departamento = dict?.getString("departamento")
+            val municipio = dict?.getString("municipio")
             val telefono = dict?.getString("telefono")
+            val tipo = dict?.getString("tipoCliente")
+            val dui = dict?.getString("dui")
+            val nrc = dict?.getString("nrc")
+            val AcEco = dict?.getString("actividadEconomica")
 
             // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$nombre\n$email\n$telefono\n$direccion\n$nit"
+            val dataString = "$nombre\n$nit\n$email\n$direccion\n$departamento\n$municipio\n$telefono\n$tipo\n$dui\n$nrc\n$AcEco"
             dataList.add(dataString)
         }
 
@@ -164,6 +214,7 @@ class ImportarClientes : AppCompatActivity() {
                 }
                 // Elimina la tarjeta de la vista
                 linearLayout.removeView(itemLayout)
+                recreate()
 
                 Log.d("Prin_Re_Cliente", "Se eliminó el cliente")
                 showToast("Cliente eliminado")

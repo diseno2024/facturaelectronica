@@ -561,9 +561,9 @@ class ReClienteActivity : AppCompatActivity() {
                 val direccionValue = direccion.text.toString()
                 val telefonoValue = telefono.text.toString()
                 val tipoSeleccionado = tipoC.selectedItem.toString()
-                val actividadEconomicaValue=actividadEconomica.toString()
-                val duivalue=dui.toString()
-                val nrcValue=nrc.toString()
+                val actividadEconomicaValue=actividadEconomica.text.toString()
+                val duivalue=dui.text.toString()
+                val nrcValue=nrc.text.toString()
                 // Iniciar otra actividad
                 val intent = Intent(this, EmitirCFActivity::class.java)
                 // Crear un Intent y agregar los datos
@@ -594,9 +594,9 @@ class ReClienteActivity : AppCompatActivity() {
                 val direccionValue = direccion.text.toString()
                 val telefonoValue = telefono.text.toString()
                 val tipoSeleccionado = tipoC.selectedItem.toString()
-                val actividadEconomicaValue=actividadEconomica.toString()
-                val duivalue=dui.toString()
-                val nrcValue=nrc.toString()
+                val actividadEconomicaValue=actividadEconomica.text.toString()
+                val duivalue=dui.text.toString()
+                val nrcValue=nrc.text.toString()
                 // Iniciar otra actividad
                 val intent = Intent(this, EmitirCFActivity::class.java)
                 // Crear un Intent y agregar los datos
