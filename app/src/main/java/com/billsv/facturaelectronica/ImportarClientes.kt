@@ -146,31 +146,39 @@ class ImportarClientes : AppCompatActivity() {
 
     private fun mostrardialogo(data: String) {
         val dialogoCliente = Dialog(this)
-        dialogoCliente.setContentView(R.layout.layout_dialogo_cliente) // R.layout.layout_custom_dialog es tu diseño personalizado
+        dialogoCliente.setContentView(R.layout.layout_mostrar_data) // R.layout.layout_custom_dialog es tu diseño personalizado
         val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
         val height = (resources.displayMetrics.heightPixels * 0.7).toInt() // 60% del alto de la pantalla
+        val nombre = dialogoCliente.findViewById<TextView>(R.id.nombre)
+        val dui = dialogoCliente.findViewById<TextView>(R.id.dui)
+        val departamento = dialogoCliente.findViewById<TextView>(R.id.departamento)
+        val municipio = dialogoCliente.findViewById<TextView>(R.id.municipio)
+        val direccion = dialogoCliente.findViewById<TextView>(R.id.direccion)
+        val correo = dialogoCliente.findViewById<TextView>(R.id.correo)
+        val telefono = dialogoCliente.findViewById<TextView>(R.id.telefono)
+        val tipo = dialogoCliente.findViewById<TextView>(R.id.tipoC)
+        val nit = dialogoCliente.findViewById<TextView>(R.id.nit)
+        val nrc = dialogoCliente.findViewById<TextView>(R.id.nrc)
+        val AcEco = dialogoCliente.findViewById<TextView>(R.id.AcEco)
         dialogoCliente.window?.setLayout(width, height)
         dialogoCliente.setCanceledOnTouchOutside(false)
-        val btnImportar = dialogoCliente.findViewById<Button>(R.id.btnImportar)
-        val btnAgregar = dialogoCliente.findViewById<Button>(R.id.btnAgregar)
         val btnExit = dialogoCliente.findViewById<ImageButton>(R.id.exit)
-        btnAgregar.setOnClickListener {
-            //Pagina para agregar datos de clientes
-            val intent = Intent(this, ReClienteActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-        btnImportar.setOnClickListener {
-            //Pagina para agregar datos de clientes
-            val intent = Intent(this, ImportarClientes::class.java)
-            intent.putExtra("letra","c")
-            startActivity(intent)
-            finish()
-        }
         btnExit.setOnClickListener {
             // Acción al hacer clic en el botón "Cancelar"
             dialogoCliente.dismiss()
         }
+        val datos = data.split("\n")
+        nombre.text = datos[0]
+        dui.text = datos[8]
+        departamento.text = datos[4]
+        municipio.text = datos[5]
+        direccion.text = datos[3]
+        correo.text = datos[2]
+        telefono.text = datos[6]
+        tipo.text = datos[7]
+        nit.text = datos[1]
+        nrc.text = datos[9]
+        AcEco.text = datos[10]
 
         dialogoCliente.show()
     }
