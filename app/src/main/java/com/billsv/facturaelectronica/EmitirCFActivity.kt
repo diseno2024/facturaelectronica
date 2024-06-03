@@ -11,11 +11,16 @@ import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import android.os.Environment
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
+import android.widget.TableLayout
+import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -24,6 +29,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.couchbase.lite.DataSource
+import com.couchbase.lite.Expression
+import com.couchbase.lite.QueryBuilder
+import com.couchbase.lite.SelectResult
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
@@ -32,6 +41,7 @@ import java.lang.Exception
 
 
 class EmitirCFActivity : AppCompatActivity() {
+    private lateinit var tableLayout: TableLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,8 +51,54 @@ class EmitirCFActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        tableLayout = findViewById(R.id.Tabla)
+        var total = 0.0
+        val dataList = obtenerDatosGuardados()
+        dataList.forEach { data ->
+            val datos = data.split("\n")
+            val cantidad = datos[1]
+            val producto = datos[3]
+            val precio = datos[5]
+
+            total += ((cantidad.toIntOrNull() ?:0) * (precio.toDoubleOrNull()?: 0.0))
+            val tableRow = TableRow(this)
+
+            val cantidadTextView = TextView(this).apply {
+                text = cantidad
+                layoutParams = TableRow.LayoutParams(40, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    setMargins(8, 8, 8, 8)
+                    gravity = Gravity.CENTER
+                }
+                textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+            }
+
+            val productoTextView = TextView(this).apply {
+                text = producto
+                layoutParams = TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply {
+                    setMargins(8, 8, 8, 8)
+                }
+                textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+            }
+
+            val precioTextView = TextView(this).apply {
+                text = precio
+                layoutParams = TableRow.LayoutParams(70, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    setMargins(8, 8, 8, 8)
+                }
+                textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+            }
+
+            tableRow.addView(cantidadTextView)
+            tableRow.addView(productoTextView)
+            tableRow.addView(precioTextView)
+
+            tableLayout.addView(tableRow)
+        }
+        val Total: TextView = findViewById(R.id.Total)
+        Total.text = total.toString()
+
         val spinnerOp: Spinner = findViewById(R.id.CoOperacion)
-// Create an ArrayAdapter using the string array and a default spinner layout.
+        // Create an ArrayAdapter using the string array and a default spinner layout.
         ArrayAdapter.createFromResource(
             this,
             R.array.Operacion,
@@ -89,6 +145,7 @@ class EmitirCFActivity : AppCompatActivity() {
 
 
     }
+
     fun showDescription(view: View?) {
         val intent = Intent(this, DescripcionActivity::class.java)
         startActivity(intent)
@@ -131,6 +188,43 @@ class EmitirCFActivity : AppCompatActivity() {
         val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
         finish()
+    }
+    private fun obtenerDatosGuardados(): List<String> {
+        // Obtén la instancia de la base de datos desde la aplicación
+        val app = application as MyApp
+        val database = app.database
+
+        // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulo")))
+
+        // Ejecuta la consulta
+        val result = query.execute()
+
+        // Lista para almacenar los datos obtenidos
+        val dataList = mutableListOf<String>()
+
+        // Itera sobre todos los resultados de la consulta
+        result.allResults().forEach { result ->
+            // Obtiene el diccionario del documento del resultado actual
+            val dict = result.getDictionary(database.name)
+
+            // Extrae los valores de los campos del documento
+            val Tipo = dict?.getString("Tipod")
+            val cantidad = dict?.getString("Cantidad")
+            val unidad = dict?.getString("Unidad")
+            val Producto = dict?.getString("Producto")
+            val TipoV = dict?.getString("Tipo de Vente")
+            val Precio = dict?.getString("Precio")
+
+            // Formatea los datos como una cadena y la agrega a la lista
+            val dataString = "$Tipo\n$cantidad\n$unidad\n$Producto\n$TipoV\n$Precio"
+            dataList.add(dataString)
+        }
+
+        // Devuelve la lista de datos
+        return dataList
     }
     private fun generarPdf() {
         // Variable para poder almacenar el contenido del json através de una función

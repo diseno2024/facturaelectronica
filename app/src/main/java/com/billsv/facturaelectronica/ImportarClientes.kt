@@ -286,7 +286,7 @@ class ImportarClientes : AppCompatActivity() {
                 }
                 // Elimina la tarjeta de la vista
                 linearLayout.removeView(itemLayout)
-                recreate()
+
 
                 Log.d("Prin_Re_Cliente", "Se eliminó el cliente")
                 showToast("Cliente eliminado")
