@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,10 @@ import androidx.core.view.WindowInsetsCompat
 import com.billsv.facturaelectronica.R
 
 class DescripcionActivity : AppCompatActivity() {
+    private lateinit var Cantidad: EditText
+    private lateinit var Producto: EditText
+    private lateinit var Precio: EditText
+    private lateinit var Tipo: Spinner
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -22,7 +27,7 @@ class DescripcionActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val spinnerTipo: Spinner = findViewById(R.id.TipoS)
+        Tipo = findViewById(R.id.TipoS)
 // Create an ArrayAdapter using the string array and a default spinner layout.
         ArrayAdapter.createFromResource(
             this,
@@ -32,7 +37,7 @@ class DescripcionActivity : AppCompatActivity() {
             // Specify the layout to use when the list of choices appears.
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_per)
             // Apply the adapter to the spinner.
-            spinnerTipo.adapter = adapter
+            Tipo.adapter = adapter
         }
         val spinnerMedida: Spinner = findViewById(R.id.UnidadMedidaS)
 // Create an ArrayAdapter using the string array and a default spinner layout.
@@ -64,8 +69,13 @@ class DescripcionActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        Cantidad = findViewById(R.id.Cantidad)
+        Producto = findViewById(R.id.Producto)
+        Precio = findViewById(R.id.Precio)
+
         val Agregar: Button = findViewById(R.id.Agregar)
         Agregar.setOnClickListener {
+            guardarItem()
             val Item = Dialog(this)
             Item.setContentView(R.layout.layout_item) // R.layout.layout_custom_dialog es tu diseño personalizado
             val width = (resources.displayMetrics.widthPixels * 0.92).toInt() // 80% del ancho de la pantalla
@@ -75,6 +85,9 @@ class DescripcionActivity : AppCompatActivity() {
             val btnAgregar = Item.findViewById<Button>(R.id.AggItem)
             val btnRegresar = Item.findViewById<Button>(R.id.Regresar)
             btnAgregar.setOnClickListener {
+                Cantidad.text.clear()
+                Producto.text.clear()
+                Precio.text.clear()
                 //cierra el dialogo
                 Item.dismiss()
             }
@@ -89,6 +102,11 @@ class DescripcionActivity : AppCompatActivity() {
 
         }
     }
+
+    private fun guardarItem() {
+        
+    }
+
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
         val intent = Intent(this, EmitirCFActivity::class.java)

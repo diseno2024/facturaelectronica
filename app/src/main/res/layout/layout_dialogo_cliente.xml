@@ -14,11 +14,11 @@
         android:clickable="true"
         android:contentDescription="bottom"
         android:focusable="true"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/icons8_cancelar_24"
         app:tint="#EF0000" />
+
     <Button
         android:id="@+id/btnAgregar"
         android:layout_width="0dp"

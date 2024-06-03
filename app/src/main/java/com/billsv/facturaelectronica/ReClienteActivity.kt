@@ -711,7 +711,7 @@ class ReClienteActivity : AppCompatActivity() {
         val tipoSeleccionado = tipoC.selectedItem.toString()
         val departamentoCodigo = departamentosMap[departamentoText]
         val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
-        val duiText=dui.text.toString()
+        val duiText=dui.text.toString().replace("-", "")
         val nrcText=nrc.text.toString()
         val actividadEcoText=actividadEconomica.text.toString()
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
@@ -762,6 +762,8 @@ class ReClienteActivity : AppCompatActivity() {
 
 
     private fun validarEntradas(): Boolean {
+        val app = application as MyApp///////
+        val database = app.database///////
         val nombreText = nombre.text.toString()
         val nitText = nit.text.toString().replace("-", "")
         val emailText = email.text.toString()
@@ -772,6 +774,30 @@ class ReClienteActivity : AppCompatActivity() {
         val actividadEcoText=actividadEconomica.text.toString()
         val tipoCText=tipoC.selectedItem.toString()
 
+        //////
+
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("dui").equalTo(Expression.string(duiText)))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
+                showToast("Ya existe un cliente con ese dui")
+                return false
+            } else {
+                Log.d("Prin_Re_Cliente", "PASS")
+                return true
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+            showToast("Error al buscar el dui")
+        }
+
+        //////
         // Verifica que todos los campos estén llenos
         if (nombreText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() ) {
             Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
@@ -829,7 +855,7 @@ class ReClienteActivity : AppCompatActivity() {
         val tipoSeleccionado = tipoC.selectedItem.toString()
         val departamentoCodigo = departamentosMap[departamentoText]
         val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
-        val duiText=dui.text.toString()
+        val duiText=dui.text.toString().replace("-", "")
         val nrcText=nrc.text.toString()
         val actividadEcoText=actividadEconomica.text.toString()
         // Crear un documento mutable para guardar en la base de datos
