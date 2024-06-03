@@ -77,22 +77,54 @@ class RestauracionActivity : AppCompatActivity() {
         val restorationDirectoryName = "restauracion_factura"
 
         val backupDirectory = File(parentDir, backupDirectoryName)
-        val restorationDirectory = File(backupDirectory, restorationDirectoryName)
+        val restorationDirectory = File(parentDir, restorationDirectoryName)
 
-        if (restorationDirectory.exists()) {
+        if (backupDirectory.exists() && backupDirectory.isDirectory) {
             try {
-                // Copiar los archivos desde la carpeta de respaldo a la carpeta de restauración
-                copyDirectory(backupDirectory, restorationDirectory)
-                Log.d("RestauracionActivity", "Datos restaurados con éxito")
-                Toast.makeText(this, "Datos restaurados con éxito", Toast.LENGTH_SHORT).show()
+                // Verificar si el directorio de restauración ya existe y eliminarlo si es necesario
+                if (restorationDirectory.exists()) {
+                    restorationDirectory.deleteRecursively()
+                }
+                // Crear el directorio de restauración
+                if (restorationDirectory.mkdirs()) {
+                    // Copiar todos los archivos del directorio de respaldo al directorio de restauración
+                    copyDirectory(backupDirectory, restorationDirectory)
+                    Log.d("RestauracionActivity", "Datos restaurados con éxito en: ${restorationDirectory.absolutePath}")
+                    Toast.makeText(this, "Datos restaurados con éxito", Toast.LENGTH_SHORT).show()
+                } else {
+                    Log.e("RestauracionActivity", "Error al crear el directorio de restauración")
+                    Toast.makeText(this, "Error al crear el directorio de restauración", Toast.LENGTH_SHORT).show()
+                }
             } catch (e: IOException) {
                 e.printStackTrace()
                 Log.e("RestauracionActivity", "Error al restaurar datos: ${e.message}")
                 Toast.makeText(this, "Error al restaurar datos", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Log.e("RestauracionActivity", "La carpeta de restauración no existe")
-            Toast.makeText(this, "La carpeta de restauración no existe", Toast.LENGTH_SHORT).show()
+            Log.e("RestauracionActivity", "El directorio de respaldo no existe o no es un directorio")
+            Toast.makeText(this, "El directorio de respaldo no existe o no es un directorio", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun copyDirectory(srcDir: File, destDir: File) {
+        if (srcDir.isDirectory) {
+            if (!destDir.exists()) {
+                destDir.mkdirs()
+            }
+
+            val children = srcDir.list()
+            if (children != null) {
+                for (i in children.indices) {
+                    copyDirectory(File(srcDir, children[i]), File(destDir, children[i]))
+                }
+            }
+        } else {
+            FileInputStream(srcDir).use { input ->
+                FileOutputStream(destDir).use { output ->
+                    input.copyTo(output)
+                }
+            }
         }
     }
 
@@ -111,28 +143,6 @@ class RestauracionActivity : AppCompatActivity() {
                     "Los permisos son necesarios para realizar la restauración",
                     Toast.LENGTH_SHORT
                 ).show()
-            }
-        }
-    }
-
-    @Throws(IOException::class)
-    private fun copyDirectory(srcDir: File, destDir: File) {
-        if (srcDir.isDirectory) {
-            if (!destDir.exists()) {
-                destDir.mkdirs()
-            }
-
-            val children = srcDir.list()
-            if (children != null) {
-                for (child in children) {
-                    copyDirectory(File(srcDir, child), File(destDir, child))
-                }
-            }
-        } else {
-            FileInputStream(srcDir).use { input ->
-                FileOutputStream(destDir).use { output ->
-                    input.copyTo(output)
-                }
             }
         }
     }

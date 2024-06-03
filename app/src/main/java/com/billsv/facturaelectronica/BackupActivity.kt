@@ -1,32 +1,23 @@
 package com.billsv.facturaelectronica
 
+import android.Manifest
 import android.app.TimePickerDialog
-import android.os.Bundle
-import android.widget.Switch
-import android.widget.TextView
-import android.widget.Spinner
-import android.widget.ArrayAdapter
-import android.widget.AdapterView
-import android.view.View
-import android.widget.Toast
-import android.widget.ImageButton
-import android.widget.Button
-import android.widget.EditText
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import java.util.*
+import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.util.Log
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import android.Manifest
-import android.content.pm.PackageManager
+import android.view.View
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.couchbase.lite.Database
+import java.io.*
+import java.util.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 class BackupActivity : AppCompatActivity() {
 
@@ -165,8 +156,8 @@ class BackupActivity : AppCompatActivity() {
                     )
                     Toast.makeText(
                         this,
-                        "Directorio de respaldo creado exitosamente",
-                        Toast.LENGTH_SHORT
+                        "Directorio de respaldo creado en: ${getFriendlyPath(backupDirectory.absolutePath)}",
+                        Toast.LENGTH_LONG
                     ).show()
                 } else {
                     Log.e("BackupActivity", "Error al crear el directorio de respaldo")
@@ -185,7 +176,7 @@ class BackupActivity : AppCompatActivity() {
                 "BackupActivity",
                 "El directorio de respaldo ya existe en: ${backupDirectory.absolutePath}"
             )
-            Toast.makeText(this, "El directorio de respaldo ya existe", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "El directorio de respaldo ya existe en: ${getFriendlyPath(backupDirectory.absolutePath)}", Toast.LENGTH_LONG).show()
         }
 
         // Realizar respaldo de la base de datos después de crear el directorio
@@ -228,6 +219,12 @@ class BackupActivity : AppCompatActivity() {
             copyDirectory(dbDir, backupDirDb)
             Log.d("BackupActivity", "Respaldo realizado con éxito: ${backupDirDb.absolutePath}")
             Toast.makeText(this, "Respaldo realizado con éxito", Toast.LENGTH_SHORT).show()
+
+            // Crear archivo zip
+            val zipFile = File(backupDir, "${backupDirDb.name}.zip")
+            zipDirectory(backupDirDb, zipFile)
+            Log.d("BackupActivity", "Archivos comprimidos con éxito: ${zipFile.absolutePath}")
+            Toast.makeText(this, "Archivos comprimidos con éxito en: ${getFriendlyPath(zipFile.absolutePath)}", Toast.LENGTH_LONG).show()
         } catch (e: IOException) {
             e.printStackTrace()
             Log.e("BackupActivity", "Error al realizar el respaldo: ${e.message}")
@@ -255,5 +252,35 @@ class BackupActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    @Throws(IOException::class)
+    private fun zipDirectory(srcDir: File, zipFile: File) {
+        ZipOutputStream(FileOutputStream(zipFile)).use { zos ->
+            zipFile(srcDir, srcDir.name, zos)
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun zipFile(srcFile: File, fileName: String, zos: ZipOutputStream) {
+        if (srcFile.isDirectory) {
+            val children = srcFile.list()
+            if (children != null) {
+                for (child in children) {
+                    zipFile(File(srcFile, child), "$fileName/$child", zos)
+                }
+            }
+        } else {
+            FileInputStream(srcFile).use { fis ->
+                val zipEntry = ZipEntry(fileName)
+                zos.putNextEntry(zipEntry)
+                fis.copyTo(zos)
+                zos.closeEntry()
+            }
+        }
+    }
+
+    private fun getFriendlyPath(absolutePath: String): String {
+        return absolutePath.replace("/storage/emulated/0", "Internal Storage")
     }
 }
