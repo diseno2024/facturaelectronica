@@ -55,6 +55,7 @@ android {
 
 dependencies {
     val appcompat_version = "1.6.1"
+    implementation ("androidx.core:core-ktx:1.6.0")
     implementation ("com.couchbase.lite:couchbase-lite-android-ktx:3.1.6")
     implementation("androidx.appcompat:appcompat:$appcompat_version")
     implementation("com.google.android.material:material:1.11.0")

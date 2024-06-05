@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -24,6 +25,7 @@ class BackupActivity : AppCompatActivity() {
     private lateinit var buttonSelectTime: Button
     private lateinit var editTextSelectedTime: EditText
     private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
+    private val CREATE_FILE_REQUEST_CODE = 1
     private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 33) {
         listOf(
             Manifest.permission.READ_MEDIA_AUDIO,
@@ -50,7 +52,7 @@ class BackupActivity : AppCompatActivity() {
 
         val btnRegistrar = findViewById<Button>(R.id.btnRegistrar)
         btnRegistrar.setOnClickListener {
-            requestPermissions()
+            checkPermissionsAndBackup()
         }
 
         val spinnerFrecuencia = findViewById<Spinner>(R.id.spinnerFrecuencia)
@@ -116,7 +118,7 @@ class BackupActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun requestPermissions() {
+    private fun checkPermissionsAndBackup() {
         val permissionsToRequest = mutableListOf<String>()
 
         for (permission in permissionList) {
@@ -136,51 +138,17 @@ class BackupActivity : AppCompatActivity() {
                 WRITE_EXTERNAL_STORAGE_REQUEST_CODE
             )
         } else {
-            createBackupFolder()
+            openFilePicker()
         }
     }
 
-    private fun createBackupFolder() {
-        val parentDir =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-        val backupDirectoryName = "respaldo_factura2024"
-        val backupDirectory = File(parentDir, backupDirectoryName)
-
-        // Verificar si el directorio de respaldo existe y manejar errores de creación
-        if (!backupDirectory.exists()) {
-            try {
-                if (backupDirectory.mkdirs()) {
-                    Log.d(
-                        "BackupActivity",
-                        "Directorio de respaldo creado en: ${backupDirectory.absolutePath}"
-                    )
-                    Toast.makeText(
-                        this,
-                        "Directorio de respaldo creado en: ${getFriendlyPath(backupDirectory.absolutePath)}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                } else {
-                    Log.e("BackupActivity", "Error al crear el directorio de respaldo")
-                    Toast.makeText(this, "Error al crear el directorio de respaldo", Toast.LENGTH_SHORT)
-                        .show()
-                    return
-                }
-            } catch (e: Exception) {
-                Log.e("BackupActivity", "Excepción al crear el directorio de respaldo: ${e.message}")
-                Toast.makeText(this, "Excepción al crear el directorio de respaldo", Toast.LENGTH_SHORT)
-                    .show()
-                return
-            }
-        } else {
-            Log.d(
-                "BackupActivity",
-                "El directorio de respaldo ya existe en: ${backupDirectory.absolutePath}"
-            )
-            Toast.makeText(this, "El directorio de respaldo ya existe en: ${getFriendlyPath(backupDirectory.absolutePath)}", Toast.LENGTH_LONG).show()
+    private fun openFilePicker() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/zip"
+            putExtra(Intent.EXTRA_TITLE, "respaldo_factura2024.zip")
         }
-
-        // Realizar respaldo de la base de datos después de crear el directorio
-        backupDatabase(backupDirectory)
+        startActivityForResult(intent, CREATE_FILE_REQUEST_CODE)
     }
 
     override fun onRequestPermissionsResult(
@@ -191,7 +159,7 @@ class BackupActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                createBackupFolder()
+                openFilePicker()
             } else {
                 Toast.makeText(
                     this,
@@ -202,27 +170,39 @@ class BackupActivity : AppCompatActivity() {
         }
     }
 
-    // Método para realizar el respaldo de la base de datos
-    private fun backupDatabase(backupDir: File) {
-        // Supongamos que tienes una instancia de la base de datos de Couchbase Lite llamada `database`
-        val database = Database("my_database")  // Corrige el nombre de la base de datos
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CREATE_FILE_REQUEST_CODE && resultCode == RESULT_OK) {
+            data?.data?.let { uri ->
+                val backupDirectory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "respaldo_factura2024")
+                backupDatabase(backupDirectory, uri)
+            }
+        }
+    }
+
+    private fun backupDatabase(backupDir: File, uri: Uri) {
+        val database = Database("my_database")
 
         val dbDir = File(database.path)
         val backupDirDb = File(backupDir, dbDir.name)
 
         try {
-            // Verificar si el archivo de destino ya existe y eliminarlo si es necesario
             if (backupDirDb.exists()) {
-                backupDirDb.deleteRecursively()  // Utiliza deleteRecursively para eliminar directorios
+                backupDirDb.deleteRecursively()
             }
-            // Copiar todos los archivos al directorio de respaldo
             copyDirectory(dbDir, backupDirDb)
             Log.d("BackupActivity", "Respaldo realizado con éxito: ${backupDirDb.absolutePath}")
             Toast.makeText(this, "Respaldo realizado con éxito", Toast.LENGTH_SHORT).show()
 
-            // Crear archivo zip
             val zipFile = File(backupDir, "${backupDirDb.name}.zip")
             zipDirectory(backupDirDb, zipFile)
+
+            contentResolver.openOutputStream(uri)?.use { outputStream ->
+                FileInputStream(zipFile).use { inputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
+
             Log.d("BackupActivity", "Archivos comprimidos con éxito: ${zipFile.absolutePath}")
             Toast.makeText(this, "Archivos comprimidos con éxito en: ${getFriendlyPath(zipFile.absolutePath)}", Toast.LENGTH_LONG).show()
         } catch (e: IOException) {
