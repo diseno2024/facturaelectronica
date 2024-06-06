@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import java.text.SimpleDateFormat
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
@@ -199,22 +200,37 @@ class BackupActivity : AppCompatActivity() {
     private fun backupDatabase(uri: Uri) {
         val database = Database("my_database")
         val dbDir = File(database.path)
-        val zipFile = File(cacheDir, "respaldo_factura2024.zip")
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val backupFileName = "respaldo_factura2024.zip"
 
         try {
-            zipDirectory(dbDir, zipFile)
+            // Crear un nuevo archivo ZIP o abrir el existente si ya existe
+            val backupZipFile = File(cacheDir, backupFileName)
+            val zipOutputStream = if (backupZipFile.exists()) {
+                ZipOutputStream(FileOutputStream(backupZipFile, true)) // Modo de append
+            } else {
+                ZipOutputStream(FileOutputStream(backupZipFile))
+            }
 
-            // Ensure the URI is a directory URI
+            // Agregar la base de datos actual al archivo ZIP
+            val databaseEntry = ZipEntry("my_database.cblite2")
+            zipOutputStream.putNextEntry(databaseEntry)
+            FileInputStream(File(dbDir, "my_database.cblite2")).use { input ->
+                input.copyTo(zipOutputStream)
+            }
+            zipOutputStream.closeEntry()
+
+            // Resto del código para guardar el archivo ZIP en la ubicación seleccionada...
             if (DocumentFile.fromTreeUri(this, uri)?.isDirectory == true) {
                 val documentFile = DocumentFile.fromTreeUri(this, uri)
-                val backupFile = documentFile?.createFile("application/zip", "respaldo_factura2024.zip")
+                val backupFile = documentFile?.createFile("application/zip", backupFileName)
                 backupFile?.uri?.let { backupUri ->
                     contentResolver.openOutputStream(backupUri)?.use { outputStream ->
-                        FileInputStream(zipFile).use { inputStream ->
+                        FileInputStream(backupZipFile).use { inputStream ->
                             inputStream.copyTo(outputStream)
                         }
                     }
-                    Log.d("BackupActivity", "Archivos comprimidos con éxito: ${zipFile.absolutePath}")
+                    Log.d("BackupActivity", "Archivos comprimidos con éxito: ${backupZipFile.absolutePath}")
                     Toast.makeText(this, "Archivos comprimidos con éxito en la ubicación seleccionada", Toast.LENGTH_LONG).show()
                 }
             } else {
@@ -227,6 +243,8 @@ class BackupActivity : AppCompatActivity() {
             Toast.makeText(this, "Error al realizar el respaldo", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 
     @Throws(IOException::class)
     private fun zipDirectory(srcDir: File, zipFile: File) {
