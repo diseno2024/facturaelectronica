@@ -141,9 +141,8 @@ class EmitirCFActivity : AppCompatActivity() {
         }
         val crearjson: Button = findViewById(R.id.CrearJson)
         crearjson.setOnClickListener {
-            val intent = Intent(this, ConfHacienda::class.java)
-            startActivity(intent)
-            finish()
+            json()
+            borrararticulos()
         }
         // Recupera los datos pasados desde la otra actividad
         val datosGuardados = intent.getStringExtra("Cliente")
@@ -236,6 +235,9 @@ class EmitirCFActivity : AppCompatActivity() {
         } else {
             // Si no hay artículos, llama a super.onBackPressed()
             super.onBackPressed()
+            val intent = Intent(this, MenuActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
     private fun verificar(){
@@ -266,6 +268,10 @@ class EmitirCFActivity : AppCompatActivity() {
                 dialogoCliente.dismiss()
             }
             dialogoCliente.show()
+        }else{
+            val intent = Intent(this, MenuActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
@@ -800,6 +806,7 @@ class EmitirCFActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
     private fun json(){
+
         val identificacion = Identificacion(
             tipoContingencia = null,
             motivoContin = null,
