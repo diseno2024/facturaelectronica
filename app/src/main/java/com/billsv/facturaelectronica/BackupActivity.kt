@@ -4,16 +4,17 @@ import android.Manifest
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.documentfile.provider.DocumentFile
 import com.couchbase.lite.Database
 import java.io.*
 import java.util.*
@@ -26,6 +27,9 @@ class BackupActivity : AppCompatActivity() {
     private lateinit var editTextSelectedTime: EditText
     private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
     private val CREATE_FILE_REQUEST_CODE = 1
+    private val preferenceFileKey = "com.billsv.facturaelectronica.PREFERENCE_FILE_KEY"
+    private val backupUriKey = "backupUri"
+
     private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 33) {
         listOf(
             Manifest.permission.READ_MEDIA_AUDIO,
@@ -138,16 +142,24 @@ class BackupActivity : AppCompatActivity() {
                 WRITE_EXTERNAL_STORAGE_REQUEST_CODE
             )
         } else {
-            openFilePicker()
+            performBackup()
         }
     }
 
-    private fun openFilePicker() {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/zip"
-            putExtra(Intent.EXTRA_TITLE, "respaldo_factura2024.zip")
+    private fun performBackup() {
+        val sharedPreferences = getSharedPreferences(preferenceFileKey, MODE_PRIVATE)
+        val backupUriString = sharedPreferences.getString(backupUriKey, null)
+
+        if (backupUriString != null) {
+            val backupUri = Uri.parse(backupUriString)
+            backupDatabase(backupUri)
+        } else {
+            openDirectoryPicker()
         }
+    }
+
+    private fun openDirectoryPicker() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
         startActivityForResult(intent, CREATE_FILE_REQUEST_CODE)
     }
 
@@ -159,7 +171,7 @@ class BackupActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                openFilePicker()
+                performBackup()
             } else {
                 Toast.makeText(
                     this,
@@ -174,63 +186,45 @@ class BackupActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CREATE_FILE_REQUEST_CODE && resultCode == RESULT_OK) {
             data?.data?.let { uri ->
-                val backupDirectory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "respaldo_factura2024")
-                backupDatabase(backupDirectory, uri)
+                val sharedPreferences = getSharedPreferences(preferenceFileKey, MODE_PRIVATE)
+                with(sharedPreferences.edit()) {
+                    putString(backupUriKey, uri.toString())
+                    apply()
+                }
+                backupDatabase(uri)
             }
         }
     }
 
-    private fun backupDatabase(backupDir: File, uri: Uri) {
+    private fun backupDatabase(uri: Uri) {
         val database = Database("my_database")
-
         val dbDir = File(database.path)
-        val backupDirDb = File(backupDir, dbDir.name)
+        val zipFile = File(cacheDir, "respaldo_factura2024.zip")
 
         try {
-            if (backupDirDb.exists()) {
-                backupDirDb.deleteRecursively()
-            }
-            copyDirectory(dbDir, backupDirDb)
-            Log.d("BackupActivity", "Respaldo realizado con éxito: ${backupDirDb.absolutePath}")
-            Toast.makeText(this, "Respaldo realizado con éxito", Toast.LENGTH_SHORT).show()
+            zipDirectory(dbDir, zipFile)
 
-            val zipFile = File(backupDir, "${backupDirDb.name}.zip")
-            zipDirectory(backupDirDb, zipFile)
-
-            contentResolver.openOutputStream(uri)?.use { outputStream ->
-                FileInputStream(zipFile).use { inputStream ->
-                    inputStream.copyTo(outputStream)
+            // Ensure the URI is a directory URI
+            if (DocumentFile.fromTreeUri(this, uri)?.isDirectory == true) {
+                val documentFile = DocumentFile.fromTreeUri(this, uri)
+                val backupFile = documentFile?.createFile("application/zip", "respaldo_factura2024.zip")
+                backupFile?.uri?.let { backupUri ->
+                    contentResolver.openOutputStream(backupUri)?.use { outputStream ->
+                        FileInputStream(zipFile).use { inputStream ->
+                            inputStream.copyTo(outputStream)
+                        }
+                    }
+                    Log.d("BackupActivity", "Archivos comprimidos con éxito: ${zipFile.absolutePath}")
+                    Toast.makeText(this, "Archivos comprimidos con éxito en la ubicación seleccionada", Toast.LENGTH_LONG).show()
                 }
+            } else {
+                Log.e("BackupActivity", "La URI seleccionada no es un directorio")
+                Toast.makeText(this, "Error: la URI seleccionada no es un directorio", Toast.LENGTH_SHORT).show()
             }
-
-            Log.d("BackupActivity", "Archivos comprimidos con éxito: ${zipFile.absolutePath}")
-            Toast.makeText(this, "Archivos comprimidos con éxito en: ${getFriendlyPath(zipFile.absolutePath)}", Toast.LENGTH_LONG).show()
         } catch (e: IOException) {
             e.printStackTrace()
             Log.e("BackupActivity", "Error al realizar el respaldo: ${e.message}")
             Toast.makeText(this, "Error al realizar el respaldo", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    @Throws(IOException::class)
-    private fun copyDirectory(srcDir: File, destDir: File) {
-        if (srcDir.isDirectory) {
-            if (!destDir.exists()) {
-                destDir.mkdirs()
-            }
-
-            val children = srcDir.list()
-            if (children != null) {
-                for (i in children.indices) {
-                    copyDirectory(File(srcDir, children[i]), File(destDir, children[i]))
-                }
-            }
-        } else {
-            FileInputStream(srcDir).use { input ->
-                FileOutputStream(destDir).use { output ->
-                    input.copyTo(output)
-                }
-            }
         }
     }
 
@@ -258,9 +252,5 @@ class BackupActivity : AppCompatActivity() {
                 zos.closeEntry()
             }
         }
-    }
-
-    private fun getFriendlyPath(absolutePath: String): String {
-        return absolutePath.replace("/storage/emulated/0", "Internal Storage")
     }
 }
