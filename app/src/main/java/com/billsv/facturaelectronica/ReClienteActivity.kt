@@ -32,8 +32,8 @@ import com.couchbase.lite.SelectResult
 class ReClienteActivity : AppCompatActivity() {
     private lateinit var spinnerDep: Spinner
     private lateinit var spinnerMun: Spinner
-    private lateinit var departamento: Spinner
-    private lateinit var municipio: Spinner
+    //private lateinit var departamento: Spinner
+    //private lateinit var municipio: Spinner
     private lateinit var tipoC:Spinner
     private lateinit var nombre: EditText
     private lateinit var nit: EditText
@@ -368,12 +368,10 @@ class ReClienteActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val datos = intent.getStringExtra("datos")
-        if(datos!=null){edicion(datos)}
+
         // Inicializa el Spinner de departamento
         spinnerDep = findViewById(R.id.departamento)
         val departamentos = departamentosMap.keys.toTypedArray()
-
 
         // Configura el adaptador para el Spinner de departamento
         val adapterDep = ArrayAdapter(this, R.layout.spinner_personalizado, departamentos)
@@ -384,12 +382,10 @@ class ReClienteActivity : AppCompatActivity() {
         spinnerMun = findViewById(R.id.municipio)
         val initialMunicipios = arrayOf("Seleccione un municipio")
 
-
         // Configura el adaptador para el Spinner de municipio
         val adapterMun = ArrayAdapter(this, R.layout.spinner_personalizado, initialMunicipios)
         adapterMun.setDropDownViewResource(R.layout.spinner_dropdown_per)
         spinnerMun.adapter = adapterMun
-
 
         // listener para el Spinner de departamento
         spinnerDep.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -406,21 +402,79 @@ class ReClienteActivity : AppCompatActivity() {
             }
         }
 
-
         // Inicializar vistas
         nombre = findViewById(R.id.nombre)
         nit = findViewById(R.id.nit)
         email = findViewById(R.id.correo)
+        spinnerDep = findViewById(R.id.departamento)
+        spinnerMun = findViewById(R.id.municipio)
         direccion = findViewById(R.id.complemento)
-        departamento = findViewById(R.id.departamento)
-        municipio = findViewById(R.id.municipio)
         telefono = findViewById(R.id.telefono)
         agregarButton = findViewById(R.id.btnAgregar)
         cancelarButton = findViewById(R.id.btnCancelar)
-        tipoC =findViewById(R.id.tipoCliente)
-        dui=findViewById(R.id.dui)
-        nrc=findViewById(R.id.nrc)
-        actividadEconomica=findViewById(R.id.actividadEconomica)
+        tipoC = findViewById(R.id.tipoCliente)
+        dui = findViewById(R.id.dui)
+        nrc = findViewById(R.id.nrc)
+        actividadEconomica = findViewById(R.id.actividadEconomica)
+
+        // spinner tipoC
+        val opcionesT = arrayOf("Contribuyente", "Consumidor Final")
+        val adapterT = ArrayAdapter(this, R.layout.spinner_personalizado, opcionesT)
+        adapterT.setDropDownViewResource(R.layout.spinner_dropdown_per)
+        tipoC.adapter = adapterT
+
+        val datos = intent.getStringExtra("datos")
+        if (datos != null) {
+            edicion(datos)
+            datos.let {
+                val dato = it.split("\n")
+                val spinnerDepd = dato[4]
+                val spinnerMund = dato[5]
+                val tipoCd = dato[7]
+
+                val pTipoC = opcionesT.indexOf(tipoCd)
+                tipoC.setSelection(pTipoC)
+
+                val departamento = departamentosMap.entries.find { it.value == spinnerDepd }?.key
+                if (departamento != null) {
+                    val index = departamentos.indexOf(departamento)
+                    if (index != -1) {
+                        spinnerDep.setSelection(index)
+                    } else {
+                        Log.d("ReClienteActivity", "Departamento no encontrado en el Spinner: $departamento")
+                    }
+                } else {
+                    Log.e("ReClienteActivity", "Código de departamento no válido: $spinnerDepd")
+                }
+
+                spinnerDep.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                        val selectedDept = parent.getItemAtPosition(position).toString()
+                        val municipios = municipiosMap[selectedDept]?.map { it.first } ?: listOf("Seleccione un municipio")
+                        val adapterMun = ArrayAdapter(this@ReClienteActivity, R.layout.spinner_personalizado, municipios)
+                        adapterMun.setDropDownViewResource(R.layout.spinner_dropdown_per)
+                        spinnerMun.adapter = adapterMun
+
+                        // Establecer la selección del municipio una vez que el Spinner de municipios está actualizado
+                        val municipio = municipiosMap[selectedDept]?.find { it.second == spinnerMund }?.first
+                        if (municipio != null) {
+                            val index = municipios.indexOf(municipio)
+                            if (index != -1) {
+                                spinnerMun.setSelection(index)
+                            } else {
+                                Log.e("ReClienteActivity", "Municipio no encontrado en el Spinner: $municipio")
+                            }
+                        } else {
+                            Log.e("ReClienteActivity", "Código de municipio no válido: $spinnerMund")
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+                        // No hace nada
+                    }
+                }
+            }
+        }
 
         // Agregar TextWatcher para el campo de teléfono
         telefono.addTextChangedListener(object : TextWatcher {
@@ -532,11 +586,7 @@ class ReClienteActivity : AppCompatActivity() {
                 return formatted.toString()
             }
         })
-        //spinner tipoC
-        val opcionesT = arrayOf("Contribuyente", "Consumidor Final")
-        val adapterT = ArrayAdapter(this, R.layout.spinner_personalizado, opcionesT)
-        adapterT.setDropDownViewResource(R.layout.spinner_dropdown_per)
-        tipoC.adapter = adapterT
+
 
         val Check: CheckBox = findViewById(R.id.checkGuardar)
         //val isCheck = false
@@ -687,6 +737,7 @@ class ReClienteActivity : AppCompatActivity() {
             nit.setText(nitd)
             nrc.setText(nrcd)
             actividadEconomica.setText(actividadEconomicad)
+            
 
         }
         guardar.setOnClickListener {
@@ -705,8 +756,8 @@ class ReClienteActivity : AppCompatActivity() {
         val nitText = nit.text.toString()
         val emailText = email.text.toString()
         val direccionText = direccion.text.toString()
-        val departamentoText = departamento.selectedItem.toString()
-        val municipioText = municipio.selectedItem.toString()
+        val departamentoText = spinnerDep.selectedItem.toString()
+        val municipioText = spinnerMun.selectedItem.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
         val tipoSeleccionado = tipoC.selectedItem.toString()
         val departamentoCodigo = departamentosMap[departamentoText]
@@ -849,8 +900,8 @@ class ReClienteActivity : AppCompatActivity() {
         val nitText = nit.text.toString()
         val emailText = email.text.toString()
         val direccionText = direccion.text.toString()
-        val departamentoText = departamento.selectedItem.toString()
-        val municipioText = municipio.selectedItem.toString()
+        val departamentoText = spinnerDep.selectedItem.toString()
+        val municipioText = spinnerMun.selectedItem.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
         val tipoSeleccionado = tipoC.selectedItem.toString()
         val departamentoCodigo = departamentosMap[departamentoText]

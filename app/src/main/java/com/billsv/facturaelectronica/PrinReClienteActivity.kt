@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
@@ -18,22 +19,31 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.couchbase.lite.CouchbaseLiteException
+import com.couchbase.lite.DataSource
 import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.Database
+import com.couchbase.lite.Expression
+import com.couchbase.lite.Meta
+import com.couchbase.lite.QueryBuilder
+import com.couchbase.lite.SelectResult
 
 class PrinReClienteActivity : AppCompatActivity() {
     private lateinit var spinnerDep: Spinner
     private lateinit var spinnerMun: Spinner
+    //private lateinit var departamento: Spinner
+    //private lateinit var municipio: Spinner
+    private lateinit var tipoC:Spinner
     private lateinit var nombre: EditText
     private lateinit var nit: EditText
     private lateinit var email: EditText
     private lateinit var direccion: EditText
     private lateinit var telefono: EditText
-    private lateinit var departamento: Spinner
-    private lateinit var municipio: Spinner
+    private lateinit var dui: EditText
+    private lateinit var nrc: EditText
+    private lateinit var actividadEconomica: EditText
     private lateinit var agregarButton: Button
+    private lateinit var cancelarButton: Button
     private lateinit var database: Database
-    private lateinit var regresar: ImageButton
 
     private val departamentosMap = mapOf(
         "Ahuachapán" to "01",
@@ -356,7 +366,8 @@ class PrinReClienteActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        val datos = intent.getStringExtra("datos")
+        if(datos!=null){edicion(datos)}
         // Inicializa el Spinner de departamento
         spinnerDep = findViewById(R.id.departamento)
         val departamentos = departamentosMap.keys.toTypedArray()
@@ -394,18 +405,20 @@ class PrinReClienteActivity : AppCompatActivity() {
         }
 
 
-
-
         // Inicializar vistas
         nombre = findViewById(R.id.nombre)
         nit = findViewById(R.id.nit)
-        email = findViewById(R.id.email)
+        email = findViewById(R.id.correo)
+        spinnerDep=findViewById(R.id.departamento)
+        spinnerMun=findViewById(R.id.municipio)
         direccion = findViewById(R.id.complemento)
-        departamento = findViewById(R.id.departamento)
-        municipio = findViewById(R.id.municipio)
         telefono = findViewById(R.id.telefono)
         agregarButton = findViewById(R.id.btnAgregar)
-        regresar = findViewById(R.id.atras)
+        cancelarButton = findViewById(R.id.btnCancelar)
+        tipoC =findViewById(R.id.tipoCliente)
+        dui=findViewById(R.id.dui)
+        nrc=findViewById(R.id.nrc)
+        actividadEconomica=findViewById(R.id.actividadEconomica)
 
         // Agregar TextWatcher para el campo de teléfono
         telefono.addTextChangedListener(object : TextWatcher {
@@ -480,10 +493,57 @@ class PrinReClienteActivity : AppCompatActivity() {
                 return formatted.toString()
             }
         })
+        //mascara del dui
+        dui.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            private val mask = "########-#" // La máscara del NIT
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating) return
+
+                isUpdating = true
+                val formatted = formatDui(s.toString())
+                dui.setText(formatted)
+                dui.setSelection(formatted.length)
+                isUpdating = false
+            }
+
+            private fun formatDui(dui: String): String {
+                // Eliminar todos los caracteres no numéricos del NIT
+                val digits = dui.replace(Regex("\\D"), "")
+                val formatted = StringBuilder()
+
+                var i = 0
+                for (m in mask.toCharArray()) {
+                    if (m != '#') {
+                        formatted.append(m)
+                        continue
+                    }
+                    if (i >= digits.length) break
+                    formatted.append(digits[i])
+                    i++
+                }
+                return formatted.toString()
+            }
+        })
+        //spinner tipoC
+        val opcionesT = arrayOf("Contribuyente", "Consumidor Final")
+        val adapterT = ArrayAdapter(this, R.layout.spinner_personalizado, opcionesT)
+        adapterT.setDropDownViewResource(R.layout.spinner_dropdown_per)
+        tipoC.adapter = adapterT
 
 
-        // Configurar evento de clic para el botón "Agregar"
-        agregarButton.setOnClickListener {
+        cancelarButton.setOnClickListener {
+            // Iniciar otra actividad
+            val intent = Intent(this, ImportarClientes::class.java)
+            intent.putExtra("letra", "s")
+            startActivity(intent)
+        }
+        agregarButton.setOnClickListener{
             if (validarEntradas()) {
                 guardarInformacion()
                 // Limpiar los EditText
@@ -499,35 +559,182 @@ class PrinReClienteActivity : AppCompatActivity() {
             }
         }
 
-        regresar.setOnClickListener {
-            // Iniciar otra actividad
+        // Inicializar la base de datos
+        val app = application as MyApp
+        database = app.database
+
+    }
+
+    private fun edicion(datos: String) {
+        nombre = findViewById(R.id.nombre)
+        dui = findViewById(R.id.dui)
+        spinnerDep = findViewById(R.id.departamento)
+        spinnerMun = findViewById(R.id.municipio)
+        direccion = findViewById(R.id.complemento)
+        email = findViewById(R.id.correo)
+        telefono = findViewById(R.id.telefono)
+        tipoC = findViewById(R.id.tipoCliente)
+        nit = findViewById(R.id.nit)
+        nrc = findViewById(R.id.nrc)
+        actividadEconomica = findViewById(R.id.actividadEconomica)
+
+        val Check: CheckBox = findViewById(R.id.checkGuardar)
+        Check.visibility = View.GONE
+
+        agregarButton = findViewById(R.id.btnAgregar)
+        agregarButton.visibility = View.GONE
+
+        cancelarButton = findViewById(R.id.btnCancelar)
+        cancelarButton.visibility = View.GONE
+
+        val guardar: Button = findViewById(R.id.btnGuardar)
+        guardar.visibility = View.VISIBLE
+
+        datos.let{
+            val dato = it.split("\n")
+            val nombred = dato[0]
+            val duid = dato[8]
+            val spinnerDepd = dato[4]
+            val spinnerMund = dato[5]
+            val direcciond = dato[3]
+            val emaild = dato[2]
+            val telefonod = dato[6]
+            val tipoCd = dato[7]
+            val nitd = dato[1]
+            val nrcd = dato[9]
+            val actividadEconomicad = dato[10]
+
+            nombre.setText(nombred)
+            dui.setText(duid)
+            //spinnerDep.setSelection()
+            //spinnerMun.setSelection()
+            direccion.setText(direcciond)
+            email.setText(emaild)
+            telefono.setText(telefonod)
+            //tipoC.setSelection()
+            nit.setText(nitd)
+            nrc.setText(nrcd)
+            actividadEconomica.setText(actividadEconomicad)
+
+
+        }
+        guardar.setOnClickListener {
+            actualizardatos(datos)
             val intent = Intent(this, ImportarClientes::class.java)
             intent.putExtra("letra", "s")
             startActivity(intent)
         }
+    }
 
-        // Inicializar la base de datos
+    private fun actualizardatos(datos: String) {
         val app = application as MyApp
-        database = app.database
+        val database = app.database
+        val dato = datos.split("\n")
+        val nombreText = nombre.text.toString()
+        val nitText = nit.text.toString()
+        val emailText = email.text.toString()
+        val direccionText = direccion.text.toString()
+        val departamentoText = spinnerDep.selectedItem.toString()
+        val municipioText = spinnerMun.selectedItem.toString()
+        val telefonoText = telefono.text.toString().replace("-", "")
+        val tipoSeleccionado = tipoC.selectedItem.toString()
+        val departamentoCodigo = departamentosMap[departamentoText]
+        val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
+        val duiText=dui.text.toString().replace("-", "")
+        val nrcText=nrc.text.toString()
+        val actividadEcoText=actividadEconomica.text.toString()
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("dui").equalTo(Expression.string(dato[8])))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Itera sobre los resultados y actualiza cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)?.toMutable()
+                        document?.let { doc ->
+                            // Actualizar los campos del documento
+                            doc.setString("nombre", nombreText)
+                            doc.setString("nit", nitText)
+                            doc.setString("email", emailText)
+                            doc.setString("direccion", direccionText)
+                            doc.setString("departamento", departamentoCodigo)
+                            doc.setString("municipio", municipioCodigo)
+                            doc.setString("telefono", telefonoText)
+                            doc.setString("tipoCliente",tipoSeleccionado)
+                            doc.setString("dui",duiText)
+                            doc.setString("nrc",nrcText)
+                            doc.setString("actividadEconomica",actividadEcoText)
+                            doc.setString("tipo", "cliente")
+
+                            // Guardar el documento actualizado en la base de datos
+                            database.save(doc)
+                        }
+                    }
+                }
+                Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
+                showToast("Datos actualizados correctamente")
+            } else {
+                Log.d("Prin_Re_Cliente", "No existe el documento con el dui especificado")
+                showToast("No se encontró el documento para actualizar")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+            showToast("Error al actualizar el documento")
+        }
     }
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, ImportarClientes ::class.java)
-        intent.putExtra("letra", "s")
-        startActivity(intent)
-        finish()
-    }
+
 
     private fun validarEntradas(): Boolean {
+        val app = application as MyApp///////
+        val database = app.database///////
         val nombreText = nombre.text.toString()
         val nitText = nit.text.toString().replace("-", "")
         val emailText = email.text.toString()
         val direccionText = direccion.text.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
+        val duiText=dui.text.toString().replace("-","")
+        val nrcText= nrc.text.toString()
+        val actividadEcoText=actividadEconomica.text.toString()
+        val tipoCText=tipoC.selectedItem.toString()
 
+        //////
+
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("dui").equalTo(Expression.string(duiText)))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
+                showToast("Ya existe un cliente con ese dui")
+                return false
+            } else {
+                Log.d("Prin_Re_Cliente", "PASS")
+                return true
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+            showToast("Error al buscar el dui")
+        }
+
+        //////
         // Verifica que todos los campos estén llenos
-        if (nombreText.isEmpty() || nitText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty()) {
-            Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+        if (nombreText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() ) {
+            Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        // Verifica que el dui sea un número válido de 8 dígitos
+        if (!duiText.matches(Regex("\\d{9}"))) {
+            Toast.makeText(this, "DUI debe ser un número válido de 9 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -536,18 +743,32 @@ class PrinReClienteActivity : AppCompatActivity() {
             Toast.makeText(this, "Correo electrónico no válido", Toast.LENGTH_SHORT).show()
             return false
         }
-
-        // Verifica que el NIT sea un número válido
-        if (!nitText.matches(Regex("\\d{14}"))) {
-            Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
         // Verifica que el teléfono sea un número válido de 8 dígitos
         if (!telefonoText.matches(Regex("\\d{8}"))) {
             Toast.makeText(this, "Teléfono debe ser un número válido de 8 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
+        if (tipoCText=="Contribuyente"){
+            // Verifica que todos los campos estén llenos
+            if (nrcText.isEmpty() || nitText.isEmpty()  ||   actividadEcoText.isEmpty()) {
+                Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            // Verifica que el NIT sea un número válido
+            if (!nitText.matches(Regex("\\d{14}"))) {
+                Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
+                return false
+            }
+            // Verifica que el nrc sea un número válido de 8 dígitos
+            if (!nrcText.matches(Regex("\\d{7}"))) {
+                Toast.makeText(this, "NRC debe ser un número válido de 7 dígitos", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            return true
+        }
+
 
         return true
     }
@@ -557,13 +778,15 @@ class PrinReClienteActivity : AppCompatActivity() {
         val nitText = nit.text.toString()
         val emailText = email.text.toString()
         val direccionText = direccion.text.toString()
-        val departamentoText = departamento.selectedItem.toString()
-        val municipioText = municipio.selectedItem.toString()
+        val departamentoText = spinnerDep.selectedItem.toString()
+        val municipioText = spinnerMun.selectedItem.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
-
+        val tipoSeleccionado = tipoC.selectedItem.toString()
         val departamentoCodigo = departamentosMap[departamentoText]
-        val municipioCodigo =
-            municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
+        val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
+        val duiText=dui.text.toString().replace("-", "")
+        val nrcText=nrc.text.toString()
+        val actividadEcoText=actividadEconomica.text.toString()
         // Crear un documento mutable para guardar en la base de datos
         if (departamentoCodigo != null && municipioCodigo != null) {
             // Crear un documento mutable para guardar en la base de datos
@@ -575,6 +798,10 @@ class PrinReClienteActivity : AppCompatActivity() {
                 .setString("departamento", departamentoCodigo)
                 .setString("municipio", municipioCodigo)
                 .setString("telefono", telefonoText)
+                .setString("tipoCliente",tipoSeleccionado)
+                .setString("dui",duiText)
+                .setString("nrc",nrcText)
+                .setString("actividadEconomica",actividadEcoText)
                 .setString("tipo", "cliente")
 
             try {
@@ -597,5 +824,15 @@ class PrinReClienteActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+    override fun onBackPressed() {
+        super.onBackPressed() // Llama al método onBackPressed() de la clase base
+        val intent = Intent(this, ImportarClientes::class.java)
+        intent.putExtra("letra", "s")
+        startActivity(intent)
+        finish()
     }
 }

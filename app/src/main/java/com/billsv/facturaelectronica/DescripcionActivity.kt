@@ -96,6 +96,9 @@ class DescripcionActivity : AppCompatActivity() {
                 Precio.text.clear()
                 //cierra el dialogo
                 Item.dismiss()
+                Tipo.setSelection(0)
+                TipoV.setSelection(0)
+                Unidad.setSelection(0)
             }
 
             btnRegresar.setOnClickListener {
