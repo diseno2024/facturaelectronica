@@ -36,9 +36,11 @@ import com.couchbase.lite.Expression
 import com.couchbase.lite.Meta
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
+import com.google.gson.GsonBuilder
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
+import java.io.FileWriter
 import java.io.InputStream
 import java.lang.Exception
 
@@ -136,6 +138,12 @@ class EmitirCFActivity : AppCompatActivity() {
             /*val intent = Intent(this, PDF_CFActivity::class.java)
             startActivity(intent)
             finish()*/
+        }
+        val crearjson: Button = findViewById(R.id.CrearJson)
+        crearjson.setOnClickListener {
+            val intent = Intent(this, ConfHacienda::class.java)
+            startActivity(intent)
+            finish()
         }
         // Recupera los datos pasados desde la otra actividad
         val datosGuardados = intent.getStringExtra("Cliente")
@@ -790,5 +798,171 @@ class EmitirCFActivity : AppCompatActivity() {
     }
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+    private fun json(){
+        val identificacion = Identificacion(
+            tipoContingencia = null,
+            motivoContin = null,
+            version = 1,
+            ambiente = "01",
+            tipoDte = "01",
+            numeroControl = "DTE-01-M001P001-000000000415593",
+            codigoGeneracion = "E5EF2A03-20E9-492E-A9E1-9551A26EE0D4",
+            tipoModelo = 1,
+            tipoOperacion = 1,
+            fecEmi = "2024-04-05",
+            horEmi = "17:45:20",
+            tipoMoneda = "USD"
+        )
+
+        val direccionEmisor = Direccion(
+            departamento = "05",
+            municipio = "02",
+            complemento = "Calle Chaparrastique lote 2A, Zona Industrial Santa Elena"
+        )
+
+        val emisor = Emisor(
+            codEstableMH = null,
+            codEstable = "M001",
+            codPuntoVentaMH = null,
+            codPuntoVenta = "P001",
+            nit = "06141812981018",
+            nrc = "1167953",
+            nombre = "Digicel SA de CV",
+            codActividad = "61101",
+            descActividad = "Servicio de telefonía",
+            nombreComercial = "Digicel",
+            tipoEstablecimiento = "01",
+            direccion = direccionEmisor,
+            telefono = "22855555",
+            correo = "facturaciondigicelsv@digicel.com.sv"
+        )
+
+        val direccionReceptor = Direccion(
+            departamento = "02",
+            municipio = "10",
+            complemento = "COL RIO ZARCO ETAPA 1 FINAL CL PPL AV BARCELONA GRUPO No 16 CASA No 16 , SANTA ANA"
+        )
+
+        val receptor = Receptor(
+            tipoDocumento = "36",
+            numDocumento = "02100904801030",
+            nrc = null,
+            nombre = "ERNESTO ALEXANDER CALDERON PERAZA",
+            codActividad = null,
+            descActividad = null,
+            telefono = "50371723699",
+            direccion = direccionReceptor,
+            correo = "calderonperaza@gmail.com"
+        )
+
+        val cuerpoDocumento = listOf(
+            CuerpoDocumento(
+                ivaItem = 1.6107,
+                psv = 0.000,
+                noGravado = 0.0,
+                numItem = 1,
+                tipoItem = 2,
+                numeroDocumento = null,
+                cantidad = 1.0,
+                codigo = "Srvc",
+                codTributo = null,
+                uniMedida = 99,
+                descripcion = "Cargo Básico de Plan",
+                precioUni = 14.0007,
+                montoDescu = 0.000,
+                ventaNoSuj = 0.0,
+                ventaExenta = 0.0,
+                ventaGravada = 14.00070,
+                tributos = null
+            )
+        )
+
+        val pagos = listOf(
+            Pago(
+                codigo = "13",
+                montoPago = 14.0,
+                referencia = "",
+                plazo = "01",
+                periodo = 30
+            )
+        )
+
+        val resumen = Resumen(
+            totalIva = 1.61,
+            porcentajeDescuento = 0.0,
+            ivaRete1 = 0.0,
+            reteRenta = 0.0,
+            totalNoGravado = 0.0,
+            totalPagar = 14.00,
+            saldoFavor = 0.0,
+            condicionOperacion = 2,
+            pagos = pagos,
+            numPagoElectronico = "02210014000090391000903915",
+            totalNoSuj = 0.0,
+            totalExenta = 0.0,
+            totalGravada = 14.00,
+            subTotalVentas = 14.00,
+            descuNoSuj = 0.0,
+            descuExenta = 0.0,
+            descuGravada = 0.00,
+            totalDescu = 0.00,
+            tributos = null,
+            subTotal = 14.00,
+            montoTotalOperacion = 14.00,
+            totalLetras = "CATORCE 00/100 USD"
+        )
+
+        val extension = Extension(
+            placaVehiculo = null,
+            docuEntrega = null,
+            nombEntrega = null,
+            docuRecibe = null,
+            nombRecibe = null,
+            observaciones = null
+        )
+
+        val documento = Documento(
+            identificacion = identificacion,
+            documentoRelacionado = null,
+            emisor = emisor,
+            receptor = receptor,
+            otrosDocumentos = null,
+            ventaTercero = null,
+            cuerpoDocumento = cuerpoDocumento,
+            resumen = resumen,
+            extension = extension,
+            apendice = null,
+            selloRecibido = "",
+            firmaElectronica = ""
+        )
+
+        // Convertir los datos a JSON usando Gson
+        val gsonBuilder = GsonBuilder().setPrettyPrinting()
+
+// Conservar los campos con valor null
+        gsonBuilder.serializeNulls()
+
+// Crear el objeto Gson
+        val gson = gsonBuilder.create()
+
+// Convertir los datos a JSON formateado y legible
+        val jsonData = gson.toJson(documento)
+        saveJsonToExternalStorage(jsonData)
+    }
+    private fun saveJsonToExternalStorage(jsonData: String) {
+        val fileName = "documento.json"
+        val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val file = File(directory, fileName)
+
+        try {
+            FileWriter(file).use {
+                it.write(jsonData)
+            }
+            Toast.makeText(this, "Archivo JSON guardado en: ${file.absolutePath}", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Error al guardar el archivo JSON", Toast.LENGTH_SHORT).show()
+        }
     }
 }
