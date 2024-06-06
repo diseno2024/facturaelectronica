@@ -603,7 +603,7 @@ class PrinReClienteActivity : AppCompatActivity() {
                 telefono.text.clear()
 
                 // Iniciar otra actividad
-                val intent = Intent(this, MenuActivity::class.java)
+                val intent = Intent(this, ImportarClientes::class.java)
                 startActivity(intent)
             }
         }
@@ -666,11 +666,71 @@ class PrinReClienteActivity : AppCompatActivity() {
 
         }
         guardar.setOnClickListener {
-            actualizardatos(datos)
-            val intent = Intent(this, ImportarClientes::class.java)
-            intent.putExtra("letra", "s")
-            startActivity(intent)
+            if(validaractu()) {
+                actualizardatos(datos)
+                val intent = Intent(this, ImportarClientes::class.java)
+                intent.putExtra("letra", "s")
+                startActivity(intent)
+            }
         }
+    }
+
+    private fun validaractu(): Boolean {
+        val nombreText = nombre.text.toString()
+        val nitText = nit.text.toString().replace("-", "")
+        val emailText = email.text.toString()
+        val direccionText = direccion.text.toString()
+        val telefonoText = telefono.text.toString().replace("-", "")
+        val duiText=dui.text.toString().replace("-","")
+        val nrcText= nrc.text.toString()
+        val actividadEcoText=actividadEconomica.text.toString()
+        val tipoCText=tipoC.selectedItem.toString()
+
+        // Verifica que todos los campos estén llenos
+        if (nombreText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() ) {
+            Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        // Verifica que el dui sea un número válido de 8 dígitos
+        if (!duiText.matches(Regex("\\d{9}"))) {
+            Toast.makeText(this, "DUI debe ser un número válido de 9 dígitos", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Verifica que el correo electrónico tenga un formato válido
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
+            Toast.makeText(this, "Correo electrónico no válido", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        // Verifica que el teléfono sea un número válido de 8 dígitos
+        if (!telefonoText.matches(Regex("\\d{8}"))) {
+            Toast.makeText(this, "Teléfono debe ser un número válido de 8 dígitos", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (tipoCText=="Contribuyente"){
+            // Verifica que todos los campos estén llenos
+            if (nrcText.isEmpty() || nitText.isEmpty()  ||   actividadEcoText.isEmpty()) {
+                Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            // Verifica que el NIT sea un número válido
+            if (!nitText.matches(Regex("\\d{14}"))) {
+                Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
+                return false
+            }
+            // Verifica que el nrc sea un número válido de 8 dígitos
+            if (!nrcText.matches(Regex("\\d{7}"))) {
+                Toast.makeText(this, "NRC debe ser un número válido de 7 dígitos", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            return true
+        }
+
+
+        return true
+
     }
 
     private fun actualizardatos(datos: String) {
