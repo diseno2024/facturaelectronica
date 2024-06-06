@@ -139,7 +139,7 @@ class ImportarClientes : AppCompatActivity() {
     }
 
     private fun editardatos(data: String) {
-        val intent = Intent(this, ReClienteActivity::class.java)
+        val intent = Intent(this, PrinReClienteActivity::class.java)
         intent.putExtra("datos",data)
         startActivity(intent)
     }
