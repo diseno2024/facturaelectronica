@@ -11,6 +11,7 @@ import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -29,8 +30,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
+import com.couchbase.lite.Meta
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
 import org.json.JSONObject
@@ -54,45 +57,59 @@ class EmitirCFActivity : AppCompatActivity() {
         tableLayout = findViewById(R.id.Tabla)
         var total = 0.0
         val dataList = obtenerDatosGuardados()
-        dataList.forEach { data ->
-            val datos = data.split("\n")
-            val cantidad = datos[1]
-            val producto = datos[3]
-            val precio = datos[5]
+        if (dataList.isNotEmpty()) {
+            dataList.forEach { data ->
+                val datos = data.split("\n")
+                val cantidad = datos[1]
+                val producto = datos[3]
+                val precio = datos[5]
 
-            total += ((cantidad.toIntOrNull() ?:0) * (precio.toDoubleOrNull()?: 0.0))
-            val tableRow = TableRow(this)
+                total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
+                val tableRow = TableRow(this)
 
-            val cantidadTextView = TextView(this).apply {
-                text = cantidad
-                layoutParams = TableRow.LayoutParams(40, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                    setMargins(8, 8, 8, 8)
-                    gravity = Gravity.CENTER
+                val cantidadTextView = TextView(this).apply {
+                    text = cantidad
+                    layoutParams = TableRow.LayoutParams(40, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                        setMargins(8, 8, 8, 8)
+                        gravity = Gravity.CENTER
+                    }
+                    textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                 }
-                textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-            }
 
-            val productoTextView = TextView(this).apply {
-                text = producto
+                val productoTextView = TextView(this).apply {
+                    text = producto
+                    layoutParams = TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply {
+                        setMargins(8, 8, 8, 8)
+                    }
+                    textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                }
+
+                val precioTextView = TextView(this).apply {
+                    text = precio
+                    layoutParams = TableRow.LayoutParams(70, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                        setMargins(8, 8, 8, 8)
+                    }
+                    textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                }
+
+                tableRow.addView(cantidadTextView)
+                tableRow.addView(productoTextView)
+                tableRow.addView(precioTextView)
+
+                tableLayout.addView(tableRow)
+            }
+        } else {
+            // Si no hay datos, puedes agregar una fila indicando que no hay datos disponibles
+            val emptyRow = TableRow(this)
+            val emptyTextView = TextView(this).apply {
+                text = "no hay articulos"
                 layoutParams = TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply {
                     setMargins(8, 8, 8, 8)
                 }
                 textAlignment = TextView.TEXT_ALIGNMENT_CENTER
             }
-
-            val precioTextView = TextView(this).apply {
-                text = precio
-                layoutParams = TableRow.LayoutParams(70, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                    setMargins(8, 8, 8, 8)
-                }
-                textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-            }
-
-            tableRow.addView(cantidadTextView)
-            tableRow.addView(productoTextView)
-            tableRow.addView(precioTextView)
-
-            tableLayout.addView(tableRow)
+            emptyRow.addView(emptyTextView)
+            tableLayout.addView(emptyRow)
         }
         val Total: TextView = findViewById(R.id.Total)
         Total.text = total.toString()
@@ -111,10 +128,7 @@ class EmitirCFActivity : AppCompatActivity() {
         }
         val btnAtras: ImageButton = findViewById(R.id.atras)
         btnAtras.setOnClickListener {
-            // Crear un intent para ir a MenuActivity
-            val intent = Intent(this, MenuActivity::class.java)
-            startActivity(intent)
-            finish()  // Finalizar la actividad actual si se desea
+           verificar()
         }
         val siguiente: Button = findViewById(R.id.Siguiente)
         siguiente.setOnClickListener {
@@ -184,11 +198,106 @@ class EmitirCFActivity : AppCompatActivity() {
         dialogoCliente.show()
     }
     override fun onBackPressed() {
-        super.onBackPressed() // Llama al método onBackPressed() de la clase base
-        val intent = Intent(this, MenuActivity::class.java)
-        startActivity(intent)
-        finish()
+        val app = application as MyApp
+        val database = app.database
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulo")))
+
+        // Ejecuta la consulta
+        val result = query.execute()
+        if(result.allResults().isNotEmpty()){
+            val dialogoCliente = Dialog(this)
+            dialogoCliente.setContentView(R.layout.layout_datos_perdidos) // R.layout.layout_custom_dialog es tu diseño personalizado
+            val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
+            val height = (resources.displayMetrics.heightPixels * 0.5).toInt() // 60% del alto de la pantalla
+            dialogoCliente.window?.setLayout(width, height)
+            dialogoCliente.setCanceledOnTouchOutside(false)
+            val btnsi = dialogoCliente.findViewById<Button>(R.id.btnsi)
+            val btnno = dialogoCliente.findViewById<Button>(R.id.btnno)
+            btnsi.setOnClickListener {
+                borrararticulos()
+                val intent = Intent(this, MenuActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            btnno.setOnClickListener {
+                dialogoCliente.dismiss()
+            }
+            dialogoCliente.show()
+        } else {
+            // Si no hay artículos, llama a super.onBackPressed()
+            super.onBackPressed()
+        }
     }
+    private fun verificar(){
+        val app = application as MyApp
+        val database = app.database
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulo")))
+
+        // Ejecuta la consulta
+        val result = query.execute()
+        if(result.allResults().isNotEmpty()){
+            val dialogoCliente = Dialog(this)
+            dialogoCliente.setContentView(R.layout.layout_datos_perdidos) // R.layout.layout_custom_dialog es tu diseño personalizado
+            val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
+            val height = (resources.displayMetrics.heightPixels * 0.5).toInt() // 60% del alto de la pantalla
+            dialogoCliente.window?.setLayout(width, height)
+            dialogoCliente.setCanceledOnTouchOutside(false)
+            val btnsi = dialogoCliente.findViewById<Button>(R.id.btnsi)
+            val btnno = dialogoCliente.findViewById<Button>(R.id.btnno)
+            btnsi.setOnClickListener {
+                borrararticulos()
+                val intent = Intent(this, MenuActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            btnno.setOnClickListener {
+                dialogoCliente.dismiss()
+            }
+            dialogoCliente.show()
+        }
+    }
+
+
+    private fun borrararticulos() {
+        val app = application as MyApp
+        val database = app.database
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulo")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Itera sobre los resultados y elimina cada documento
+                for (result in results) {
+                    val docId = result.getString("id") // Obtener el ID del documento
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+
+                Log.d("Prin_Re_Cliente", "Se eliminaron los artículos")
+                showToast("Artículos eliminados")
+            } else {
+                Log.d("Prin_Re_Cliente", "No se encontraron artículos")
+                showToast("No se encontraron artículos")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al eliminar los artículos: ${e.message}", e)
+        }
+    }
+
+
+
     private fun obtenerDatosGuardados(): List<String> {
         // Obtén la instancia de la base de datos desde la aplicación
         val app = application as MyApp
@@ -678,5 +787,8 @@ class EmitirCFActivity : AppCompatActivity() {
             ),
             200
         )
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

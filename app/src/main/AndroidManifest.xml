@@ -22,6 +22,9 @@
         android:theme="@style/Base.Theme.FacturaElectronica"
         tools:targetApi="31">
         <activity
+            android:name=".ConfHacienda"
+            android:exported="false" />
+        <activity
             android:name=".VerPdfCF"
             android:exported="false" />
         <activity
@@ -89,13 +92,13 @@
             android:name=".InfoEmisorActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".EmitirCFActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.billsv.facturaelectronica.AgregarArticuloActivity"
+            android:name=".AgregarArticuloActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
