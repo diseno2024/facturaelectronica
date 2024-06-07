@@ -140,6 +140,23 @@
                 app:layout_constraintTop_toBottomOf="@id/nombre"
                 app:layout_constraintWidth_percent="0.8" />
             <EditText
+                android:id="@+id/DUI"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="DUI"
+                android:inputType="number"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nombreC"
+                app:layout_constraintWidth_percent="0.8" />
+            <EditText
                 android:id="@+id/NIT"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -154,7 +171,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nombreC"
+                app:layout_constraintTop_toBottomOf="@id/DUI"
                 app:layout_constraintWidth_percent="0.8" />
             <EditText
                 android:id="@+id/NRC"
@@ -190,6 +207,28 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/NRC"
                 app:layout_constraintWidth_percent="0.8" />
+            <TextView
+                android:id="@+id/textdep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Departamento"
+                android:textColor="#4A8C74"
+                android:textSize="@dimen/TextoEtiquetas"
+                app:layout_constraintTop_toBottomOf="@+id/AcEco"
+                app:layout_constraintStart_toStartOf="@+id/departamento" />
+
+            <Spinner
+                android:id="@+id/departamento"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/input_text"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textdep"
+                app:layout_constraintWidth_percent="0.38" />
             <EditText
                 android:id="@+id/Direccion"
                 android:layout_width="0dp"
@@ -205,8 +244,30 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/AcEco"
+                app:layout_constraintTop_toBottomOf="@id/departamento"
                 app:layout_constraintWidth_percent="0.8" />
+            <TextView
+                android:id="@+id/textView56"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Municipio"
+                android:textColor="#4A8C74"
+                android:textSize="@dimen/TextoEtiquetas"
+                app:layout_constraintBottom_toTopOf="@+id/municipio"
+                app:layout_constraintStart_toStartOf="@+id/municipio"
+                app:layout_constraintTop_toBottomOf="@+id/AcEco" />
+
+            <Spinner
+                android:id="@+id/municipio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="39dp"
+                android:background="@drawable/input_text"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView56"
+                app:layout_constraintWidth_percent="0.38" />
             <EditText
                 android:id="@+id/NumT"
                 android:layout_width="0dp"
