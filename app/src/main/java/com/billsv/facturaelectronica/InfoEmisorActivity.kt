@@ -9,10 +9,13 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -35,15 +38,326 @@ class InfoEmisorActivity : AppCompatActivity() {
     private lateinit var database: Database
     private lateinit var nombre: EditText
     private lateinit var nombreC: EditText
+    private lateinit var DUI: EditText
     private lateinit var NIT: EditText
     private lateinit var NRC: EditText
     private lateinit var AcEco: EditText
     private lateinit var Direccion: EditText
     private lateinit var NumT: EditText
     private lateinit var Correo: EditText
-    /*private lateinit var departamento: Spinner
-    private lateinit var municipio: Spinner*/
+    private lateinit var spinnerDep: Spinner
+    private lateinit var spinnerMun: Spinner
     private val REQUEST_CODE_IMAGE_PICKER = 123
+    private val departamentosMap = mapOf(
+        "Ahuachapán" to "01",
+        "Santa Ana" to "02",
+        "Sonsonate" to "03",
+        "Chalatenango" to "04",
+        "La Libertad" to "05",
+        "San Salvador" to "06",
+        "Cuscatlán" to "07",
+        "La Paz" to "08",
+        "Cabañas" to "09",
+        "San Vicente" to "10",
+        "Usulután" to "11",
+        "San Miguel" to "12",
+        "Morazán" to "13",
+        "La Unión" to "14"
+    )
+
+    private val municipiosMap = mapOf(
+        "Ahuachapán" to listOf(
+            "Ahuachapán" to "01",
+            "Apaneca" to "02",
+            "Atiquizaya" to "03",
+            "Concepción de Ataco" to "04",
+            "El Refugio" to "05",
+            "Guaymango" to "06",
+            "Jujutla" to "07",
+            "San Francisco Menéndez" to "08",
+            "San Lorenzo" to "09",
+            "San Pedro Puxtla" to "10",
+            "Tacuba" to "11",
+            "Turín" to "12"
+        ),
+        "Santa Ana" to listOf(
+            "Candelaria de la Frontera" to "01",
+            "Coatepeque" to "02",
+            "Chalchuapa" to "03",
+            "El Congo" to "04",
+            "El Porvenir" to "05",
+            "Masahuat" to "06",
+            "Metapán" to "07",
+            "San Antonio Pajonal" to "08",
+            "San Sebastián Salitrillo" to "09",
+            "Santa Ana" to "10",
+            "Santa Rosa Guachipilin" to "11",
+            "Santiago de la Frontera" to "12",
+            "Texistepeque" to "13"
+        ),
+        "Sonsonate" to listOf(
+            "Acajutla" to "01",
+            "Armenia" to "02",
+            "Caluco" to "03",
+            "Cuisnahuat" to "04",
+            "Santa Isabel Ishuatán" to "05",
+            "Izalco" to "06",
+            "Juayúa" to "07",
+            "Nahuizalco" to "08",
+            "Nahuilingo" to "09",
+            "Salcoatitán" to "10",
+            "San Antonio del Monte" to "11",
+            "San Julián" to "12",
+            "Santa Catarina Masahuat" to "13",
+            "Santo Domingo de Guzmán" to "14",
+            "Sonsonate" to "15",
+            "Sonzacate" to "16"
+        ),
+        "Chalatenango" to listOf(
+            "Agua Caliente" to "01",
+            "Arcatao" to "02",
+            "Azacualpa" to "03",
+            "Citalá" to "04",
+            "Comalapa" to "05",
+            "Concepción Quezaltepeque" to "06",
+            "Chalatenango" to "07",
+            "Dulce Nombre de María" to "08",
+            "El Carrizal" to "09",
+            "El Paraíso" to "10",
+            "La Laguna" to "11",
+            "La Palma" to "12",
+            "La Reina" to "13",
+            "Las Vueltas" to "14",
+            "Nombre de Jesús" to "15",
+            "Nueva Concepción" to "16",
+            "Nueva Trinidad" to "17",
+            "Ojos de Agua" to "18",
+            "Potonico" to "19",
+            "San Antonio de La Cruz" to "20",
+            "San Antonio Los Ranchos" to "21",
+            "San Fernando" to "22",
+            "San Francisco Lempa" to "23",
+            "San Francisco Morazán" to "24",
+            "San Ignacio" to "25",
+            "San Isidro Labrador" to "26",
+            "San José Cancasque" to "27",
+            "San José Las Flores" to "28",
+            "San Luis del Carmen" to "29",
+            "San Miguel de Mercedes" to "30",
+            "San Rafael" to "31",
+            "Santa Rita" to "32",
+            "Tejutla" to "33"
+        ),
+        "La Libertad" to listOf(
+            "Antiguo Cuscatlán" to "01",
+            "Ciudad Arce" to "02",
+            "Colón" to "03",
+            "Comasagua" to "04",
+            "Chiltiupán" to "05",
+            "Huizúcar" to "06",
+            "Jayaque" to "07",
+            "Jicalapa" to "08",
+            "La Libertad" to "09",
+            "Nuevo Cuscatlán" to "10",
+            "Santa Tecla" to "11",
+            "Quezaltepeque" to "12",
+            "Sacacoyo" to "13",
+            "San José Villanueva" to "14",
+            "San Juan Opico" to "15",
+            "San Pablo Tacachico" to "16",
+            "Tamanique" to "17",
+            "Talnique" to "18",
+            "Teotepeque" to "19",
+            "Tepecoyo" to "20",
+            "Zaragoza" to "21"
+        ),
+        "San Salvador" to listOf(
+            "Aguilares" to "01",
+            "Apopa" to "02",
+            "Ayutuxtepeque" to "03",
+            "Cuscatancingo" to "04",
+            "El Paisnal" to "05",
+            "Guazapa" to "06",
+            "Ilopango" to "07",
+            "Mejicanos" to "08",
+            "Nejapa" to "09",
+            "Panchimalco" to "10",
+            "Rosario de Mora" to "11",
+            "San Marcos" to "12",
+            "San Martin" to "13",
+            "San Salvador" to "14",
+            "Santiago Texacuangos" to "15",
+            "Santo Tomas" to "16",
+            "Soyapango" to "17",
+            "Tonacatepeque" to "18",
+            "Ciudad Delgado" to "19"
+        ),
+        "Cuscatlán" to listOf(
+            "Candelaria" to "01",
+            "Cojutepeque" to "02",
+            "El Carmen" to "03",
+            "El Rosario" to "04",
+            "Monte San Juan" to "05",
+            "Oratorio de Concepción" to "06",
+            "San Bartolomé Perulapía" to "07",
+            "San Cristóbal" to "08",
+            "San José Guayabal" to "09",
+            "San Pedro Perulapán" to "10",
+            "San Rafael Cedros" to "11",
+            "San Ramón" to "12",
+            "Santa Cruz Analquito" to "13",
+            "Santa Cruz Michapa" to "14",
+            "Suchitoto" to "15",
+            "Tenancingo" to "16"
+        ),
+        "La Paz" to listOf(
+            "Cuyultitán" to "01",
+            "El Rosario" to "02",
+            "Jerusalén" to "03",
+            "Mercedes La Ceiba" to "04",
+            "Olocuilta" to "05",
+            "Paraíso de Osorio" to "06",
+            "San Antonio Masahuat" to "07",
+            "San Emigdio" to "08",
+            "San Francisco Chinameca" to "09",
+            "San Juan Nonualco" to "10",
+            "San Juan Talpa" to "11",
+            "San Juan Tepezontes" to "12",
+            "San Luis Talpa" to "13",
+            "San Miguel Tepezontes" to "14",
+            "San Pedro Masahuat" to "15",
+            "San Pedro Nonualco" to "16",
+            "San Rafael Obrajuelo" to "17",
+            "Santa María Ostuma" to "18",
+            "Santiago Nonualco" to "19",
+            "Tapalhuaca" to "20",
+            "Zacatecoluca" to "21",
+            "San Luis La Herradura" to "22",
+            "Cinquera" to "23",
+            "Guacotecti" to "24"
+        ),
+        "Cabañas" to listOf(
+            "Cinquera" to "01",
+            "Guacotecti" to "02",
+            "Ilobasco" to "03",
+            "Jutiapa" to "04",
+            "San Isidro" to "05",
+            "Sensuntepeque" to "06",
+            "Tejutepeque" to "07",
+            "Victoria" to "08",
+            "Dolores" to "09"
+        ),
+        "San Vicente" to listOf(
+            "Apastepeque" to "01",
+            "Guadalupe" to "02",
+            "San Cayetano Istepeque" to "03",
+            "Santa Clara" to "04",
+            "Santo Domingo" to "05",
+            "San Esteban Catarina" to "06",
+            "San Ildefonso" to "07",
+            "San Lorenzo" to "08",
+            "San Sebastián" to "09",
+            "San Vicente" to "10",
+            "Tecoluca" to "11",
+            "Tepetitán" to "12",
+            "Verapaz" to "13"
+        ),
+        "Usulután" to listOf(
+            "Alegría" to "01",
+            "Berlín" to "02",
+            "California" to "03",
+            "Concepción Batres" to "04",
+            "El Triunfo" to "05",
+            "Ereguayquín" to "06",
+            "Estanzuelas" to "07",
+            "Jiquilisco" to "08",
+            "Jucuapa" to "09",
+            "Jucuarán" to "10",
+            "Mercedes Umaña" to "11",
+            "Nueva Granada" to "12",
+            "Ozatlán" to "13",
+            "Puerto El Triunfo" to "14",
+            "San Agustín" to "15",
+            "San Buenaventura" to "16",
+            "San Dionisio" to "17",
+            "Santa Elena" to "18",
+            "San Francisco Javier" to "19",
+            "Santa María" to "20",
+            "Santiago de María" to "21",
+            "Tecapán" to "22",
+            "Usulután" to "23"
+        ),
+        "San Miguel" to listOf(
+            "Carolina" to "01",
+            "Ciudad Barrios" to "02",
+            "Comacarán" to "03",
+            "Chapeltique" to "04",
+            "Chinameca" to "05",
+            "Chirilagua" to "06",
+            "El Tránsito" to "07",
+            "Lolotique" to "08",
+            "Moncagua" to "09",
+            "Nueva Guadalupe" to "10",
+            "Nuevo Edén de San Juan" to "11",
+            "Quelepa" to "12",
+            "San Antonio del Mosco" to "13",
+            "San Gerardo" to "14",
+            "San Jorge" to "15",
+            "San Luis de la Reina" to "16",
+            "San Miguel" to "17",
+            "San Rafael Oriente" to "18",
+            "Sesori" to "19",
+            "Uluazapa" to "20"
+        ),
+        "Morazán" to listOf(
+            "Arambala" to "01",
+            "Cacaopera" to "02",
+            "Corinto" to "03",
+            "Chilanga" to "04",
+            "Delicias de Concepción" to "05",
+            "El Divisadero" to "06",
+            "El Rosario" to "07",
+            "Gualococti" to "08",
+            "Guatajiagua" to "09",
+            "Joateca" to "10",
+            "Jocoaitique" to "11",
+            "Jocoro" to "12",
+            "Lolotiquillo" to "13",
+            "Meanguera" to "14",
+            "Osicala" to "15",
+            "Perquín" to "16",
+            "San Carlos" to "17",
+            "San Fernando" to "18",
+            "San Francisco Gotera" to "19",
+            "San Isidro" to "20",
+            "San Simón" to "21",
+            "Sensembra" to "22",
+            "Sociedad" to "23",
+            "Torola" to "24",
+            "Yamabal" to "25",
+            "Yoloaiquín" to "26"
+        ),
+        "La Unión" to listOf(
+            "Anamoros" to "01",
+            "Bolívar" to "02",
+            "Concepción de Oriente" to "03",
+            "Conchagua" to "04",
+            "El Carmen" to "05",
+            "El Sauce" to "06",
+            "Intipucá" to "07",
+            "La Unión" to "08",
+            "Lislique" to "09",
+            "Meanguera del Golfo" to "10",
+            "Nueva Esparta" to "11",
+            "Pasaquina" to "12",
+            "Polorós" to "13",
+            "San Alejo" to "14",
+            "San José" to "15",
+            "Santa Rosa de Lima" to "16",
+            "Yayantique" to "17",
+            "Yucuaiquín" to "18"
+        )
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -57,6 +371,38 @@ class InfoEmisorActivity : AppCompatActivity() {
         database = app.database
         verificar()
         contarDocumentosConfEmisor()
+        // Inicializa el Spinner de departamento
+        spinnerDep = findViewById(R.id.departamento)
+        val departamentos = departamentosMap.keys.toTypedArray()
+
+        // Configura el adaptador para el Spinner de departamento
+        val adapterDep = ArrayAdapter(this, R.layout.spinner_personalizado, departamentos)
+        adapterDep.setDropDownViewResource(R.layout.spinner_dropdown_per)
+        spinnerDep.adapter = adapterDep
+
+        // Inicializa el Spinner de municipio
+        spinnerMun = findViewById(R.id.municipio)
+        val initialMunicipios = arrayOf("Seleccione un municipio")
+
+        // Configura el adaptador para el Spinner de municipio
+        val adapterMun = ArrayAdapter(this, R.layout.spinner_personalizado, initialMunicipios)
+        adapterMun.setDropDownViewResource(R.layout.spinner_dropdown_per)
+        spinnerMun.adapter = adapterMun
+
+        // listener para el Spinner de departamento
+        spinnerDep.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedDept = parent.getItemAtPosition(position).toString()
+                val municipios = municipiosMap[selectedDept]?.map { it.first } ?: listOf("Seleccione un municipio")
+                val adapterMun = ArrayAdapter(this@InfoEmisorActivity, R.layout.spinner_personalizado, municipios)
+                adapterMun.setDropDownViewResource(R.layout.spinner_dropdown_per)
+                spinnerMun.adapter = adapterMun
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // No hace nada
+            }
+        }
         val btnAtras: ImageButton = findViewById(R.id.atras)
         btnAtras.setOnClickListener {
             // Crear un intent para ir a MenuActivity
@@ -71,6 +417,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         }
         nombre = findViewById(R.id.nombre)
         nombreC = findViewById(R.id.nombreC)
+        DUI = findViewById(R.id.DUI)
         NIT = findViewById(R.id.NIT)
         NRC = findViewById(R.id.NRC)
         AcEco = findViewById(R.id.AcEco)
@@ -115,6 +462,42 @@ class InfoEmisorActivity : AppCompatActivity() {
                 return formatted.toString()
             }
 
+        })
+        DUI.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            private val mask = "########-#" // La máscara del NIT
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating) return
+
+                isUpdating = true
+                val formatted = formatDui(s.toString())
+                DUI.setText(formatted)
+                DUI.setSelection(formatted.length)
+                isUpdating = false
+            }
+
+            private fun formatDui(dui: String): String {
+                // Eliminar todos los caracteres no numéricos del NIT
+                val digits = dui.replace(Regex("\\D"), "")
+                val formatted = StringBuilder()
+
+                var i = 0
+                for (m in mask.toCharArray()) {
+                    if (m != '#') {
+                        formatted.append(m)
+                        continue
+                    }
+                    if (i >= digits.length) break
+                    formatted.append(digits[i])
+                    i++
+                }
+                return formatted.toString()
+            }
         })
         NIT.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
@@ -207,6 +590,7 @@ class InfoEmisorActivity : AppCompatActivity() {
 
         val nombre: EditText = findViewById(R.id.nombre)
         val nombrec: EditText = findViewById(R.id.nombreC)
+        val dui: EditText = findViewById(R.id.DUI)
         val nit: EditText = findViewById(R.id.NIT)
         val nrc: EditText = findViewById(R.id.NRC)
         val AcEco: EditText = findViewById(R.id.AcEco)
@@ -214,34 +598,10 @@ class InfoEmisorActivity : AppCompatActivity() {
         val NumT: EditText = findViewById(R.id.NumT)
         val correo: EditText = findViewById(R.id.Correo)
 
-        //habilitar
-        nombre.isFocusable = true
-        nombre.isFocusableInTouchMode = true
-
-        nombrec.isFocusable = true
-        nombrec.isFocusableInTouchMode = true
-
-        nit.isFocusable = true
-        nit.isFocusableInTouchMode = true
-
-        nrc.isFocusable = true
-        nrc.isFocusableInTouchMode = true
-
-        AcEco.isFocusable = true
-        AcEco.isFocusableInTouchMode = true
-
-        direccion.isFocusable = true
-        direccion.isFocusableInTouchMode = true
-
-        NumT.isFocusable = true
-        NumT.isFocusableInTouchMode = true
-
-        correo.isFocusable = true
-        correo.isFocusableInTouchMode = true
-
         //pone el efectoclick
         nombre.isEnabled = true
         nombrec.isEnabled = true
+        dui.isEnabled = true
         nit.isEnabled = true
         nrc.isEnabled = true
         AcEco.isEnabled = true
@@ -293,6 +653,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         //buscar los edittext
         val nombre: EditText = findViewById(R.id.nombre)
         val nombrec: EditText = findViewById(R.id.nombreC)
+        val dui: EditText = findViewById(R.id.DUI)
         val nit: EditText = findViewById(R.id.NIT)
         val nrc: EditText = findViewById(R.id.NRC)
         val AcEco: EditText = findViewById(R.id.AcEco)
@@ -304,6 +665,7 @@ class InfoEmisorActivity : AppCompatActivity() {
             val datos = data.split("\n")
             val nombredato = datos[0]
             val nombrecdato = datos[1]
+            val duidato = datos[8]
             val nitdato = datos[2]
             val nrcdato = datos[3]
             val AcEcodato = datos[4]
@@ -314,6 +676,7 @@ class InfoEmisorActivity : AppCompatActivity() {
             //pasar la data a los edittext
             nombre.setText(nombredato)
             nombrec.setText(nombrecdato)
+            dui.setText(duidato)
             nit.setText(nitdato)
             nrc.setText(nrcdato)
             AcEco.setText(AcEcodato)
@@ -321,34 +684,10 @@ class InfoEmisorActivity : AppCompatActivity() {
             NumT.setText(Numtdato)
             correo.setText(correodato)
 
-            //deshabilitar
-            nombre.isFocusable = false
-            nombre.isFocusableInTouchMode = false
-
-            nombrec.isFocusable = false
-            nombrec.isFocusableInTouchMode = false
-
-            nit.isFocusable = false
-            nit.isFocusableInTouchMode = false
-
-            nrc.isFocusable = false
-            nrc.isFocusableInTouchMode = false
-
-            AcEco.isFocusable = false
-            AcEco.isFocusableInTouchMode = false
-
-            direccion.isFocusable = false
-            direccion.isFocusableInTouchMode = false
-
-            NumT.isFocusable = false
-            NumT.isFocusableInTouchMode = false
-
-            correo.isFocusable = false
-            correo.isFocusableInTouchMode = false
-
             //quita el efectoclick
             nombre.isEnabled = false
             nombrec.isEnabled = false
+            dui.isEnabled = false
             nit.isEnabled = false
             nrc.isEnabled = false
             AcEco.isEnabled = false
@@ -508,6 +847,7 @@ class InfoEmisorActivity : AppCompatActivity() {
     private fun guardarInformacion() {
         val nombre = nombre.text.toString()
         val nombreC = nombreC.text.toString()
+        val dui = DUI.text.toString()
         val nit = NIT.text.toString()
         val nrc = NRC.text.toString()
         val AcEco = AcEco.text.toString()
@@ -542,6 +882,7 @@ class InfoEmisorActivity : AppCompatActivity() {
             val document = MutableDocument()
                 .setString("nombre", nombre)
                 .setString("nombreC", nombreC)
+                .setString("dui", dui)
                 .setString("nit", nit)
                 .setString("nrc", nrc)
                 .setString("ActividadEco", AcEco)
@@ -583,6 +924,7 @@ class InfoEmisorActivity : AppCompatActivity() {
             // Extrae los valores de los campos del documento
             val nombre = dict?.getString("nombre")
             val nombrec = dict?.getString("nombreC")
+            val dui = dict?.getString("dui")
             val nit = dict?.getString("nit")
             val nrc = dict?.getString("nrc")
             val AcEco = dict?.getString("ActividadEco")
@@ -591,7 +933,7 @@ class InfoEmisorActivity : AppCompatActivity() {
             val correo = dict?.getString("correo")
 
             // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$nombre\n$nombrec\n$nit\n$nrc\n$AcEco\n$direccion\n$telefono\n$correo"
+            val dataString = "$nombre\n$nombrec\n$nit\n$nrc\n$AcEco\n$direccion\n$telefono\n$correo\n$dui"
             dataList.add(dataString)
         }
 
@@ -614,6 +956,7 @@ class InfoEmisorActivity : AppCompatActivity() {
     private fun validarEntradas(): Boolean {
         val nombreText = nombre.text.toString()
         val nombrecText = nombreC.text.toString()
+        val duiText = DUI.text.toString().replace("-", "")
         val nitText = NIT.text.toString().replace("-", "")
         val nrcText = NRC.text.toString()
         val AcEco = AcEco.text.toString()
@@ -622,7 +965,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         val emailText = Correo.text.toString()
 
         // Verifica que todos los campos estén llenos
-        if (nombreText.isEmpty() || nitText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() || AcEco.isEmpty() || nombrecText.isEmpty()){
+        if (nombreText.isEmpty() || nitText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() || AcEco.isEmpty() || nombrecText.isEmpty()){
             Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
             return false
         }
@@ -630,6 +973,11 @@ class InfoEmisorActivity : AppCompatActivity() {
         // Verifica que el correo electrónico tenga un formato válido
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
             Toast.makeText(this, "Correo electrónico no válido", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        // Verifica que el dui sea un número válido de 8 dígitos
+        if (!duiText.matches(Regex("\\d{9}"))) {
+            Toast.makeText(this, "DUI debe ser un número válido de 9 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
 
