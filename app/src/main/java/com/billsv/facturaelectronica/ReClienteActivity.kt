@@ -32,17 +32,11 @@ import com.couchbase.lite.SelectResult
 class ReClienteActivity : AppCompatActivity() {
     private lateinit var spinnerDep: Spinner
     private lateinit var spinnerMun: Spinner
-    //private lateinit var departamento: Spinner
-    //private lateinit var municipio: Spinner
-    private lateinit var tipoC:Spinner
     private lateinit var nombre: EditText
-    private lateinit var nit: EditText
     private lateinit var email: EditText
     private lateinit var direccion: EditText
     private lateinit var telefono: EditText
     private lateinit var dui: EditText
-    private lateinit var nrc: EditText
-    private lateinit var actividadEconomica: EditText
     private lateinit var agregarButton: Button
     private lateinit var cancelarButton: Button
     private lateinit var database: Database
@@ -404,7 +398,6 @@ class ReClienteActivity : AppCompatActivity() {
 
         // Inicializar vistas
         nombre = findViewById(R.id.nombre)
-        nit = findViewById(R.id.nit)
         email = findViewById(R.id.correo)
         spinnerDep = findViewById(R.id.departamento)
         spinnerMun = findViewById(R.id.municipio)
@@ -412,16 +405,8 @@ class ReClienteActivity : AppCompatActivity() {
         telefono = findViewById(R.id.telefono)
         agregarButton = findViewById(R.id.btnAgregar)
         cancelarButton = findViewById(R.id.btnCancelar)
-        tipoC = findViewById(R.id.tipoCliente)
         dui = findViewById(R.id.dui)
-        nrc = findViewById(R.id.nrc)
-        actividadEconomica = findViewById(R.id.actividadEconomica)
 
-        // spinner tipoC
-        val opcionesT = arrayOf("Contribuyente", "Consumidor Final")
-        val adapterT = ArrayAdapter(this, R.layout.spinner_personalizado, opcionesT)
-        adapterT.setDropDownViewResource(R.layout.spinner_dropdown_per)
-        tipoC.adapter = adapterT
 
         val datos = intent.getStringExtra("datos")
         if (datos != null) {
@@ -430,10 +415,7 @@ class ReClienteActivity : AppCompatActivity() {
                 val dato = it.split("\n")
                 val spinnerDepd = dato[4]
                 val spinnerMund = dato[5]
-                val tipoCd = dato[7]
 
-                val pTipoC = opcionesT.indexOf(tipoCd)
-                tipoC.setSelection(pTipoC)
 
                 val departamento = departamentosMap.entries.find { it.value == spinnerDepd }?.key
                 if (departamento != null) {
@@ -513,46 +495,10 @@ class ReClienteActivity : AppCompatActivity() {
             }
 
         })
-        nit.addTextChangedListener(object : TextWatcher {
-            private var isUpdating = false
-            private val mask = "####-######-###-#" // La máscara del NIT
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                if (isUpdating) return
-
-                isUpdating = true
-                val formatted = formatNIT(s.toString())
-                nit.setText(formatted)
-                nit.setSelection(formatted.length)
-                isUpdating = false
-            }
-
-            private fun formatNIT(nit: String): String {
-                // Eliminar todos los caracteres no numéricos del NIT
-                val digits = nit.replace(Regex("\\D"), "")
-                val formatted = StringBuilder()
-
-                var i = 0
-                for (m in mask.toCharArray()) {
-                    if (m != '#') {
-                        formatted.append(m)
-                        continue
-                    }
-                    if (i >= digits.length) break
-                    formatted.append(digits[i])
-                    i++
-                }
-                return formatted.toString()
-            }
-        })
         //mascara del dui
         dui.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
-            private val mask = "########-#" // La máscara del NIT
+            private val mask = "########-#" // La máscara del DUI
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -569,7 +515,7 @@ class ReClienteActivity : AppCompatActivity() {
             }
 
             private fun formatDui(dui: String): String {
-                // Eliminar todos los caracteres no numéricos del NIT
+                // Eliminar todos los caracteres no numéricos del DUI
                 val digits = dui.replace(Regex("\\D"), "")
                 val formatted = StringBuilder()
 
@@ -608,69 +554,47 @@ class ReClienteActivity : AppCompatActivity() {
             if (validarEntradas() && Check.isChecked) {
                 guardarInformacion()
                 val nombreValue = nombre.text.toString()
-                val nitValue = nit.text.toString()
                 val emailValue = email.text.toString()
                 val direccionValue = direccion.text.toString()
                 val telefonoValue = telefono.text.toString()
-                val tipoSeleccionado = tipoC.selectedItem.toString()
-                val actividadEconomicaValue=actividadEconomica.text.toString()
                 val duivalue=dui.text.toString()
-                val nrcValue=nrc.text.toString()
                 // Iniciar otra actividad
                 val intent = Intent(this, EmitirCFActivity::class.java)
                 // Crear un Intent y agregar los datos
                 intent.putExtra("nombre", nombreValue)
-                intent.putExtra("nit", nitValue)
                 intent.putExtra("email", emailValue)
                 intent.putExtra("direccion", direccionValue)
                 intent.putExtra("telefono", telefonoValue)
-                intent.putExtra("tipoCliente", tipoSeleccionado)
-                intent.putExtra("actividad", actividadEconomicaValue)
                 intent.putExtra("dui", duivalue)
-                intent.putExtra("nrc", nrcValue)
                 startActivity(intent)
                 // Limpiar los EditText
                 nombre.text.clear()
-                nit.text.clear()
                 email.text.clear()
                 direccion.text.clear()
                 telefono.text.clear()
-                actividadEconomica.text.clear()
                 dui.text.clear()
-                nrc.text.clear()
                 finish()
             }else if(validarEntradas()){
                 val nombreValue = nombre.text.toString()
-                val nitValue = nit.text.toString()
                 val emailValue = email.text.toString()
                 val direccionValue = direccion.text.toString()
                 val telefonoValue = telefono.text.toString()
-                val tipoSeleccionado = tipoC.selectedItem.toString()
-                val actividadEconomicaValue=actividadEconomica.text.toString()
                 val duivalue=dui.text.toString()
-                val nrcValue=nrc.text.toString()
                 // Iniciar otra actividad
                 val intent = Intent(this, EmitirCFActivity::class.java)
                 // Crear un Intent y agregar los datos
                 intent.putExtra("nombre", nombreValue)
-                intent.putExtra("nit", nitValue)
                 intent.putExtra("email", emailValue)
                 intent.putExtra("direccion", direccionValue)
                 intent.putExtra("telefono", telefonoValue)
-                intent.putExtra("tipoCliente", tipoSeleccionado)
-                intent.putExtra("actividad", actividadEconomicaValue)
                 intent.putExtra("dui", duivalue)
-                intent.putExtra("nrc", nrcValue)
                 startActivity(intent)
                 // Limpiar los EditText
                 nombre.text.clear()
-                nit.text.clear()
                 email.text.clear()
                 direccion.text.clear()
                 telefono.text.clear()
-                actividadEconomica.text.clear()
                 dui.text.clear()
-                nrc.text.clear()
                 finish()
             }
         }
@@ -695,10 +619,6 @@ class ReClienteActivity : AppCompatActivity() {
         direccion = findViewById(R.id.complemento)
         email = findViewById(R.id.correo)
         telefono = findViewById(R.id.telefono)
-        tipoC = findViewById(R.id.tipoCliente)
-        nit = findViewById(R.id.nit)
-        nrc = findViewById(R.id.nrc)
-        actividadEconomica = findViewById(R.id.actividadEconomica)
 
         val Check: CheckBox = findViewById(R.id.checkGuardar)
         Check.visibility = View.GONE
@@ -728,16 +648,9 @@ class ReClienteActivity : AppCompatActivity() {
 
             nombre.setText(nombred)
             dui.setText(duid)
-            //spinnerDep.setSelection()
-            //spinnerMun.setSelection()
             direccion.setText(direcciond)
             email.setText(emaild)
             telefono.setText(telefonod)
-            //tipoC.setSelection()
-            nit.setText(nitd)
-            nrc.setText(nrcd)
-            actividadEconomica.setText(actividadEconomicad)
-            
 
         }
         guardar.setOnClickListener {
@@ -753,18 +666,14 @@ class ReClienteActivity : AppCompatActivity() {
         val database = app.database
         val dato = datos.split("\n")
         val nombreText = nombre.text.toString()
-        val nitText = nit.text.toString()
         val emailText = email.text.toString()
         val direccionText = direccion.text.toString()
         val departamentoText = spinnerDep.selectedItem.toString()
         val municipioText = spinnerMun.selectedItem.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
-        val tipoSeleccionado = tipoC.selectedItem.toString()
         val departamentoCodigo = departamentosMap[departamentoText]
         val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
         val duiText=dui.text.toString().replace("-", "")
-        val nrcText=nrc.text.toString()
-        val actividadEcoText=actividadEconomica.text.toString()
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
             .where(Expression.property("dui").equalTo(Expression.string(dato[8])))
@@ -782,16 +691,12 @@ class ReClienteActivity : AppCompatActivity() {
                         document?.let { doc ->
                             // Actualizar los campos del documento
                             doc.setString("nombre", nombreText)
-                            doc.setString("nit", nitText)
                             doc.setString("email", emailText)
                             doc.setString("direccion", direccionText)
                             doc.setString("departamento", departamentoCodigo)
                             doc.setString("municipio", municipioCodigo)
                             doc.setString("telefono", telefonoText)
-                            doc.setString("tipoCliente",tipoSeleccionado)
                             doc.setString("dui",duiText)
-                            doc.setString("nrc",nrcText)
-                            doc.setString("actividadEconomica",actividadEcoText)
                             doc.setString("tipo", "cliente")
 
                             // Guardar el documento actualizado en la base de datos
@@ -816,15 +721,10 @@ class ReClienteActivity : AppCompatActivity() {
         val app = application as MyApp///////
         val database = app.database///////
         val nombreText = nombre.text.toString()
-        val nitText = nit.text.toString().replace("-", "")
         val emailText = email.text.toString()
         val direccionText = direccion.text.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
         val duiText=dui.text.toString().replace("-","")
-        val nrcText= nrc.text.toString()
-        val actividadEcoText=actividadEconomica.text.toString()
-        val tipoCText=tipoC.selectedItem.toString()
-
         //////
 
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
@@ -870,60 +770,30 @@ class ReClienteActivity : AppCompatActivity() {
             Toast.makeText(this, "Teléfono debe ser un número válido de 8 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
-        if (tipoCText=="Contribuyente"){
-            // Verifica que todos los campos estén llenos
-            if (nrcText.isEmpty() || nitText.isEmpty()  ||   actividadEcoText.isEmpty()) {
-                Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
-                return false
-            }
-
-            // Verifica que el NIT sea un número válido
-            if (!nitText.matches(Regex("\\d{14}"))) {
-                Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
-                return false
-            }
-            // Verifica que el nrc sea un número válido de 8 dígitos
-            if (!nrcText.matches(Regex("\\d{7}"))) {
-                Toast.makeText(this, "NRC debe ser un número válido de 7 dígitos", Toast.LENGTH_SHORT).show()
-                return false
-            }
-
-            return true
-        }
-
-
         return true
     }
 
     private fun guardarInformacion() {
         val nombreText = nombre.text.toString()
-        val nitText = nit.text.toString()
         val emailText = email.text.toString()
         val direccionText = direccion.text.toString()
         val departamentoText = spinnerDep.selectedItem.toString()
         val municipioText = spinnerMun.selectedItem.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
-        val tipoSeleccionado = tipoC.selectedItem.toString()
         val departamentoCodigo = departamentosMap[departamentoText]
         val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
         val duiText=dui.text.toString().replace("-", "")
-        val nrcText=nrc.text.toString()
-        val actividadEcoText=actividadEconomica.text.toString()
         // Crear un documento mutable para guardar en la base de datos
         if (departamentoCodigo != null && municipioCodigo != null) {
             // Crear un documento mutable para guardar en la base de datos
             val document = MutableDocument()
                 .setString("nombre", nombreText)
-                .setString("nit", nitText)
                 .setString("email", emailText)
                 .setString("direccion", direccionText)
                 .setString("departamento", departamentoCodigo)
                 .setString("municipio", municipioCodigo)
                 .setString("telefono", telefonoText)
-                .setString("tipoCliente",tipoSeleccionado)
                 .setString("dui",duiText)
-                .setString("nrc",nrcText)
-                .setString("actividadEconomica",actividadEcoText)
                 .setString("tipo", "cliente")
 
             try {
