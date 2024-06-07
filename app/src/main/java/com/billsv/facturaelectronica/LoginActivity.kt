@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import android.view.inputmethod.EditorInfo
 
 class LoginActivity : AppCompatActivity() {
 
@@ -50,42 +51,43 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        // Inicializar vistas
         pinEditText = findViewById(R.id.pinEditText)
         loginButton = findViewById(R.id.loginButton)
         linkTextView = findViewById(R.id.linkTextView)
 
-        // Verificar si es la primera vez que se instala la aplicación
-        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val isFirstTime = sharedPreferences.getBoolean("is_first_time", true)
-
-        if (isFirstTime) {
-            // Mostrar un cuadro de diálogo para crear un nuevo PIN
-            showCreatePinDialog()
-        } else {
-            // Verificar si hay un PIN guardado
-            val savedPins = loadPinsFromMenuActivity()
-            if (savedPins.isEmpty()) {
-                // Si no hay PIN guardado, mostrar mensaje para crear uno
-                Toast.makeText(this@LoginActivity, "Por favor, crea un nuevo PIN", Toast.LENGTH_SHORT).show()
+        // Agregar un listener para la acción "Done" o "Enter" en el teclado
+        pinEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // Realizar la acción de inicio de sesión cuando se presiona "Done" o "Enter"
+                iniciarSesion()
+                return@setOnEditorActionListener true // Devolver true para indicar que se ha manejado la acción
             }
+            false // Devolver false para indicar que la acción no se ha manejado completamente
         }
 
+        // Configurar el botón de inicio de sesión
         loginButton.setOnClickListener {
-            val enteredPin = pinEditText.text.toString()
-            val savedPins = loadPinsFromMenuActivity()
-            if (savedPins.contains(enteredPin)) {
-                // PIN correcto, iniciar MenuActivity
-                val intent = Intent(this@LoginActivity, MenuActivity::class.java)
-                startActivity(intent)
-                requestPermissions()
-                finish() // Finalizar LoginActivity para evitar que el usuario regrese presionando el botón Atrás
-            } else {
-                // PIN incorrecto, mostrar mensaje de error
-                Toast.makeText(this@LoginActivity, "PIN incorrecto", Toast.LENGTH_SHORT).show()
-            }
+            iniciarSesion()
         }
 
+        // Configurar el enlace clickable
         setupClickableLink()
+    }
+
+    private fun iniciarSesion() {
+        val enteredPin = pinEditText.text.toString()
+        val savedPins = loadPinsFromMenuActivity()
+        if (savedPins.contains(enteredPin)) {
+            // PIN correcto, iniciar MenuActivity
+            val intent = Intent(this@LoginActivity, MenuActivity::class.java)
+            startActivity(intent)
+            requestPermissions()
+            finish() // Finalizar LoginActivity para evitar que el usuario regrese presionando el botón Atrás
+        } else {
+            // PIN incorrecto, mostrar mensaje de error
+            Toast.makeText(this@LoginActivity, "PIN incorrecto", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun showCreatePinDialog() {
