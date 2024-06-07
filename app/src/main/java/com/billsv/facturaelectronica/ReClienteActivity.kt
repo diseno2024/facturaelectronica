@@ -741,7 +741,6 @@ class ReClienteActivity : AppCompatActivity() {
                 return false
             } else {
                 Log.d("Prin_Re_Cliente", "PASS")
-                return true
             }
         } catch (e: CouchbaseLiteException) {
             Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)

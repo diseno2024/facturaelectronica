@@ -604,6 +604,7 @@ class PrinReClienteActivity : AppCompatActivity() {
 
                 // Iniciar otra actividad
                 val intent = Intent(this, ImportarClientes::class.java)
+                intent.putExtra("letra", "s")
                 startActivity(intent)
             }
         }
@@ -676,6 +677,8 @@ class PrinReClienteActivity : AppCompatActivity() {
     }
 
     private fun validaractu(): Boolean {
+        val app = application as MyApp///////
+        val database = app.database///////
         val nombreText = nombre.text.toString()
         val nitText = nit.text.toString().replace("-", "")
         val emailText = email.text.toString()
@@ -686,6 +689,28 @@ class PrinReClienteActivity : AppCompatActivity() {
         val actividadEcoText=actividadEconomica.text.toString()
         val tipoCText=tipoC.selectedItem.toString()
 
+        //////
+
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("dui").equalTo(Expression.string(duiText)))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+            if (results.size>2) {
+                Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
+                showToast("Ya existe un cliente con ese dui")
+                return false
+            } else {
+                Log.d("Prin_Re_Cliente", "PASS")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+            showToast("Error al buscar el dui")
+        }
+
+        //////
         // Verifica que todos los campos estén llenos
         if (nombreText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() ) {
             Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
@@ -825,7 +850,6 @@ class PrinReClienteActivity : AppCompatActivity() {
                 return false
             } else {
                 Log.d("Prin_Re_Cliente", "PASS")
-                return true
             }
         } catch (e: CouchbaseLiteException) {
             Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
