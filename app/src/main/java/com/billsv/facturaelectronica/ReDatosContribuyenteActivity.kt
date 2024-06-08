@@ -606,6 +606,9 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         val municipioText = spinnerMun.selectedItem.toString()
         val departamentoCodigo = departamentosMap[departamentoText]
         val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
+        val telefonoMostrar = telefono.text.toString()
+        val duiMostrar=dui.text.toString()
+        val nitMostrar=nit.text.toString()
 
         // Crear un documento mutable para guardar en la base de datos
         val document = MutableDocument()
@@ -622,6 +625,11 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
             .setString("departamento", departamentoCodigo)
             .setString("municipio", municipioCodigo)
             .setString("tipoCliente","Contribuyente")
+            .setString("telefonoM",telefonoMostrar)
+            .setString("duiM",duiMostrar)
+            .setString("nitM",nitMostrar)
+            .setString("municipioT",municipioText)
+            .setString("departamentoT",departamentoText)
 
         try {
             // Guardar el documento en la base de datos

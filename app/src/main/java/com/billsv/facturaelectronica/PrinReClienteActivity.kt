@@ -699,14 +699,14 @@ class PrinReClienteActivity : AppCompatActivity() {
         datos.let{
             val dato = it.split("\n")
             val nombred = dato[0]
-            val duid = dato[8]
+            val duid = dato[12]
             val spinnerDepd = dato[4]
             val spinnerMund = dato[5]
             val direcciond = dato[3]
             val emaild = dato[2]
-            val telefonod = dato[6]
+            val telefonod = dato[13]
             val tipoCd = dato[7]
-            val nitd = dato[1]
+            val nitd = dato[11]
             val nrcd = dato[9]
             val actividadEconomicad = dato[10]
 
@@ -833,6 +833,9 @@ class PrinReClienteActivity : AppCompatActivity() {
         val duiText=dui.text.toString().replace("-", "")
         val nrcText=nrc.text.toString()
         val actividadEcoText=actividadEconomica.text.toString()
+        val telefonoMostrar = telefono.text.toString()
+        val duiMostrar=dui.text.toString()
+        val nitMostrar=nit.text.toString()
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
             .where(Expression.property("dui").equalTo(Expression.string(dato[8])))
@@ -860,6 +863,12 @@ class PrinReClienteActivity : AppCompatActivity() {
                             doc.setString("nrc",nrcText)
                             doc.setString("actividadEconomica",actividadEcoText)
                             doc.setString("tipo", "cliente")
+                            doc.setString("telefonoM",telefonoMostrar)
+                            doc.setString("duiM",duiMostrar)
+                            doc.setString("nitM",nitMostrar)
+                            doc.setString("municipioT",municipioText)
+                            doc.setString("departamentoT",departamentoText)
+
 
                             // Guardar el documento actualizado en la base de datos
                             database.save(doc)
@@ -975,6 +984,9 @@ class PrinReClienteActivity : AppCompatActivity() {
         val duiText=dui.text.toString().replace("-", "")
         val nrcText=nrc.text.toString()
         val actividadEcoText=actividadEconomica.text.toString()
+        val telefonoMostrar = telefono.text.toString()
+        val duiMostrar=dui.text.toString()
+        val nitMostrar= nit.text.toString()
         // Crear un documento mutable para guardar en la base de datos
         if (departamentoCodigo != null && municipioCodigo != null) {
             // Crear un documento mutable para guardar en la base de datos
@@ -991,6 +1003,11 @@ class PrinReClienteActivity : AppCompatActivity() {
                 .setString("nrc",nrcText)
                 .setString("actividadEconomica",actividadEcoText)
                 .setString("tipo", "cliente")
+                .setString("telefonoM",telefonoMostrar)
+                .setString("duiM",duiMostrar)
+                .setString("nitM",nitMostrar)
+                .setString("municipioT",municipioText)
+                .setString("departamentoT",departamentoText)
 
             try {
                 // Guardar el documento en la base de datos

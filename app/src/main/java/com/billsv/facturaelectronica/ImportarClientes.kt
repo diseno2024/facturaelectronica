@@ -45,7 +45,7 @@ class ImportarClientes : AppCompatActivity() {
                 val datos = data.split("\n")
                 textViewNombre2.text = datos[0]
                 textViewNRC.text = datos[9]
-                textViewTelefono.text = datos[6]
+                textViewTelefono.text = datos[13]
 
                 // Establece un onClickListener para cada tarjeta
                 itemLayout2.setOnClickListener {
@@ -77,8 +77,8 @@ class ImportarClientes : AppCompatActivity() {
 
                 val datos = data.split("\n")
                 textViewNombre.text = datos[0]
-                textViewTelefono.text = datos[6]
-                textViewNit.text = datos[8]
+                textViewTelefono.text = datos[13]
+                textViewNit.text = datos[12]
 
                 // Establece un onClickListener para cada tarjeta
                 itemLayout.setOnClickListener {
@@ -169,14 +169,14 @@ class ImportarClientes : AppCompatActivity() {
         }
         val datos = data.split("\n")
         nombre.text = datos[0]
-        dui.text = datos[8]
-        departamento.text = datos[4]
-        municipio.text = datos[5]
+        dui.text = datos[12]
+        departamento.text = datos[14]
+        municipio.text = datos[15]
         direccion.text = datos[3]
         correo.text = datos[2]
-        telefono.text = datos[6]
+        telefono.text = datos[13]
         tipo.text = datos[7]
-        nit.text = datos[1]
+        nit.text = datos[11]
         nrc.text = datos[9]
         AcEco.text = datos[10]
 
@@ -234,9 +234,14 @@ class ImportarClientes : AppCompatActivity() {
             val dui = dict?.getString("dui")
             val nrc = dict?.getString("nrc")
             val AcEco = dict?.getString("actividadEconomica")
+            val nitM= dict?.getString("nitM")
+            val duiM=dict?.getString("duiM")
+            val telM=dict?.getString("telefonoM")
+            val depaText= dict?.getString("departamentoT")
+            val muniText=dict?.getString("municipioT")
 
             // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$nombre\n$nit\n$email\n$direccion\n$departamento\n$municipio\n$telefono\n$tipo\n$dui\n$nrc\n$AcEco"
+            val dataString = "$nombre\n$nit\n$email\n$direccion\n$departamento\n$municipio\n$telefono\n$tipo\n$dui\n$nrc\n$AcEco\n$nitM\n$duiM\n$telM\n$depaText\n$muniText"
             dataList.add(dataString)
         }
 
