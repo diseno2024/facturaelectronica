@@ -404,6 +404,53 @@ class InfoEmisorActivity : AppCompatActivity() {
             }
         }
         ///////////------->
+        if (verificar()) {
+            val dataList = obtenerDatosGuardados()
+            dataList.forEach { data ->
+                val dato = data.split("\n")
+                val spinnerDepd = dato[9]
+                val spinnerMund = dato[10]
+
+                val departamento = departamentosMap.entries.find { it.value == spinnerDepd }?.key
+                if (departamento != null) {
+                    val index = departamentos.indexOf(departamento)
+                    if (index != -1) {
+                        spinnerDep.setSelection(index)
+                    } else {
+                        Log.d("ReClienteActivity", "Departamento no encontrado en el Spinner: $departamento")
+                    }
+                } else {
+                    Log.e("ReClienteActivity", "Código de departamento no válido: $spinnerDepd")
+                }
+
+                spinnerDep.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                        val selectedDept = parent.getItemAtPosition(position).toString()
+                        val municipios = municipiosMap[selectedDept]?.map { it.first } ?: listOf("Seleccione un municipio")
+                        val adapterMun = ArrayAdapter(this@InfoEmisorActivity, R.layout.spinner_personalizado, municipios)
+                        adapterMun.setDropDownViewResource(R.layout.spinner_dropdown_per)
+                        spinnerMun.adapter = adapterMun
+
+                        // Establecer la selección del municipio una vez que el Spinner de municipios está actualizado
+                        val municipio = municipiosMap[selectedDept]?.find { it.second == spinnerMund }?.first
+                        if (municipio != null) {
+                            val index = municipios.indexOf(municipio)
+                            if (index != -1) {
+                                spinnerMun.setSelection(index)
+                            } else {
+                                Log.e("ReClienteActivity", "Municipio no encontrado en el Spinner: $municipio")
+                            }
+                        } else {
+                            Log.e("ReClienteActivity", "Código de municipio no válido: $spinnerMund")
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+                        // No hace nada
+                    }
+                }
+            }
+        }
 
         val btnAtras: ImageButton = findViewById(R.id.atras)
         btnAtras.setOnClickListener {
@@ -622,21 +669,7 @@ class InfoEmisorActivity : AppCompatActivity() {
 
     }
 
-    private fun verificar() {
-        val dataList = obtenerDatosGuardados()
-        dataList.forEach { data ->
-            //sacar la data
-            val datos = data.split("\n")
-            val nombredato = datos[0]
-            if(nombredato!=""){
-                mostrardata(dataList)
-                val boton: Button = findViewById(R.id.Guardar)
-                boton.visibility = View.GONE
-                val boton2: Button = findViewById(R.id.Editar)
-                boton2.visibility = View.VISIBLE
-            }
-
-        }
+    private fun verificar(): Boolean {
         val uri = obtenerUriGuardada()?.toUri()
         if(uri!=null){
             val Imagen: ImageView = findViewById(R.id.Logo)
@@ -652,6 +685,22 @@ class InfoEmisorActivity : AppCompatActivity() {
             val drawable = ContextCompat.getDrawable(this, R.drawable.ic_add_photo)
             Imagen.setImageDrawable(drawable)
         }
+        val dataList = obtenerDatosGuardados()
+        dataList.forEach { data ->
+            //sacar la data
+            val datos = data.split("\n")
+            val nombredato = datos[0]
+            if(nombredato!=""){
+                mostrardata(dataList)
+                val boton: Button = findViewById(R.id.Guardar)
+                boton.visibility = View.GONE
+                val boton2: Button = findViewById(R.id.Editar)
+                boton2.visibility = View.VISIBLE
+                return true
+            }
+
+        }
+        return false
     }
 
 
