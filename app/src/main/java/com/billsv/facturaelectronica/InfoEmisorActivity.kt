@@ -403,6 +403,8 @@ class InfoEmisorActivity : AppCompatActivity() {
                 // No hace nada
             }
         }
+        ///////////------->
+
         val btnAtras: ImageButton = findViewById(R.id.atras)
         btnAtras.setOnClickListener {
             // Crear un intent para ir a MenuActivity
@@ -422,8 +424,8 @@ class InfoEmisorActivity : AppCompatActivity() {
         NRC = findViewById(R.id.NRC)
         AcEco = findViewById(R.id.AcEco)
         Direccion = findViewById(R.id.Direccion)
-        /*departamento = findViewById(R.id.departamento)
-        municipio = findViewById(R.id.municipio)*/
+        spinnerDep = findViewById(R.id.departamento)
+        spinnerMun = findViewById(R.id.municipio)
         NumT = findViewById(R.id.NumT)
         Correo = findViewById(R.id.Correo)
 
@@ -594,6 +596,8 @@ class InfoEmisorActivity : AppCompatActivity() {
         val nit: EditText = findViewById(R.id.NIT)
         val nrc: EditText = findViewById(R.id.NRC)
         val AcEco: EditText = findViewById(R.id.AcEco)
+        val spinnerDep: Spinner = findViewById(R.id.departamento)
+        val spinnerMun: Spinner = findViewById(R.id.municipio)
         val direccion: EditText = findViewById(R.id.Direccion)
         val NumT: EditText = findViewById(R.id.NumT)
         val correo: EditText = findViewById(R.id.Correo)
@@ -605,6 +609,8 @@ class InfoEmisorActivity : AppCompatActivity() {
         nit.isEnabled = true
         nrc.isEnabled = true
         AcEco.isEnabled = true
+        spinnerDep.isEnabled = true
+        spinnerMun.isEnabled = true
         direccion.isEnabled = true
         NumT.isEnabled = true
         correo.isEnabled = true
@@ -657,6 +663,8 @@ class InfoEmisorActivity : AppCompatActivity() {
         val nit: EditText = findViewById(R.id.NIT)
         val nrc: EditText = findViewById(R.id.NRC)
         val AcEco: EditText = findViewById(R.id.AcEco)
+        val spinnerDep: Spinner = findViewById(R.id.departamento)
+        val spinnerMun: Spinner = findViewById(R.id.municipio)
         val direccion: EditText = findViewById(R.id.Direccion)
         val NumT: EditText = findViewById(R.id.NumT)
         val correo: EditText = findViewById(R.id.Correo)
@@ -691,6 +699,8 @@ class InfoEmisorActivity : AppCompatActivity() {
             nit.isEnabled = false
             nrc.isEnabled = false
             AcEco.isEnabled = false
+            spinnerDep.isEnabled = false
+            spinnerMun.isEnabled = false
             direccion.isEnabled = false
             NumT.isEnabled = false
             correo.isEnabled = false
@@ -851,6 +861,10 @@ class InfoEmisorActivity : AppCompatActivity() {
         val nit = NIT.text.toString()
         val nrc = NRC.text.toString()
         val AcEco = AcEco.text.toString()
+        val departamento = spinnerDep.selectedItem.toString()
+        val municipio = spinnerMun.selectedItem.toString()
+        val departamentoCodigo = departamentosMap[departamento]
+        val municipioCodigo = municipiosMap[departamento]?.firstOrNull { it.first == municipio }?.second
         val direccion = Direccion.text.toString()
         val telefono = NumT.text.toString().replace("-", "")
         val correo = Correo.text.toString()
@@ -886,6 +900,8 @@ class InfoEmisorActivity : AppCompatActivity() {
                 .setString("nit", nit)
                 .setString("nrc", nrc)
                 .setString("ActividadEco", AcEco)
+                .setString("departamento", departamentoCodigo)
+                .setString("municipio", municipioCodigo)
                 .setString("direccion", direccion)
                 .setString("telefono", telefono)
                 .setString("correo", correo)
@@ -928,12 +944,14 @@ class InfoEmisorActivity : AppCompatActivity() {
             val nit = dict?.getString("nit")
             val nrc = dict?.getString("nrc")
             val AcEco = dict?.getString("ActividadEco")
+            val departamento = dict?.getString("departamento")
+            val municipio = dict?.getString("municipio")
             val direccion = dict?.getString("direccion")
             val telefono = dict?.getString("telefono")
             val correo = dict?.getString("correo")
 
             // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$nombre\n$nombrec\n$nit\n$nrc\n$AcEco\n$direccion\n$telefono\n$correo\n$dui"
+            val dataString = "$nombre\n$nombrec\n$nit\n$nrc\n$AcEco\n$direccion\n$telefono\n$correo\n$dui\n$departamento\n$municipio"
             dataList.add(dataString)
         }
 
