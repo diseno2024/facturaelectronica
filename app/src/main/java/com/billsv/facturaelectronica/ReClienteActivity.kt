@@ -534,6 +534,7 @@ class ReClienteActivity : AppCompatActivity() {
         })
 
 
+
         val Check: CheckBox = findViewById(R.id.checkGuardar)
         //val isCheck = false
         Check.isChecked
@@ -794,6 +795,7 @@ class ReClienteActivity : AppCompatActivity() {
                 .setString("telefono", telefonoText)
                 .setString("dui",duiText)
                 .setString("tipo", "cliente")
+                .setString("tipoCliente","Consumidor Final")
 
             try {
                 // Guardar el documento en la base de datos

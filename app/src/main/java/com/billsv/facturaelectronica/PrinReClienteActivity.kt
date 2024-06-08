@@ -420,6 +420,27 @@ class PrinReClienteActivity : AppCompatActivity() {
         adapterT.setDropDownViewResource(R.layout.spinner_dropdown_per)
         tipoC.adapter = adapterT
 
+        // Listener para el Spinner tipoC
+        tipoC.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedType = parent.getItemAtPosition(position).toString()
+
+                // Habilitar o deshabilitar campos basado en la selección
+                if (selectedType == "Contribuyente") {
+                    nrc.isEnabled = true
+                    actividadEconomica.isEnabled = true
+                } else {
+                    nrc.isEnabled = false
+                    actividadEconomica.isEnabled = false
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Opcional: manejar caso donde no hay selección
+            }
+        }
+
+
         val datos = intent.getStringExtra("datos")
         if (datos != null) {
             edicion(datos)
@@ -583,6 +604,43 @@ class PrinReClienteActivity : AppCompatActivity() {
                 return formatted.toString()
             }
         })
+        nrc.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            private val mask = "#######"
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating) return
+
+                isUpdating = true
+                val formatted = formatNrc(s.toString())
+                nrc.setText(formatted)
+                nrc.setSelection(formatted.length)
+                isUpdating = false
+            }
+
+            private fun formatNrc(nrc: String): String {
+                val digits = nrc.replace(Regex("\\D"), "")
+                val formatted = StringBuilder()
+
+                var i = 0
+                for (m in mask.toCharArray()) {
+                    if (m != '#') {
+                        formatted.append(m)
+                        continue
+                    }
+                    if (i >= digits.length) break
+                    formatted.append(digits[i])
+                    i++
+                }
+                return formatted.toString()
+            }
+
+        })
+
 
 
 
