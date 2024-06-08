@@ -56,6 +56,25 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id='@+id/cambiarCliente'
+                android:layout_width="51dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="-24dp"
+                android:layout_marginBottom="88dp"
+                android:background="@drawable/click_effect"
+                android:clickable="true"
+                android:contentDescription="bottom"
+                android:elevation="3dp"
+                android:focusable="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/DatosdelCliente"
+                app:layout_constraintEnd_toEndOf="@+id/DatosdelCliente"
+                app:layout_constraintTop_toTopOf="@+id/DatosdelCliente"
+                app:srcCompat="@drawable/icons8_delete_32_1_"
+                app:tint="#00b861" />
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"

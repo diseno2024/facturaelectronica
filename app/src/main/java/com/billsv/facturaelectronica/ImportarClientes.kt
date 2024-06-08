@@ -171,6 +171,7 @@ class ImportarClientes : AppCompatActivity() {
     private fun mostrardialogo(data: String) {
         val dialogoCliente = Dialog(this)
         dialogoCliente.setContentView(R.layout.layout_mostrar_data) // R.layout.layout_custom_dialog es tu diseño personalizado
+        dialogoCliente.window?.setBackgroundDrawableResource(R.drawable.cuadro_dialogo)
         val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
         val height = (resources.displayMetrics.heightPixels * 0.7).toInt() // 60% del alto de la pantalla
         val nombre = dialogoCliente.findViewById<TextView>(R.id.nombre)
@@ -180,10 +181,11 @@ class ImportarClientes : AppCompatActivity() {
         val direccion = dialogoCliente.findViewById<TextView>(R.id.direccion)
         val correo = dialogoCliente.findViewById<TextView>(R.id.correo)
         val telefono = dialogoCliente.findViewById<TextView>(R.id.telefono)
-        val tipo = dialogoCliente.findViewById<TextView>(R.id.tipoC)
         val nit = dialogoCliente.findViewById<TextView>(R.id.nit)
         val nrc = dialogoCliente.findViewById<TextView>(R.id.nrc)
         val AcEco = dialogoCliente.findViewById<TextView>(R.id.AcEco)
+        val RemoverA = dialogoCliente.findViewById<LinearLayout>(R.id.vistaAc)
+        val RemoverNRC = dialogoCliente.findViewById<LinearLayout>(R.id.vistaNRC)
         dialogoCliente.window?.setLayout(width, height)
         dialogoCliente.setCanceledOnTouchOutside(false)
         val btnExit = dialogoCliente.findViewById<ImageButton>(R.id.exit)
@@ -199,11 +201,13 @@ class ImportarClientes : AppCompatActivity() {
         direccion.text = datos[3]
         correo.text = datos[2]
         telefono.text = datos[13]
-        tipo.text = datos[7]
         nit.text = datos[11]
         nrc.text = datos[9]
         AcEco.text = datos[10]
-
+        if(datos[7]!="Contribuyente"){
+            RemoverA.visibility = View.GONE
+            RemoverNRC.visibility = View.GONE
+        }
         dialogoCliente.show()
     }
 

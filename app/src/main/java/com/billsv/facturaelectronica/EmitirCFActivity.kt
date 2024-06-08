@@ -164,9 +164,17 @@ class EmitirCFActivity : AppCompatActivity() {
             Nombre.text = nombreRecibido
             DUI.text = duiRecibido
         }
+        val editar: ImageButton = findViewById(R.id.cambiarCliente)
+        val carta: MaterialCardView = findViewById(R.id.DatosdelCliente)
         if (Nombre.text != ""){
-            val carta: MaterialCardView = findViewById(R.id.DatosdelCliente)
             carta.isEnabled = false
+            editar.visibility = View.VISIBLE
+        }
+        editar.setOnClickListener{
+            carta.isEnabled = true
+            Nombre.text = ""
+            DUI.text = ""
+            editar.visibility = View.GONE
         }
 
     }

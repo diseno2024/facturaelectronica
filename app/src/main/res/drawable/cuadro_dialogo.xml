@@ -3,6 +3,6 @@
     <corners android:topLeftRadius="0dp"
         android:bottomRightRadius="0dp"
         android:topRightRadius="25dp"
-        android:bottomLeftRadius="25dp"/> <!-- Ajusta el radio según tus preferencias -->
-    <solid android:color="#FFFFFF" /> <!-- Cambia este color por el que desees -->
+        android:bottomLeftRadius="25dp"/>  <!-- Ajusta el radio según tus preferencias -->
+    <solid android:color="#4a8c74" /> <!-- Cambia este color por el que desees -->
 </shape>
