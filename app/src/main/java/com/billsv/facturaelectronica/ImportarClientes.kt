@@ -39,6 +39,7 @@ class ImportarClientes : AppCompatActivity() {
 
                 val borrar2 = itemLayout2.findViewById<ImageButton>(R.id.btnBorrarData)
                 val Editar2 = itemLayout2.findViewById<ImageButton>(R.id.btnEditarData)
+                val Ver2 = itemLayout2.findViewById<ImageButton>(R.id.btnVerData)
                 val textViewNombre2 = itemLayout2.findViewById<TextView>(R.id.textViewNombreComercial)
                 val textViewNRC = itemLayout2.findViewById<TextView>(R.id.textViewNrc)
                 val textViewTelefono = itemLayout2.findViewById<TextView>(R.id.textViewTelefono)
@@ -55,12 +56,23 @@ class ImportarClientes : AppCompatActivity() {
                         mostrardialogo(data)
                     }
                 }
-
+                if (letra=="r"||letra=="c"){
+                    borrar2.visibility = View.GONE
+                    Editar2.visibility = View.GONE
+                    Ver2.visibility = View.VISIBLE
+                }else if(letra=="s"){
+                    borrar2.visibility = View.VISIBLE
+                    Editar2.visibility = View.VISIBLE
+                    Ver2.visibility = View.GONE
+                }
                 borrar2.setOnClickListener {
                     Borrardatos(data, itemLayout2, linearLayout)
                 }
                 Editar2.setOnClickListener{
                     editardatos(data)
+                }
+                Ver2.setOnClickListener{
+                    mostrardialogo(data)
                 }
 
                 linearLayout.addView(itemLayout2)
@@ -70,6 +82,7 @@ class ImportarClientes : AppCompatActivity() {
 
                 val borrar = itemLayout.findViewById<ImageButton>(R.id.btnBorrarData)
                 val Editar = itemLayout.findViewById<ImageButton>(R.id.btnEditarData)
+                val Ver = itemLayout.findViewById<ImageButton>(R.id.btnVerData)
                 val textViewNombre = itemLayout.findViewById<TextView>(R.id.textViewNombre)
                 val textViewTelefono = itemLayout.findViewById<TextView>(R.id.textViewTelefono)
                 val textViewNit = itemLayout.findViewById<TextView>(R.id.textViewNit)
@@ -88,6 +101,15 @@ class ImportarClientes : AppCompatActivity() {
                         mostrardialogo(data)
                     }
                 }
+                if (letra=="r"||letra=="c"){
+                    borrar.visibility = View.GONE
+                    Editar.visibility = View.GONE
+                    Ver.visibility = View.VISIBLE
+                }else if(letra=="s"){
+                    borrar.visibility = View.VISIBLE
+                    Editar.visibility = View.VISIBLE
+                    Ver.visibility = View.GONE
+                }
 
                 borrar.setOnClickListener {
                     Borrardatos(data, itemLayout, linearLayout)
@@ -95,7 +117,9 @@ class ImportarClientes : AppCompatActivity() {
                 Editar.setOnClickListener{
                     editardatos(data)
                 }
-
+                Ver.setOnClickListener{
+                    mostrardialogo(data)
+                }
                 if(letra=="r"){
                     //solo muestra nrc
                     //linearLayout.addView(itemLayout)

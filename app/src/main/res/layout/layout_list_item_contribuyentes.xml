@@ -130,6 +130,19 @@ tools:context=".ImportarClientes">
         app:srcCompat="@drawable/editar"
         app:tint="#00b861" />
 
+    <ImageButton
+        android:id='@+id/btnVerData'
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:layout_gravity="end|top"
+        android:background="@drawable/click_effect"
+        android:clickable="true"
+        android:contentDescription="bottom"
+        android:elevation="5dp"
+        android:focusable="true"
+        android:visibility="gone"
+        app:srcCompat="@drawable/icons8_visible_32_1_"  />
+
 </FrameLayout>
 
 

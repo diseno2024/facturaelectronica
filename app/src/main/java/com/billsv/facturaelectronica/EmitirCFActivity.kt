@@ -36,6 +36,7 @@ import com.couchbase.lite.Expression
 import com.couchbase.lite.Meta
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
+import com.google.android.material.card.MaterialCardView
 import com.google.gson.GsonBuilder
 import org.json.JSONObject
 import java.io.File
@@ -163,7 +164,10 @@ class EmitirCFActivity : AppCompatActivity() {
             Nombre.text = nombreRecibido
             DUI.text = duiRecibido
         }
-
+        if (Nombre.text != ""){
+            val carta: MaterialCardView = findViewById(R.id.DatosdelCliente)
+            carta.isEnabled = false
+        }
 
     }
 
