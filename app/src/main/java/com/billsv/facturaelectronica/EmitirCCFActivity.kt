@@ -55,6 +55,7 @@ class EmitirCCFActivity : AppCompatActivity() {
         }
         tableLayout = findViewById(R.id.Tabla)
         var total = 0.0
+        var precioIva: Double
         val dataList = obtenerDatosGuardados()
         if (dataList.isNotEmpty()) {
             dataList.forEach { data ->
@@ -62,8 +63,16 @@ class EmitirCCFActivity : AppCompatActivity() {
                 val cantidad = datos[1]
                 val producto = datos[3]
                 val precio = datos[5]
+                val tipoV= datos[4]
+                Log.e("emitircf","$tipoV")
+                if (tipoV=="Gravado"){
+                    precioIva=((precio.toDoubleOrNull() ?: 0.0)*(1.0+0.13))
+                    Log.e("emitircf","$precioIva")
+                    total += ((cantidad.toIntOrNull() ?: 0) * precioIva)
+                }else{
+                    total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
+                }
 
-                total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
                 val tableRow = TableRow(this)
 
                 val cantidadTextView = TextView(this).apply {
@@ -334,7 +343,7 @@ class EmitirCCFActivity : AppCompatActivity() {
             val cantidad = dict?.getString("Cantidad")
             val unidad = dict?.getString("Unidad")
             val Producto = dict?.getString("Producto")
-            val TipoV = dict?.getString("Tipo de Vente")
+            val TipoV = dict?.getString("Tipo de Venta")
             val Precio = dict?.getString("Precio")
 
             // Formatea los datos como una cadena y la agrega a la lista

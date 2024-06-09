@@ -44,6 +44,8 @@ import java.io.FileOutputStream
 import java.io.FileWriter
 import java.io.InputStream
 import java.lang.Exception
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 
 class EmitirCFActivity : AppCompatActivity() {
@@ -68,8 +70,10 @@ class EmitirCFActivity : AppCompatActivity() {
                 val producto = datos[3]
                 val precio = datos[5]
                 val tipoV= datos[4]
+                Log.e("emitircf","$tipoV")
                 if (tipoV=="Gravado"){
                     precioIva=((precio.toDoubleOrNull() ?: 0.0)*(1.0+0.13))
+                    Log.e("emitircf","$precioIva")
                     total += ((cantidad.toIntOrNull() ?: 0) * precioIva)
                 }else{
                     total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
@@ -122,6 +126,7 @@ class EmitirCFActivity : AppCompatActivity() {
             tableLayout.addView(emptyRow)
         }
         val Total: TextView = findViewById(R.id.Total)
+        total=BigDecimal(total).setScale(2, RoundingMode.HALF_UP).toDouble()
         Total.text = total.toString()
 
         val spinnerOp: Spinner = findViewById(R.id.CoOperacion)
@@ -357,7 +362,7 @@ class EmitirCFActivity : AppCompatActivity() {
             val cantidad = dict?.getString("Cantidad")
             val unidad = dict?.getString("Unidad")
             val Producto = dict?.getString("Producto")
-            val TipoV = dict?.getString("Tipo de Vente")
+            val TipoV = dict?.getString("Tipo de Venta")
             val Precio = dict?.getString("Precio")
 
             // Formatea los datos como una cadena y la agrega a la lista
