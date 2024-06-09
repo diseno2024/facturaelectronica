@@ -221,7 +221,7 @@ class EmitirCFActivity : AppCompatActivity() {
         val database = app.database
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Articulo")))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
 
         // Ejecuta la consulta
         val result = query.execute()
@@ -257,7 +257,7 @@ class EmitirCFActivity : AppCompatActivity() {
         val database = app.database
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Articulo")))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
 
         // Ejecuta la consulta
         val result = query.execute()
@@ -293,7 +293,7 @@ class EmitirCFActivity : AppCompatActivity() {
         val database = app.database
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Articulo")))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
 
         try {
             val resultSet = query.execute()
@@ -332,7 +332,7 @@ class EmitirCFActivity : AppCompatActivity() {
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Articulo")))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
 
         // Ejecuta la consulta
         val result = query.execute()

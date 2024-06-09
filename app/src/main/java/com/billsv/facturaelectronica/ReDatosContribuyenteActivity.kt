@@ -523,7 +523,6 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         })
 
         val Check: CheckBox = findViewById(R.id.checkGuardar)
-        //val isCheck = false
         Check.isChecked
         nit.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
@@ -566,8 +565,59 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         btnAgregar.setOnClickListener{
             if(validarEntradas() && Check.isChecked){
                 guardarDatosContribuyente()
-                val intent = Intent(this, MenuActivity::class.java)
+                val nombreValue = razonSocial.text.toString()
+                val duivalue = dui.text.toString()
+                val nitvalue = nit.text.toString()
+                val AcEco = actividadEconomica.text.toString()
+                val NRC = nrc.text.toString()
+                val dep = spinnerDep.selectedItem.toString()
+                val mun = spinnerMun.selectedItem.toString()
+                val direccionValue = direccion.text.toString()
+                val emailValue = email.text.toString()
+                val telefonoValue = telefono.text.toString()
+                // Iniciar otra actividad
+                val intent = Intent(this, EmitirCCFActivity::class.java)
+                // Crear un Intent y agregar los datos
+                intent.putExtra("nombre", nombreValue)
+                intent.putExtra("dui", duivalue)
+                intent.putExtra("nit", nitvalue)
+                intent.putExtra("ActividadE", AcEco)
+                intent.putExtra("nrc", NRC)
+                intent.putExtra("departamento", dep)
+                intent.putExtra("municipio", mun)
+                intent.putExtra("direccion", direccionValue)
+                intent.putExtra("email", emailValue)
+                intent.putExtra("telefono", telefonoValue)
                 startActivity(intent)
+                limpiarEditText()
+                finish()
+            }else if(validarEntradas()){
+                val nombreValue = razonSocial.text.toString()
+                val duivalue = dui.text.toString()
+                val nitvalue = nit.text.toString()
+                val AcEco = actividadEconomica.text.toString()
+                val NRC = nrc.text.toString()
+                val dep = spinnerDep.selectedItem.toString()
+                val mun = spinnerMun.selectedItem.toString()
+                val direccionValue = direccion.text.toString()
+                val emailValue = email.text.toString()
+                val telefonoValue = telefono.text.toString()
+                // Iniciar otra actividad
+                val intent = Intent(this, EmitirCCFActivity::class.java)
+                // Crear un Intent y agregar los datos
+                intent.putExtra("nombre", nombreValue)
+                intent.putExtra("dui", duivalue)
+                intent.putExtra("nit", nitvalue)
+                intent.putExtra("ActividadE", AcEco)
+                intent.putExtra("nrc", NRC)
+                intent.putExtra("departamento", dep)
+                intent.putExtra("municipio", mun)
+                intent.putExtra("direccion", direccionValue)
+                intent.putExtra("email", emailValue)
+                intent.putExtra("telefono", telefonoValue)
+                startActivity(intent)
+                limpiarEditText()
+                finish()
             }
         }
         btnCancelar.setOnClickListener{
@@ -636,7 +686,6 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
             datosContribuyente.save(document)
             Log.d("ContribuyenteActivity", "Datos guardados correctamente: \n $document")
             Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
-            limpiarEditText()  // Limpiar los EditTexts
             returnToMenu()  // Regresar al menú
         } catch (e: CouchbaseLiteException) {
             Log.e("ContribuyenteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
@@ -646,15 +695,15 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
 
 
     private fun limpiarEditText() {
-        razonSocial.setText("")
-        nit.setText("")
-        dui.setText("")
-        actividadEconomica.setText("")
-        nrc.setText("")
-        direccion.setText("")
-        email.setText("")
+        razonSocial.text.clear()
+        nit.text.clear()
+        dui.text.clear()
+        actividadEconomica.text.clear()
+        nrc.text.clear()
+        direccion.text.clear()
+        email.text.clear()
         //nombreComercial.setText("")
-        telefono.setText("")
+        telefono.text.clear()
     }
     private fun validarEntradas(): Boolean {
         val actividadEconomicaText = actividadEconomica.text.toString()

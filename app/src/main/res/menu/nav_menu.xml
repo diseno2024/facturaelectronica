@@ -18,10 +18,6 @@
             android:title="Registro del cliente"
             />
         <item
-            android:id="@+id/nav_DatosContribuyente"
-            android:icon="@drawable/ic_person_add"
-            android:title="Datos del contribuyente" />
-        <item
             android:id="@+id/nav_configuracion"
             android:icon="@drawable/ic_user"
             android:title="Conf. del Emisor"/>

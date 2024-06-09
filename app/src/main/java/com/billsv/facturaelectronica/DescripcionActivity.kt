@@ -100,11 +100,17 @@ class DescripcionActivity : AppCompatActivity() {
                 TipoV.setSelection(0)
                 Unidad.setSelection(0)
             }
-
+            val clave = intent.getStringExtra("clave")
             btnRegresar.setOnClickListener {
-                val intent = Intent(this, EmitirCFActivity::class.java)
-                startActivity(intent)
-                Item.dismiss()
+                if(clave == "ccf"){
+                    val intent = Intent(this, EmitirCCFActivity::class.java)
+                    startActivity(intent)
+                    Item.dismiss()
+                }else {
+                    val intent = Intent(this, EmitirCFActivity::class.java)
+                    startActivity(intent)
+                    Item.dismiss()
+                }
             }
 
             Item.show()
@@ -121,7 +127,13 @@ class DescripcionActivity : AppCompatActivity() {
         val producto = Producto.text.toString()
         val TipoV = TipoV.selectedItem.toString()
         val Precio = Precio.text.toString()
-
+        val clave = intent.getStringExtra("clave")
+        var articulo = ""
+        if (clave == "ccf"){
+            articulo = "Articuloccf"
+        }else{
+            articulo = "Articulocf"
+        }
         // Crear un documento mutable para guardar en la base de datos
         if (tipo != "" && cantidad != "") {
             // Crear un documento mutable para guardar en la base de datos
@@ -132,7 +144,7 @@ class DescripcionActivity : AppCompatActivity() {
                 .setString("Producto", producto)
                 .setString("Tipo de Venta", TipoV)
                 .setString("Precio", Precio)
-                .setString("tipo", "Articulo")
+                .setString("tipo", articulo)
 
             try {
                 // Guardar el documento en la base de datos
@@ -159,8 +171,15 @@ class DescripcionActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
-        val intent = Intent(this, EmitirCFActivity::class.java)
-        startActivity(intent)
-        finish()
+        val clave = intent.getStringExtra("clave")
+        if (clave == "ccf"){
+            val intent = Intent(this, EmitirCCFActivity::class.java)
+            startActivity(intent)
+            finish()
+        }else {
+            val intent = Intent(this, EmitirCFActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 }

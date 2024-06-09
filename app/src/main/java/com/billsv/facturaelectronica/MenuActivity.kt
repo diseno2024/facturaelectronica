@@ -100,15 +100,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
 
-
-            R.id.nav_DatosContribuyente -> {
-                //Iniciar ReDatosCntribuyenteActivity al selecionar "Datos Contribuyente"
-                val intent = Intent(this, ReDatosContribuyenteActivity::class.java)
-                startActivity(intent)
-                finish()
-                return true
-            }
-
             R.id.nav_cerrar_sesion -> {
                 // Cerrar sesión: iniciar LoginActivity y finalizar MenuActivity
                 val intent = Intent(this, LoginActivity::class.java)
