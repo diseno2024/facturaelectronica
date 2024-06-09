@@ -37,6 +37,7 @@ class ReClienteActivity : AppCompatActivity() {
     private lateinit var direccion: EditText
     private lateinit var telefono: EditText
     private lateinit var dui: EditText
+    private lateinit var nit: EditText
     private lateinit var agregarButton: Button
     private lateinit var cancelarButton: Button
     private lateinit var database: Database
@@ -406,6 +407,7 @@ class ReClienteActivity : AppCompatActivity() {
         agregarButton = findViewById(R.id.btnAgregar)
         cancelarButton = findViewById(R.id.btnCancelar)
         dui = findViewById(R.id.dui)
+        nit = findViewById(R.id.nit)
 
 
         // Agregar TextWatcher para el campo de teléfono
@@ -482,7 +484,42 @@ class ReClienteActivity : AppCompatActivity() {
                 return formatted.toString()
             }
         })
+        nit.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            private val mask = "####-######-###-#" // La máscara del NIT
 
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating) return
+
+                isUpdating = true
+                val formatted = formatNIT(s.toString())
+                nit.setText(formatted)
+                nit.setSelection(formatted.length)
+                isUpdating = false
+            }
+
+            private fun formatNIT(nit: String): String {
+                // Eliminar todos los caracteres no numéricos del NIT
+                val digits = nit.replace(Regex("\\D"), "")
+                val formatted = StringBuilder()
+
+                var i = 0
+                for (m in mask.toCharArray()) {
+                    if (m != '#') {
+                        formatted.append(m)
+                        continue
+                    }
+                    if (i >= digits.length) break
+                    formatted.append(digits[i])
+                    i++
+                }
+                return formatted.toString()
+            }
+        })
 
 
         val Check: CheckBox = findViewById(R.id.checkGuardar)
@@ -509,6 +546,7 @@ class ReClienteActivity : AppCompatActivity() {
                 val direccionValue = direccion.text.toString()
                 val telefonoValue = telefono.text.toString()
                 val duivalue=dui.text.toString()
+                val nitValue=nit.text.toString()
                 // Iniciar otra actividad
                 val intent = Intent(this, EmitirCFActivity::class.java)
                 // Crear un Intent y agregar los datos
@@ -517,6 +555,7 @@ class ReClienteActivity : AppCompatActivity() {
                 intent.putExtra("direccion", direccionValue)
                 intent.putExtra("telefono", telefonoValue)
                 intent.putExtra("dui", duivalue)
+                intent.putExtra("nit",nitValue)
                 startActivity(intent)
                 // Limpiar los EditText
                 nombre.text.clear()
@@ -524,6 +563,7 @@ class ReClienteActivity : AppCompatActivity() {
                 direccion.text.clear()
                 telefono.text.clear()
                 dui.text.clear()
+                nit.text.clear()
                 finish()
             }else if(validarEntradas()){
                 val nombreValue = nombre.text.toString()
@@ -531,6 +571,7 @@ class ReClienteActivity : AppCompatActivity() {
                 val direccionValue = direccion.text.toString()
                 val telefonoValue = telefono.text.toString()
                 val duivalue=dui.text.toString()
+                val nitValue=nit.text.toString()
                 // Iniciar otra actividad
                 val intent = Intent(this, EmitirCFActivity::class.java)
                 // Crear un Intent y agregar los datos
@@ -539,6 +580,7 @@ class ReClienteActivity : AppCompatActivity() {
                 intent.putExtra("direccion", direccionValue)
                 intent.putExtra("telefono", telefonoValue)
                 intent.putExtra("dui", duivalue)
+                intent.putExtra("nit",nitValue)
                 startActivity(intent)
                 // Limpiar los EditText
                 nombre.text.clear()
@@ -546,6 +588,7 @@ class ReClienteActivity : AppCompatActivity() {
                 direccion.text.clear()
                 telefono.text.clear()
                 dui.text.clear()
+                nit.text.clear()
                 finish()
             }
         }
@@ -570,6 +613,7 @@ class ReClienteActivity : AppCompatActivity() {
         val direccionText = direccion.text.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
         val duiText=dui.text.toString().replace("-","")
+        val nitText=nit.text.toString().replace("-","")
         //////
 
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
@@ -593,8 +637,29 @@ class ReClienteActivity : AppCompatActivity() {
         }
 
         //////
+        val query2 = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("nit").equalTo(Expression.string(nitText)))
+
+        try {
+            val resultSet = query2.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                Log.d("Re_Cliente", "Datos actualizados correctamente")
+                showToast("Ya existe un cliente con ese NIT")
+                return false
+            } else {
+                Log.d("Re_Cliente", "PASS")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+            showToast("Error al buscar el NIT")
+        }
+
+        //////
         // Verifica que todos los campos estén llenos
-        if (nombreText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() ) {
+        if (nombreText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() || nitText.isEmpty()) {
             Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
             return false
         }
@@ -603,7 +668,11 @@ class ReClienteActivity : AppCompatActivity() {
             Toast.makeText(this, "DUI debe ser un número válido de 9 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
-
+        // Verifica que el NIT sea un número válido
+        if (!nitText.matches(Regex("\\d{14}"))) {
+            Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
+            return false
+        }
         // Verifica que el correo electrónico tenga un formato válido
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
             Toast.makeText(this, "Correo electrónico no válido", Toast.LENGTH_SHORT).show()
@@ -620,6 +689,7 @@ class ReClienteActivity : AppCompatActivity() {
     private fun guardarInformacion() {
         val nombreText = nombre.text.toString()
         val emailText = email.text.toString()
+        val nitText = nit.text.toString().replace("-", "")
         val direccionText = direccion.text.toString()
         val departamentoText = spinnerDep.selectedItem.toString()
         val municipioText = spinnerMun.selectedItem.toString()
@@ -629,6 +699,7 @@ class ReClienteActivity : AppCompatActivity() {
         val duiText=dui.text.toString().replace("-", "")
         val telefonoMostrar = telefono.text.toString()
         val duiMostrar=dui.text.toString()
+        val nitMostrar = nit.text.toString()
         // Crear un documento mutable para guardar en la base de datos
         if (departamentoCodigo != null && municipioCodigo != null) {
             // Crear un documento mutable para guardar en la base de datos
@@ -646,6 +717,8 @@ class ReClienteActivity : AppCompatActivity() {
                 .setString("duiM",duiMostrar)
                 .setString("municipioT",municipioText)
                 .setString("departamentoT",departamentoText)
+                .setString("nit",nitText)
+                .setString("nitM",nitMostrar)
 
 
             try {

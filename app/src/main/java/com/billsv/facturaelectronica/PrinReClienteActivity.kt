@@ -924,6 +924,50 @@ class PrinReClienteActivity : AppCompatActivity() {
         }
 
         //////
+        val query2 = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("nit").equalTo(Expression.string(nitText)))
+
+        try {
+            val resultSet = query2.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                Log.d("Re_Cliente", "Datos actualizados correctamente")
+                showToast("Ya existe un cliente con ese NIT")
+                return false
+            } else {
+                Log.d("Re_Cliente", "PASS")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+            showToast("Error al buscar el NIT")
+        }
+
+        //////
+
+        val query3 = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("nrc").equalTo(Expression.string(nrcText)))
+
+        try {
+            val resultSet = query3.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                Log.d("Re_Cliente", "Datos actualizados correctamente")
+                showToast("Ya existe un cliente con ese NRC")
+                return false
+            } else {
+                Log.d("Re_Cliente", "PASS")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+            showToast("Error al buscar el NRC")
+        }
+
+        //////
+
         // Verifica que todos los campos estén llenos
         if (nombreText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() ) {
             Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
@@ -972,7 +1016,7 @@ class PrinReClienteActivity : AppCompatActivity() {
 
     private fun guardarInformacion() {
         val nombreText = nombre.text.toString()
-        val nitText = nit.text.toString()
+        val nitText = nit.text.toString().replace("-", "")
         val emailText = email.text.toString()
         val direccionText = direccion.text.toString()
         val departamentoText = spinnerDep.selectedItem.toString()

@@ -20,6 +20,8 @@ import com.couchbase.lite.CouchbaseLite
 import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Database
+import com.couchbase.lite.Expression
+import com.couchbase.lite.Meta
 import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
@@ -706,6 +708,8 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         telefono.text.clear()
     }
     private fun validarEntradas(): Boolean {
+        val app = application as MyApp///////
+        val database = app.database///////
         val actividadEconomicaText = actividadEconomica.text.toString()
         val nrcText = nrc.text.toString()
         val razonSocialText = razonSocial.text.toString()
@@ -714,6 +718,74 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         val emailText = email.text.toString().trim()
         val direccionText = direccion.text.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
+        val duiText=dui.text.toString().replace("-","")
+        //////
+
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("dui").equalTo(Expression.string(duiText)))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
+                showToast("Ya existe un cliente con ese dui")
+                return false
+            } else {
+                Log.d("Prin_Re_Cliente", "PASS")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+            showToast("Error al buscar el dui")
+        }
+
+        //////
+
+        val query2 = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("nit").equalTo(Expression.string(nitText)))
+
+        try {
+            val resultSet = query2.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                Log.d("Re_Cliente", "Datos actualizados correctamente")
+                showToast("Ya existe un cliente con ese NIT")
+                return false
+            } else {
+                Log.d("Re_Cliente", "PASS")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+            showToast("Error al buscar el NIT")
+        }
+
+        //////
+
+        val query3 = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("nrc").equalTo(Expression.string(nrcText)))
+
+        try {
+            val resultSet = query3.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                Log.d("Re_Cliente", "Datos actualizados correctamente")
+                showToast("Ya existe un cliente con ese NRC")
+                return false
+            } else {
+                Log.d("Re_Cliente", "PASS")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+            showToast("Error al buscar el NRC")
+        }
+
+        //////
 
         // Verifica que todos los campos estén llenos
         if (nrcText.isEmpty() || actividadEconomicaText.isEmpty() || nitText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() || razonSocialText.isEmpty()) {
@@ -746,5 +818,8 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
         finish()
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
