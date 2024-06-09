@@ -57,6 +57,24 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <ImageButton
+                android:id='@+id/cambiarCliente'
+                android:layout_width="51dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="-24dp"
+                android:layout_marginBottom="88dp"
+                android:background="@drawable/click_effect"
+                android:clickable="true"
+                android:contentDescription="bottom"
+                android:elevation="3dp"
+                android:focusable="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/Receptor"
+                app:layout_constraintEnd_toEndOf="@+id/Receptor"
+                app:layout_constraintTop_toTopOf="@+id/Receptor"
+                app:srcCompat="@drawable/icons8_delete_32_1_"
+                app:tint="#00b861" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/Totall"
@@ -305,88 +323,15 @@
                 android:id="@+id/textView13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="90dp"
                 android:padding="8dp"
-                android:text="Receptor"
+                android:text="Cliente"
                 android:textColor="#4a8c74"
                 android:textSize="@dimen/Texto"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/Receptor"
                 app:layout_constraintStart_toStartOf="@+id/Receptor"
-                app:layout_constraintTop_toBottomOf="@id/Emisor" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/Emisor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:translationZ="5dp"
-                app:cardCornerRadius="7dp"
-                app:cardElevation="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView"
-                app:strokeColor="#4a8c74"
-                app:strokeWidth="2dp">
-
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp">
-
-                    <TableRow
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="8dp"
-                            android:text="Nombre"
-                            android:textAlignment="center" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="8dp"
-                            android:text="NRC"
-                            android:textAlignment="center" />
-
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/nombreE"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="8dp"
-                            android:text=""
-                            android:textAlignment="center" />
-
-                        <TextView
-                            android:id="@+id/nrcE"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="8dp"
-                            android:text=""
-                            android:textAlignment="center" />
-
-                    </TableRow>
-                </TableLayout>
-
-
-            </com.google.android.material.card.MaterialCardView>
-
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView133"
@@ -402,19 +347,7 @@
                 app:layout_constraintStart_toStartOf="@+id/Articulo"
                 app:layout_constraintTop_toBottomOf="@id/Receptor" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="95dp"
-                android:padding="8dp"
-                android:text="Emisor"
-                android:textColor="#4a8c74"
-                android:textSize="@dimen/Texto"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/Emisor"
-                app:layout_constraintStart_toStartOf="@+id/Emisor"
-                app:layout_constraintTop_toTopOf="parent" />
+
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/Articulo"
@@ -536,7 +469,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="1.5"
                             android:padding="8dp"
                             android:text="Nombre"
                             android:textAlignment="center" />
@@ -559,8 +492,11 @@
                             android:id="@+id/nombreR"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="8dp"
+                            android:layout_weight="1.5"
+                            android:paddingStart="2dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="2dp"
+                            android:paddingBottom="8dp"
                             android:text=""
                             android:textAlignment="center" />
 
@@ -569,7 +505,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="8dp"
+                            android:paddingStart="2dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="2dp"
+                            android:paddingBottom="8dp"
                             android:text=""
                             android:textAlignment="center" />
 

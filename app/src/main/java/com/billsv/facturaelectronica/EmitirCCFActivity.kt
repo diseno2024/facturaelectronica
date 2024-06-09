@@ -23,6 +23,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.material.card.MaterialCardView
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
@@ -39,6 +40,7 @@ class EmitirCCFActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         val buttonAtras = findViewById<ImageButton>(R.id.atras)
         buttonAtras.setOnClickListener {
             val intent = Intent(this, MenuActivity::class.java)
@@ -46,14 +48,26 @@ class EmitirCCFActivity : AppCompatActivity() {
             finish()
         }
         // Recupera los datos pasados desde la otra actividad
-        val datosGuardados = intent.getStringExtra("Contribuyente")
+        val datosGuardados = intent.getStringExtra("Cliente")
         val Nombre: TextView = findViewById(R.id.nombreR)
         val NRC: TextView = findViewById(R.id.nrcR)
         // Aquí puedes usar los datos como necesites
         datosGuardados?.let{
             val datos = it.split("\n")
             Nombre.text = datos[0]
-            NRC.text = datos[4]
+            NRC.text = datos[9]
+        }
+        val editar: ImageButton = findViewById(R.id.cambiarCliente)
+        val carta: MaterialCardView = findViewById(R.id.Receptor)
+        if (Nombre.text != ""){
+            carta.isEnabled = false
+            editar.visibility = View.VISIBLE
+        }
+        editar.setOnClickListener{
+            carta.isEnabled = true
+            Nombre.text = ""
+            NRC.text = ""
+            editar.visibility = View.GONE
         }
 
 

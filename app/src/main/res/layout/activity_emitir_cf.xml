@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="85dp"
                 android:padding="8dp"
-                android:text="Datos del Cliente"
+                android:text="Cliente"
                 android:textStyle="bold"
                 android:textColor="#4a8c74"
                 android:textSize="@dimen/Texto"
@@ -121,7 +121,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="1.5"
                             android:padding="8dp"
                             android:text="Nombre"
                             android:textAlignment="center" />
@@ -144,8 +144,11 @@
                             android:id="@+id/nombre"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="8dp"
+                            android:layout_weight="1.5"
+                            android:paddingStart="2dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="2dp"
+                            android:paddingBottom="8dp"
                             android:text=""
                             android:textAlignment="center" />
 
@@ -154,7 +157,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="8dp"
+                            android:paddingStart="2dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="2dp"
+                            android:paddingBottom="8dp"
                             android:text=""
                             android:textAlignment="center" />
 
