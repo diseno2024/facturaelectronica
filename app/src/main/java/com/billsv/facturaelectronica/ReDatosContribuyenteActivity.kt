@@ -623,7 +623,7 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
             }
         }
         btnCancelar.setOnClickListener{
-            val intent = Intent(this, MenuActivity::class.java)
+            val intent = Intent(this, EmitirCCFActivity::class.java)
             startActivity(intent)
         }
         /*
@@ -638,7 +638,7 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val intent = Intent(this, MenuActivity::class.java)
+        val intent = Intent(this, EmitirCCFActivity::class.java)
         startActivity(intent)
         finish()
     }

@@ -71,9 +71,16 @@ class DescripcionActivity : AppCompatActivity() {
         }
         val Cancelar: Button = findViewById(R.id.Cancelar)
         Cancelar.setOnClickListener {
-            val intent = Intent(this, EmitirCFActivity::class.java)
-            startActivity(intent)
-            finish()
+            val clave = intent.getStringExtra("clave")
+            if(clave == "ccf"){
+                val intent = Intent(this, EmitirCCFActivity::class.java)
+                startActivity(intent)
+                finish()
+            }else {
+                val intent = Intent(this, EmitirCFActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
         Cantidad = findViewById(R.id.Cantidad)
         Producto = findViewById(R.id.Producto)

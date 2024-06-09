@@ -59,6 +59,7 @@ class EmitirCFActivity : AppCompatActivity() {
         }
         tableLayout = findViewById(R.id.Tabla)
         var total = 0.0
+        var precioIva: Double
         val dataList = obtenerDatosGuardados()
         if (dataList.isNotEmpty()) {
             dataList.forEach { data ->
@@ -66,8 +67,14 @@ class EmitirCFActivity : AppCompatActivity() {
                 val cantidad = datos[1]
                 val producto = datos[3]
                 val precio = datos[5]
+                val tipoV= datos[4]
+                if (tipoV=="Gravado"){
+                    precioIva=((precio.toDoubleOrNull() ?: 0.0)*(1.0+0.13))
+                    total += ((cantidad.toIntOrNull() ?: 0) * precioIva)
+                }else{
+                    total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
+                }
 
-                total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
                 val tableRow = TableRow(this)
 
                 val cantidadTextView = TextView(this).apply {
