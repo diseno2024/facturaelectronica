@@ -84,6 +84,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nombre" />
 
+            <EditText
+                android:id="@+id/nit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="39dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="NIT"
+                android:inputType="number"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dui" />
+
 
             <TextView
                 android:id="@+id/textdep"
@@ -93,7 +112,7 @@
                 android:text="Departamento"
                 android:textColor="#4A8C74"
                 android:textSize="@dimen/TextoEtiquetas"
-                app:layout_constraintTop_toBottomOf="@+id/dui"
+                app:layout_constraintTop_toBottomOf="@+id/nit"
                 app:layout_constraintStart_toStartOf="@+id/departamento" />
 
             <Spinner
@@ -119,7 +138,7 @@
                 android:textSize="@dimen/TextoEtiquetas"
                 app:layout_constraintBottom_toTopOf="@+id/municipio"
                 app:layout_constraintStart_toStartOf="@+id/municipio"
-                app:layout_constraintTop_toBottomOf="@+id/dui" />
+                app:layout_constraintTop_toBottomOf="@+id/nit" />
 
             <Spinner
                 android:id="@+id/municipio"
@@ -209,24 +228,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/texttipo"
                 />
-            <EditText
-                android:id="@+id/nit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="39dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="39dp"
-                android:backgroundTint="#2E594A"
-                android:ems="10"
-                android:hint="NIT"
-                android:inputType="number"
-                android:textColor="#4a8c74"
-                android:textColorHint="#4a8c74"
-                android:textSize="@dimen/textSize_input"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tipoCliente" />
 
             <EditText
                 android:id="@+id/nrc"
@@ -245,7 +246,7 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nit" />
+                app:layout_constraintTop_toBottomOf="@+id/tipoCliente" />
             <EditText
                 android:id="@+id/actividadEconomica"
                 android:layout_width="match_parent"
