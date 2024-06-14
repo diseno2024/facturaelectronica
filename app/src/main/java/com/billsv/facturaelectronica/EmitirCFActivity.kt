@@ -32,8 +32,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
+import com.couchbase.lite.Database
 import com.couchbase.lite.Expression
 import com.couchbase.lite.Meta
+import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -54,10 +56,13 @@ import java.util.Locale
 import java.util.UUID
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
+import java.io.ByteArrayOutputStream
 
 
 class EmitirCFActivity : AppCompatActivity() {
     private lateinit var tableLayout: TableLayout
+    private lateinit var database: Database
+    private var currentControlNumber = 0L
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -66,6 +71,13 @@ class EmitirCFActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+        val app = application as MyApp
+        database = app.database
+        val Num = obtenerNumeroControl()
+        Num.forEach { data ->
+            val nums = data.split("\n")
+            currentControlNumber = nums[0].toLong()
         }
         tableLayout = findViewById(R.id.Tabla)
         var total = 0.0
@@ -162,11 +174,11 @@ class EmitirCFActivity : AppCompatActivity() {
         }
         val crearjson: Button = findViewById(R.id.CrearJson)
         crearjson.setOnClickListener {
-            json()
+            /*json()
             /*borrararticulos()*/
             val intent = Intent(this, ConfHacienda::class.java)
             startActivity(intent)
-            finish()
+            finish()*/
         }
         // Recupera los datos pasados desde la otra actividad
         val datosGuardados = intent.getStringExtra("Cliente")
@@ -200,6 +212,91 @@ class EmitirCFActivity : AppCompatActivity() {
             editar.visibility = View.GONE
         }
 
+    }
+    private fun numeroControl(): String {
+        val numerocontrolBase = "DTE-01-OFIC0001-"
+        val numeroDigitos = 15
+        val formatoNumero = "%0${numeroDigitos}d"
+
+        // Incrementar el número de control
+        currentControlNumber = (currentControlNumber + 1) % 1000000000000000L
+
+        // Formatear el número de control
+        val numeroFormateado = String.format(formatoNumero, currentControlNumber)
+
+        guardarNumeroControl(currentControlNumber)
+
+        // Retornar el número de control completo
+        return numerocontrolBase + numeroFormateado
+    }
+    private fun guardarNumeroControl(Long :Long) {
+        // Buscar si ya existe un documento del tipo "ConfEmisor"
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("NumeroControl")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+            // Crear un nuevo documento
+            val document = MutableDocument()
+                .setString("numero", Long.toString())
+                .setString("tipo", "NumeroControl")
+
+            // Guardar el nuevo documento
+            database.save(document)
+            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun obtenerNumeroControl(): List<String> {
+        // Obtén la instancia de la base de datos desde la aplicación
+        val app = application as MyApp
+        val database = app.database
+
+        // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("NumeroControl")))
+
+        // Ejecuta la consulta
+        val result = query.execute()
+
+        // Lista para almacenar los datos obtenidos
+        val dataList = mutableListOf<String>()
+
+        // Itera sobre todos los resultados de la consulta
+        result.allResults().forEach { result ->
+            // Obtiene el diccionario del documento del resultado actual
+            val dict = result.getDictionary(database.name)
+
+            // Extrae los valores de los campos del documento
+            val numero = dict?.getString("numero")
+
+            // Formatea los datos como una cadena y la agrega a la lista
+            val dataString = "$numero"
+            dataList.add(dataString)
+        }
+
+        // Devuelve la lista de datos
+        return dataList
     }
     private fun FyH_emicion(): String{
         val calendar = Calendar.getInstance()
