@@ -7,11 +7,11 @@ data class Identificacion(
     val codigoGeneracion: String,
     val tipoModelo: Int,
     val tipoOperacion: Int,
-    val fecEmi: String,
-    val horEmi: String,
-    val tipoMoneda: String,
     val tipoContingencia: String?,
     val motivoContin: String?,
+    val fecEmi: String,
+    val horEmi: String,
+    val tipoMoneda: String
 )
 
 data class Direccion(

@@ -36,6 +36,8 @@ import com.couchbase.lite.Expression
 import com.couchbase.lite.Meta
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.GsonBuilder
 import org.json.JSONObject
@@ -46,6 +48,12 @@ import java.io.InputStream
 import java.lang.Exception
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import java.util.UUID
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.readValue
 
 
 class EmitirCFActivity : AppCompatActivity() {
@@ -154,8 +162,8 @@ class EmitirCFActivity : AppCompatActivity() {
         }
         val crearjson: Button = findViewById(R.id.CrearJson)
         crearjson.setOnClickListener {
-            /*json()
-            borrararticulos()*/
+            json()
+            /*borrararticulos()*/
             val intent = Intent(this, ConfHacienda::class.java)
             startActivity(intent)
             finish()
@@ -193,7 +201,20 @@ class EmitirCFActivity : AppCompatActivity() {
         }
 
     }
-
+    private fun FyH_emicion(): String{
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        // Formatea la fecha y la hora
+        val formattedDate = dateFormat.format(calendar.time)
+        val formattedTime = timeFormat.format(calendar.time)
+        val tiempo = "$formattedDate\n$formattedTime"
+        return tiempo
+    }
+    private fun generarUUIDv4(): String {
+        val uuid = UUID.randomUUID()
+        return uuid.toString().toUpperCase()
+    }
     fun showDescription(view: View?) {
         val intent = Intent(this, DescripcionActivity::class.java)
         startActivity(intent)
@@ -834,155 +855,133 @@ class EmitirCFActivity : AppCompatActivity() {
     }
     private fun json(){
 
-        val identificacion = Identificacion(
-            tipoContingencia = null,
-            motivoContin = null,
-            version = 1,
-            ambiente = "01",
-            tipoDte = "01",
-            numeroControl = "DTE-01-M001P001-000000000415593",
-            codigoGeneracion = "E5EF2A03-20E9-492E-A9E1-9551A26EE0D4",
-            tipoModelo = 1,
-            tipoOperacion = 1,
-            fecEmi = "2024-04-05",
-            horEmi = "17:45:20",
-            tipoMoneda = "USD"
-        )
-
-        val direccionEmisor = Direccion(
-            departamento = "05",
-            municipio = "02",
-            complemento = "Calle Chaparrastique lote 2A, Zona Industrial Santa Elena"
-        )
-
-        val emisor = Emisor(
-            codEstableMH = null,
-            codEstable = "M001",
-            codPuntoVentaMH = null,
-            codPuntoVenta = "P001",
-            nit = "06141812981018",
-            nrc = "1167953",
-            nombre = "Digicel SA de CV",
-            codActividad = "61101",
-            descActividad = "Servicio de telefonía",
-            nombreComercial = "Digicel",
-            tipoEstablecimiento = "01",
-            direccion = direccionEmisor,
-            telefono = "22855555",
-            correo = "facturaciondigicelsv@digicel.com.sv"
-        )
-
-        val direccionReceptor = Direccion(
-            departamento = "02",
-            municipio = "10",
-            complemento = "COL RIO ZARCO ETAPA 1 FINAL CL PPL AV BARCELONA GRUPO No 16 CASA No 16 , SANTA ANA"
-        )
-
-        val receptor = Receptor(
-            tipoDocumento = "36",
-            numDocumento = "02100904801030",
-            nrc = null,
-            nombre = "ERNESTO ALEXANDER CALDERON PERAZA",
-            codActividad = null,
-            descActividad = null,
-            telefono = "50371723699",
-            direccion = direccionReceptor,
-            correo = "calderonperaza@gmail.com"
-        )
-
-        val cuerpoDocumento = listOf(
-            CuerpoDocumento(
-                ivaItem = 1.6107,
-                psv = 0.000,
-                noGravado = 0.0,
-                numItem = 1,
-                tipoItem = 2,
-                numeroDocumento = null,
-                cantidad = 1.0,
-                codigo = "Srvc",
-                codTributo = null,
-                uniMedida = 99,
-                descripcion = "Cargo Básico de Plan",
-                precioUni = 14.0007,
-                montoDescu = 0.000,
-                ventaNoSuj = 0.0,
-                ventaExenta = 0.0,
-                ventaGravada = 14.00070,
-                tributos = null
-            )
-        )
-
-        val pagos = listOf(
-            Pago(
-                codigo = "13",
-                montoPago = 14.0,
-                referencia = "",
-                plazo = "01",
-                periodo = 30
-            )
-        )
-
-        val resumen = Resumen(
-            totalIva = 1.61,
-            porcentajeDescuento = 0.0,
-            ivaRete1 = 0.0,
-            reteRenta = 0.0,
-            totalNoGravado = 0.0,
-            totalPagar = 14.00,
-            saldoFavor = 0.0,
-            condicionOperacion = 2,
-            pagos = pagos,
-            numPagoElectronico = "02210014000090391000903915",
-            totalNoSuj = 0.0,
-            totalExenta = 0.0,
-            totalGravada = 14.00,
-            subTotalVentas = 14.00,
-            descuNoSuj = 0.0,
-            descuExenta = 0.0,
-            descuGravada = 0.00,
-            totalDescu = 0.00,
-            tributos = null,
-            subTotal = 14.00,
-            montoTotalOperacion = 14.00,
-            totalLetras = "CATORCE 00/100 USD"
-        )
-
-        val extension = Extension(
-            placaVehiculo = null,
-            docuEntrega = null,
-            nombEntrega = null,
-            docuRecibe = null,
-            nombRecibe = null,
-            observaciones = null
-        )
-
         val documento = Documento(
-            identificacion = identificacion,
+            identificacion = Identificacion(
+                version = 1,
+                ambiente = "Producción",
+                tipoDte = "Factura",
+                numeroControl = "12345",
+                codigoGeneracion = "FF54E9DB-79C3-42CE-B432-EC522C97EFB9",
+                tipoModelo = 1,
+                tipoOperacion = 1,
+                tipoContingencia = null,
+                motivoContin = null,
+                fecEmi = "2023-06-01",
+                horEmi = "12:00:00",
+                tipoMoneda = "USD"
+            ),
             documentoRelacionado = null,
-            emisor = emisor,
-            receptor = receptor,
+            emisor = Emisor(
+                nit = "06140030211001",
+                nrc = "123456-7",
+                nombre = "Empresa XYZ",
+                codActividad = "6201",
+                descActividad = "Desarrollo de Software",
+                nombreComercial = "XYZ Tech",
+                tipoEstablecimiento = "Oficina",
+                direccion = Direccion(
+                    departamento = "San Salvador",
+                    municipio = "San Salvador",
+                    complemento = "Colonia Escalón"
+                ),
+                telefono = "2500-0000",
+                correo = "contacto@xyztech.com",
+                codEstableMH = null,
+                codEstable = "1",
+                codPuntoVentaMH = null,
+                codPuntoVenta = "1"
+            ),
+            receptor = Receptor(
+                tipoDocumento = "DUI",
+                numDocumento = "12345678-9",
+                nrc = null,
+                nombre = "Cliente ABC",
+                codActividad = null,
+                descActividad = null,
+                telefono = "2100-0000",
+                direccion = Direccion(
+                    departamento = "La Libertad",
+                    municipio = "Santa Tecla",
+                    complemento = "Residencial Las Piletas"
+                ),
+                correo = "cliente.abc@gmail.com"
+            ),
             otrosDocumentos = null,
             ventaTercero = null,
-            cuerpoDocumento = cuerpoDocumento,
-            resumen = resumen,
-            extension = extension,
+            cuerpoDocumento = listOf(
+                CuerpoDocumento(
+                    ivaItem = 0.0,
+                    psv = 0.0,
+                    noGravado = 0.0,
+                    numItem = 1,
+                    tipoItem = 1,
+                    numeroDocumento = null,
+                    cantidad = 2.0,
+                    codigo = "P001",
+                    codTributo = null,
+                    uniMedida = 1,
+                    descripcion = "Producto A",
+                    precioUni = 10.0,
+                    montoDescu = 0.0,
+                    ventaNoSuj = 0.0,
+                    ventaExenta = 0.0,
+                    ventaGravada = 20.0,
+                    tributos = null
+                )
+            ),
+            resumen = Resumen(
+                totalIva = 2.6,
+                porcentajeDescuento = 0.0,
+                ivaRete1 = 0.0,
+                reteRenta = 0.0,
+                totalNoGravado = 0.0,
+                totalPagar = 22.6,
+                saldoFavor = 0.0,
+                condicionOperacion = 1,
+                pagos = listOf(
+                    Pago(
+                        codigo = "01",
+                        montoPago = 22.6,
+                        referencia = "Pago en efectivo",
+                        plazo = "Inmediato",
+                        periodo = 0
+                    )
+                ),
+                numPagoElectronico = "0001",
+                totalNoSuj = 0.0,
+                totalExenta = 0.0,
+                totalGravada = 20.0,
+                subTotalVentas = 20.0,
+                descuNoSuj = 0.0,
+                descuExenta = 0.0,
+                descuGravada = 0.0,
+                totalDescu = 0.0,
+                tributos = null,
+                subTotal = 20.0,
+                montoTotalOperacion = 22.6,
+                totalLetras = "VEINTIDÓS CON 60/100"
+            ),
+            extension = Extension(
+                placaVehiculo = null,
+                docuEntrega = null,
+                nombEntrega = null,
+                docuRecibe = null,
+                nombRecibe = null,
+                observaciones = null
+            ),
             apendice = null,
-            selloRecibido = "",
-            firmaElectronica = ""
+            selloRecibido = "Sello de recibido",
+            firmaElectronica = "Firma electrónica"
         )
 
-        // Convertir los datos a JSON usando Gson
-        val gsonBuilder = GsonBuilder().setPrettyPrinting()
+        // Crear una instancia de ObjectMapper
+        val mapper = ObjectMapper().registerModule(KotlinModule())
+        mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
 
-// Conservar los campos con valor null
-        gsonBuilder.serializeNulls()
+        // Convertir la instancia de Documento a JSON
+        val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
 
-// Crear el objeto Gson
-        val gson = gsonBuilder.create()
-
-// Convertir los datos a JSON formateado y legible
-        val jsonData = gson.toJson(documento)
-        saveJsonToExternalStorage(jsonData)
+        saveJsonToExternalStorage(json)
     }
     private fun saveJsonToExternalStorage(jsonData: String) {
         val fileName = "documento.json"

@@ -91,12 +91,13 @@ dependencies {
     // PDF VIEWER
     implementation (libs.pdfview.android)
 
-    implementation ("com.fasterxml.jackson.core:jackson-databind:2.12.3")
+    implementation ("com.fasterxml.jackson.core:jackson-databind:2.12.5")
     implementation ("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.3")
     implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3")
     implementation ("org.slf4j:slf4j-api:1.7.30")
     implementation ("org.slf4j:slf4j-android:1.7.30")
     implementation ("org.bitbucket.b_c:jose4j:0.7.9")
     implementation ("javax.servlet:javax.servlet-api:4.0.1")
+    implementation ("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5")
 
 }

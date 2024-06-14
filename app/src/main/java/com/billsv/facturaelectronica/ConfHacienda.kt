@@ -46,18 +46,6 @@ class ConfHacienda : AppCompatActivity() {
             usuarioapi = datosapi[0]
             contraseñaapi = datosapi[1]
         }
-
-       /* val uuid: TextView = findViewById(R.id.textView55)
-        val uuid2: TextView = findViewById(R.id.textView57)
-        val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-        // Formatea la fecha y la hora
-        val formattedDate = dateFormat.format(calendar.time)
-        //uuid.text = formattedDate
-        val formattedTime = timeFormat.format(calendar.time)
-        //uuid2.text = formattedTime*/
-
         usuario = findViewById(R.id.usuario)
         contraseña = findViewById(R.id.contraseña)
 
@@ -129,11 +117,6 @@ class ConfHacienda : AppCompatActivity() {
         boton2.visibility = View.GONE
 
     }
-
-    /*private fun generarUUIDv4(): String {
-        val uuid = UUID.randomUUID()
-        return uuid.toString().toUpperCase()
-    }*/
     private fun guardarInformacion() {
         val app = application as MyApp
         val database = app.database
