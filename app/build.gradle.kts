@@ -55,6 +55,28 @@ android {
 
 dependencies {
     val appcompat_version = "1.6.1"
+    //firmador
+    implementation ("com.fasterxml.jackson.core:jackson-databind:2.12.3")
+    implementation ("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.3")
+    implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3")
+    implementation ("org.slf4j:slf4j-api:1.7.30")
+    implementation ("org.slf4j:slf4j-android:1.7.30")
+    implementation ("org.bitbucket.b_c:jose4j:0.7.9")
+    implementation ("javax.servlet:javax.servlet-api:4.0.1")
+    // JSON WEB TOKEN
+    implementation("io.jsonwebtoken:jjwt:0.9.0")
+    implementation("org.json:json:20160810")
+    implementation("org.bouncycastle:bcprov-jdk15on:1.60")
+    implementation("org.glassfish.jersey.core:jersey-client:2.25.1")
+    implementation("org.glassfish.jersey.media:jersey-media-json-jackson:2.25.1")
+    // Para la generación de JWS
+    implementation("org.bitbucket.b_c:jose4j:0.7.1")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.8")
+    implementation("au.com.dius.pact.consumer:junit:4.1.11")
+    implementation("com.google.dagger:dagger:2.x")
+    //
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.google.code.gson:gson:2.8.9")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
