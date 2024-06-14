@@ -20,6 +20,9 @@ import com.couchbase.lite.Meta
 import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
+import com.google.android.material.button.MaterialButtonToggleGroup
+import android.content.Context
+import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -59,6 +62,14 @@ class ConfHacienda : AppCompatActivity() {
         val boton2: Button = findViewById(R.id.button3)
         boton2.setOnClickListener {
             habilitaredicion()
+        }
+        val toggleGroup = findViewById<MaterialButtonToggleGroup>(R.id.toggleButton)
+        restoreSelectedButton()
+
+        toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if (isChecked) {
+                saveSelectedButton(checkedId)
+            }
         }
     }
 
@@ -194,6 +205,21 @@ class ConfHacienda : AppCompatActivity() {
         // Devuelve la lista de datos
         return dataList
     }
+    private fun saveSelectedButton(buttonId: Int) {
+        val sharedPreferences = getSharedPreferences("ButtonStatePrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putInt("selectedButton", buttonId)
+        editor.apply()
+    }
+    private fun restoreSelectedButton() {
+        val sharedPreferences = getSharedPreferences("ButtonStatePrefs", Context.MODE_PRIVATE)
+        val selectedButtonId = sharedPreferences.getInt("selectedButton", View.NO_ID)
+        if (selectedButtonId != View.NO_ID) {
+            findViewById<MaterialButton>(selectedButtonId)?.isChecked = true
+        }
+    }
+
+
 
 
 }
