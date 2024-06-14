@@ -1,5 +1,6 @@
 package com.billsv.firmador.filter
 
+
 class FirmarDocumentoFilter {
     var passwordPub: String? = null
     var passwordPri: String? = null
@@ -11,4 +12,3 @@ class FirmarDocumentoFilter {
     var dte: String? = null
     var activo = false
 }
-
