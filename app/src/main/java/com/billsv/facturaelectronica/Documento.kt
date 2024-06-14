@@ -44,15 +44,12 @@ data class Receptor(
     val nombre: String,
     val codActividad: String?,
     val descActividad: String?,
-    val telefono: String,
     val direccion: Direccion,
+    val telefono: String,
     val correo: String
 )
 
 data class CuerpoDocumento(
-    val ivaItem: Double,
-    val psv: Double,
-    val noGravado: Double,
     val numItem: Int,
     val tipoItem: Int,
     val numeroDocumento: String?,
@@ -66,7 +63,10 @@ data class CuerpoDocumento(
     val ventaNoSuj: Double,
     val ventaExenta: Double,
     val ventaGravada: Double,
-    val tributos: String?
+    val tributos: String?,
+    val psv: Double,
+    val noGravado: Double,
+    val ivaItem: Double,
 )
 
 data class Pago(
@@ -78,16 +78,6 @@ data class Pago(
 )
 
 data class Resumen(
-    val totalIva: Double,
-    val porcentajeDescuento: Double,
-    val ivaRete1: Double,
-    val reteRenta: Double,
-    val totalNoGravado: Double,
-    val totalPagar: Double,
-    val saldoFavor: Double,
-    val condicionOperacion: Int,
-    val pagos: List<Pago>,
-    val numPagoElectronico: String,
     val totalNoSuj: Double,
     val totalExenta: Double,
     val totalGravada: Double,
@@ -95,20 +85,30 @@ data class Resumen(
     val descuNoSuj: Double,
     val descuExenta: Double,
     val descuGravada: Double,
+    val porcentajeDescuento: Double,
     val totalDescu: Double,
     val tributos: String?,
     val subTotal: Double,
+    val ivaRete1: Double,
+    val reteRenta: Double,
     val montoTotalOperacion: Double,
-    val totalLetras: String
+    val totalNoGravado: Double,
+    val totalPagar: Double,
+    val totalLetras: String,
+    val totalIva: Double,
+    val saldoFavor: Double,
+    val condicionOperacion: Int,
+    val pagos: List<Pago>,
+    val numPagoElectronico: String
 )
 
 data class Extension(
-    val placaVehiculo: String?,
-    val docuEntrega: String?,
     val nombEntrega: String?,
-    val docuRecibe: String?,
+    val docuEntrega: String?,
     val nombRecibe: String?,
-    val observaciones: String?
+    val docuRecibe: String?,
+    val observaciones: String?,
+    val placaVehiculo: String?,
 )
 
 data class Documento(
