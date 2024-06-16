@@ -189,7 +189,7 @@ class EmitirCFActivity : AppCompatActivity() {
         // Aquí puedes usar los datos como necesites
         if (datosGuardados != null) {
             if(datosGuardados.isNotEmpty())
-                datosGuardados?.let{
+                datosGuardados.let{
                     val datos = it.split("\n")
                     guardarCliente(Letrai, datos[8])
                 }
@@ -251,21 +251,25 @@ class EmitirCFActivity : AppCompatActivity() {
     }
 
     private fun emitirFactura() {
-            val currentreceptor = obtenerDui()
-            if(currentreceptor.isNotEmpty()){
-                currentreceptor.forEach{data->
-                    val datos = data.split("\n")
-                    val receptor = cargarData(datos[0],datos[1])
-                    if (receptor.isNotEmpty()) {
-                        receptor.forEach { info ->
-                            val intent = Intent(this, PDF_CFActivity::class.java)
-                            intent.putExtra("Cliente", info)
-                            startActivity(intent)
-                            finish()
-                        }
+        val numeroControl = numeroControl()
+        val codigoGeneracion = generarUUIDv4()
+        val currentreceptor = obtenerDui()
+        if(currentreceptor.isNotEmpty()){
+            currentreceptor.forEach{data->
+                val datos = data.split("\n")
+                val receptor = cargarData(datos[0],datos[1])
+                if (receptor.isNotEmpty()) {
+                    receptor.forEach { info ->
+                        val intent = Intent(this, PDF_CFActivity::class.java)
+                        intent.putExtra("Cliente", info)
+                        intent.putExtra("numeroControl", numeroControl)
+                        intent.putExtra("codGeneracion", codigoGeneracion)
+                        startActivity(intent)
+                        finish()
                     }
                 }
             }
+        }
     }
 
     private fun borrarClienteTemporal() {
@@ -510,7 +514,8 @@ class EmitirCFActivity : AppCompatActivity() {
             }
             // Crear un nuevo documento
             val document = MutableDocument()
-                .setString("numero", Long.toString())
+                //.setString("numero", Long.toString())
+                .setString("numero", 0.toString())//para recetear
                 .setString("tipo", "NumeroControl")
 
             // Guardar el nuevo documento
@@ -553,16 +558,6 @@ class EmitirCFActivity : AppCompatActivity() {
 
         // Devuelve la lista de datos
         return dataList
-    }
-    private fun FyH_emicion(): String{
-        val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-        // Formatea la fecha y la hora
-        val formattedDate = dateFormat.format(calendar.time)
-        val formattedTime = timeFormat.format(calendar.time)
-        val tiempo = "$formattedDate\n$formattedTime"
-        return tiempo
     }
     private fun generarUUIDv4(): String {
         val uuid = UUID.randomUUID()
@@ -734,9 +729,9 @@ class EmitirCFActivity : AppCompatActivity() {
         val dataList = mutableListOf<String>()
 
         // Itera sobre todos los resultados de la consulta
-        result.allResults().forEach { result ->
+        result.allResults().forEach { results ->
             // Obtiene el diccionario del documento del resultado actual
-            val dict = result.getDictionary(database.name)
+            val dict = results.getDictionary(database.name)
 
             // Extrae los valores de los campos del documento
             val Tipo = dict?.getString("Tipod")
@@ -758,49 +753,7 @@ class EmitirCFActivity : AppCompatActivity() {
             val numItem = dict?.getString("numItem")
 
             // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$Tipo\n$cantidad\n$unidad\n$Producto\n$TipoV\n$Precio"
-            dataList.add(dataString)
-        }
-
-        // Devuelve la lista de datos
-        return dataList
-    }
-    private fun obtenerEmisor(): List<String> {
-        // Obtén la instancia de la base de datos desde la aplicación
-        val app = application as MyApp
-        val database = app.database
-
-        // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
-        val query = QueryBuilder.select(SelectResult.all())
-            .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("ConfEmisor")))
-
-        // Ejecuta la consulta
-        val result = query.execute()
-
-        // Lista para almacenar los datos obtenidos
-        val dataList = mutableListOf<String>()
-
-        // Itera sobre todos los resultados de la consulta
-        result.allResults().forEach { result ->
-            // Obtiene el diccionario del documento del resultado actual
-            val dict = result.getDictionary(database.name)
-
-            // Extrae los valores de los campos del documento
-            val nombre = dict?.getString("nombre")
-            val nombrec = dict?.getString("nombreC")
-            val dui = dict?.getString("dui")
-            val nit = dict?.getString("nit")
-            val nrc = dict?.getString("nrc")
-            val AcEco = dict?.getString("ActividadEco")
-            val departamento = dict?.getString("departamento")
-            val municipio = dict?.getString("municipio")
-            val direccion = dict?.getString("direccion")
-            val telefono = dict?.getString("telefono")
-            val correo = dict?.getString("correo")
-
-            // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$nombre\n$nombrec\n$nit\n$nrc\n$AcEco\n$direccion\n$telefono\n$correo\n$dui\n$departamento\n$municipio"
+            val dataString = "$Tipo\n$cantidad\n$unidad\n$Producto\n$TipoV\n$Precio\n$VentaG\n$VentaE\n$VentaNS\n$ivaItem\n$codigoP\n$codigoT\n$tributo\n$psv\n$noGravado\n$montoDes\n$numItem"
             dataList.add(dataString)
         }
 

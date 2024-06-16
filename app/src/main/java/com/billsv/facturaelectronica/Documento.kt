@@ -1,52 +1,52 @@
 package com.billsv.facturaelectronica
 data class Identificacion(
     val version: Int,
-    val ambiente: String,
-    val tipoDte: String,
-    val numeroControl: String,
-    val codigoGeneracion: String,
+    val ambiente: String?,
+    val tipoDte: String?,
+    val numeroControl: String?,
+    val codigoGeneracion: String?,
     val tipoModelo: Int,
     val tipoOperacion: Int,
     val tipoContingencia: String?,
     val motivoContin: String?,
-    val fecEmi: String,
-    val horEmi: String,
-    val tipoMoneda: String
+    val fecEmi: String?,
+    val horEmi: String?,
+    val tipoMoneda: String?
 )
 
 data class Direccion(
-    val departamento: String,
-    val municipio: String,
-    val complemento: String
+    val departamento: String?,
+    val municipio: String?,
+    val complemento: String?
 )
 
 data class Emisor(
-    val nit: String,
-    val nrc: String,
-    val nombre: String,
-    val codActividad: String,
-    val descActividad: String,
-    val nombreComercial: String,
-    val tipoEstablecimiento: String,
+    val nit: String?,
+    val nrc: String?,
+    val nombre: String?,
+    val codActividad: String?,
+    val descActividad: String?,
+    val nombreComercial: String?,
+    val tipoEstablecimiento: String?,
     val direccion: Direccion,
-    val telefono: String,
-    val correo: String,
+    val telefono: String?,
+    val correo: String?,
     val codEstableMH: String?,
-    val codEstable: String,
+    val codEstable: String?,
     val codPuntoVentaMH: String?,
-    val codPuntoVenta: String,
+    val codPuntoVenta: String?,
 )
 
 data class Receptor(
-    val tipoDocumento: String,
-    val numDocumento: String,
+    val tipoDocumento: String?,
+    val numDocumento: String?,
     val nrc: String?,
-    val nombre: String,
+    val nombre: String?,
     val codActividad: String?,
     val descActividad: String?,
     val direccion: Direccion,
-    val telefono: String,
-    val correo: String
+    val telefono: String?,
+    val correo: String?
 )
 
 data class CuerpoDocumento(
@@ -54,10 +54,10 @@ data class CuerpoDocumento(
     val tipoItem: Int,
     val numeroDocumento: String?,
     val cantidad: Double,
-    val codigo: String,
+    val codigo: String?,
     val codTributo: String?,
     val uniMedida: Int,
-    val descripcion: String,
+    val descripcion: String?,
     val precioUni: Double,
     val montoDescu: Double,
     val ventaNoSuj: Double,
@@ -70,10 +70,10 @@ data class CuerpoDocumento(
 )
 
 data class Pago(
-    val codigo: String,
+    val codigo: String?,
     val montoPago: Double,
-    val referencia: String,
-    val plazo: String,
+    val referencia: String?,
+    val plazo: String?,
     val periodo: Int
 )
 
@@ -94,7 +94,7 @@ data class Resumen(
     val montoTotalOperacion: Double,
     val totalNoGravado: Double,
     val totalPagar: Double,
-    val totalLetras: String,
+    val totalLetras: String?,
     val totalIva: Double,
     val saldoFavor: Double,
     val condicionOperacion: Int,
@@ -118,10 +118,10 @@ data class Documento(
     val receptor: Receptor,
     val otrosDocumentos: String?,
     val ventaTercero: String?,
-    val cuerpoDocumento: List<CuerpoDocumento>,
+    var cuerpoDocumento: List<CuerpoDocumento>,
     val resumen: Resumen,
     val extension: Extension,
     val apendice: String?,
-    val selloRecibido: String,
-    val firmaElectronica: String
+    val selloRecibido: String?,
+    val firmaElectronica: String?
 )

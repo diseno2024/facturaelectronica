@@ -182,6 +182,24 @@ class DescripcionActivity : AppCompatActivity() {
                 codigo="3"
             }
         }
+        var codigoUnidad=""
+        codigoUnidad = when (UnidadMe) {
+            "Unidad" -> {
+                "59"
+            }
+
+            "Docena" -> {
+                "58"
+            }
+
+            "Ciento" -> {
+                "57"
+            }
+
+            else -> {
+                "99"
+            }
+        }
 
         var count=0
         val query = QueryBuilder.select(SelectResult.all())
@@ -202,7 +220,7 @@ class DescripcionActivity : AppCompatActivity() {
             val document = MutableDocument()
                 .setString("Tipod", codigo)
                 .setString("Cantidad", cantidad)
-                .setString("Unidad", UnidadMe)
+                .setString("Unidad", codigoUnidad)
                 .setString("Producto", producto)
                 .setString("Tipo de Venta", TipoV)
                 .setString("Precio", Precio)
