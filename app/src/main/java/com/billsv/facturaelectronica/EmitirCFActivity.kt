@@ -745,6 +745,17 @@ class EmitirCFActivity : AppCompatActivity() {
             val Producto = dict?.getString("Producto")
             val TipoV = dict?.getString("Tipo de Venta")
             val Precio = dict?.getString("Precio")
+            val VentaG = dict?.getString("ventaG")
+            val VentaE = dict?.getString("ventaE")
+            val VentaNS = dict?.getString("ventaNS")
+            val ivaItem = dict?.getString("ivaItem")
+            val codigoP = dict?.getString("ventaG")
+            val codigoT = dict?.getString("codigoT")
+            val tributo = dict?.getString("tributo")
+            val psv = dict?.getString("psv")
+            val noGravado = dict?.getString("noGravado")
+            val montoDes = dict?.getString("montoDesc")
+            val numItem = dict?.getString("numItem")
 
             // Formatea los datos como una cadena y la agrega a la lista
             val dataString = "$Tipo\n$cantidad\n$unidad\n$Producto\n$TipoV\n$Precio"

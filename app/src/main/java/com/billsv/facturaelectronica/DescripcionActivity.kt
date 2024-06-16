@@ -15,7 +15,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.billsv.facturaelectronica.R
 import com.couchbase.lite.CouchbaseLiteException
+import com.couchbase.lite.DataSource
+import com.couchbase.lite.Expression
 import com.couchbase.lite.MutableDocument
+import com.couchbase.lite.QueryBuilder
+import com.couchbase.lite.SelectResult
 
 class DescripcionActivity : AppCompatActivity() {
     private lateinit var Cantidad: EditText
@@ -69,6 +73,7 @@ class DescripcionActivity : AppCompatActivity() {
             // Apply the adapter to the spinner.
             TipoV.adapter = adapter
         }
+
         val Cancelar: Button = findViewById(R.id.Cancelar)
         Cancelar.setOnClickListener {
             val clave = intent.getStringExtra("clave")
@@ -85,6 +90,8 @@ class DescripcionActivity : AppCompatActivity() {
         Cantidad = findViewById(R.id.Cantidad)
         Producto = findViewById(R.id.Producto)
         Precio = findViewById(R.id.Precio)
+
+
 
         val Agregar: Button = findViewById(R.id.Agregar)
         Agregar.setOnClickListener {
@@ -136,22 +143,83 @@ class DescripcionActivity : AppCompatActivity() {
         val Precio = Precio.text.toString()
         val clave = intent.getStringExtra("clave")
         var articulo = ""
+        var ventaG="0.0"
+        var ventaE="0.0"
+        var ventaNS="0.0"
+        var ivaItemT="0.0"
         if (clave == "ccf"){
             articulo = "Articuloccf"
         }else{
             articulo = "Articulocf"
         }
+        when (TipoV) {
+            "Gravado" -> {
+                ventaG=Precio
+                val precioDouble: Double =  Precio.toDouble()
+
+                val ivaItem=precioDouble*0.13
+                ivaItemT=ivaItem.toString()
+
+            }
+            "Exento" -> {
+                ventaE=Precio
+            }
+            else -> {
+                ventaNS=Precio
+            }
+        }
+        //TIPO
+        var codigo=""
+        when (tipo) {
+            "Bien" -> {
+                codigo="1"
+
+            }
+            "Servicio" -> {
+                codigo="2"
+            }
+            else -> {
+                codigo="3"
+            }
+        }
+
+        var count=0
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
+
+        try {
+            val result = query.execute()
+            count +=result.allResults().size
+            Log.d("ReClienteActivity", "Número de documentos de tipo 'ConfEmisor': $count")
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al contar los documentos de tipo 'ConfEmisor': ${e.message}", e)
+        }
+        val numItem=(count+1).toString()
         // Crear un documento mutable para guardar en la base de datos
         if (tipo != "" && cantidad != "") {
             // Crear un documento mutable para guardar en la base de datos
             val document = MutableDocument()
-                .setString("Tipod", tipo)
+                .setString("Tipod", codigo)
                 .setString("Cantidad", cantidad)
                 .setString("Unidad", UnidadMe)
                 .setString("Producto", producto)
                 .setString("Tipo de Venta", TipoV)
                 .setString("Precio", Precio)
                 .setString("tipo", articulo)
+                .setString("ventaG",ventaG)
+                .setString("ventaE",ventaE)
+                .setString("ventaNS",ventaNS)
+                .setString("ivaItem",ivaItemT)
+                .setString("codigoP",null)
+                .setString("codigoT",null)
+                .setString("tributo",null)
+                .setString("psv","0.0")
+                .setString("noGravado","0.0")
+                .setString("montoDesc","0.0")
+                .setString("numItem",numItem)
+
+
 
             try {
                 // Guardar el documento en la base de datos

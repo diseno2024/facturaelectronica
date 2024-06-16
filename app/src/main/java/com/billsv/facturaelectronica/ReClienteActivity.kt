@@ -784,4 +784,11 @@ class ReClienteActivity : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+    override fun onBackPressed() {
+        super.onBackPressed() // Llama al método onBackPressed() de la clase base
+        val intent = Intent(this, EmitirCFActivity::class.java)
+
+        startActivity(intent)
+        finish()
+    }
 }

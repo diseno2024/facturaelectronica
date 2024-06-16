@@ -1,0 +1,5 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fondo de la celda -->
+    <stroke android:width="2dp" android:color="#2E594A" />
+    <!-- Color y ancho del borde -->
+</shape>

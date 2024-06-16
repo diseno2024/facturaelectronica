@@ -77,7 +77,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_resumenes -> {
                 // Iniciar ResMensualesActivity al seleccionar "Resúmenes mensuales"
-                val intent = Intent(this, ResMensualActivity::class.java)
+                val intent = Intent(this, ResMensualCCFActivity::class.java)
                 startActivity(intent)
                 finish()
                 return true
