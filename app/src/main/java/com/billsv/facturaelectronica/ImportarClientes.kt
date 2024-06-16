@@ -289,6 +289,7 @@ class ImportarClientes : AppCompatActivity() {
             val intent = Intent(this, EmitirCFActivity::class.java)
             // Pasa los datos de la carta seleccionada a la siguiente actividad
             intent.putExtra("Cliente", data)
+            intent.putExtra("letrai", "P")
             startActivity(intent)
             finish()
         }

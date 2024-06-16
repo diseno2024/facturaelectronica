@@ -541,21 +541,12 @@ class ReClienteActivity : AppCompatActivity() {
         agregarButton.setOnClickListener {
             if (validarEntradas() && Check.isChecked) {
                 guardarInformacion()
-                val nombreValue = nombre.text.toString()
-                val emailValue = email.text.toString()
-                val direccionValue = direccion.text.toString()
-                val telefonoValue = telefono.text.toString()
-                val duivalue=dui.text.toString()
-                val nitValue=nit.text.toString()
+                val duivalue= dui.text.toString().replace("-","")
                 // Iniciar otra actividad
                 val intent = Intent(this, EmitirCFActivity::class.java)
                 // Crear un Intent y agregar los datos
-                intent.putExtra("nombre", nombreValue)
-                intent.putExtra("email", emailValue)
-                intent.putExtra("direccion", direccionValue)
-                intent.putExtra("telefono", telefonoValue)
                 intent.putExtra("dui", duivalue)
-                intent.putExtra("nit",nitValue)
+                intent.putExtra("letra","P")
                 startActivity(intent)
                 // Limpiar los EditText
                 nombre.text.clear()
@@ -566,21 +557,13 @@ class ReClienteActivity : AppCompatActivity() {
                 nit.text.clear()
                 finish()
             }else if(validarEntradas()){
-                val nombreValue = nombre.text.toString()
-                val emailValue = email.text.toString()
-                val direccionValue = direccion.text.toString()
-                val telefonoValue = telefono.text.toString()
-                val duivalue=dui.text.toString()
-                val nitValue=nit.text.toString()
+                guardarInfoTemporal()
+                val duivalue= dui.text.toString().replace("-","")
                 // Iniciar otra actividad
                 val intent = Intent(this, EmitirCFActivity::class.java)
                 // Crear un Intent y agregar los datos
-                intent.putExtra("nombre", nombreValue)
-                intent.putExtra("email", emailValue)
-                intent.putExtra("direccion", direccionValue)
-                intent.putExtra("telefono", telefonoValue)
                 intent.putExtra("dui", duivalue)
-                intent.putExtra("nit",nitValue)
+                intent.putExtra("letra","T")
                 startActivity(intent)
                 // Limpiar los EditText
                 nombre.text.clear()
@@ -712,6 +695,62 @@ class ReClienteActivity : AppCompatActivity() {
                 .setString("telefono", telefonoText)
                 .setString("dui",duiText)
                 .setString("tipo", "cliente")
+                .setString("tipoCliente","Consumidor Final")
+                .setString("telefonoM",telefonoMostrar)
+                .setString("duiM",duiMostrar)
+                .setString("municipioT",municipioText)
+                .setString("departamentoT",departamentoText)
+                .setString("nit",nitText)
+                .setString("nitM",nitMostrar)
+
+
+            try {
+                // Guardar el documento en la base de datos
+                database.save(document)
+                Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
+                Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+            } catch (e: CouchbaseLiteException) {
+                Log.e(
+                    "ReClienteActivity",
+                    "Error al guardar los datos en la base de datos: ${e.message}",
+                    e
+                )
+                Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(
+                this,
+                "Error: Código de departamento o municipio no válido",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+    private fun guardarInfoTemporal() {
+        val nombreText = nombre.text.toString()
+        val emailText = email.text.toString()
+        val nitText = nit.text.toString().replace("-", "")
+        val direccionText = direccion.text.toString()
+        val departamentoText = spinnerDep.selectedItem.toString()
+        val municipioText = spinnerMun.selectedItem.toString()
+        val telefonoText = telefono.text.toString().replace("-", "")
+        val departamentoCodigo = departamentosMap[departamentoText]
+        val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
+        val duiText=dui.text.toString().replace("-", "")
+        val telefonoMostrar = telefono.text.toString()
+        val duiMostrar=dui.text.toString()
+        val nitMostrar = nit.text.toString()
+        // Crear un documento mutable para guardar en la base de datos
+        if (departamentoCodigo != null && municipioCodigo != null) {
+            // Crear un documento mutable para guardar en la base de datos
+            val document = MutableDocument()
+                .setString("nombre", nombreText)
+                .setString("email", emailText)
+                .setString("direccion", direccionText)
+                .setString("departamento", departamentoCodigo)
+                .setString("municipio", municipioCodigo)
+                .setString("telefono", telefonoText)
+                .setString("dui",duiText)
+                .setString("tipo", "clientetemporal")
                 .setString("tipoCliente","Consumidor Final")
                 .setString("telefonoM",telefonoMostrar)
                 .setString("duiM",duiMostrar)

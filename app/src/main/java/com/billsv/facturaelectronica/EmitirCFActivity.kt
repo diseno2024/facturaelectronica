@@ -36,7 +36,9 @@ import com.couchbase.lite.Database
 import com.couchbase.lite.Expression
 import com.couchbase.lite.Meta
 import com.couchbase.lite.MutableDocument
+import com.couchbase.lite.Query
 import com.couchbase.lite.QueryBuilder
+import com.couchbase.lite.ResultSet
 import com.couchbase.lite.SelectResult
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -74,6 +76,7 @@ class EmitirCFActivity : AppCompatActivity() {
         }
         val app = application as MyApp
         database = app.database
+        contarDocumentosConfEmisor()
         val Num = obtenerNumeroControl()
         Num.forEach { data ->
             val nums = data.split("\n")
@@ -167,10 +170,8 @@ class EmitirCFActivity : AppCompatActivity() {
         }
         val siguiente: Button = findViewById(R.id.Siguiente)
         siguiente.setOnClickListener {
-            generarPdf()
-            /*val intent = Intent(this, PDF_CFActivity::class.java)
-            startActivity(intent)
-            finish()*/
+            emitirFactura()
+            //generarPdf()
         }
         val crearjson: Button = findViewById(R.id.CrearJson)
         crearjson.setOnClickListener {
@@ -182,22 +183,45 @@ class EmitirCFActivity : AppCompatActivity() {
         }
         // Recupera los datos pasados desde la otra actividad
         val datosGuardados = intent.getStringExtra("Cliente")
+        val Letrai = intent.getStringExtra("letrai")
         val Nombre: TextView = findViewById(R.id.nombre)
         val DUI: TextView = findViewById(R.id.dui)
         // Aquí puedes usar los datos como necesites
-        datosGuardados?.let{
-            val datos = it.split("\n")
-            Nombre.text = datos[0]
-            DUI.text = datos[8]
+        if (datosGuardados != null) {
+            if(datosGuardados.isNotEmpty())
+                datosGuardados?.let{
+                    val datos = it.split("\n")
+                    guardarCliente(Letrai, datos[8])
+                }
+        }else{
+            val duiRecibido = intent.getStringExtra("dui")
+            val Letra = intent.getStringExtra("letra")
+            if(Letra!=null){
+                guardarCliente(Letra, duiRecibido)
+            }
         }
-        val nombreRecibido = intent.getStringExtra("nombre")
-        val duiRecibido = intent.getStringExtra("dui")
-        val emailRecibida = intent.getStringExtra("email")
-        val direccionRecibida = intent.getStringExtra("direccion")
-        val telefonoRecibida = intent.getStringExtra("telefono")
-        if(nombreRecibido!=null){
-            Nombre.text = nombreRecibido
-            DUI.text = duiRecibido
+        val datacliente = obtenerDui()
+        if(datacliente.isNotEmpty()){
+            datacliente.forEach{data->
+                val datos = data.split("\n")
+                val dui = datos[0]
+                val letra = datos[1]
+                val cliente = cargarData(dui,letra)
+                Log.d("ReClienteActivity", cliente.toString())
+                if (cliente.isNotEmpty()) {
+                    cliente.forEach{info->
+                        val infocliente = info.split("\n")
+                        Nombre.text = infocliente[0]
+                        DUI.text = infocliente[12]
+                        /*= datos[14]
+                        = datos[15]
+                        = datos[3]
+                         = datos[2]
+                         = datos[13]
+                         = datos[11]*/
+                    }
+                }
+            }
         }
         val editar: ImageButton = findViewById(R.id.cambiarCliente)
         val carta: MaterialCardView = findViewById(R.id.DatosdelCliente)
@@ -210,9 +234,241 @@ class EmitirCFActivity : AppCompatActivity() {
             Nombre.text = ""
             DUI.text = ""
             editar.visibility = View.GONE
+            if (datacliente.isNotEmpty()){
+                datacliente.forEach{data->
+                    val datos = data.split("\n")
+                    val letra = datos[1]
+                    if(letra=="T"){
+                        borrarDui()
+                        borrarClienteTemporal()
+                    }else if(letra=="P"){
+                        borrarDui()
+                    }
+                }
+            }
         }
 
     }
+
+    private fun emitirFactura() {
+            val currentreceptor = obtenerDui()
+            if(currentreceptor.isNotEmpty()){
+                currentreceptor.forEach{data->
+                    val datos = data.split("\n")
+                    val receptor = cargarData(datos[0],datos[1])
+                    if (receptor.isNotEmpty()) {
+                        receptor.forEach { info ->
+                            val intent = Intent(this, PDF_CFActivity::class.java)
+                            intent.putExtra("Cliente", info)
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
+                }
+            }
+    }
+
+    private fun borrarClienteTemporal() {
+        val app = application as MyApp
+        val database = app.database
+
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("clientetemporal")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun borrarDui() {
+        val app = application as MyApp
+        val database = app.database
+
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("DUI")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun guardarCliente(Letra:String?, dui:String?){
+        if(Letra=="T"){
+            guardarDUI(dui,Letra)
+        }else if(Letra=="P"){
+            guardarDUI(dui,Letra)
+        }
+
+    }
+
+    private fun cargarData(dui: String, letra: String): List<String> {
+        val app = application as MyApp
+        val database = app.database
+        val query: Query
+        val result: ResultSet
+
+        if (letra == "T") {
+            // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+            query = QueryBuilder.select(SelectResult.all())
+                .from(DataSource.database(database))
+                .where(Expression.property("tipo").equalTo(Expression.string("clientetemporal")))
+            result = query.execute()
+        } else if (letra == "P") {
+            // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+            query = QueryBuilder.select(SelectResult.all())
+                .from(DataSource.database(database))
+                .where(Expression.property("dui").equalTo(Expression.string(dui)))
+            result = query.execute()
+        } else {
+            // Initialize result with an empty ResultSet or handle the error appropriately
+            return emptyList()
+        }
+
+        // Lista para almacenar los datos obtenidos
+        val dataList = mutableListOf<String>()
+
+        // Itera sobre todos los resultados de la consulta
+        result.allResults().forEach { result ->
+            // Obtiene el diccionario del documento del resultado actual
+            val dict = result.getDictionary(database.name)
+
+            // Extrae los valores de los campos del documento
+            val nombre = dict?.getString("nombre")
+            val nit = dict?.getString("nit")
+            val email = dict?.getString("email")
+            val direccion = dict?.getString("direccion")
+            val departamento = dict?.getString("departamento")
+            val municipio = dict?.getString("municipio")
+            val telefono = dict?.getString("telefono")
+            val tipo = dict?.getString("tipoCliente")
+            val dui = dict?.getString("dui")
+            val nrc = dict?.getString("nrc")
+            val AcEco = dict?.getString("actividadEconomica")
+            val nitM = dict?.getString("nitM")
+            val duiM = dict?.getString("duiM")
+            val telM = dict?.getString("telefonoM")
+            val depaText = dict?.getString("departamentoT")
+            val muniText = dict?.getString("municipioT")
+
+            // Formatea los datos como una cadena y la agrega a la lista
+            val dataString = "$nombre\n$nit\n$email\n$direccion\n$departamento\n$municipio\n$telefono\n$tipo\n$dui\n$nrc\n$AcEco\n$nitM\n$duiM\n$telM\n$depaText\n$muniText"
+            dataList.add(dataString)
+        }
+
+        // Devuelve la lista de datos
+        return dataList
+    }
+
+
+    private fun guardarDUI(dui: String?, letra: String?){
+        val app = application as MyApp
+        val database = app.database
+
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("DUI")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+            // Crear un nuevo documento
+            val document = MutableDocument()
+                .setString("Dui", dui)
+                .setString("letra", letra)
+                .setString("tipo", "DUI")
+
+            // Guardar el nuevo documento
+            database.save(document)
+            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun obtenerDui(): List<String>{
+        val app = application as MyApp
+        val database = app.database
+
+        // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+        val query2 = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("DUI")))
+
+        // Ejecuta la consulta
+        val result2 = query2.execute()
+
+        // Lista para almacenar los datos obtenidos
+        val info = mutableListOf<String>()
+
+        // Itera sobre todos los resultados de la consulta
+        result2.allResults().forEach { resul ->
+            // Obtiene el diccionario del documento del resultado actual
+            val dict = resul.getDictionary(database.name)
+
+            // Extrae los valores de los campos del documento
+            val DUI = dict?.getString("Dui")
+            val letra = dict?.getString("letra")
+
+            // Formatea los datos como una cadena y la agrega a la lista
+            val dataString = "$DUI\n$letra"
+            info.add(dataString)
+        }
+        return info
+    }
+
     private fun numeroControl(): String {
         val numerocontrolBase = "DTE-01-OFIC0001-"
         val numeroDigitos = 15
@@ -380,6 +636,8 @@ class EmitirCFActivity : AppCompatActivity() {
         } else {
             // Si no hay artículos, llama a super.onBackPressed()
             super.onBackPressed()
+            borrarDui()
+            borrarClienteTemporal()
             val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
             finish()
@@ -414,6 +672,8 @@ class EmitirCFActivity : AppCompatActivity() {
             }
             dialogoCliente.show()
         }else{
+            borrarDui()//falta dialogo que se borrara el cliente
+            borrarClienteTemporal()
             val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
             finish()
@@ -488,6 +748,48 @@ class EmitirCFActivity : AppCompatActivity() {
 
             // Formatea los datos como una cadena y la agrega a la lista
             val dataString = "$Tipo\n$cantidad\n$unidad\n$Producto\n$TipoV\n$Precio"
+            dataList.add(dataString)
+        }
+
+        // Devuelve la lista de datos
+        return dataList
+    }
+    private fun obtenerEmisor(): List<String> {
+        // Obtén la instancia de la base de datos desde la aplicación
+        val app = application as MyApp
+        val database = app.database
+
+        // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("ConfEmisor")))
+
+        // Ejecuta la consulta
+        val result = query.execute()
+
+        // Lista para almacenar los datos obtenidos
+        val dataList = mutableListOf<String>()
+
+        // Itera sobre todos los resultados de la consulta
+        result.allResults().forEach { result ->
+            // Obtiene el diccionario del documento del resultado actual
+            val dict = result.getDictionary(database.name)
+
+            // Extrae los valores de los campos del documento
+            val nombre = dict?.getString("nombre")
+            val nombrec = dict?.getString("nombreC")
+            val dui = dict?.getString("dui")
+            val nit = dict?.getString("nit")
+            val nrc = dict?.getString("nrc")
+            val AcEco = dict?.getString("ActividadEco")
+            val departamento = dict?.getString("departamento")
+            val municipio = dict?.getString("municipio")
+            val direccion = dict?.getString("direccion")
+            val telefono = dict?.getString("telefono")
+            val correo = dict?.getString("correo")
+
+            // Formatea los datos como una cadena y la agrega a la lista
+            val dataString = "$nombre\n$nombrec\n$nit\n$nrc\n$AcEco\n$direccion\n$telefono\n$correo\n$dui\n$departamento\n$municipio"
             dataList.add(dataString)
         }
 
@@ -950,149 +1252,18 @@ class EmitirCFActivity : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-    private fun json(){
 
-        val documento = Documento(
-            identificacion = Identificacion(
-                version = 1,
-                ambiente = "Producción",
-                tipoDte = "Factura",
-                numeroControl = "12345",
-                codigoGeneracion = "FF54E9DB-79C3-42CE-B432-EC522C97EFB9",
-                tipoModelo = 1,
-                tipoOperacion = 1,
-                tipoContingencia = null,
-                motivoContin = null,
-                fecEmi = "2023-06-01",
-                horEmi = "12:00:00",
-                tipoMoneda = "USD"
-            ),
-            documentoRelacionado = null,
-            emisor = Emisor(
-                nit = "06140030211001",
-                nrc = "123456-7",
-                nombre = "Empresa XYZ",
-                codActividad = "6201",
-                descActividad = "Desarrollo de Software",
-                nombreComercial = "XYZ Tech",
-                tipoEstablecimiento = "Oficina",
-                direccion = Direccion(
-                    departamento = "San Salvador",
-                    municipio = "San Salvador",
-                    complemento = "Colonia Escalón"
-                ),
-                telefono = "2500-0000",
-                correo = "contacto@xyztech.com",
-                codEstableMH = null,
-                codEstable = "1",
-                codPuntoVentaMH = null,
-                codPuntoVenta = "1"
-            ),
-            receptor = Receptor(
-                tipoDocumento = "DUI",
-                numDocumento = "12345678-9",
-                nrc = null,
-                nombre = "Cliente ABC",
-                codActividad = null,
-                descActividad = null,
-                telefono = "2100-0000",
-                direccion = Direccion(
-                    departamento = "La Libertad",
-                    municipio = "Santa Tecla",
-                    complemento = "Residencial Las Piletas"
-                ),
-                correo = "cliente.abc@gmail.com"
-            ),
-            otrosDocumentos = null,
-            ventaTercero = null,
-            cuerpoDocumento = listOf(
-                CuerpoDocumento(
-                    ivaItem = 0.0,
-                    psv = 0.0,
-                    noGravado = 0.0,
-                    numItem = 1,
-                    tipoItem = 1,
-                    numeroDocumento = null,
-                    cantidad = 2.0,
-                    codigo = "P001",
-                    codTributo = null,
-                    uniMedida = 1,
-                    descripcion = "Producto A",
-                    precioUni = 10.0,
-                    montoDescu = 0.0,
-                    ventaNoSuj = 0.0,
-                    ventaExenta = 0.0,
-                    ventaGravada = 20.0,
-                    tributos = null
-                )
-            ),
-            resumen = Resumen(
-                totalIva = 2.6,
-                porcentajeDescuento = 0.0,
-                ivaRete1 = 0.0,
-                reteRenta = 0.0,
-                totalNoGravado = 0.0,
-                totalPagar = 22.6,
-                saldoFavor = 0.0,
-                condicionOperacion = 1,
-                pagos = listOf(
-                    Pago(
-                        codigo = "01",
-                        montoPago = 22.6,
-                        referencia = "Pago en efectivo",
-                        plazo = "Inmediato",
-                        periodo = 0
-                    )
-                ),
-                numPagoElectronico = "0001",
-                totalNoSuj = 0.0,
-                totalExenta = 0.0,
-                totalGravada = 20.0,
-                subTotalVentas = 20.0,
-                descuNoSuj = 0.0,
-                descuExenta = 0.0,
-                descuGravada = 0.0,
-                totalDescu = 0.0,
-                tributos = null,
-                subTotal = 20.0,
-                montoTotalOperacion = 22.6,
-                totalLetras = "VEINTIDÓS CON 60/100"
-            ),
-            extension = Extension(
-                placaVehiculo = null,
-                docuEntrega = null,
-                nombEntrega = null,
-                docuRecibe = null,
-                nombRecibe = null,
-                observaciones = null
-            ),
-            apendice = null,
-            selloRecibido = "Sello de recibido",
-            firmaElectronica = "Firma electrónica"
-        )
-
-        // Crear una instancia de ObjectMapper
-        val mapper = ObjectMapper().registerModule(KotlinModule())
-        mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
-
-        // Convertir la instancia de Documento a JSON
-        val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
-
-        saveJsonToExternalStorage(json)
-    }
-    private fun saveJsonToExternalStorage(jsonData: String) {
-        val fileName = "documento.json"
-        val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val file = File(directory, fileName)
+    private fun contarDocumentosConfEmisor() {
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("DUI")))
 
         try {
-            FileWriter(file).use {
-                it.write(jsonData)
-            }
-            Toast.makeText(this, "Archivo JSON guardado en: ${file.absolutePath}", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Error al guardar el archivo JSON", Toast.LENGTH_SHORT).show()
+            val result = query.execute()
+            val count = result.allResults().size
+            Log.d("ReClienteActivity", "Número de documentos de tipo 'ConfEmisor': $count")
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al contar los documentos de tipo 'ConfEmisor': ${e.message}", e)
         }
     }
 }
