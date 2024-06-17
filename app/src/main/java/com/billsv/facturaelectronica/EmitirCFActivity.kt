@@ -2,6 +2,7 @@ package com.billsv.facturaelectronica
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -19,6 +20,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -74,6 +76,7 @@ class EmitirCFActivity : AppCompatActivity() {
 
 
     var total = 0.0
+    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -181,9 +184,19 @@ class EmitirCFActivity : AppCompatActivity() {
         }
         val siguiente: Button = findViewById(R.id.Siguiente)
         siguiente.setOnClickListener {
-            emitirFactura()
-            enviarDatos()
-            guardarDatosF()
+            if (total < 1024){
+                if(validarfactura()) {
+                    emitirFactura()
+                    enviarDatos()
+                    guardarDatosF()
+                }
+            }else{
+                if(validarfactura()&&validarcliente()) {
+                    emitirFactura()
+                    enviarDatos()
+                    guardarDatosF()
+                }
+            }
             //generarPdf()
         }
         val crearjson: Button = findViewById(R.id.CrearJson)
@@ -261,7 +274,150 @@ class EmitirCFActivity : AppCompatActivity() {
                 }
             }
         }
+        val editarA: ImageButton = findViewById(R.id.editarArticulos)
+        if (Total.text != "0.0"){
+            editarA.visibility = View.VISIBLE
+        }
+        editarA.setOnClickListener {
+            val dialogoCliente = Dialog(this@EmitirCFActivity) // Usa el contexto de la actividad
+            dialogoCliente.setContentView(R.layout.dialogo_articulos)
+            val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+            val height = (resources.displayMetrics.heightPixels * 0.8).toInt()
+            dialogoCliente.window?.setLayout(width, height)
+            dialogoCliente.setCanceledOnTouchOutside(false)
 
+            // Busca containerLayout dentro del diálogo, no de la actividad
+            val linearLayout1 = dialogoCliente.findViewById<LinearLayout>(R.id.containerLayout)
+            val articulos = obtenerDatosGuardados()
+
+            if(articulos.isNotEmpty()) {
+                articulos.forEach { data ->
+                    val datosv = data.split("\n")
+                    val itemLayout2 = dialogoCliente.layoutInflater.inflate(R.layout.articulos, linearLayout1, false)
+
+                    val Editar2 = itemLayout2.findViewById<ImageButton>(R.id.btnEditarData)
+                    val textViewCantidad = itemLayout2.findViewById<TextView>(R.id.cantidad)
+                    val textViewProducto = itemLayout2.findViewById<TextView>(R.id.producto)
+                    val textViewPrecio = itemLayout2.findViewById<TextView>(R.id.precio)
+
+                    textViewCantidad.text = datosv[1]
+                    textViewProducto.text = datosv[3]
+                    textViewPrecio.text = datosv[5]
+
+                    Editar2.setOnClickListener {
+                        borrararticulo(data, itemLayout2, linearLayout1)
+                    }
+                    linearLayout1.addView(itemLayout2)
+                }
+            }
+
+            val btnExit = dialogoCliente.findViewById<ImageButton>(R.id.exit)
+            btnExit.setOnClickListener {
+                dialogoCliente.dismiss()
+                recreate()
+            }
+
+            dialogoCliente.show()
+        }
+    }
+
+    private fun borrararticulo(data: String, itemLayout2: View, linearLayout: LinearLayout) {
+        val app = application as MyApp
+        val database = app.database
+        val datos = data.split("\n")
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("Producto").equalTo(Expression.string(datos[3])))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Itera sobre los resultados y elimina cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                // Elimina la tarjeta de la vista
+
+                linearLayout.removeView(itemLayout2)
+
+
+                Log.d("Prin_Re_Cliente", "Se eliminó el cliente")
+                showToast("Cliente eliminado")
+            } else {
+                Log.d("Prin_Re_Cliente", "No existe el cliente")
+                showToast("No se encontró el cliente para eliminar")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al eliminar al cliente: ${e.message}", e)
+        }
+    }
+
+
+    private fun validarcliente(): Boolean {
+        val app = application as MyApp
+        val database = app.database
+
+        val queryCliente = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("DUI")))
+        try {
+            val resulCliente = queryCliente.execute()
+            val resultsC = resulCliente.allResults()
+
+            if (resultsC.isNotEmpty()) {
+                return true
+            }else{
+                showToast("Falta la informacion del Cliente")
+                return false
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+        return false
+    }
+
+    private fun validarfactura(): Boolean {
+        val app = application as MyApp
+        val database = app.database
+
+        val queryEmisor = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("ConfEmisor")))
+        val queryArticulos = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
+        try {
+            val resulEmisor = queryEmisor.execute()
+            val resultsE = resulEmisor.allResults()
+
+            val resulArticulo = queryArticulos.execute()
+            val resultsA = resulArticulo.allResults()
+
+            if (resultsE.isNotEmpty() && resultsA.isNotEmpty()) {
+               return true
+            }else{
+                if(resultsE.isEmpty()){
+                    showToast("Falta la informacion del Emisor")
+                }
+                if(resultsA.isEmpty()){
+                    showToast("Debe de haber al menos un Articulo")
+                }
+                return false
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+        return false
     }
 
     private fun enviarDatos() {
@@ -661,35 +817,58 @@ class EmitirCFActivity : AppCompatActivity() {
 
     }
     fun showDataClient(view: View) {
+        val app = application as MyApp
+        val database = app.database
 
-        val dialogoCliente = Dialog(this)
-        dialogoCliente.setContentView(R.layout.layout_dialogo_cliente) // R.layout.layout_custom_dialog es tu diseño personalizado
-        val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
-        val height = (resources.displayMetrics.heightPixels * 0.5).toInt() // 60% del alto de la pantalla
-        dialogoCliente.window?.setLayout(width, height)
-        dialogoCliente.setCanceledOnTouchOutside(false)
-        val btnImportar = dialogoCliente.findViewById<Button>(R.id.btnImportar)
-        val btnAgregar = dialogoCliente.findViewById<Button>(R.id.btnAgregar)
-        val btnExit = dialogoCliente.findViewById<ImageButton>(R.id.exit)
-        btnAgregar.setOnClickListener {
-            //Pagina para agregar datos de clientes
-            val intent = Intent(this, ReClienteActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-        btnImportar.setOnClickListener {
-            //Pagina para agregar datos de clientes
-            val intent = Intent(this, ImportarClientes::class.java)
-            intent.putExtra("letra","c")
-            startActivity(intent)
-            finish()
-        }
-        btnExit.setOnClickListener {
-            // Acción al hacer clic en el botón "Cancelar"
-            dialogoCliente.dismiss()
-        }
+        // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("cliente")))
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
 
-        dialogoCliente.show()
+            if (results.isNotEmpty()) {
+                val dialogoCliente = Dialog(this)
+                dialogoCliente.setContentView(R.layout.layout_dialogo_cliente) // R.layout.layout_custom_dialog es tu diseño personalizado
+                val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
+                val height = (resources.displayMetrics.heightPixels * 0.5).toInt() // 60% del alto de la pantalla
+                dialogoCliente.window?.setLayout(width, height)
+                dialogoCliente.setCanceledOnTouchOutside(false)
+                val btnImportar = dialogoCliente.findViewById<Button>(R.id.btnImportar)
+                val btnAgregar = dialogoCliente.findViewById<Button>(R.id.btnAgregar)
+                val btnExit = dialogoCliente.findViewById<ImageButton>(R.id.exit)
+                btnAgregar.setOnClickListener {
+                    //Pagina para agregar datos de clientes
+                    val intent = Intent(this, ReClienteActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                btnImportar.setOnClickListener {
+                    //Pagina para agregar datos de clientes
+                    val intent = Intent(this, ImportarClientes::class.java)
+                    intent.putExtra("letra","c")
+                    startActivity(intent)
+                    finish()
+                }
+                btnExit.setOnClickListener {
+                    // Acción al hacer clic en el botón "Cancelar"
+                    dialogoCliente.dismiss()
+                }
+
+                dialogoCliente.show()
+
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }else{
+                val intent = Intent(this, ReClienteActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
     }
     override fun onBackPressed() {
         val app = application as MyApp
@@ -711,6 +890,8 @@ class EmitirCFActivity : AppCompatActivity() {
             val btnno = dialogoCliente.findViewById<Button>(R.id.btnno)
             btnsi.setOnClickListener {
                 borrararticulos()
+                borrarDui()
+                borrarClienteTemporal()
                 val intent = Intent(this, MenuActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -749,6 +930,8 @@ class EmitirCFActivity : AppCompatActivity() {
             val btnno = dialogoCliente.findViewById<Button>(R.id.btnno)
             btnsi.setOnClickListener {
                 borrararticulos()
+                borrarDui()
+                borrarClienteTemporal()
                 val intent = Intent(this, MenuActivity::class.java)
                 startActivity(intent)
                 finish()
