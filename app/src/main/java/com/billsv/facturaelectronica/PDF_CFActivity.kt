@@ -8,21 +8,27 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
 import android.os.Environment
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
+import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
+import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.File
 import java.io.FileWriter
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.UUID
 
 class PDF_CFActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -229,7 +235,7 @@ class PDF_CFActivity : AppCompatActivity() {
                 tributos = null,
                 subTotal = 20.0,
                 montoTotalOperacion = 22.6,
-                totalLetras = "VEINTIDÓS CON 60/100"
+                totalLetras = precioEnLetras(42.37)
             ),
             extension = Extension(
                 placaVehiculo = null,
@@ -255,7 +261,7 @@ class PDF_CFActivity : AppCompatActivity() {
         // Convertir la instancia de Documento a JSON
         val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
 
-        saveJsonToExternalStorage(json)
+        saveJsonToExternalStorage(json,numeroContol)
     }
     private fun FyH_emicion(): String{
         val calendar = Calendar.getInstance()
@@ -267,8 +273,8 @@ class PDF_CFActivity : AppCompatActivity() {
         val tiempo = "$formattedDate\n$formattedTime"
         return tiempo
     }
-    private fun saveJsonToExternalStorage(jsonData: String) {
-        val fileName = "documento.json"
+    private fun saveJsonToExternalStorage(jsonData: String,numeroControl:String?) {
+        val fileName = "$numeroControl.json"
         val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val file = File(directory, fileName)
 
@@ -396,4 +402,42 @@ class PDF_CFActivity : AppCompatActivity() {
             )
         }
     }
+    fun numeroALetras(numero: Int): String {
+        val unidades = arrayOf("", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve")
+        val decenas = arrayOf("", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa")
+        val especiales = arrayOf("once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve")
+
+        return when {
+            numero == 0 -> "cero"
+            numero < 10 -> unidades[numero]
+            numero < 20 -> especiales[numero - 11]
+            numero < 100 -> {
+                val decena = numero / 10
+                val unidad = numero % 10
+                if (unidad == 0) decenas[decena] else "${decenas[decena]} y ${unidades[unidad]}"
+            }
+            numero < 1000 -> {
+                val centena = numero / 100
+                val resto = numero % 100
+                if (resto == 0) "${unidades[centena]}cientos" else "${unidades[centena]}cientos ${numeroALetras(resto)}"
+            }
+            else -> throw IllegalArgumentException("Número fuera de rango")
+        }
+    }
+
+    fun precioEnLetras(precio: Double): String {
+        val partes = precio.toString().split(".")
+        val parteEntera = partes[0].toInt()
+        val parteDecimal = if (partes.size > 1) partes[1].padEnd(2, '0').take(2).toInt() else 0
+
+        val letrasEntera = if (parteEntera == 1) "un dólar" else "${numeroALetras(parteEntera)} dólares"
+        val letrasDecimal = when (parteDecimal) {
+            0 -> ""
+            1 -> "con un centavo"
+            else -> "con ${numeroALetras(parteDecimal)} centavos"
+        }
+
+        return "$letrasEntera $letrasDecimal".trim()
+    }
+
 }
