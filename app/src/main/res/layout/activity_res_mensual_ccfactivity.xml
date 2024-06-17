@@ -214,16 +214,7 @@
                         android:textColor="#FFFFFF"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:background="@drawable/border"
-                        android:padding="16dp"
-                        android:text="Tipo de Documento"
-                        android:textAlignment="center"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
+
 
                     <TextView
                         android:layout_width="match_parent"
