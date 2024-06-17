@@ -20,6 +20,7 @@ import com.couchbase.lite.Expression
 import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
+import java.math.RoundingMode
 
 class DescripcionActivity : AppCompatActivity() {
     private lateinit var Cantidad: EditText
@@ -154,15 +155,22 @@ class DescripcionActivity : AppCompatActivity() {
         }
         when (TipoV) {
             "Gravado" -> {
-                ventaG=Precio
-                val precioDouble: Double =  Precio.toDouble()
 
-                val ivaItem=precioDouble*0.13
+                val precioDouble: Double =  Precio.toDouble()
+                val cantidadDouble: Double =cantidad.toDouble()
+                val ventaGT=precioDouble*cantidadDouble
+                ventaG=ventaGT.toString()
+
+                val ivaItem=(((precioDouble*cantidadDouble)/1.13)*0.13).toBigDecimal().setScale(6,RoundingMode.HALF_UP).toDouble()
                 ivaItemT=ivaItem.toString()
+                Log.e("Descripcion","$ivaItem")
 
             }
             "Exento" -> {
-                ventaE=Precio
+                val precioDouble: Double =  Precio.toDouble()
+                val cantidadDouble: Double =cantidad.toDouble()
+                val ventaET=precioDouble*cantidadDouble
+                ventaE=ventaET.toString()
             }
             else -> {
                 ventaNS=Precio

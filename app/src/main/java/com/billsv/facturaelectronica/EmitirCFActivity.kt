@@ -64,7 +64,15 @@ import java.io.ByteArrayOutputStream
 class EmitirCFActivity : AppCompatActivity() {
     private lateinit var tableLayout: TableLayout
     private lateinit var database: Database
+    private lateinit var spinnerOp:Spinner
     private var currentControlNumber = 0L
+    var totalNoSuj=0.0
+    var totalExenta=0.0
+    var totalGravada=0.0
+    var totalIva=0.0
+
+
+    var total = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -83,8 +91,8 @@ class EmitirCFActivity : AppCompatActivity() {
             currentControlNumber = nums[0].toLong()
         }
         tableLayout = findViewById(R.id.Tabla)
-        var total = 0.0
-        var precioIva: Double
+
+
         val dataList = obtenerDatosGuardados()
         if (dataList.isNotEmpty()) {
             dataList.forEach { data ->
@@ -92,15 +100,17 @@ class EmitirCFActivity : AppCompatActivity() {
                 val cantidad = datos[1]
                 val producto = datos[3]
                 val precio = datos[5]
-                val tipoV= datos[4]
-                Log.e("emitircf","$tipoV")
-                if (tipoV=="Gravado"){
-                    precioIva=((precio.toDoubleOrNull() ?: 0.0)*(1.0+0.13))
-                    Log.e("emitircf","$precioIva")
-                    total += ((cantidad.toIntOrNull() ?: 0) * precioIva)
-                }else{
-                    total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
-                }
+                val totalNS=datos[8].toDouble()
+                val totalEx=datos[7].toDouble()
+                val totalGr=datos[6].toDouble()
+                val totalIv=datos[9].toDouble()
+
+                totalNoSuj+=totalNS
+                totalExenta+=totalEx
+                totalGravada+=totalGr
+                totalIva+=totalIv
+                total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
+
 
                 val tableRow = TableRow(this)
 
@@ -152,7 +162,7 @@ class EmitirCFActivity : AppCompatActivity() {
         total=BigDecimal(total).setScale(2, RoundingMode.HALF_UP).toDouble()
         Total.text = total.toString()
 
-        val spinnerOp: Spinner = findViewById(R.id.CoOperacion)
+        spinnerOp= findViewById(R.id.CoOperacion)
         // Create an ArrayAdapter using the string array and a default spinner layout.
         ArrayAdapter.createFromResource(
             this,
@@ -171,6 +181,8 @@ class EmitirCFActivity : AppCompatActivity() {
         val siguiente: Button = findViewById(R.id.Siguiente)
         siguiente.setOnClickListener {
             emitirFactura()
+            enviarDatos()
+            guardarDatosF()
             //generarPdf()
         }
         val crearjson: Button = findViewById(R.id.CrearJson)
@@ -250,10 +262,78 @@ class EmitirCFActivity : AppCompatActivity() {
 
     }
 
+    private fun enviarDatos() {
+        val condicionO=spinnerOp.selectedItem.toString()
+        var codigo=""
+        when (condicionO) {
+            "Contado" -> {
+                codigo="1"
+
+            }
+            "Credito" -> {
+                codigo="2"
+            }
+            else -> {
+                codigo="3"
+            }
+        }
+        val totalNS=totalNoSuj.toString()
+        val totalEx=totalExenta.toString()
+        val totalGr=totalGravada.toString()
+        val totalT=total.toString()
+        val intent=Intent(this, PDF_CFActivity::class.java)
+        intent.putExtra("totalNoSuj",totalNS)
+        intent.putExtra("totalExenta",totalEx)
+        intent.putExtra("totalGravada",totalGr)
+        intent.putExtra("total",totalT)
+        intent.putExtra("totalIva",totalT)
+        intent.putExtra("condicionOperacion",codigo)
+    }
+
+    private fun guardarDatosF() {
+        val subTotalVentas=totalExenta+totalGravada+totalNoSuj
+        val document = MutableDocument()
+            .setDouble("totalNoSuj", totalNoSuj)
+            .setDouble("totalExenta", totalExenta)
+            .setDouble("totalGravada", totalGravada)
+            .setDouble("total",subTotalVentas)
+        try {
+            // Guardar el documento en la base de datos
+            database.save(document)
+            Log.d("TuClase", "Datos guardados correctamente: \n $document")
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+        } catch (e: CouchbaseLiteException) {
+            Log.e(
+                "TuClase",
+                "Error al guardar los datos en la base de datos: ${e.message}",
+                e
+            )
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun emitirFactura() {
         val numeroControl = numeroControl()
         val codigoGeneracion = generarUUIDv4()
         val currentreceptor = obtenerDui()
+        val condicionO=spinnerOp.selectedItem.toString()
+        var codigo=""
+        when (condicionO) {
+            "Contado" -> {
+                codigo="1"
+
+            }
+            "Credito" -> {
+                codigo="2"
+            }
+            else -> {
+                codigo="3"
+            }
+        }
+        val totalNS=totalNoSuj.toString()
+        val totalEx=totalExenta.toString()
+        val totalGr=totalGravada.toString()
+        val totalT=total.toString()
         if(currentreceptor.isNotEmpty()){
             currentreceptor.forEach{data->
                 val datos = data.split("\n")
@@ -264,6 +344,14 @@ class EmitirCFActivity : AppCompatActivity() {
                         intent.putExtra("Cliente", info)
                         intent.putExtra("numeroControl", numeroControl)
                         intent.putExtra("codGeneracion", codigoGeneracion)
+                        intent.putExtra("totalNoSuj",totalNS)
+                        intent.putExtra("totalExenta",totalEx)
+                        intent.putExtra("totalGravada",totalGr)
+                        intent.putExtra("total",totalT)
+                        intent.putExtra("totalIva",totalT)
+                        intent.putExtra("condicionOperacion",codigo)
+
+
                         startActivity(intent)
                         finish()
                     }
@@ -514,8 +602,8 @@ class EmitirCFActivity : AppCompatActivity() {
             }
             // Crear un nuevo documento
             val document = MutableDocument()
-                //.setString("numero", Long.toString())
-                .setString("numero", 0.toString())//para recetear
+                .setString("numero", Long.toString())
+                //.setString("numero", 0.toString())//para recetear
                 .setString("tipo", "NumeroControl")
 
             // Guardar el nuevo documento

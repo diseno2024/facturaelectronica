@@ -143,6 +143,12 @@ class PDF_CFActivity : AppCompatActivity() {
         var horEmi: String? = null
         val numeroContol = intent.getStringExtra("numeroControl")
         val codigoGeneracion = intent.getStringExtra("codGeneracion")
+        val totalNoSujeto = intent.getStringExtra("totalNoSuj")?.toDouble()
+        val totalExenta= intent.getStringExtra("totalExenta")?.toDouble()
+        val totalGravada= intent.getStringExtra("totalGravada")?.toDouble()
+        val total= intent.getStringExtra("total")?.toDouble()
+        val totalIva= intent.getStringExtra("totalIva")?.toDouble()
+        val condicionOperacion= intent.getStringExtra("condicionOperacion")?.toInt()
         val fechayHora = FyH_emicion()
         if (fechayHora.isNotEmpty()) {
             fechayHora.let {
@@ -206,14 +212,14 @@ class PDF_CFActivity : AppCompatActivity() {
             ventaTercero = null,
             cuerpoDocumento = emptyList(),
             resumen = Resumen(
-                totalIva = 2.6,
+                totalIva = totalIva,
                 porcentajeDescuento = 0.0,
                 ivaRete1 = 0.0,
                 reteRenta = 0.0,
                 totalNoGravado = 0.0,
-                totalPagar = 22.6,
+                totalPagar = total,
                 saldoFavor = 0.0,
-                condicionOperacion = 1,
+                condicionOperacion = condicionOperacion,
                 pagos = listOf(
                     Pago(
                         codigo = "01",
@@ -224,18 +230,18 @@ class PDF_CFActivity : AppCompatActivity() {
                     )
                 ),
                 numPagoElectronico = "0001",
-                totalNoSuj = 0.0,
-                totalExenta = 0.0,
-                totalGravada = 20.0,
-                subTotalVentas = 20.0,
+                totalNoSuj = totalNoSujeto,
+                totalExenta = totalExenta,
+                totalGravada = totalGravada,
+                subTotalVentas = total,
                 descuNoSuj = 0.0,
                 descuExenta = 0.0,
                 descuGravada = 0.0,
                 totalDescu = 0.0,
                 tributos = null,
-                subTotal = 20.0,
-                montoTotalOperacion = 22.6,
-                totalLetras = precioEnLetras(42.37)
+                subTotal = total,
+                montoTotalOperacion = total,
+                totalLetras = precioEnLetras(total)
             ),
             extension = Extension(
                 placaVehiculo = null,
@@ -425,10 +431,13 @@ class PDF_CFActivity : AppCompatActivity() {
         }
     }
 
-    fun precioEnLetras(precio: Double): String {
-        val partes = precio.toString().split(".")
-        val parteEntera = partes[0].toInt()
-        val parteDecimal = if (partes.size > 1) partes[1].padEnd(2, '0').take(2).toInt() else 0
+    fun precioEnLetras(precio: Double?): String {
+        if (precio == null) {
+            return "Precio no especificado"
+        }
+
+        val parteEntera = precio.toInt()
+        val parteDecimal = (precio * 100 % 100).toInt()
 
         val letrasEntera = if (parteEntera == 1) "un dólar" else "${numeroALetras(parteEntera)} dólares"
         val letrasDecimal = when (parteDecimal) {
