@@ -416,7 +416,7 @@ class PDF_CFActivity : AppCompatActivity() {
         return when {
             numero == 0 -> "cero"
             numero < 10 -> unidades[numero]
-            numero < 20 -> especiales[numero - 11]
+            numero in 11..19 -> especiales[numero - 11]
             numero < 100 -> {
                 val decena = numero / 10
                 val unidad = numero % 10
@@ -425,7 +425,20 @@ class PDF_CFActivity : AppCompatActivity() {
             numero < 1000 -> {
                 val centena = numero / 100
                 val resto = numero % 100
-                if (resto == 0) "${unidades[centena]}cientos" else "${unidades[centena]}cientos ${numeroALetras(resto)}"
+                val centenaStr = when (centena) {
+                    1 -> if (resto == 0) "cien" else "ciento"
+                    5 -> "quinientos"
+                    7 -> "setecientos"
+                    9 -> "novecientos"
+                    else -> "${unidades[centena]}cientos"
+                }
+                if (resto == 0) centenaStr else "$centenaStr ${numeroALetras(resto)}"
+            }
+            numero < 1000000 -> {
+                val miles = numero / 1000
+                val resto = numero % 1000
+                val milesStr = if (miles == 1) "mil" else "${numeroALetras(miles)} mil"
+                if (resto == 0) milesStr else "$milesStr ${numeroALetras(resto)}"
             }
             else -> throw IllegalArgumentException("Número fuera de rango")
         }
@@ -448,5 +461,7 @@ class PDF_CFActivity : AppCompatActivity() {
 
         return "$letrasEntera $letrasDecimal".trim()
     }
+
+
 
 }

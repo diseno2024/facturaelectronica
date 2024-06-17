@@ -58,6 +58,7 @@ import java.util.Locale
 import java.util.UUID
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
+import org.json.JSONArray
 import java.io.ByteArrayOutputStream
 
 
@@ -187,6 +188,7 @@ class EmitirCFActivity : AppCompatActivity() {
         }
         val crearjson: Button = findViewById(R.id.CrearJson)
         crearjson.setOnClickListener {
+            generarPdf()
             /*json()
             /*borrararticulos()*/
             val intent = Intent(this, ConfHacienda::class.java)
@@ -297,6 +299,7 @@ class EmitirCFActivity : AppCompatActivity() {
             .setDouble("totalExenta", totalExenta)
             .setDouble("totalGravada", totalGravada)
             .setDouble("total",subTotalVentas)
+            .setString("tipo","factura")
         try {
             // Guardar el documento en la base de datos
             database.save(document)
@@ -602,8 +605,8 @@ class EmitirCFActivity : AppCompatActivity() {
             }
             // Crear un nuevo documento
             val document = MutableDocument()
-                .setString("numero", Long.toString())
-                //.setString("numero", 0.toString())//para recetear
+                //.setString("numero", Long.toString())
+                .setString("numero", 0.toString())//para recetear
                 .setString("tipo", "NumeroControl")
 
             // Guardar el nuevo documento
@@ -850,7 +853,9 @@ class EmitirCFActivity : AppCompatActivity() {
     }
     private fun generarPdf() {
         // Variable para poder almacenar el contenido del json através de una función
+        //val jsonData = leerJsonDesdeAssets("DTE-01-OFIC0001-000000000000012.json")
         val jsonData = leerJsonDesdeAssets("CF.json")
+
         val pdfDocument = PdfDocument()
         // Crea una página tamaño carta para el PDF
         val paginaInfo = PdfDocument.PageInfo.Builder(612, 792, 1).create() // Tamaño carta
@@ -940,10 +945,10 @@ class EmitirCFActivity : AppCompatActivity() {
 
 
             // SELLO DE RECEPCIÓN
-            val respuestaHacienda = jsonObject.getJSONObject("respuestaHacienda")
-            val selloRecibido = respuestaHacienda.getString("selloRecibido")
+            //val respuestaHacienda = jsonObject.getJSONObject("respuestaHacienda")
+            //val selloRecibido = respuestaHacienda.getString("selloRecibido")
             // Este es el sello de recibido otrogado por el Ministerio de Hacienda
-            canvas.drawText("Sello de Recepción: $selloRecibido", 25f, 195f, paintInfoDocumento)
+            //canvas.drawText("Sello de Recepción: $selloRecibido", 25f, 195f, paintInfoDocumento)
 
 
 
@@ -979,7 +984,7 @@ class EmitirCFActivity : AppCompatActivity() {
             // RECEPTOR
             val receptor = jsonObject.getJSONObject("receptor")
             val nombre2 = receptor.getString("nombre")
-            val nit2 = receptor.getString("nit")
+            val nit2 = receptor.getString("numDocumento")
             val nrc2 = receptor.getString("nrc")
             val descActividad2 = receptor.getString("descActividad")
             val direccion2 = receptor.getJSONObject("direccion")
@@ -1093,17 +1098,22 @@ class EmitirCFActivity : AppCompatActivity() {
             canvas.drawText("$$descuGravada", finalPosition2 - paintTITULO.measureText(descuGravada), startY + 48, paintInfoDocumento)
 
             // Obtener el array de tributos
-            val tributos = resumen.getJSONArray("tributos")
+            val tributos: JSONArray? = if (resumen.isNull("tributos")) null else resumen.getJSONArray("tributos")
+
+
+
             // Variables para almacenar la descripción y el valor
             var descripcion20 = ""
             var valor20 = 0.0
             // Buscar y almacenar la descripción y el valor del tributo con código "20"
-            for (i in 0 until tributos.length()) {
-                val tributo = tributos.getJSONObject(i)
-                if (tributo.getString("codigo") == "20") {
-                    descripcion20 = tributo.getString("descripcion")
-                    valor20 = tributo.getDouble("valor")
-                    break  // Suponiendo que solo hay un tributo con código "20"
+            if (tributos != null) {
+                for (i in 0 until tributos.length()) {
+                    val tributo = tributos.getJSONObject(i)
+                    if (tributo.getString("codigo") == "20") {
+                        descripcion20 = tributo.getString("descripcion")
+                        valor20 = tributo.getDouble("valor")
+                        break  // Suponiendo que solo hay un tributo con código "20"
+                    }
                 }
             }
             // Dibuja lo que es el monto de IVA (13%) sobre el total de la venta
@@ -1116,9 +1126,9 @@ class EmitirCFActivity : AppCompatActivity() {
             canvas.drawText("$$subTotal", finalPosition2 - paintTITULO.measureText(subTotal), startY + 70, paintInfoDocumento)
 
             // Muesta Info sobre el IVA Percibido
-            val ivaPerci1 = resumen.getString("ivaPerci1")
+            /*val ivaPerci1 = resumen.getString("ivaPerci1")
             canvas.drawText("IVA Percibido:", finalPosition1 - paintTITULO.measureText("IVA Percibido:"), startY + 81, paintTITULO)
-            canvas.drawText("$$ivaPerci1", finalPosition2 - paintTITULO.measureText(ivaPerci1), startY + 81, paintInfoDocumento)
+            canvas.drawText("$$ivaPerci1", finalPosition2 - paintTITULO.measureText(ivaPerci1), startY + 81, paintInfoDocumento)*/
 
             // Muesta Info sobre el IVA Retenido
             val ivaRete1 = resumen.getString("ivaRete1")
