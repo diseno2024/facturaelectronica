@@ -1192,6 +1192,15 @@ class PDF_CFActivity : AppCompatActivity() {
         val totalExenta= intent.getStringExtra("totalExenta")?.toDouble()
         val totalGravada= intent.getStringExtra("totalGravada")?.toDouble()
         val totalNoSuj= intent.getStringExtra("totalNoSuj")?.toDouble()
+        val fechayhora=FyH_emicion()
+        var fecEmi=""
+        if (fechayhora.isNotEmpty()) {
+            fechayhora.let {
+                val datos = it.split("\n")
+                fecEmi = datos[0]
+            }
+        }
+
         val subTotalVentas= totalExenta!! + totalGravada!! + totalNoSuj!!
         val cliente=intent.getStringExtra("Cliente")
         if (cliente != null) {
@@ -1221,6 +1230,8 @@ class PDF_CFActivity : AppCompatActivity() {
             .setDouble("total",subTotalVentas)
             .setString("tipo","factura")
             .setString("numeroControl",numeroControl)
+            .setString("fechaEmi",fecEmi)
+            .setString("tipoD","Factura Consumidor Final")
         try {
             // Guardar el documento en la base de datos
             database.save(document)

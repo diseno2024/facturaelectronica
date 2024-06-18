@@ -21,6 +21,8 @@ import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
 import android.graphics.Color
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 
 class ResMensualCCFActivity : AppCompatActivity() {
     private lateinit var textViewMes: TextView
@@ -76,16 +78,48 @@ class ResMensualCCFActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        tipoD.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                actualizarTabla()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // No hacer nada
+            }
+        }
+
+
+    }
+    private fun getMonthName(month: Int): String {
+        val months = arrayOf(
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Augosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
+        return months[month]
+    }
+    override fun onBackPressed() {
+        super.onBackPressed() // Llama al método onBackPressed() de la clase base
+        val intent = Intent(this, MenuActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+    private fun actualizarTabla() {
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
+
+
+        // Limpia todas las filas excepto la cabecera
+        tableLayout.removeViews(1, tableLayout.childCount - 1)
 
         // Obtén una referencia a la base de datos
         val app = application as MyApp
         val database = app.database
+        val tipoDSeleccionado = tipoD.selectedItem.toString()
+        Log.e("ResMen", "$tipoDSeleccionado")
 
-        // Crea una consulta para seleccionar todos los documentos con tipo = "factura"
+        // Crea una consulta para seleccionar todos los documentos con el tipo seleccionado
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("factura")))
+            .where(Expression.property("tipoD").equalTo(Expression.string(tipoDSeleccionado)))
 
         // Ejecuta la consulta
         val result = query.execute()
@@ -105,7 +139,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
             val totalG = dict?.getDouble("totalGravada") ?: 0.0
             val total = dict?.getDouble("total") ?: 0.0
             val numC = dict?.getString("numeroControl") ?: ""
-            val fechE = "17-06-2024"
+            val fechE = dict?.getString("fechaEmi") ?: ""
             val numR = "15041-RES-IN-05608-2024"
             val serieD = "OFIC0001"
             val numD = "1"
@@ -127,20 +161,8 @@ class ResMensualCCFActivity : AppCompatActivity() {
                 dui
             )
         }
+    }
 
-    }
-    private fun getMonthName(month: Int): String {
-        val months = arrayOf(
-            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-            "Julio", "Augosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
-        return months[month]
-    }
-    override fun onBackPressed() {
-        super.onBackPressed() // Llama al método onBackPressed() de la clase base
-        val intent = Intent(this, MenuActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
     private fun addRowToTable(
         tableLayout: TableLayout,
         vararg values: String?
