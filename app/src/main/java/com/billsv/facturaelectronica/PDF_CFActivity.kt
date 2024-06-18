@@ -1,16 +1,26 @@
 package com.billsv.facturaelectronica
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.graphics.pdf.PdfDocument
+import android.graphics.pdf.PdfRenderer
 import android.os.Environment
+import android.os.ParcelFileDescriptor
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
+import com.billsv.facturaelectronica.databinding.ActivityPdfCfactivityBinding
 import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
@@ -20,28 +30,38 @@ import com.couchbase.lite.SelectResult
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
+import java.io.FileOutputStream
 import java.io.FileWriter
+import java.io.IOException
+import java.io.InputStream
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
+import com.pdfview.PDFView
 
 class PDF_CFActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityPdfCfactivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_pdf_cfactivity)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+
+        binding = ActivityPdfCfactivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val generar: Button = findViewById(R.id.Generar)
-        generar.setOnClickListener {
+
+        binding.Generar.setOnClickListener {
             val dialogoGenerar = Dialog(this)
             dialogoGenerar.setContentView(R.layout.layout_generar) // R.layout.layout_custom_dialog es tu diseño personalizado
             val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
@@ -61,6 +81,17 @@ class PDF_CFActivity : AppCompatActivity() {
 
             dialogoGenerar.show()
         }
+        // Crear y guardar el PDF en un archivo temporal
+        val pdfDocument = generarPdf()
+        val pdfFile = savePdfToCache(this, pdfDocument)
+
+        // Mostrar el PDF utilizando PDFView
+        binding.VistaPdf.fromFile(pdfFile)
+        binding.VistaPdf.isZoomEnabled = true
+        binding.VistaPdf.show()
+
+
+
     }
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
@@ -461,7 +492,264 @@ class PDF_CFActivity : AppCompatActivity() {
 
         return "$letrasEntera $letrasDecimal".trim()
     }
+    private fun generarPdf():PdfDocument {
+        // Variable para poder almacenar el contenido del json através de una función
+        //val jsonData = leerJsonDesdeAssets("DTE-01-OFIC0001-000000000000012.json")
+
+        val pdfDocument = PdfDocument()
+        // Crea una página tamaño carta para el PDF
+        val paginaInfo = PdfDocument.PageInfo.Builder(612, 792, 1).create() // Tamaño carta
+        val pagina1 = pdfDocument.startPage(paginaInfo)
+        val canvas = pagina1.canvas
+
+        // Estilo de Letra 1 - Para el encabezado del documento
+        val paintEncabezado = Paint().apply {
+            color = Color.BLACK
+            textSize = 12f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        }
+        // Estilo de Letra 2 - Para la mayoría de información del documento
+        val paintInfoDocumento = Paint().apply {
+            color = Color.BLACK
+            textSize = 7f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        }
+        // Estilo de Letra 3 - Para los títulos
+        val paintTITULO = Paint().apply {
+            color = Color.BLACK
+            textSize = 8f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        }
+        // Estilo de Letra 4 - Para la info del emisor y receptor
+        val paintInfoContribuyentes = Paint().apply {
+            color = Color.BLACK
+            textSize = 7f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        }
+        // Estilo de Rectángulo 1
+        val paintRect1 = Paint().apply {
+            style = Paint.Style.STROKE // Solo dibujar el contorno
+            color = Color.BLACK // Color del contorno
+            strokeWidth = 2f // Ancho del contorno
+        }
+        // Estilo de Rectángulo 2
+        val paintRect2 = Paint().apply {
+            style = Paint.Style.STROKE // Solo dibujar el contorno
+            color = Color.BLACK // Color del contorno
+            strokeWidth = 0.5f // Ancho del contorno
+        }
+        // Estilo de Borde 1 - Para el rectángulo del emisor y receptor
+        val cornerRadius1 = 5f
+
+        // Extraer y mostrar información del JSON
+        try {
+
+            // Aquí se empieza a generar el PDF en base a toda la info
+
+            // Dibujar el Encabezado
+            canvas.drawText("DOCUMENTO TRIBUTARIO ELECTRÓNICO", 210f, 25f, paintEncabezado)
+            canvas.drawText("COMPROBANTE DE CONSUMIDOR FINAL", 220f, 40f, paintEncabezado)
+
+            // IDENTIFICACIÓN
+            /*   Lado izquierdo   */
+            val codigoGeneracion = intent.getStringExtra("codGeneracion")
+            val numeroControl = intent.getStringExtra("numeroControl")
+            // Dibujar el texto en el PDF
+            // Info Código de Generación
+            canvas.drawText("Código de Generación: $codigoGeneracion", 25f, 175f, paintInfoDocumento)
+            // Info Número de Control
+            canvas.drawText("Número de Control: $numeroControl", 25f, 185f, paintInfoDocumento)
+            /*   Lado derecho   */
+            val tipoModelo = 1
+            val tipoOperacion = 1
+            val fecEmi = ""
+            val horEmi = ""
+            // Dibujar el texto en el PDF
+            // Info Modelo de Facturación
+            if (tipoModelo == 1) {
+                canvas.drawText("Modelo de Facturación: Modelo Facturación Previo", 375f, 175f, paintInfoDocumento)
+            } else if (tipoModelo == 2) {
+                canvas.drawText("Modelo de Facturación: Modelo Facturación Diferido", 375f, 175f, paintInfoDocumento)
+            }
+            // Info Tipo de Transmisión
+            if (tipoOperacion == 1) {
+                canvas.drawText("Tipo de Transmisión: Transmisión Normal", 375f, 185f, paintInfoDocumento)
+            } else if (tipoOperacion == 2) {
+                canvas.drawText("Tipo de Transmisión: Transmisión por Contingencia", 375f, 185f, paintInfoDocumento)
+            }
+            // Info de fecha y hora de generación
+            canvas.drawText("Fecha y Hora de Generación: $fecEmi $horEmi", 375f, 195f, paintInfoDocumento)
 
 
 
-}
+            // SELLO DE RECEPCIÓN
+            //val respuestaHacienda = jsonObject.getJSONObject("respuestaHacienda")
+            //val selloRecibido = respuestaHacienda.getString("selloRecibido")
+            // Este es el sello de recibido otrogado por el Ministerio de Hacienda
+            //canvas.drawText("Sello de Recepción: $selloRecibido", 25f, 195f, paintInfoDocumento)
+
+            var duiE: String? = null
+            var nombreE: String? = null
+            var nombrecE: String? = null
+            var telefonoE: String? = null
+            var departamentoE: String? = null
+            var municipioE: String? = null
+            var complementoE: String? = null
+            var correoE: String? = null
+            var nrcE: String? = null
+            var nitE: String? = null
+            var codAcEcoE: String? = null
+            var desAcEcoE: String? = null
+
+            val infoemisor = obtenerEmisor()
+            if (infoemisor.isNotEmpty()) {
+                infoemisor.forEach{ data->
+                    val datos = data.split("\n")
+                    // "$nombre\n$nombrec\n$nit\n$nrc\n$AcEco\n$direccion\n$telefono\n$correo\n$dui\n$departamento\n$municipio"
+                    duiE = datos[8]
+                    nombreE = datos[0]
+                    nombrecE = datos[1]
+                    telefonoE = datos[6]
+                    departamentoE = datos[9]
+                    municipioE = datos[10]
+                    complementoE = datos[5]
+                    correoE = datos[7]
+                    nitE = datos[2].replace("-","")
+                    nrcE = datos[3]
+                    codAcEcoE = datos[4]
+                    desAcEcoE = datos[4]
+
+                }
+            }
+            // EMISOR
+            val nombre1 = nombreE
+            val nit1 = nitE
+            val nrc1 = nrcE
+            val descActividad1 = desAcEcoE
+            val municipio1 = municipioE
+            val departamento1 = departamentoE
+            val complemento1 = complementoE
+            val telefono1 = telefonoE
+            val correo1 = correoE
+            // Coordenadas del rectángulo del EMISOR
+            val emisorLeftEmisor = 25f
+            val emisorTopEmisor = 215f
+            val emisorRightEmisor = 306f
+            val emisorBottomEmisor = 340f
+            // Dibujar rectángulo del EMISOR
+            canvas.drawRoundRect(emisorLeftEmisor, emisorTopEmisor, emisorRightEmisor, emisorBottomEmisor, cornerRadius1, cornerRadius1, paintRect1)
+            // Dibujar el texto del EMISOR
+            canvas.drawText("EMISOR", 130f, 230f, paintTITULO) // Dibuja que es la info del Emisor
+            canvas.drawText("Nombre o razón social: $nombre1", 40f, 250f, paintInfoContribuyentes)
+            canvas.drawText("NIT: $nit1", 40f, 260f, paintInfoContribuyentes)
+            canvas.drawText("NRC: $nrc1", 40f, 270f, paintInfoContribuyentes)
+            canvas.drawText("Actividad Económica: $descActividad1", 40f, 280f, paintInfoContribuyentes)
+            canvas.drawText("Municipio: $municipio1", 40f, 290f, paintInfoContribuyentes)
+            canvas.drawText("Departamento: $departamento1", 40f, 300f, paintInfoContribuyentes)
+            canvas.drawText("Dirección: $complemento1", 40f, 310f, paintInfoContribuyentes)
+            canvas.drawText("Número de Teléfono: $telefono1", 40f, 320f, paintInfoContribuyentes)
+            canvas.drawText("Correo Electrónico: $correo1", 40f, 330f, paintInfoContribuyentes)
+
+
+
+            var dui: String? = null
+            var nombre: String? = null
+            var telefono: String? = null
+            var departamento: String? = null
+            var municipio: String? = null
+            var complemento: String? = null
+            var correo: String? = null
+            var nrc: String? = null
+            var nit: String? = null
+            var codAcEco: String? = null
+            var desAcEco: String? = null
+
+            val datosGuardados = intent.getStringExtra("Cliente")
+            if (datosGuardados != null) {
+                if(datosGuardados.isNotEmpty()) {
+                    datosGuardados.let {
+                        val datos = it.split("\n")
+                        dui = datos[8]
+                        nombre = datos[0]
+                        telefono = datos[6]
+                        departamento = datos[4]
+                        municipio = datos[5]
+                        complemento = datos[3]
+                        correo = datos[2]
+                        nit = datos[1]
+                        if(datos[9]=="null"){
+                            nrc = null
+                            codAcEco = null
+                            desAcEco = null
+                        }else{
+                            nrc = datos[9]
+                            codAcEco = datos[10]
+                            desAcEco = datos[10]
+                        }
+                    }
+                }
+            }
+            // RECEPTOR
+            val nombre2 = nombre
+            val nit2 = nit
+            val nrc2 = nrc
+            val descActividad2 = desAcEco
+            val municipio2 = municipio
+            val departamento2 = departamento
+            val complemento2 = complemento
+            val telefono2 = telefono
+            val correo2 = correo
+            // Coordenadas del rectángulo del RECEPTOR
+            val emisorLeftReceptor = 321f
+            val emisorTopReceptor = 215f
+            val emisorRightReceptor = 587f
+            val emisorBottomReceptor = 340f
+            // Dibujar rectángulo del RECEPTOR
+            canvas.drawRoundRect(emisorLeftReceptor, emisorTopReceptor, emisorRightReceptor, emisorBottomReceptor, cornerRadius1, cornerRadius1, paintRect1)
+            // Dibujar el texto del RECEPTOR
+            canvas.drawText("RECEPTOR", 425f, 230f, paintTITULO) // Dibuja que es la info del Receptor
+            canvas.drawText("Nombre o razón social: $nombre2", 336f, 250f, paintInfoContribuyentes)
+            canvas.drawText("NIT: $nit2", 336f, 260f, paintInfoContribuyentes)
+            canvas.drawText("NRC: $nrc2", 336f, 270f, paintInfoContribuyentes)
+            canvas.drawText("Actividad Económica: $descActividad2", 336f, 280f, paintInfoContribuyentes)
+            canvas.drawText("Municipio: $municipio2", 336f, 290f, paintInfoContribuyentes)
+            canvas.drawText("Departamento: $departamento2", 336f, 300f, paintInfoContribuyentes)
+            canvas.drawText("Dirección: $complemento2", 336f, 310f, paintInfoContribuyentes)
+            canvas.drawText("Número de Teléfono: $telefono2", 336f, 320f, paintInfoContribuyentes)
+            canvas.drawText("Correo Electrónico: $correo2", 336f, 330f, paintInfoContribuyentes)
+
+
+
+            // CUERPO
+            // Tabla de ítems
+
+            val startX = 40f // Posición X de inicio de la tabla
+            var startY = 380f // Posición Y de inicio de la tabla
+            val rowHeight = 25f // Altura de cada fila de la tabla
+            // Dibujar encabezados de la tabla
+            canvas.drawText("N°", startX, startY, paintTITULO)
+            canvas.drawText("Cantidad", startX + 30, startY, paintTITULO)
+            canvas.drawText("Unidad", startX + 80, startY, paintTITULO)
+            canvas.drawText("Descripción", startX + 125, startY, paintTITULO)
+            canvas.drawText("Precio", startX + 300, startY, paintTITULO)
+            canvas.drawText("Unitario", startX + 300, startY + 10, paintTITULO)
+            canvas.drawText("Descuento", startX + 350, startY, paintTITULO)
+            canvas.drawText("por Item", startX + 350, startY + 10, paintTITULO)
+            canvas.drawText("Ventas No", startX + 405, startY, paintTITULO)
+            canvas.drawText("Sujetas", startX + 405, startY + 10, paintTITULO)
+            canvas.drawText("Ventas", startX + 460, startY, paintTITULO)
+            canvas.drawText("Exentas", startX + 460, startY + 10, paintTITULO)
+            canvas.drawText("Ventas", startX + 505, startY, paintTITULO)
+            canvas.drawText("Gravadas", startX + 505, startY + 10, paintTITULO)
+            startY += rowHeight
+
+            val app = application as MyApp
+            val database = app.database
+
+            // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+            val query = QueryBuilder.select(SelectResult.all())
+                .from(DataSource.database(database))
+                .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
+
+            // Ejecuta la consulta
+            val result = query.execute()
