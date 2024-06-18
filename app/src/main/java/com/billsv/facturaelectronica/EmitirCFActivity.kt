@@ -325,6 +325,52 @@ class EmitirCFActivity : AppCompatActivity() {
 
             dialogoCliente.show()
         }
+        val control = intent.getStringExtra("numeroControl")
+        val codigoG = intent.getStringExtra("codigoGeneracion")
+        if(control != null && codigoG != null){
+            guardarNCyCG(control, codigoG)
+        }
+    }
+
+    private fun guardarNCyCG(control: String, codigoG: String) {
+        val app = application as MyApp
+        val database = app.database
+
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("NCCG")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+            // Crear un nuevo documento
+            val document = MutableDocument()
+                .setString("numeroControl", control)
+                .setString("codigoGeneracion", codigoG)
+                .setString("tipo", "NCCG")
+
+            // Guardar el nuevo documento
+            database.save(document)
+            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun borrararticulo(data: String, itemLayout2: View, linearLayout: LinearLayout) {
@@ -455,7 +501,7 @@ class EmitirCFActivity : AppCompatActivity() {
     }
 
     private fun guardarDatosF() {
-        val numeroControl = numeroControl()
+        //val numeroControl = numeroControlActual()
         var nombre=""
         var nit=""
         var dui=""
@@ -488,7 +534,7 @@ class EmitirCFActivity : AppCompatActivity() {
             .setDouble("totalGravada", totalGravada)
             .setDouble("total",subTotalVentas)
             .setString("tipo","factura")
-            .setString("numeroControl",numeroControl)
+            //.setString("numeroControl",numeroControl)
         try {
             // Guardar el documento en la base de datos
             database.save(document)
@@ -506,8 +552,19 @@ class EmitirCFActivity : AppCompatActivity() {
 
 
     private fun emitirFactura() {
-        val numeroControl = numeroControl()
-        val codigoGeneracion = generarUUIDv4()
+        val NCCG = obtenerNCCG()
+        var numeroControl:String = ""
+        var codigoGeneracion:String = ""
+        if(NCCG.isNotEmpty()){
+            NCCG.forEach{data->
+                val datos = data.split("\n")
+                numeroControl = datos[0]
+                codigoGeneracion = datos[1]
+            }
+        }else{
+            numeroControl = numeroControl()
+            codigoGeneracion = generarUUIDv4()
+        }
         val currentreceptor = obtenerDui()
         val condicionO=spinnerOp.selectedItem.toString()
         var codigo=""
@@ -527,30 +584,63 @@ class EmitirCFActivity : AppCompatActivity() {
         val totalEx=totalExenta.toString()
         val totalGr=totalGravada.toString()
         val totalT=total.toString()
+        var Info: String = ""
         if(currentreceptor.isNotEmpty()){
             currentreceptor.forEach{data->
                 val datos = data.split("\n")
                 val receptor = cargarData(datos[0],datos[1])
                 if (receptor.isNotEmpty()) {
                     receptor.forEach { info ->
-                        val intent = Intent(this, PDF_CFActivity::class.java)
-                        intent.putExtra("Cliente", info)
-                        intent.putExtra("numeroControl", numeroControl)
-                        intent.putExtra("codGeneracion", codigoGeneracion)
-                        intent.putExtra("totalNoSuj",totalNS)
-                        intent.putExtra("totalExenta",totalEx)
-                        intent.putExtra("totalGravada",totalGr)
-                        intent.putExtra("total",totalT)
-                        intent.putExtra("totalIva",totalT)
-                        intent.putExtra("condicionOperacion",codigo)
-
-
-                        startActivity(intent)
-                        finish()
+                        Info = info
                     }
                 }
             }
         }
+        val intent = Intent(this, PDF_CFActivity::class.java)
+        intent.putExtra("Cliente", Info)
+        intent.putExtra("numeroControl", numeroControl)
+        intent.putExtra("codGeneracion", codigoGeneracion)
+        intent.putExtra("totalNoSuj",totalNS)
+        intent.putExtra("totalExenta",totalEx)
+        intent.putExtra("totalGravada",totalGr)
+        intent.putExtra("total",totalT)
+        intent.putExtra("totalIva",totalT)
+        intent.putExtra("condicionOperacion",codigo)
+
+
+        startActivity(intent)
+        finish()
+    }
+
+    private fun obtenerNCCG(): List<String> {
+        val app = application as MyApp
+        val database = app.database
+
+        // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+        val query2 = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("NCCG")))
+
+        // Ejecuta la consulta
+        val result2 = query2.execute()
+
+        // Lista para almacenar los datos obtenidos
+        val info = mutableListOf<String>()
+
+        // Itera sobre todos los resultados de la consulta
+        result2.allResults().forEach { resul ->
+            // Obtiene el diccionario del documento del resultado actual
+            val dict = resul.getDictionary(database.name)
+
+            // Extrae los valores de los campos del documento
+            val control = dict?.getString("numeroControl")
+            val codigoG = dict?.getString("codigoGeneracion")
+
+            // Formatea los datos como una cadena y la agrega a la lista
+            val dataString = "$control\n$codigoG"
+            info.add(dataString)
+        }
+        return info
     }
 
     private fun borrarClienteTemporal() {
@@ -982,7 +1072,6 @@ class EmitirCFActivity : AppCompatActivity() {
             finish()
         }
     }
-
 
     private fun borrararticulos() {
         val app = application as MyApp

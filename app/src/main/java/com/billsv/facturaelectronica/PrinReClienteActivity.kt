@@ -1026,7 +1026,11 @@ class PrinReClienteActivity : AppCompatActivity() {
         val departamentoCodigo = departamentosMap[departamentoText]
         val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
         val duiText=dui.text.toString().replace("-", "")
-        val nrcText=nrc.text.toString()
+        var nrcText:String?
+        nrcText=nrc.text.toString()
+        if(nrcText==""){
+            nrcText= null
+        }
         val actividadEcoText=actividadEconomica.text.toString()
         val telefonoMostrar = telefono.text.toString()
         val duiMostrar=dui.text.toString()

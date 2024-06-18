@@ -301,7 +301,7 @@ class ImportarClientes : AppCompatActivity() {
         val datos = data.split("\n")
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("nombre").equalTo(Expression.string(datos[0])))
+            .where(Expression.property("dui").equalTo(Expression.string(datos[8])))
 
         try {
             val resultSet = query.execute()
