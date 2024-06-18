@@ -753,3 +753,304 @@ class PDF_CFActivity : AppCompatActivity() {
 
             // Ejecuta la consulta
             val result = query.execute()
+
+            // Itera sobre todos los resultados de la consulta
+            result.allResults().forEach { results ->
+                // Obtiene el diccionario del documento del resultado actual
+                val dict = results.getDictionary(database.name)
+
+                // Dibujar cada fila de la tabla
+                val numItem = dict?.getString("numItem")
+                val cantidad = dict?.getString("Cantidad")
+                val uniMedida = dict?.getString("Unidad")
+                val descripcion = dict?.getString("Producto")
+                val precioUni = dict?.getString("Precio")
+                val montoDescu = dict?.getString("montoDesc")
+                val ventaNoSuj = dict?.getString("ventaNS")
+                val ventaExenta = dict?.getString("ventaE")
+                val ventaGravada = dict?.getString("ventaG")
+                // Dibujar cada celda de la fila
+                if (numItem != null) {
+                    canvas.drawText(numItem, startX + 2, startY, paintInfoDocumento)
+                }
+                if (cantidad != null) {
+                    canvas.drawText(cantidad, startX + 33, startY, paintInfoDocumento)
+                }
+                if (uniMedida != null) {
+                    canvas.drawText(uniMedida, startX + 86, startY, paintInfoDocumento)
+                }
+                if (descripcion != null) {
+                    canvas.drawText(descripcion, startX + 128, startY, paintInfoDocumento)
+                }
+                canvas.drawText("$$precioUni", startX + 301, startY, paintInfoDocumento)
+                canvas.drawText("$$montoDescu", startX + 359, startY, paintInfoDocumento)
+                canvas.drawText("$$ventaNoSuj", startX + 415, startY, paintInfoDocumento)
+                canvas.drawText("$$ventaExenta", startX + 469, startY, paintInfoDocumento)
+                canvas.drawText("$$ventaGravada", startX + 506, startY, paintInfoDocumento)
+                // Mover al siguiente renglón
+                startY += rowHeight
+            }
+
+
+
+            // RESUMEN
+            // Info sobre todas las ventas que se realizaron
+            canvas.drawText("SUMA DE VENTAS:", startX + 325, startY, paintTITULO)
+
+            val totalNoSuj = intent.getStringExtra("totalNoSuj")?.toDouble()
+            val totalExenta = intent.getStringExtra("totalExenta")?.toDouble()
+            val totalGravada = intent.getStringExtra("totalGravada")?.toDouble()
+            canvas.drawText("$$totalNoSuj", startX + 414, startY, paintInfoDocumento)
+            canvas.drawText("$$totalExenta", startX + 468, startY, paintInfoDocumento)
+            canvas.drawText("$$totalGravada", startX + 509, startY, paintInfoDocumento)
+
+            // LLama a los demás datos de DETALLES
+
+            // Para mover a la derecha: Incrementa finalPosition (por ejemplo, startX + 500).
+            // Para mover a la izquierda: Decrementa finalPosition (por ejemplo, startX + 350).
+            val finalPosition1 = startX + 495
+            val finalPosition2 = startX + 530
+            // Info de Suma Total de Operaciones con su respectivo monto
+            val subTotalVentas =  intent.getStringExtra("total")
+            canvas.drawText("Suma Total de Operaciones:", finalPosition1 - paintTITULO.measureText("Suma Total de Operaciones:"), startY + 15, paintTITULO)
+            canvas.drawText("$$subTotalVentas", finalPosition2 - paintTITULO.measureText(subTotalVentas), startY + 15, paintInfoDocumento)
+
+            // Info de Descuento para Ventas no sujetas con su respectivo monto
+            val descuNoSuj = "0.0"
+            canvas.drawText("Monto global Desc., Rebajas y otros a ventas no sujetas:", finalPosition1 - paintTITULO.measureText("Monto global Desc., Rebajas y otros a ventas no sujetas:"), startY + 26, paintTITULO)
+            canvas.drawText("$$descuNoSuj", finalPosition2 - paintTITULO.measureText(descuNoSuj), startY + 26, paintInfoDocumento)
+
+            // Info de Descuento para Ventas exentas con su respectivo monto
+            val descuExenta = "0.0"
+            canvas.drawText("Monto global Desc., Rebajas y otros a ventas exentas:", finalPosition1 - paintTITULO.measureText("Monto global Desc., Rebajas y otros a ventas exentas:"), startY + 37, paintTITULO)
+            canvas.drawText("$$descuExenta", finalPosition2 - paintTITULO.measureText(descuExenta), startY + 37, paintInfoDocumento)
+
+            // Info de Descuento para Ventas gravadas con su respectivo monto
+            val descuGravada = "0.0"
+            canvas.drawText("Monto global Desc., Rebajas y otros a ventas gravadas:", finalPosition1 - paintTITULO.measureText("Monto global Desc., Rebajas y otros a ventas gravadas:"), startY + 48, paintTITULO)
+            canvas.drawText("$$descuGravada", finalPosition2 - paintTITULO.measureText(descuGravada), startY + 48, paintInfoDocumento)
+
+            // Obtener el array de tributos
+            val tributos: JSONArray? = null
+
+
+
+            // Variables para almacenar la descripción y el valor
+            var descripcion20 = ""
+            var valor20 = 0.0
+            // Buscar y almacenar la descripción y el valor del tributo con código "20"
+            if (tributos != null) {
+                for (i in 0 until tributos.length()) {
+                    val tributo = tributos.getJSONObject(i)
+                    if (tributo.getString("codigo") == "20") {
+                        descripcion20 = tributo.getString("descripcion")
+                        valor20 = tributo.getDouble("valor")
+                        break  // Suponiendo que solo hay un tributo con código "20"
+                    }
+                }
+            }
+            // Dibuja lo que es el monto de IVA (13%) sobre el total de la venta
+            canvas.drawText(descripcion20, finalPosition1 - paintTITULO.measureText(descripcion20), startY + 59, paintTITULO)
+            canvas.drawText("$$valor20", finalPosition2 - paintTITULO.measureText(valor20.toString()), startY + 59, paintInfoDocumento)
+
+            // Muesta Info sobre el Sub-Total
+            val subTotal =  intent.getStringExtra("total")
+            canvas.drawText("Sub-Total:", finalPosition1 - paintTITULO.measureText("Sub-Total:"), startY + 70, paintTITULO)
+            canvas.drawText("$$subTotal", finalPosition2 - paintTITULO.measureText(subTotal), startY + 70, paintInfoDocumento)
+
+            // Muesta Info sobre el IVA Percibido
+            /*val ivaPerci1 = resumen.getString("ivaPerci1")
+            canvas.drawText("IVA Percibido:", finalPosition1 - paintTITULO.measureText("IVA Percibido:"), startY + 81, paintTITULO)
+            canvas.drawText("$$ivaPerci1", finalPosition2 - paintTITULO.measureText(ivaPerci1), startY + 81, paintInfoDocumento)*/
+
+            // Muesta Info sobre el IVA Retenido
+            val ivaRete1 = "0.0"
+            canvas.drawText("IVA Retenido:", finalPosition1 - paintTITULO.measureText("IVA Retenido:"), startY + 92, paintTITULO)
+            canvas.drawText("$$ivaRete1", finalPosition2 - paintTITULO.measureText(ivaRete1), startY + 92, paintInfoDocumento)
+
+            // Muesta Info sobre Retención Renta
+            val reteRenta = "0.0"
+            canvas.drawText("Retención Renta:", finalPosition1 - paintTITULO.measureText("Retención Renta:"), startY + 103, paintTITULO)
+            canvas.drawText("$$reteRenta", finalPosition2 - paintTITULO.measureText(reteRenta), startY + 103, paintInfoDocumento)
+
+            // Muesta Info sobre el Monto Total de la Operación
+            val montoTotalOperacion =  intent.getStringExtra("total")
+            canvas.drawText("Monto Total de la Operación:", finalPosition1 - paintTITULO.measureText("Monto Total de la Operación:"), startY + 114, paintTITULO)
+            canvas.drawText("$$montoTotalOperacion", finalPosition2 - paintTITULO.measureText(montoTotalOperacion), startY + 114, paintInfoDocumento)
+
+            // Muesta Info sobre Otros montos posibles no afectos
+            val totalNoGravado = "0.0"
+            canvas.drawText("Total Otros montos no afectos:", finalPosition1 - paintTITULO.measureText("Total Otros montos no afectos:"), startY + 125, paintTITULO)
+            canvas.drawText("$$totalNoGravado", finalPosition2 - paintTITULO.measureText(totalNoGravado), startY + 125, paintInfoDocumento)
+
+            // Muesta Info sobre el Total a Pagar
+            val totalPagar =  intent.getStringExtra("total")
+            canvas.drawText("Total a Pagar:", finalPosition1 - paintTITULO.measureText("Total a Pagar:"), startY + 136, paintTITULO)
+            canvas.drawText("$$totalPagar", finalPosition2 - paintTITULO.measureText(totalPagar), startY + 136, paintInfoDocumento)
+
+            // Principal 1 - Coordenadas del rectángulo que encierra valor en letras y demás información
+            val rectanguloLeft1 = startX - 10
+            val rectanguloTop1 = startY - 14
+            val rectanguloRight1 = 315f
+            val rectanguloBottom1 = startY + 145
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft1, rectanguloTop1, rectanguloRight1, rectanguloBottom1, paintRect1)
+
+            // Secundario 1.1 - Encierra valor en letras con tipo de condición de operación
+            val rectanguloLeft11 = startX - 10
+            val rectanguloTop11 = startY - 14
+            val rectanguloRight11 = 315f
+            val rectanguloBottom11 = startY + 31
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft11, rectanguloTop11, rectanguloRight11, rectanguloBottom11, paintRect2)
+
+            // Secundario 1.2 - Encierra Emisor Responsable
+            val rectanguloLeft12 = startX - 10
+            val rectanguloTop12 = startY + 48
+            val rectanguloRight12 = 315f
+            val rectanguloBottom12 = startY + 78
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft12, rectanguloTop12, rectanguloRight12, rectanguloBottom12, paintRect2)
+
+            // Secundario 1.3 - Encierra Receptor Responsable
+            val rectanguloLeft13 = startX - 10
+            val rectanguloTop13 = startY + 78
+            val rectanguloRight13 = 315f
+            val rectanguloBottom13 = startY + 108
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft13, rectanguloTop13, rectanguloRight13, rectanguloBottom13, paintRect2)
+
+            // Secundario 1.3 - Encierra Receptor Responsable
+            val rectanguloLeft14 = startX - 10
+            val rectanguloTop14 = startY + 78
+            val rectanguloRight14 = 315f
+            val rectanguloBottom14 = startY + 108
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft14, rectanguloTop14, rectanguloRight14, rectanguloBottom13, paintRect2)
+
+            // Coordenadas del rectángulo que encierra info de las Ventas
+            val rectanguloLeft2 = 315f
+            val rectanguloTop2 = startY - 14
+            val rectanguloRight2 = 585f
+            val rectanguloBottom2 = startY + 145
+            // Dibujar rectángulo
+            canvas.drawRect(rectanguloLeft2, rectanguloTop2, rectanguloRight2, rectanguloBottom2, paintRect1)
+
+            // Muestra Info de Valor en Letras
+
+            val totalLetras =precioEnLetras(intent.getStringExtra("total")?.toDouble())
+            canvas.drawText("Valor en Letras: $totalLetras", startX, startY + 5, paintTITULO)
+
+            // Muestra Info de Condición de la Operación
+            val condicionOperacion = intent.getStringExtra("condicionOperacion")?.toInt()
+            if (condicionOperacion == 1) {
+                // Si la operación fue al Contado
+                canvas.drawText("Condición de la Operación: $condicionOperacion - Contado", startX, startY + 20, paintTITULO)
+            } else if (condicionOperacion == 2) {
+                // Si la operación fue al Crédito
+                canvas.drawText("Condición de la Operación: $condicionOperacion - A crédito", startX, startY + 20, paintTITULO)
+            } else if (condicionOperacion == 3){
+                // Si la operación fue otra
+                canvas.drawText("Condición de la Operación: $condicionOperacion - Otro", startX, startY + 20, paintTITULO)
+            }
+
+
+
+            // EXTENSIÓN
+            // Muestra información extra que requiere hacienda
+            canvas.drawText("EXTENSIÓN", startX + 125, startY + 42, paintTITULO)
+
+            canvas.drawText("Emisor Responsable:", startX, startY + 60, paintTITULO)
+            canvas.drawText("No. documento:", startX, startY + 70, paintTITULO)
+
+            canvas.drawText("Receptor Responsable:", startX, startY + 90, paintTITULO)
+            canvas.drawText("No. documento:", startX, startY + 100, paintTITULO)
+
+            canvas.drawText("Observaciones:", startX, startY + 120, paintTITULO)
+
+
+
+            // Agregar el número de página
+            canvas.drawText("Página 1 de 1", 550f, 775f, paintInfoDocumento)
+
+
+
+            // Valida si hubo algún problema para poder validar el archivo json
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Error al procesar el JSON: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+
+        // Aquí dejan de generarse páginas del pdf
+        pdfDocument.finishPage(pagina1)
+        /*
+                // Accede al directorio de descargas del dispositivo, ya sea virtual o físico
+                // El acceso lo hace através del directorio de la descargas
+                val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                // Con ese nombre se le va a guardar el PDF
+                val outputFilePath = File(downloadsDir, "Comprobante de Consumidor Final.pdf")
+
+                // Valida si el PDF no tuvo errores para generarse
+                try {
+                    pdfDocument.writeTo(FileOutputStream(outputFilePath))
+                    Toast.makeText(this, "Se creó el PDF correctamente en: ${outputFilePath.absolutePath}", Toast.LENGTH_LONG).show()
+
+                    val intentCF = Intent(applicationContext, VerPdfCF::class.java)
+                    startActivity(intentCF)
+
+                } catch (e: Exception) {
+                    // En caso de que los haya habido muestra un mensaje
+                    e.printStackTrace()
+                    Toast.makeText(this, "Error al crear el PDF: ${e.message}", Toast.LENGTH_LONG).show()
+                }*/
+
+        // Aquí finaliza la generación del documento pdf
+        // pdfDocument.close()
+        return pdfDocument
+
+    }
+    fun savePdfToCache(context: Context, document: PdfDocument): File {
+        val cacheDir = context.cacheDir
+        val file = File(cacheDir, "example.pdf")
+        try {
+            val fos = FileOutputStream(file)
+            document.writeTo(fos)
+            fos.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            document.close()
+        }
+        return file
+    }
+    fun renderPdfToImageView(pdfFile: File, imageView: ImageView) {
+        try {
+            val fileDescriptor = ParcelFileDescriptor.open(pdfFile, ParcelFileDescriptor.MODE_READ_ONLY)
+            val pdfRenderer = PdfRenderer(fileDescriptor)
+            val page = pdfRenderer.openPage(0)
+
+            val bitmap = Bitmap.createBitmap(page.width, page.height, Bitmap.Config.ARGB_8888)
+            page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+            imageView.setImageBitmap(bitmap)
+
+            page.close()
+            pdfRenderer.close()
+            fileDescriptor.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+    private fun leerJsonDesdeAssets(fileName: String): String {
+        var json = ""
+        try {
+            val inputStream: InputStream = assets.open(fileName)
+            json = inputStream.bufferedReader().use { it.readText() }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return json
+    }
+
+
+
+}

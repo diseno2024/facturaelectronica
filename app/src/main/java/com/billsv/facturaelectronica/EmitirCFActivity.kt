@@ -4,14 +4,18 @@ package com.billsv.facturaelectronica
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
+import android.graphics.pdf.PdfRenderer
 import android.os.Bundle
 import android.os.Environment
+import android.os.ParcelFileDescriptor
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -20,6 +24,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TableLayout
@@ -62,6 +67,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.json.JSONArray
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 
 class EmitirCFActivity : AppCompatActivity() {
@@ -449,13 +455,40 @@ class EmitirCFActivity : AppCompatActivity() {
     }
 
     private fun guardarDatosF() {
+        val numeroControl = numeroControl()
+        var nombre=""
+        var nit=""
+        var dui=""
         val subTotalVentas=totalExenta+totalGravada+totalNoSuj
+        val cliente=intent.getStringExtra("Cliente")
+        if (cliente != null) {
+            val datos = cliente.split("\n")
+
+
+            if (datos.isNotEmpty()) {
+                nombre = datos[0]
+                nit = datos[11]
+                dui = datos[12]
+            } else {
+                // Maneja el caso donde los datos no están completos o el formato no es el esperado
+                println("Los datos del cliente no están en el formato esperado.")
+            }
+        } else {
+            // Maneja el caso donde `cliente` es null
+            println("No se recibió información del cliente.")
+        }
+
+
         val document = MutableDocument()
+            .setString("nombre",nombre)
+            .setString("nit",nit)
+            .setString("dui",dui)
             .setDouble("totalNoSuj", totalNoSuj)
             .setDouble("totalExenta", totalExenta)
             .setDouble("totalGravada", totalGravada)
             .setDouble("total",subTotalVentas)
             .setString("tipo","factura")
+            .setString("numeroControl",numeroControl)
         try {
             // Guardar el documento en la base de datos
             database.save(document)
@@ -470,6 +503,7 @@ class EmitirCFActivity : AppCompatActivity() {
             Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun emitirFactura() {
         val numeroControl = numeroControl()
@@ -1034,7 +1068,7 @@ class EmitirCFActivity : AppCompatActivity() {
         // Devuelve la lista de datos
         return dataList
     }
-    private fun generarPdf() {
+    private fun generarPdf():PdfDocument {
         // Variable para poder almacenar el contenido del json através de una función
         //val jsonData = leerJsonDesdeAssets("DTE-01-OFIC0001-000000000000012.json")
         val jsonData = leerJsonDesdeAssets("CF.json")
@@ -1432,7 +1466,7 @@ class EmitirCFActivity : AppCompatActivity() {
 
         // Aquí dejan de generarse páginas del pdf
         pdfDocument.finishPage(pagina1)
-
+/*
         // Accede al directorio de descargas del dispositivo, ya sea virtual o físico
         // El acceso lo hace através del directorio de la descargas
         val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -1451,11 +1485,14 @@ class EmitirCFActivity : AppCompatActivity() {
             // En caso de que los haya habido muestra un mensaje
             e.printStackTrace()
             Toast.makeText(this, "Error al crear el PDF: ${e.message}", Toast.LENGTH_LONG).show()
-        }
+        }*/
 
         // Aquí finaliza la generación del documento pdf
-        pdfDocument.close()
+       // pdfDocument.close()
+        return pdfDocument
+
     }
+
 
     // Función para poder leer el archivo json
     private fun leerJsonDesdeAssets(fileName: String): String {
@@ -1511,4 +1548,5 @@ class EmitirCFActivity : AppCompatActivity() {
             Log.e("ReClienteActivity", "Error al contar los documentos de tipo 'ConfEmisor': ${e.message}", e)
         }
     }
+
 }
