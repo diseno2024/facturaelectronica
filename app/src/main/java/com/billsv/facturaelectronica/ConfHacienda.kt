@@ -5,8 +5,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TableLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -21,16 +19,20 @@ import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
 import com.google.android.material.button.MaterialButtonToggleGroup
-import android.content.Context
-import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ConfHacienda : AppCompatActivity() {
     private lateinit var usuario: EditText
     private lateinit var contraseña: EditText
+    private lateinit var apiService: ApiService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -48,12 +50,52 @@ class ConfHacienda : AppCompatActivity() {
             val datosapi = data.split("\n")
             usuarioapi = datosapi[0]
             contraseñaapi = datosapi[1]
+            if(usuarioapi!="") {
+                apiService = RetrofitClient.instance.create(ApiService::class.java)
+
+                val authRequest = AuthRequest(usuarioapi, contraseñaapi)
+
+                Log.d("API_REQUEST", "Enviando solicitud a la API")
+
+                apiService.authenticate(authRequest).enqueue(object : Callback<AuthResponse> {
+                    override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
+                        if (response.isSuccessful) {
+                            response.body()?.let { authResponse ->
+                                if (authResponse.status == "OK") {
+                                    val authBody = authResponse.body
+                                    Toast.makeText(this@ConfHacienda, "Token: ${authBody?.token}", Toast.LENGTH_LONG).show()
+                                    Log.d("API_RESPONSE", "Token: ${authBody?.token}")
+                                } else {
+                                    handleErrorResponse(response)
+                                }
+                            }
+                        } else {
+                            handleErrorResponse(response)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                        Toast.makeText(this@ConfHacienda, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+                        Log.e("API_ERROR", "Error: ${t.message}", t)
+                    }
+                })
+            }
         }
+
+        /* val uuid: TextView = findViewById(R.id.textView55)
+         val uuid2: TextView = findViewById(R.id.textView57)
+         val calendar = Calendar.getInstance()
+         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+         val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+         // Formatea la fecha y la hora
+         val formattedDate = dateFormat.format(calendar.time)
+         //uuid.text = formattedDate
+         val formattedTime = timeFormat.format(calendar.time)
+         //uuid2.text = formattedTime*/
+
         usuario = findViewById(R.id.usuario)
         contraseña = findViewById(R.id.contraseña)
 
-        //https://apitest.dtes.mh.gob.sv/seguridad/auth
-        //https://api.dtes.mh.gob.sv/seguridad/authw
         val boton: Button = findViewById(R.id.button2)
         boton.setOnClickListener {
             guardarInformacion()
@@ -70,6 +112,17 @@ class ConfHacienda : AppCompatActivity() {
             if (isChecked) {
                 saveSelectedButton(checkedId)
             }
+        }
+
+    }
+    private fun handleErrorResponse(response: Response<AuthResponse>) {
+        try {
+            val errorResponse = Gson().fromJson(response.errorBody()?.charStream(), ErrorResponse::class.java)
+            Toast.makeText(this, "Error: ${errorResponse.message}", Toast.LENGTH_LONG).show()
+            Log.e("API_ERROR_RESPONSE", "Error: ${errorResponse.message}")
+        } catch (e: JsonSyntaxException) {
+            Toast.makeText(this, "Error desconocido", Toast.LENGTH_LONG).show()
+            Log.e("API_ERROR_RESPONSE", "Error desconocido", e)
         }
     }
 
@@ -128,6 +181,11 @@ class ConfHacienda : AppCompatActivity() {
         boton2.visibility = View.GONE
 
     }
+
+    /*private fun generarUUIDv4(): String {
+        val uuid = UUID.randomUUID()
+        return uuid.toString().toUpperCase()
+    }*/
     private fun guardarInformacion() {
         val app = application as MyApp
         val database = app.database
@@ -205,21 +263,6 @@ class ConfHacienda : AppCompatActivity() {
         // Devuelve la lista de datos
         return dataList
     }
-    private fun saveSelectedButton(buttonId: Int) {
-        val sharedPreferences = getSharedPreferences("ButtonStatePrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putInt("selectedButton", buttonId)
-        editor.apply()
-    }
-    private fun restoreSelectedButton() {
-        val sharedPreferences = getSharedPreferences("ButtonStatePrefs", Context.MODE_PRIVATE)
-        val selectedButtonId = sharedPreferences.getInt("selectedButton", View.NO_ID)
-        if (selectedButtonId != View.NO_ID) {
-            findViewById<MaterialButton>(selectedButtonId)?.isChecked = true
-        }
-    }
-
-
 
 
 }
