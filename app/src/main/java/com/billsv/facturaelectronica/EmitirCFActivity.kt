@@ -194,13 +194,11 @@ class EmitirCFActivity : AppCompatActivity() {
                 if(validarfactura()) {
                     emitirFactura()
                     enviarDatos()
-                    guardarDatosF()
                 }
             }else{
                 if(validarfactura()&&validarcliente()) {
                     emitirFactura()
                     enviarDatos()
-                    guardarDatosF()
                 }
             }
             //generarPdf()
@@ -500,55 +498,6 @@ class EmitirCFActivity : AppCompatActivity() {
         intent.putExtra("condicionOperacion",codigo)
     }
 
-    private fun guardarDatosF() {
-        //val numeroControl = numeroControlActual()
-        var nombre=""
-        var nit=""
-        var dui=""
-        val subTotalVentas=totalExenta+totalGravada+totalNoSuj
-        val cliente=intent.getStringExtra("Cliente")
-        if (cliente != null) {
-            val datos = cliente.split("\n")
-
-
-            if (datos.isNotEmpty()) {
-                nombre = datos[0]
-                nit = datos[11]
-                dui = datos[12]
-            } else {
-                // Maneja el caso donde los datos no están completos o el formato no es el esperado
-                println("Los datos del cliente no están en el formato esperado.")
-            }
-        } else {
-            // Maneja el caso donde `cliente` es null
-            println("No se recibió información del cliente.")
-        }
-
-
-        val document = MutableDocument()
-            .setString("nombre",nombre)
-            .setString("nit",nit)
-            .setString("dui",dui)
-            .setDouble("totalNoSuj", totalNoSuj)
-            .setDouble("totalExenta", totalExenta)
-            .setDouble("totalGravada", totalGravada)
-            .setDouble("total",subTotalVentas)
-            .setString("tipo","factura")
-            //.setString("numeroControl",numeroControl)
-        try {
-            // Guardar el documento en la base de datos
-            database.save(document)
-            Log.d("TuClase", "Datos guardados correctamente: \n $document")
-            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
-        } catch (e: CouchbaseLiteException) {
-            Log.e(
-                "TuClase",
-                "Error al guardar los datos en la base de datos: ${e.message}",
-                e
-            )
-            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
-        }
-    }
 
 
     private fun emitirFactura() {

@@ -73,6 +73,7 @@ class PDF_CFActivity : AppCompatActivity() {
             val btnNo = dialogoGenerar.findViewById<Button>(R.id.btnNo)
             btnYes.setOnClickListener {
                 json()
+                guardarDatosF()
                 borrararticulos()
                 borrarDui()
                 borrarClienteTemporal()
@@ -264,15 +265,7 @@ class PDF_CFActivity : AppCompatActivity() {
                 totalPagar = total,
                 saldoFavor = 0.0,
                 condicionOperacion = condicionOperacion,
-                pagos = listOf(
-                    Pago(
-                        codigo = "01",
-                        montoPago = 22.6,
-                        referencia = "Pago en efectivo",
-                        plazo = "Inmediato",
-                        periodo = 0
-                    )
-                ),
+                pagos = null,
                 numPagoElectronico = "0001",
                 totalNoSuj = totalNoSujeto,
                 totalExenta = totalExenta,
@@ -439,7 +432,7 @@ class PDF_CFActivity : AppCompatActivity() {
                 tipoItem = data[0].toInt(),
                 numeroDocumento = null,
                 cantidad = data[1].toDouble(),
-                codigo = data[10],
+                codigo = null,
                 codTributo = null,
                 uniMedida = data[2].toInt(),
                 descripcion = data[3],
@@ -1189,4 +1182,58 @@ class PDF_CFActivity : AppCompatActivity() {
             Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
+    private fun guardarDatosF() {
+        val app = application as MyApp
+        val database = app.database
+        val numeroControl = intent.getStringExtra("numeroControl")
+        var nombre=""
+        var nit=""
+        var dui=""
+        val totalExenta= intent.getStringExtra("totalExenta")?.toDouble()
+        val totalGravada= intent.getStringExtra("totalGravada")?.toDouble()
+        val totalNoSuj= intent.getStringExtra("totalNoSuj")?.toDouble()
+        val subTotalVentas= totalExenta!! + totalGravada!! + totalNoSuj!!
+        val cliente=intent.getStringExtra("Cliente")
+        if (cliente != null) {
+            val datos = cliente.split("\n")
+
+            if (datos.isNotEmpty()) {
+                nombre = datos[0]
+                nit = datos[11]
+                dui = datos[12]
+            } else {
+                // Maneja el caso donde los datos no están completos o el formato no es el esperado
+                println("Los datos del cliente no están en el formato esperado.")
+            }
+        } else {
+            // Maneja el caso donde `cliente` es null
+            println("No se recibió información del cliente.")
+        }
+
+
+        val document = MutableDocument()
+            .setString("nombre",nombre)
+            .setString("nit",nit)
+            .setString("dui",dui)
+            .setDouble("totalNoSuj", totalNoSuj)
+            .setDouble("totalExenta", totalExenta)
+            .setDouble("totalGravada", totalGravada)
+            .setDouble("total",subTotalVentas)
+            .setString("tipo","factura")
+            .setString("numeroControl",numeroControl)
+        try {
+            // Guardar el documento en la base de datos
+            database.save(document)
+            Log.d("TuClase", "Datos guardados correctamente: \n $document")
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+        } catch (e: CouchbaseLiteException) {
+            Log.e(
+                "TuClase",
+                "Error al guardar los datos en la base de datos: ${e.message}",
+                e
+            )
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 }
