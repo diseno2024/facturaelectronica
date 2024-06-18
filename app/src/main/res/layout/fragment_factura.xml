@@ -26,12 +26,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Facturas"
+        android:text="Credito Fiscal"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <Button
         android:id="@+id/btnLoadMore"
@@ -45,13 +44,51 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listRecycler"
-        android:layout_width="413dp"
-        android:layout_height="645dp"
-        android:layout_marginTop="4dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/listaFactura" />
+
+    <EditText
+        android:id="@+id/etDui"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Buscar por DUI"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@id/btnBuscar"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/listaFactura"
-        app:layout_constraintVertical_bias="0.942" />
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"/>
+
+
+    <Button
+        android:id="@+id/btnBuscar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buscar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/etDui"
+        app:layout_constraintTop_toBottomOf="@id/listaFactura"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"/>
+
+    <Button
+        android:id="@+id/btnClearFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:text="Quitar filtro"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.875"
+        app:layout_constraintStart_toEndOf="@id/btnBuscar"
+        app:layout_constraintTop_toBottomOf="@id/listaFactura" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
