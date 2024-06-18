@@ -67,19 +67,31 @@ class FacturaFragment : Fragment() {
 
         // Agregar TextWatcher para formatear el DUI en el EditText
         etDui.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Formatear el DUI automáticamente con un guion después de los primeros 8 caracteres
-                if (s?.length == 9 && !s.contains("-")) {
-                    etDui.setText(
-                        s.subSequence(0, 8).toString() + "-" + s.subSequence(8, 9).toString()
-                    )
+            private var isFormatting = false
+            override fun afterTextChanged(s: Editable?) {
+                if (isFormatting) {
+                    return
+                }
+                isFormatting = true
+                // Formatear automáticamente con ########-#
+                if (s?.length == 9 && s[8] != '-') {
+                    val formattedText = s.substring(0, 8) + "-" + s[8]
+                    etDui.setText(formattedText)
                     etDui.setSelection(etDui.text.length) // Posicionar el cursor al final
                 }
+                // Limitar la entrada adicional después de ########-#
+                if (s?.length == 10) {
+                    etDui.setSelection(etDui.text.length) // Posicionar el cursor al final
+                }
+                // Bloquear la entrada de caracteres adicionales después de ########-#
+                if (s?.length == 11) {
+                    etDui.setText(s.substring(0, 10))
+                    etDui.setSelection(etDui.text.length) // Posicionar el cursor al final
+                }
+                isFormatting = false
             }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
         facturaAdapter = FacturaAdapter(requireContext(), mutableListOf())
