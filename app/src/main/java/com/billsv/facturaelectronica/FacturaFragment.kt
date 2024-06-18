@@ -86,7 +86,7 @@ class FacturaFragment : Fragment() {
 
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("cliente")))
+            .where(Expression.property("tipoCliente").equalTo(Expression.string("Consumidor Final")))
             .limit(Expression.intValue(limit), Expression.intValue(offset))
 
         val result = query.execute()
