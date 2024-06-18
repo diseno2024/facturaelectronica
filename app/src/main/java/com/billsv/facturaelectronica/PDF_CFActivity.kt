@@ -24,6 +24,7 @@ import com.billsv.facturaelectronica.databinding.ActivityPdfCfactivityBinding
 import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
+import com.couchbase.lite.Meta
 import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
@@ -72,6 +73,14 @@ class PDF_CFActivity : AppCompatActivity() {
             val btnNo = dialogoGenerar.findViewById<Button>(R.id.btnNo)
             btnYes.setOnClickListener {
                 json()
+                borrararticulos()
+                borrarDui()
+                borrarClienteTemporal()
+                borrarNCCG()
+                dialogoGenerar.dismiss()
+                val intent = Intent(this, EmitirCFActivity::class.java)
+                startActivity(intent)
+                finish()
             }
 
             btnNo.setOnClickListener {
@@ -95,7 +104,11 @@ class PDF_CFActivity : AppCompatActivity() {
     }
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
+        val control = intent.getStringExtra("numeroControl")
+        val codigo = intent.getStringExtra("codGeneracion")
         val intent = Intent(this, EmitirCFActivity::class.java)
+        intent.putExtra("numeroControl", control)
+        intent.putExtra("codigoGeneracion", codigo)
         startActivity(intent)
         finish()
     }
@@ -1050,7 +1063,130 @@ class PDF_CFActivity : AppCompatActivity() {
         }
         return json
     }
+    private fun borrararticulos() {
+        val app = application as MyApp
+        val database = app.database
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
 
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
 
+            if (results.isNotEmpty()) {
+                // Itera sobre los resultados y elimina cada documento
+                for (result in results) {
+                    val docId = result.getString("id") // Obtener el ID del documento
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
 
+                Log.d("Prin_Re_Cliente", "Se eliminaron los artículos")
+                showToast("Artículos eliminados")
+            } else {
+                Log.d("Prin_Re_Cliente", "No se encontraron artículos")
+                showToast("No se encontraron artículos")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al eliminar los artículos: ${e.message}", e)
+        }
+    }
+    private fun borrarDui() {
+        val app = application as MyApp
+        val database = app.database
+
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("DUI")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun borrarClienteTemporal() {
+        val app = application as MyApp
+        val database = app.database
+
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("clientetemporal")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+    private fun borrarNCCG() {
+        val app = application as MyApp
+        val database = app.database
+
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("NCCG")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
