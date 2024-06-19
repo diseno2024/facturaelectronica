@@ -55,6 +55,10 @@ class EmitirCCFActivity : AppCompatActivity() {
     private lateinit var tableLayout: TableLayout
     private lateinit var spinnerOp: Spinner
     private var currentControlNumber = 0L
+    var totalNoSuj=0.0
+    var totalExenta=0.0
+    var totalGravada=0.0
+    var totalIva=0.0
     var total = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -471,9 +475,9 @@ class EmitirCCFActivity : AppCompatActivity() {
                 codigo="3"
             }
         }
-        /*val totalNS=totalNoSuj.toString()
+        val totalNS=totalNoSuj.toString()
         val totalEx=totalExenta.toString()
-        val totalGr=totalGravada.toString()*/
+        val totalGr=totalGravada.toString()
         val totalT=total.toString()
         var Info: String = ""
         if(currentreceptor.isNotEmpty()){
@@ -491,12 +495,13 @@ class EmitirCCFActivity : AppCompatActivity() {
         intent.putExtra("Cliente", Info)
         intent.putExtra("numeroControl", numeroControl)
         intent.putExtra("codGeneracion", codigoGeneracion)
-        /*intent.putExtra("totalNoSuj",totalNS)
+        intent.putExtra("totalNoSuj",totalNS)
         intent.putExtra("totalExenta",totalEx)
-        intent.putExtra("totalGravada",totalGr)*/
+        intent.putExtra("totalGravada",totalGr)
         intent.putExtra("total",totalT)
         intent.putExtra("totalIva",totalT)
         intent.putExtra("condicionOperacion",codigo)
+        intent.putExtra("JSON","CreditoFiscal")
 
 
         startActivity(intent)

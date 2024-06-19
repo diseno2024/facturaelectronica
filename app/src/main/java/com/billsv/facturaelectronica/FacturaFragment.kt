@@ -57,7 +57,11 @@ class FacturaFragment : Fragment() {
         btnBuscar = view.findViewById(R.id.btnBuscar)
         btnBuscar.setOnClickListener {
             val dui = etDui.text.toString()
-            buscarPorDui(dui)
+            if(dui!="" && dui.length >= 10) {
+                buscarPorDui(dui)
+            }else{
+                Toast.makeText(context, "ingrese un dui valido", Toast.LENGTH_SHORT).show()
+            }
         }
 
         btnClearFilter = view.findViewById(R.id.btnClearFilter)

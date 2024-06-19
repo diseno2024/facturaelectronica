@@ -555,6 +555,7 @@ class EmitirCFActivity : AppCompatActivity() {
         intent.putExtra("total",totalT)
         intent.putExtra("totalIva",totalT)
         intent.putExtra("condicionOperacion",codigo)
+        intent.putExtra("JSON","Factura")
 
 
         startActivity(intent)

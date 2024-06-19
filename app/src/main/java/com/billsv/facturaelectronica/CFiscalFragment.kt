@@ -53,8 +53,12 @@ class CFiscalFragment : Fragment() {
         etDui = view.findViewById(R.id.etDui)
         btnBuscar = view.findViewById(R.id.btnBuscar)
         btnBuscar.setOnClickListener {
-            val dui = etDui.text.toString().replace("-", "")
-            buscarPorDui(dui)
+            val dui = etDui.text.toString()
+            if(dui!="" && dui.length >= 10) {
+                buscarPorDui(dui)
+            }else{
+                Toast.makeText(context, "ingrese un dui valido", Toast.LENGTH_SHORT).show()
+            }
         }
 
         btnClearFilter = view.findViewById(R.id.btnClearFilter)
@@ -137,7 +141,7 @@ class CFiscalFragment : Fragment() {
 
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipoCliente").equalTo(Expression.string("Contribuyente")))
+            .where(Expression.property("tipoD").equalTo(Expression.string("Comprobante Crédito Fiscal")))
             .limit(Expression.intValue(limit), Expression.intValue(offset))
 
         val result = query.execute()
@@ -146,11 +150,10 @@ class CFiscalFragment : Fragment() {
         result.allResults().forEach { result ->
             val dict = result.getDictionary(database.name)
             val nombre = dict?.getString("nombre") ?: ""
-            val telefono = dict?.getString("telefono") ?: ""
+            val telefono = dict?.getString("numeroControl") ?: ""
             val dui = dict?.getString("dui") ?: ""
-            val duiFormateado = formatearDUI(dui)
             val telefonoFormateado = formatearTelefono(telefono)
-            val factura = Factura(nombre, telefonoFormateado, duiFormateado)
+            val factura = Factura(nombre, telefonoFormateado, dui)
             dataList.add(factura)
         }
 
@@ -171,11 +174,10 @@ class CFiscalFragment : Fragment() {
         result.allResults().forEach { result ->
             val dict = result.getDictionary(database.name)
             val nombre = dict?.getString("nombre") ?: ""
-            val telefono = dict?.getString("telefono") ?: ""
+            val telefono = dict?.getString("numeroControl") ?: ""
             val duiResult = dict?.getString("dui") ?: ""
-            val duiFormateado = formatearDUI(duiResult)
             val telefonoFormateado = formatearTelefono(telefono)
-            val factura = Factura(nombre, telefonoFormateado, duiFormateado)
+            val factura = Factura(nombre, telefonoFormateado, duiResult)
             dataList.add(factura)
         }
 
