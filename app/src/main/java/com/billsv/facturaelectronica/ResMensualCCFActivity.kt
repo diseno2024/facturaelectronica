@@ -38,6 +38,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.couchbase.lite.CouchbaseLiteException
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
@@ -119,9 +120,14 @@ class ResMensualCCFActivity : AppCompatActivity() {
         }
         documentosList = actualizarTabla()
         val generar: Button = findViewById(R.id.Generar)
+        val tipoDSeleccionado = tipoD.selectedItem.toString()
         generar.setOnClickListener {
-            // Generar el archivo CSV con los datos recuperados
-            escribirDatosEnCSV(documentosList, "documentos.csv")
+            if(contarDocumentos(tipoDSeleccionado)) {
+                // Generar el archivo CSV con los datos recuperados
+                escribirDatosEnCSV(documentosList, "documentos.csv")
+            }else{
+                Toast.makeText(this, "No hay DTE's para exportar", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
@@ -168,7 +174,6 @@ class ResMensualCCFActivity : AppCompatActivity() {
         // Validación de selección de mes y año
         val mesNumero = getMonthNumber(mesSeleccionado)
         val anioNumero = anioSeleccionado.toInt()
-
         // Crear expresiones para la consulta
         val whereExpression = Expression.property("tipoD").equalTo(Expression.string(tipoDSeleccionado))
             .and(Expression.property("fechaEmi").greaterThanOrEqualTo(Expression.string("$anioNumero-${mesNumero.toString().padStart(2, '0')}-01")))
@@ -546,6 +551,33 @@ class ResMensualCCFActivity : AppCompatActivity() {
                 Log.d("Permissions", "Notification permission denied")
             }
         }
+    }
+    private fun contarDocumentos(fact:String):Boolean {
+        val app = application as MyApp
+        val database = app.database
+        val mesSeleccionado = textViewMes.text.toString()
+        val anioSeleccionado = textViewYear.text.toString()
+
+        // Validación de selección de mes y año
+        val mesNumero = getMonthNumber(mesSeleccionado)
+        val anioNumero = anioSeleccionado.toInt()
+        val whereExpression = Expression.property("tipoD").equalTo(Expression.string(fact))
+            .and(Expression.property("fechaEmi").greaterThanOrEqualTo(Expression.string("$anioNumero-${mesNumero.toString().padStart(2, '0')}-01")))
+            .and(Expression.property("fechaEmi").lessThanOrEqualTo(Expression.string("$anioNumero-${mesNumero.toString().padStart(2, '0')}-31")))
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(whereExpression)
+        try {
+            val result = query.execute()
+            val count = result.allResults().size
+            if(count>0){
+                return true
+            }
+            Log.d("ReClienteActivity", "Número de documentos de tipo 'ConfEmisor': $count")
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al contar los documentos de tipo 'ConfEmisor': ${e.message}", e)
+        }
+        return false
     }
 
 }
