@@ -1,7 +1,15 @@
 package com.billsv.facturaelectronica
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Build
 import android.view.Gravity
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
@@ -15,19 +23,21 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.couchbase.lite.QueryBuilder
-import com.couchbase.lite.ResultSet
 import com.couchbase.lite.SelectResult
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
 import android.graphics.Color
+import android.net.Uri
 import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.Toast
-import com.couchbase.lite.CouchbaseLiteException
-import com.couchbase.lite.MutableDocument
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
@@ -39,7 +49,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
     private lateinit var textViewYear: TextView
     private lateinit var tipoD: Spinner
     private lateinit var atras: ImageButton
-
+    private val REQUEST_CODE_NOTIFICATION_PERMISSION = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,6 +59,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        requestNotificationPermission()
         var documentosList:MutableList<Map<String, String>>
         tipoD = findViewById(R.id.tipoD)
         // spinner tipoC
@@ -140,9 +151,12 @@ class ResMensualCCFActivity : AppCompatActivity() {
 
     private fun actualizarTabla():MutableList<Map<String, String>> {
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
+        val tableLayout2 = findViewById<TableLayout>(R.id.tableLayout2)
 
         // Limpia todas las filas excepto la cabecera
         tableLayout.removeViews(1, tableLayout.childCount - 1)
+
+        tableLayout2.removeViews(1, tableLayout.childCount - 1)
 
         // Obtén una referencia a la base de datos
         val app = application as MyApp
@@ -176,55 +190,178 @@ class ResMensualCCFActivity : AppCompatActivity() {
             // Obtiene el diccionario del documento del resultado actual
             val dict = result.getDictionary(database.name)
             Log.e("RES", "$dict")
-
             // Extrae los valores de los campos del documento y los loguea
-            val nombre = dict?.getString("nombre") ?: ""
-            val nit = dict?.getString("nit") ?: ""
-            val dui = dict?.getString("dui") ?: ""
-            val totalNS = dict?.getDouble("totalNoSuj") ?: 0.0
-            val totalEx = dict?.getDouble("totalExenta") ?: 0.0
-            val totalG = dict?.getDouble("totalGravada") ?: 0.0
-            val total = dict?.getDouble("total") ?: 0.0
-            val numC = dict?.getString("numeroControl") ?: ""
-            val fechE = dict?.getString("fechaEmi") ?: ""
-            val numR = "15041-RES-IN-05608-2024"
-            val serieD = "OFIC0001"
-            val numD = "1"
+            var fechE: String = ""//A
+            var claseDocumento: String = ""//B
+            var tipoDocumento: String = ""//C
+            var codGen: String = ""//D
+            var sello: String = ""//E
+            var numC: String = ""//F
+            var numCI: String = ""//G
+            var nrc:String=""//H
+            var nombre: String = ""//I
+            var totalEx: String = ""//J
+            var totalNS: String = ""//K
+            var totalG: String = ""//L
+            var debito: String = "0.00"//M
+            var ventasCTD: String = "0.00"//N
+            var debitoFVCT: String = "0.00"//O
+            var total: String = ""//P
+            var dui: String = ""//Q
+            var nit: String = ""//
+            var Anexo: String = ""//R
+            var maquina: String=""
+            var InternasExentas: String = ""
+            var ExDCA: String = "0.00"
+            var ExFCA: String = "0.00"
+            var ExSer: String = "0.00"
+            var VeZFyDPA: String = "0.00"
+            if(tipoDSeleccionado=="Comprobante Crédito Fiscal") {
+                // Extrae los valores de los campos del documento y los loguea
+                fechE = dict?.getString("fechaEmi") ?: ""
+                claseDocumento = "4"
+                tipoDocumento = "03"
+                codGen = dict?.getString("codigoGeneracion")?.replace("-","").toString()
+                sello = ""
+                numC = dict?.getString("numeroControl")?.replace("-","").toString()
+                numCI = ""
+                nrc= dict?.getString("nrc")?.replace("-","").toString()
+                nombre  = dict?.getString("nombre") ?: ""
+                totalEx = (dict?.getDouble("totalExenta")).toString()
+                totalNS = (dict?.getDouble("totalNoSuj")).toString()
+                totalG = (dict?.getDouble("totalGravada")).toString()
+                debito = "0.00"
+                ventasCTD = "0.00"
+                debitoFVCT = "0.00"
+                total = (dict?.getDouble("total")).toString()
+                dui = ""
+                Anexo = "1"
 
-            Log.e("VALOR NOMBRE", nombre)
-            Log.e("VALOR NIT", nit)
-            Log.e("VALOR DUI", dui)
-            Log.e("VALOR TOTAL NS", totalNS.toString())
-            Log.e("VALOR TOTAL EX", totalEx.toString())
-            Log.e("VALOR TOTAL G", totalG.toString())
-            Log.e("VALOR TOTAL", total.toString())
-            Log.e("VALOR NUM CONTROL", numC)
-            Log.e("VALOR FECHA", fechE) // Imprime la fecha de emisión del documento actual
+            }else{
+                // Extrae los valores de los campos del documento y los loguea
+                fechE = dict?.getString("fechaEmi") ?: ""
+                claseDocumento = "4"
+                tipoDocumento = "01"
+                codGen = "N/A"
+                sello = "N/A"
+                numC = "N/A"
+                numCI = "N/A"
+                nrc= dict?.getString("codigoGeneracion")?.replace("-","").toString()
+                nombre  = dict?.getString("codigoGeneracion")?.replace("-","").toString()
+                maquina = ""
+                totalEx = (dict?.getDouble("totalExenta")).toString()
+                InternasExentas = "0.00"
+                totalNS = (dict?.getDouble("totalNoSuj")).toString()
+                totalG = (dict?.getDouble("totalGravada")).toString()
+                ExDCA = "0.00"
+                ExFCA = "0.00"
+                ExSer = "0.00"
+                VeZFyDPA = "0.00"
+                ventasCTD = "0.00"
+                total = (dict?.getDouble("total")).toString()
+                Anexo = "2"
+            }
+            if(tipoDSeleccionado=="Comprobante Crédito Fiscal") {
+                tableLayout2.visibility = View.GONE
+                tableLayout.visibility = View.VISIBLE
+                // Crea y agrega una fila a la tabla con los datos del documento
+                addRowToTable(
+                    tableLayout,fechE,
+                    claseDocumento,
+                    tipoDocumento,
+                    codGen,
+                    sello,
+                    numC,
+                    numCI,
+                    nrc,
+                    nombre,
+                    totalEx,
+                    totalNS,
+                    totalG,
+                    debito,
+                    ventasCTD,
+                    debitoFVCT,
+                    total,
+                    dui,
+                    Anexo
+                )
 
-            // Crea y agrega una fila a la tabla con los datos del documento
-            addRowToTable(
-                tableLayout,
-                fechE, numR, serieD, numD, numC, nit,
-                nombre, totalEx.toString(), totalNS.toString(), totalG.toString(), total.toString(),
-                dui
-            )
+                // Añadir los datos del documento a la lista
+                val documento = mapOf(
+                    "fechaEmi" to fechE,
+                    "claseDoc" to claseDocumento,
+                    "tipoDoc" to tipoDocumento,
+                    "numR" to codGen,
+                    "serieD" to sello,
+                    "numD" to numC,
+                    "numeroControl" to numCI,
+                    "nit" to nrc,
+                    "nombre" to  nombre,
+                    "totalExenta" to totalEx,
+                    "totalNoSuj" to totalNS,
+                    "totalGravada" to totalG,
+                    "debitoFiscal" to debito,
+                    "ventasTerceros" to ventasCTD,
+                    "debitoFiscalTerceros" to debitoFVCT,
+                    "total" to total,
+                    "dui" to dui,
+                    "numAnexo" to Anexo
+                )
+                documentosList.add(documento)
+            }else{
+                tableLayout.visibility = View.GONE
+                tableLayout2.visibility = View.VISIBLE
+                // Crea y agrega una fila a la tabla con los datos del documento
+                addRowToTable(
+                    tableLayout2,fechE,
+                    claseDocumento,
+                    tipoDocumento,
+                    codGen,
+                    sello,
+                    numC,
+                    numCI,
+                    nrc,
+                    nombre,
+                    maquina,
+                    totalEx,
+                    InternasExentas,
+                    totalNS,
+                    totalG,
+                    ExDCA,
+                    ExFCA,
+                    ExSer,
+                    VeZFyDPA,
+                    ventasCTD,
+                    total,
+                    Anexo
+                )
 
-            // Añadir los datos del documento a la lista
-            val documento = mapOf(
-                "nombre" to nombre,
-                "nit" to nit,
-                "dui" to dui,
-                "totalNoSuj" to totalNS.toString(),
-                "totalExenta" to totalEx.toString(),
-                "totalGravada" to totalG.toString(),
-                "total" to total.toString(),
-                "numeroControl" to numC,
-                "fechaEmi" to fechE,
-                "numR" to numR,
-                "serieD" to serieD,
-                "numD" to numD
-            )
-            documentosList.add(documento)
+                val documento = mapOf(
+                    "fechaEmi" to fechE,
+                    "claseDoc" to claseDocumento,
+                    "tipoDoc" to tipoDocumento,
+                    "numR" to codGen,
+                    "serieD" to sello,
+                    "numControlDel" to numC, // Asumiendo numC es Número de Control Interno DEL
+                    "numControlAl" to numCI, // Asumiendo numCI es Número de Control Interno AL
+                    "numDocDel" to nrc, // Asumiendo numD es Número de Documento (DEL)
+                    "numDocAl" to nombre, // Asumiendo numDA es Número de Documento (AL)
+                    "numMaquina" to maquina, // Asumiendo numMaquina es Número de Maquina Registradora
+                    "totalExenta" to totalEx,
+                    "ventasInternasExentas" to InternasExentas,
+                    "totalNoSuj" to totalNS,
+                    "totalGravada" to totalG,
+                    "exportCentroAmerica" to ExDCA,
+                    "exportFueraCentroAmerica" to ExFCA,
+                    "exportServicios" to ExSer,
+                    "ventasZonasFrancas" to VeZFyDPA,
+                    "ventasTerceros" to ventasCTD,
+                    "total" to total,
+                    "numAnexo" to Anexo
+                )
+                documentosList.add(documento)
+
+            }
         }
         return documentosList
     }
@@ -233,34 +370,137 @@ class ResMensualCCFActivity : AppCompatActivity() {
         // Get the Downloads directory
         val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val csvFile = File(downloadsDir, fileName)
+        val tipoDSeleccionado = tipoD.selectedItem.toString()
+        if(tipoDSeleccionado=="Comprobante Crédito Fiscal") {
+            try {
+                FileWriter(csvFile).use { writer ->
+                    // Write the CSV header
+                    writer.append("Fecha de Emision del Documento,Clase de Documento,Tipo de Documento,Numero de Resolucion,Serie del Documento,Número de Documento,Número de Control Interno,NIT o NRC del Cliente,Nombre Razón Social o Denominación,Ventas Exentas,Ventas No Sujetas,Ventas Gravadas Locales,Debito Fiscal,Ventas a Cuentas de Terceros no Domiciliados,Debito Fiscal por Ventas a Cuentas de Terceros,Total de Ventas,Número de DUI del cliente,Número del Anexo\n")
 
-        try {
-            FileWriter(csvFile).use { writer ->
-                // Write the CSV header
-                writer.append("nombre,nit,dui,totalNoSuj,totalExenta,totalGravada,total,numeroControl,fechaEmi,numR,serieD,numD\n")
-
-                // Write the data
-                for (documento in datosList) {
-                    writer.append(documento["nombre"]).append(',')
-                    writer.append(documento["nit"]).append(',')
-                    writer.append(documento["dui"]).append(',')
-                    writer.append(documento["totalNoSuj"]).append(',')
-                    writer.append(documento["totalExenta"]).append(',')
-                    writer.append(documento["totalGravada"]).append(',')
-                    writer.append(documento["total"]).append(',')
-                    writer.append(documento["numeroControl"]).append(',')
-                    writer.append(documento["fechaEmi"]).append(',')
-                    writer.append(documento["numR"]).append(',')
-                    writer.append(documento["serieD"]).append(',')
-                    writer.append(documento["numD"]).append('\n')
+                    // Write the data
+                    for (documento in datosList) {
+                        writer.append(documento["fechaEmi"]).append(',')
+                        writer.append(documento["claseDoc"]).append(',')
+                        writer.append(documento["tipoDoc"]).append(',')
+                        writer.append(documento["numR"]).append(',')
+                        writer.append(documento["serieD"]).append(',')
+                        writer.append(documento["numD"]).append(',')
+                        writer.append(documento["numeroControl"]).append(',')
+                        writer.append(documento["nit"]).append(',')
+                        writer.append(documento["nombre"]).append(',')
+                        writer.append(documento["totalExenta"]).append(',')
+                        writer.append(documento["totalNoSuj"]).append(',')
+                        writer.append(documento["totalGravada"]).append(',')
+                        writer.append(documento["debitoFiscal"]).append(',')
+                        writer.append(documento["ventasTerceros"]).append(',')
+                        writer.append(documento["debitoFiscalTerceros"]).append(',')
+                        writer.append(documento["total"]).append(',')
+                        writer.append(documento["dui"]).append(',')
+                        writer.append(documento["numAnexo"]).append('\n')
+                    }
                 }
+                Toast.makeText(this, "Archivo CSV creado exitosamente!", Toast.LENGTH_SHORT).show()
+
+                // Show notification
+                showNotification(csvFile)
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Toast.makeText(
+                    this,
+                    "Error al crear el archivo CSV: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            Toast.makeText(this, "Archivo CSV creado exitosamente!", Toast.LENGTH_SHORT).show()
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Toast.makeText(this, "Error al crear el archivo CSV: ${e.message}", Toast.LENGTH_SHORT).show()
+        }else{
+            try {
+                FileWriter(csvFile).use { writer ->
+                    // Write the CSV header
+                    writer.append("Fecha de Emisión,Clase de Documento,Tipo de Documento,Número de Resolución,Serie del Documento,Número de Control Interno DEL,Número de Control Interno AL,Número de Documento (DEL),Número de Documento (AL),Número de Maquina Registradora,Ventas Exentas,Ventas Internas Exentas No Sujetas a Proporcionalidad,Ventas No Sujetas,Ventas Gravadas Locales,Exportaciones Dentro del Área de CentroAmérica,Exportaciones Fuera del Área de CentroAmérica,Exportaciones de Servicio,Ventas a Zonas Francas y DPA (Tasa Cero),Ventas a Cuenta de Terceros no Domiciliados,Total de Ventas,Número del Anexo\n")
+
+                    // Write the data
+                    for (documento in datosList) {
+                        writer.append(documento["fechaEmi"]).append(',')
+                        writer.append(documento["claseDoc"]).append(',')
+                        writer.append(documento["tipoDoc"]).append(',')
+                        writer.append(documento["numR"]).append(',')
+                        writer.append(documento["serieD"]).append(',')
+                        writer.append(documento["numControlDel"]).append(',')
+                        writer.append(documento["numControlAl"]).append(',')
+                        writer.append(documento["numDocDel"]).append(',')
+                        writer.append(documento["numDocAl"]).append(',')
+                        writer.append(documento["numMaquina"]).append(',')
+                        writer.append(documento["totalExenta"]).append(',')
+                        writer.append(documento["ventasInternasExentas"]).append(',')
+                        writer.append(documento["totalNoSuj"]).append(',')
+                        writer.append(documento["totalGravada"]).append(',')
+                        writer.append(documento["exportCentroAmerica"]).append(',')
+                        writer.append(documento["exportFueraCentroAmerica"]).append(',')
+                        writer.append(documento["exportServicios"]).append(',')
+                        writer.append(documento["ventasZonasFrancas"]).append(',')
+                        writer.append(documento["ventasTerceros"]).append(',')
+                        writer.append(documento["total"]).append(',')
+                        writer.append(documento["numAnexo"]).append('\n')
+                    }
+                }
+                Toast.makeText(this, "Archivo CSV creado exitosamente!", Toast.LENGTH_SHORT).show()
+
+                // Show notification
+                showNotification(csvFile)
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Toast.makeText(this, "Error al crear el archivo CSV: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
+
     }
+
+    private fun showNotification(csvFile: File) {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channelId = "csv_channel_id"
+
+        // Crear el canal de notificación para versiones de Android Oreo (API 26) y superiores
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(channelId, "CSV Channel", NotificationManager.IMPORTANCE_DEFAULT)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Intent para abrir la carpeta de descargas
+        val intent = Intent(Intent.ACTION_VIEW)
+
+        // Obtener la URI del archivo CSV usando FileProvider
+        val uri = FileProvider.getUriForFile(
+            this,
+            "${applicationContext.packageName}.fileprovider",
+            csvFile
+        )
+        intent.setDataAndType(uri, "text/csv")
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+
+        // PendingIntent para la acción de abrir carpeta
+        val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, pendingIntentFlags)
+
+        // Construcción de la notificación
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setContentTitle("CSV creado")
+            .setContentText("Archivo CSV guardado en: ${csvFile.name}")
+            .setSmallIcon(R.drawable.ic_notification) // Asegúrate de tener un icono de notificación en tu proyecto
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .build()
+
+        // Mostrar la notificación
+        notificationManager.notify(0, notification)
+    }
+
+
+
 
 
     private fun addRowToTable(
@@ -285,6 +525,27 @@ class ResMensualCCFActivity : AppCompatActivity() {
         }
 
         tableLayout.addView(tableRow)
+    }
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // TIRAMISU is API level 33 (Android 13)
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_NOTIFICATION_PERMISSION)
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_NOTIFICATION_PERMISSION) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                // Permission granted, you can show notifications
+                Log.d("Permissions", "Notification permission granted")
+            } else {
+                // Permission denied, show a message to the user
+                Toast.makeText(this, "Notification permission is required to show notifications", Toast.LENGTH_SHORT).show()
+                Log.d("Permissions", "Notification permission denied")
+            }
+        }
     }
 
 }
