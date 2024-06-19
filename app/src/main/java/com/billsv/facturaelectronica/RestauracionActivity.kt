@@ -1,32 +1,34 @@
 package com.billsv.facturaelectronica
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.DocumentsContract
+import android.os.Environment
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.documentfile.provider.DocumentFile
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.zip.ZipEntry
-import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
+import java.util.Locale
+import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class RestauracionActivity : AppCompatActivity() {
 
     private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
-    private val READ_EXTERNAL_STORAGE_REQUEST_CODE = 102
-    private val PICK_DIRECTORY_REQUEST_CODE = 2
     private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 33) {
         listOf(
             Manifest.permission.READ_MEDIA_AUDIO,
@@ -55,6 +57,60 @@ class RestauracionActivity : AppCompatActivity() {
         btnRealizarRecuperacion.setOnClickListener {
             requestPermissions()
         }
+
+        // Mostrar la fecha del último respaldo y el rango de fechas de restauración
+        mostrarFechas()
+    }
+
+    // Función para mostrar la fecha del último respaldo y el rango de fechas de restauración
+    private fun mostrarFechas() {
+        val fechaUltimoRespaldo = leerFechaUltimoRespaldo()
+        val textFecha: TextView = findViewById(R.id.textFecha)
+        val textFecha1: TextView = findViewById(R.id.textFecha1)
+        val textFecha2: TextView = findViewById(R.id.textFecha2)
+        val dateFormat = android.icu.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+        if (fechaUltimoRespaldo != null) {
+            textFecha.text = dateFormat.format(fechaUltimoRespaldo)
+
+            // Obtener el rango de fechas de restauración
+            val rangoRestauracion = obtenerRangoRestauracion()
+            if (rangoRestauracion != null) {
+                textFecha1.text = dateFormat.format(rangoRestauracion.first)
+                textFecha2.text = dateFormat.format(rangoRestauracion.second)
+            } else {
+                textFecha1.text = "N/A"
+                textFecha2.text = "N/A"
+            }
+        } else {
+            textFecha.text = "Ninguna"
+            textFecha1.text = "N/A"
+            textFecha2.text = "N/A"
+        }
+    }
+
+    // Función para leer la fecha del último respaldo
+    private fun leerFechaUltimoRespaldo(): Date? {
+        // Aquí implementa la lógica para leer la fecha del último respaldo
+        // Por ejemplo, supongamos que obtienes la fecha desde SharedPreferences
+        val sharedPrefs = getSharedPreferences("BackupPrefs", MODE_PRIVATE)
+        val timestamp = sharedPrefs.getLong("last_backup_timestamp", -1)
+        return if (timestamp != -1L) Date(timestamp) else null
+    }
+
+    // Función para obtener el rango de fechas de restauración
+    private fun obtenerRangoRestauracion(): Pair<Date, Date>? {
+        // Aquí deberías implementar la lógica para obtener el rango de fechas de restauración
+        // Por ejemplo, podrías obtenerlas desde SharedPreferences o cualquier otra fuente de datos
+        // Aquí se muestra un ejemplo simple de cómo podrías obtener un rango de fechas ficticio
+
+        val fechaInicio = Calendar.getInstance()
+        fechaInicio.set(2024, Calendar.APRIL, 10) // Fecha de inicio ficticia
+
+        val fechaFin = Calendar.getInstance()
+        fechaFin.set(2024, Calendar.APRIL, 12) // Fecha de fin ficticia
+
+        return fechaInicio.time to fechaFin.time
     }
 
     private fun requestPermissions() {
@@ -78,107 +134,44 @@ class RestauracionActivity : AppCompatActivity() {
     }
 
     private fun restoreData() {
-        val backupUri = getBackupDirectoryUri()
-        if (backupUri != null) {
-            restoreDataFromUri(backupUri)
-        } else {
-            openDirectoryPicker()
-        }
-    }
+        val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+        val backupDirectoryName = "respaldo_factura2024"
+        val restorationDirectoryName = "restauracion_factura"
 
-    private fun getBackupDirectoryUri(): Uri? {
-        val sharedPref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        val uriString = sharedPref.getString("backup_directory_uri", null)
-        return uriString?.let { Uri.parse(it) }
-    }
+        val backupDirectory = File(parentDir, backupDirectoryName)
+        val restorationDirectory = File(parentDir, restorationDirectoryName)
 
-    private fun restoreDataFromUri(directoryUri: Uri) {
-        val documentFile = DocumentFile.fromTreeUri(this, directoryUri)
-        if (documentFile != null && documentFile.isDirectory) {
+        if (backupDirectory.exists() && backupDirectory.isDirectory) {
             try {
-                for (file in documentFile.listFiles()) {
-                    if (file.isFile && file.name?.endsWith(".zip") == true) {
-                        val restorationDirectory = File(filesDir, "restauracion_factura")
-                        if (restorationDirectory.exists()) {
-                            restorationDirectory.deleteRecursively()
-                        }
-                        restorationDirectory.mkdirs()
-                        unzipFile(file.uri, restorationDirectory)
-                        Log.d("RestauracionActivity", "Datos restaurados con éxito en: ${restorationDirectory.absolutePath}")
-                        Toast.makeText(this, "Datos restaurados con éxito", Toast.LENGTH_SHORT).show()
-                        return
-                    }
+                // Verificar si el directorio de restauración ya existe y eliminarlo si es necesario
+                if (restorationDirectory.exists()) {
+                    restorationDirectory.deleteRecursively()
                 }
-                Toast.makeText(this, "No se encontró un archivo de respaldo", Toast.LENGTH_SHORT).show()
+                // Crear el directorio de restauración
+                if (restorationDirectory.mkdirs()) {
+                    // Copiar todos los archivos del directorio de respaldo al directorio de restauración
+                    copyDirectory(backupDirectory, restorationDirectory)
+                    Log.d("RestauracionActivity", "Datos restaurados con éxito en: ${restorationDirectory.absolutePath}")
+                    Toast.makeText(this, "Datos restaurados con éxito", Toast.LENGTH_SHORT).show()
+
+                    // Crear archivo ZIP con los datos restaurados
+                    val zipFile = File(parentDir, "$restorationDirectoryName.zip")
+                    zipDirectory(restorationDirectory, zipFile)
+                    Log.d("RestauracionActivity", "Datos comprimidos con éxito en: ${zipFile.absolutePath}")
+                    Toast.makeText(this, "Datos comprimidos con éxito en: ${zipFile.absolutePath}", Toast.LENGTH_LONG).show()
+                } else {
+                    Log.e("RestauracionActivity", "Error al crear el directorio de restauración")
+                    Toast.makeText(this, "Error al crear el directorio de restauración", Toast.LENGTH_SHORT).show()
+                }
             } catch (e: IOException) {
                 e.printStackTrace()
                 Log.e("RestauracionActivity", "Error al restaurar datos: ${e.message}")
                 Toast.makeText(this, "Error al restaurar datos", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Log.e("RestauracionActivity", "El directorio de respaldo no es válido")
-            Toast.makeText(this, "El directorio de respaldo no es válido", Toast.LENGTH_SHORT).show()
+            Log.e("RestauracionActivity", "La carpeta de respaldo no existe")
+            Toast.makeText(this, "La carpeta de respaldo no existe", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun openDirectoryPicker() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-        }
-        startActivityForResult(intent, PICK_DIRECTORY_REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_DIRECTORY_REQUEST_CODE && resultCode == RESULT_OK) {
-            data?.data?.let { uri ->
-                val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                contentResolver.takePersistableUriPermission(uri, takeFlags)
-                saveDirectoryUri(uri)
-                restoreDataFromUri(uri)
-            }
-        }
-    }
-
-    private fun saveDirectoryUri(uri: Uri) {
-        val sharedPref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            putString("restore_directory_uri", uri.toString())
-            apply()
-        }
-    }
-
-    @Throws(IOException::class)
-    private fun unzipFile(zipUri: Uri, targetDirectory: File) {
-        contentResolver.openInputStream(zipUri)?.use { inputStream ->
-            ZipInputStream(inputStream).use { zis ->
-                var zipEntry: ZipEntry? = zis.nextEntry
-                while (zipEntry != null) {
-                    val newFile = createFile(targetDirectory, zipEntry)
-                    if (zipEntry.isDirectory) {
-                        if (!newFile.isDirectory && !newFile.mkdirs()) {
-                            throw IOException("Failed to create directory: ${newFile.absolutePath}")
-                        }
-                    } else {
-                        FileOutputStream(newFile).use { fos ->
-                            zis.copyTo(fos)
-                        }
-                    }
-                    zipEntry = zis.nextEntry
-                }
-            }
-        }
-    }
-
-    @Throws(IOException::class)
-    private fun createFile(targetDirectory: File, zipEntry: ZipEntry): File {
-        val destFile = File(targetDirectory, zipEntry.name)
-        val destDirPath = targetDirectory.canonicalPath
-        val destFilePath = destFile.canonicalPath
-        if (!destFilePath.startsWith(destDirPath + File.separator)) {
-            throw IOException("Entry is outside of the target dir: ${zipEntry.name}")
-        }
-        return destFile
     }
 
     override fun onRequestPermissionsResult(
@@ -187,7 +180,7 @@ class RestauracionActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE || requestCode == READ_EXTERNAL_STORAGE_REQUEST_CODE) {
+        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 restoreData()
             } else {
@@ -196,6 +189,54 @@ class RestauracionActivity : AppCompatActivity() {
                     "Los permisos son necesarios para realizar la restauración",
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun copyDirectory(srcDir: File, destDir: File) {
+        if (srcDir.isDirectory) {
+            if (!destDir.exists()) {
+                destDir.mkdirs()
+            }
+
+            val children = srcDir.list()
+            if (children != null) {
+                for (child in children) {
+                    copyDirectory(File(srcDir, child), File(destDir, child))
+                }
+            }
+        } else {
+            FileInputStream(srcDir).use { input ->
+                FileOutputStream(destDir).use { output ->
+                    input.copyTo(output)
+                }
+            }
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun zipDirectory(srcDir: File, zipFile: File) {
+        ZipOutputStream(FileOutputStream(zipFile)).use { zos ->
+            zipFile(srcDir, srcDir.name, zos)
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun zipFile(srcFile: File, fileName: String, zos: ZipOutputStream) {
+        if (srcFile.isDirectory) {
+            val children = srcFile.list()
+            if (children != null) {
+                for (child in children) {
+                    zipFile(File(srcFile, child), "$fileName/$child", zos)
+                }
+            }
+        } else {
+            FileInputStream(srcFile).use { fis ->
+                val zipEntry = ZipEntry(fileName)
+                zos.putNextEntry(zipEntry)
+                fis.copyTo(zos)
+                zos.closeEntry()
             }
         }
     }

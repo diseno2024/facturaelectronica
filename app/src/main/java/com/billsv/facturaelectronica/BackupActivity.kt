@@ -2,22 +2,21 @@ package com.billsv.facturaelectronica
 
 import android.Manifest
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import java.text.SimpleDateFormat
-import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.documentfile.provider.DocumentFile
 import com.couchbase.lite.Database
 import java.io.*
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
@@ -26,11 +25,9 @@ class BackupActivity : AppCompatActivity() {
 
     private lateinit var buttonSelectTime: Button
     private lateinit var editTextSelectedTime: EditText
-    private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
-    private val CREATE_FILE_REQUEST_CODE = 1
-    private val preferenceFileKey = "com.billsv.facturaelectronica.PREFERENCE_FILE_KEY"
-    private val backupUriKey = "backupUri"
+    private lateinit var textFecha: TextView  // Para mostrar la fecha del último respaldo
 
+    private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
     private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 33) {
         listOf(
             Manifest.permission.READ_MEDIA_AUDIO,
@@ -50,6 +47,7 @@ class BackupActivity : AppCompatActivity() {
 
         val switchEncendido = findViewById<Switch>(R.id.switchEncendido)
         val textEstado = findViewById<TextView>(R.id.textEstado)
+        textFecha = findViewById(R.id.textFecha)
 
         switchEncendido.setOnCheckedChangeListener { _, isChecked ->
             textEstado.text = if (isChecked) "Encendido" else "Apagado"
@@ -57,7 +55,7 @@ class BackupActivity : AppCompatActivity() {
 
         val btnRegistrar = findViewById<Button>(R.id.btnRegistrar)
         btnRegistrar.setOnClickListener {
-            checkPermissionsAndBackup()
+            requestPermissions()
         }
 
         val spinnerFrecuencia = findViewById<Spinner>(R.id.spinnerFrecuencia)
@@ -114,6 +112,14 @@ class BackupActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        // Cargar la fecha del último respaldo si existe
+        val fechaUltimoRespaldo = leerFechaUltimoRespaldo()
+        if (fechaUltimoRespaldo != null) {
+            textFecha.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(fechaUltimoRespaldo)
+        } else {
+            textFecha.text = "Ninguna"
+        }
     }
 
     override fun onBackPressed() {
@@ -123,7 +129,7 @@ class BackupActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun checkPermissionsAndBackup() {
+    private fun requestPermissions() {
         val permissionsToRequest = mutableListOf<String>()
 
         for (permission in permissionList) {
@@ -143,25 +149,51 @@ class BackupActivity : AppCompatActivity() {
                 WRITE_EXTERNAL_STORAGE_REQUEST_CODE
             )
         } else {
-            performBackup()
+            createBackupFolder()
         }
     }
 
-    private fun performBackup() {
-        val sharedPreferences = getSharedPreferences(preferenceFileKey, MODE_PRIVATE)
-        val backupUriString = sharedPreferences.getString(backupUriKey, null)
+    private fun createBackupFolder() {
+        val parentDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+        val backupDirectoryName = "respaldo_factura2024"
+        val backupDirectory = File(parentDir, backupDirectoryName)
 
-        if (backupUriString != null) {
-            val backupUri = Uri.parse(backupUriString)
-            backupDatabase(backupUri)
+        // Verificar si el directorio de respaldo existe y manejar errores de creación
+        if (!backupDirectory.exists()) {
+            try {
+                if (backupDirectory.mkdirs()) {
+                    Log.d(
+                        "BackupActivity",
+                        "Directorio de respaldo creado en: ${backupDirectory.absolutePath}"
+                    )
+                    Toast.makeText(
+                        this,
+                        "Directorio de respaldo creado exitosamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Log.e("BackupActivity", "Error al crear el directorio de respaldo")
+                    Toast.makeText(this, "Error al crear el directorio de respaldo", Toast.LENGTH_SHORT)
+                        .show()
+                    return
+                }
+            } catch (e: Exception) {
+                Log.e("BackupActivity", "Excepción al crear el directorio de respaldo: ${e.message}")
+                Toast.makeText(this, "Excepción al crear el directorio de respaldo", Toast.LENGTH_SHORT)
+                    .show()
+                return
+            }
         } else {
-            openDirectoryPicker()
+            Log.d(
+                "BackupActivity",
+                "El directorio de respaldo ya existe en: ${backupDirectory.absolutePath}"
+            )
+            Toast.makeText(this, "El directorio de respaldo ya existe", Toast.LENGTH_SHORT).show()
         }
-    }
 
-    private fun openDirectoryPicker() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        startActivityForResult(intent, CREATE_FILE_REQUEST_CODE)
+        // Realizar respaldo de la base de datos después de crear el directorio
+        backupDatabase(backupDirectory)
     }
 
     override fun onRequestPermissionsResult(
@@ -172,7 +204,7 @@ class BackupActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                performBackup()
+                createBackupFolder()
             } else {
                 Toast.makeText(
                     this,
@@ -183,60 +215,32 @@ class BackupActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CREATE_FILE_REQUEST_CODE && resultCode == RESULT_OK) {
-            data?.data?.let { uri ->
-                val sharedPreferences = getSharedPreferences(preferenceFileKey, MODE_PRIVATE)
-                with(sharedPreferences.edit()) {
-                    putString(backupUriKey, uri.toString())
-                    apply()
-                }
-                backupDatabase(uri)
-            }
-        }
-    }
+    // Método para realizar el respaldo de la base de datos
+    private fun backupDatabase(backupDir: File) {
+        val database = Database("my_database")  // Corrige el nombre de la base de datos
 
-    private fun backupDatabase(uri: Uri) {
-        val database = Database("my_database")
         val dbDir = File(database.path)
-        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val backupFileName = "respaldo_factura2024.zip"
+        val backupDirDb = File(backupDir, dbDir.name)
 
         try {
-            // Crear un nuevo archivo ZIP o abrir el existente si ya existe
-            val backupZipFile = File(cacheDir, backupFileName)
-            val zipOutputStream = if (backupZipFile.exists()) {
-                ZipOutputStream(FileOutputStream(backupZipFile, true)) // Modo de append
-            } else {
-                ZipOutputStream(FileOutputStream(backupZipFile))
+            // Verificar si el archivo de destino ya existe y eliminarlo si es necesario
+            if (backupDirDb.exists()) {
+                backupDirDb.deleteRecursively()  // Utiliza deleteRecursively para eliminar directorios
             }
+            // Copiar todos los archivos al directorio de respaldo
+            copyDirectory(dbDir, backupDirDb)
+            Log.d("BackupActivity", "Respaldo realizado con éxito: ${backupDirDb.absolutePath}")
+            Toast.makeText(this, "Respaldo realizado con éxito", Toast.LENGTH_SHORT).show()
 
-            // Agregar la base de datos actual al archivo ZIP
-            val databaseEntry = ZipEntry("my_database.cblite2")
-            zipOutputStream.putNextEntry(databaseEntry)
-            FileInputStream(File(dbDir, "my_database.cblite2")).use { input ->
-                input.copyTo(zipOutputStream)
-            }
-            zipOutputStream.closeEntry()
+            // Crear archivo zip
+            val zipFile = File(backupDir, "${backupDirDb.name}.zip")
+            zipDirectory(backupDirDb, zipFile)
+            Log.d("BackupActivity", "Archivos comprimidos con éxito: ${zipFile.absolutePath}")
+            Toast.makeText(this, "Archivos comprimidos con éxito", Toast.LENGTH_SHORT).show()
 
-            // Resto del código para guardar el archivo ZIP en la ubicación seleccionada...
-            if (DocumentFile.fromTreeUri(this, uri)?.isDirectory == true) {
-                val documentFile = DocumentFile.fromTreeUri(this, uri)
-                val backupFile = documentFile?.createFile("application/zip", backupFileName)
-                backupFile?.uri?.let { backupUri ->
-                    contentResolver.openOutputStream(backupUri)?.use { outputStream ->
-                        FileInputStream(backupZipFile).use { inputStream ->
-                            inputStream.copyTo(outputStream)
-                        }
-                    }
-                    Log.d("BackupActivity", "Archivos comprimidos con éxito: ${backupZipFile.absolutePath}")
-                    Toast.makeText(this, "Archivos comprimidos con éxito en la ubicación seleccionada", Toast.LENGTH_LONG).show()
-                }
-            } else {
-                Log.e("BackupActivity", "La URI seleccionada no es un directorio")
-                Toast.makeText(this, "Error: la URI seleccionada no es un directorio", Toast.LENGTH_SHORT).show()
-            }
+            // Actualizar la fecha del último respaldo
+            actualizarFechaUltimoRespaldo(Date())
+            textFecha.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
         } catch (e: IOException) {
             e.printStackTrace()
             Log.e("BackupActivity", "Error al realizar el respaldo: ${e.message}")
@@ -244,7 +248,27 @@ class BackupActivity : AppCompatActivity() {
         }
     }
 
+    @Throws(IOException::class)
+    private fun copyDirectory(srcDir: File, destDir: File) {
+        if (srcDir.isDirectory) {
+            if (!destDir.exists()) {
+                destDir.mkdirs()
+            }
 
+            val children = srcDir.list()
+            if (children != null) {
+                for (i in children.indices) {
+                    copyDirectory(File(srcDir, children[i]), File(destDir, children[i]))
+                }
+            }
+        } else {
+            FileInputStream(srcDir).use { input ->
+                FileOutputStream(destDir).use { output ->
+                    input.copyTo(output)
+                }
+            }
+        }
+    }
 
     @Throws(IOException::class)
     private fun zipDirectory(srcDir: File, zipFile: File) {
@@ -271,4 +295,27 @@ class BackupActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun getFriendlyPath(absolutePath: String): String {
+        return absolutePath.replace("/storage/emulated/0", "Internal Storage")
+    }
+
+    private fun leerFechaUltimoRespaldo(): Date? {
+        // Aquí implementa la lógica para leer la fecha del último respaldo
+        // Por ejemplo, supongamos que obtienes la fecha desde SharedPreferences
+        val sharedPrefs = getSharedPreferences("BackupPrefs", Context.MODE_PRIVATE)
+        val timestamp = sharedPrefs.getLong("last_backup_timestamp", -1)
+        return if (timestamp != -1L) Date(timestamp) else null
+    }
+
+    private fun actualizarFechaUltimoRespaldo(fecha: Date) {
+        // Aquí implementa la lógica para actualizar la fecha del último respaldo
+        // Por ejemplo, guardando la fecha en SharedPreferences
+        val sharedPrefs = getSharedPreferences("BackupPrefs", Context.MODE_PRIVATE)
+        with(sharedPrefs.edit()) {
+            putLong("last_backup_timestamp", fecha.time)
+            apply()
+        }
+    }
+
 }
