@@ -178,6 +178,7 @@
     </LinearLayout>
 
     <HorizontalScrollView
+        android:id="@+id/HorizontalS"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="190dp"
@@ -344,5 +345,23 @@
 
         </ScrollView>
     </HorizontalScrollView>
+
+    <Button
+        android:id="@+id/Generar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#96D0B9"
+        android:text="Generar CSV"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/Texto"
+        android:textStyle="bold"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="#4a8c74"
+        app:strokeWidth="3dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
