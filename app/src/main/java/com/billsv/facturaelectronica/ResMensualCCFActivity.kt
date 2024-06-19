@@ -43,7 +43,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
         }
         tipoD = findViewById(R.id.tipoD)
         // spinner tipoC
-        val opcionesD = arrayOf("Todo","Comprobante Crédito Fiscal", "Factura Consumidor Final")
+        val opcionesD = arrayOf("Comprobante Crédito Fiscal", "Factura Consumidor Final")
         val adapterD = ArrayAdapter(this, R.layout.spinner_descripcion, opcionesD)
         adapterD.setDropDownViewResource(R.layout.spinner_dropdown_per)
         tipoD.adapter = adapterD

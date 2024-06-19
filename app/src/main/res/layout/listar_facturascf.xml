@@ -31,8 +31,8 @@
                 android:paddingLeft="14dp"
                 android:paddingRight="14dp"
                 app:srcCompat="@drawable/ic_factura"
-                android:tint="@color/verde_menta_1"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentLeft="true"
+                app:tint="@color/verde_menta_1" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
