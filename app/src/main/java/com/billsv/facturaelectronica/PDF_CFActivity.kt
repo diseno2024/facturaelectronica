@@ -72,12 +72,15 @@ class PDF_CFActivity : AppCompatActivity() {
             val btnYes = dialogoGenerar.findViewById<Button>(R.id.btnYes)
             val btnNo = dialogoGenerar.findViewById<Button>(R.id.btnNo)
             btnYes.setOnClickListener {
-                json()
-                guardarDatosF()
-                borrararticulos()
-                borrarDui()
-                borrarClienteTemporal()
-                borrarNCCG()
+                val JSON = intent.getStringExtra("JSON")
+                if(JSON!=null) {
+                    json()
+                    guardarDatosF(JSON)
+                    borrararticulos(JSON)
+                    borrarDui(JSON)
+                    borrarClienteTemporal()
+                    borrarNCCG(JSON)
+                }
                 dialogoGenerar.dismiss()
                 val intent = Intent(this, EmitirCFActivity::class.java)
                 startActivity(intent)
@@ -107,11 +110,20 @@ class PDF_CFActivity : AppCompatActivity() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
         val control = intent.getStringExtra("numeroControl")
         val codigo = intent.getStringExtra("codGeneracion")
-        val intent = Intent(this, EmitirCFActivity::class.java)
-        intent.putExtra("numeroControl", control)
-        intent.putExtra("codigoGeneracion", codigo)
-        startActivity(intent)
-        finish()
+        val JSON = intent.getStringExtra("JSON")
+        if(JSON=="Factura"){
+            val intent = Intent(this, EmitirCFActivity::class.java)
+            intent.putExtra("numeroControl", control)
+            intent.putExtra("codigoGeneracion", codigo)
+            startActivity(intent)
+            finish()
+        }else{
+            val intent = Intent(this, EmitirCCFActivity::class.java)
+            intent.putExtra("numeroControl", control)
+            intent.putExtra("codigoGeneracion", codigo)
+            startActivity(intent)
+            finish()
+        }
     }
     private fun json(){
         var dui: String? = null
@@ -266,7 +278,7 @@ class PDF_CFActivity : AppCompatActivity() {
                 saldoFavor = 0.0,
                 condicionOperacion = condicionOperacion,
                 pagos = null,
-                numPagoElectronico = "0001",
+                numPagoElectronico = null,
                 totalNoSuj = totalNoSujeto,
                 totalExenta = totalExenta,
                 totalGravada = totalGravada,
@@ -292,20 +304,157 @@ class PDF_CFActivity : AppCompatActivity() {
             selloRecibido = "Sello de recibido",
             firmaElectronica = "Firma electrónica"
         )
-        val articulos = obtenerDatosGuardados()
-        val cuerpoDocumentos = createCuerpoDocumento(articulos)
+        val documento2 = DocumentoC(
+            identificacion = IdentificacionC(
+                version = 1,
+                ambiente = "00",
+                tipoDte = "03",
+                numeroControl = numeroContol,
+                codigoGeneracion = codigoGeneracion,
+                tipoModelo = 1,
+                tipoOperacion = 1,
+                tipoContingencia = null,
+                motivoContin = null,
+                fecEmi = fecEmi,
+                horEmi = horEmi,
+                tipoMoneda = "USD"
+            ),
+            documentoRelacionado = null,
+            emisor = EmisorC(
+                nit = nitE,
+                nrc = nrcE,
+                nombre = nombreE,
+                codActividad = codAcEcoE,
+                descActividad = desAcEcoE,
+                nombreComercial = nombrecE,
+                tipoEstablecimiento = "Oficina",
+                direccion = DireccionC(
+                    departamento = departamentoE,
+                    municipio = municipioE,
+                    complemento = complementoE
+                ),
+                telefono = telefonoE,
+                correo = correoE,
+                codEstableMH = null,
+                codEstable = "1",
+                codPuntoVentaMH = null,
+                codPuntoVenta = "1"
+            ),
+            receptor = ReceptorC(
+                nit = nit,
+                nrc = nrc,
+                nombre = nombre,
+                codActividad = codAcEco,
+                descActividad = desAcEco,
+                nombreComercial = nombre,
+                direccion = DireccionC(
+                    departamento = departamento,
+                    municipio = municipio,
+                    complemento = complemento
+                ),
+                telefono = telefono,
+                correo = correo
+            ),
+            otrosDocumentos = null,
+            ventaTercero = null,
+            cuerpoDocumento = emptyList(),
+            resumen = ResumenC(
+                totalIva = totalIva,
+                porcentajeDescuento = 0.0,
+                ivaRete1 = 0.0,
+                reteRenta = 0.0,
+                totalNoGravado = 0.0,
+                totalPagar = total,
+                saldoFavor = 0.0,
+                condicionOperacion = condicionOperacion,
+                pagos = null,
+                numPagoElectronico = null,
+                totalNoSuj = totalNoSujeto,
+                totalExenta = totalExenta,
+                totalGravada = totalGravada,
+                subTotalVentas = total,
+                descuNoSuj = 0.0,
+                descuExenta = 0.0,
+                descuGravada = 0.0,
+                totalDescu = 0.0,
+                tributos =  tributosC(
+                    codigo = "20",
+                    descripcion = "Impuesto al Valor Agregado 13%",
+                    valor = 0.13
+                ),
+                subTotal = total,
+                montoTotalOperacion = total,
+                totalLetras = precioEnLetras(total)
+            ),
+            extension = ExtensionC(
+                placaVehiculo = null,
+                docuEntrega = null,
+                nombEntrega = null,
+                docuRecibe = null,
+                nombRecibe = null,
+                observaciones = null
+            ),
+            apendice = null,
+            selloRecibido = "Sello de recibido",
+            firmaElectronica = "Firma electrónica"
+        )
+        val JSON = intent.getStringExtra("JSON")
+        if(JSON=="Factura"){
+            val articulos = obtenerDatosGuardados("F")
+            val cuerpoDocumentos = createCuerpoDocumento(articulos)
 
-        documento.cuerpoDocumento = cuerpoDocumentos
+            documento.cuerpoDocumento = cuerpoDocumentos
 
-        // Crear una instancia de ObjectMapper
-        val mapper = ObjectMapper().registerModule(KotlinModule())
-        mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+            // Crear una instancia de ObjectMapper
+            val mapper = ObjectMapper().registerModule(KotlinModule())
+            mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
 
-        // Convertir la instancia de Documento a JSON
-        val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
+            // Convertir la instancia de Documento a JSON
+            val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
 
-        saveJsonToExternalStorage(json,numeroContol)
+            saveJsonToExternalStorage(json,numeroContol)
+        }else if(JSON=="CreditoFiscal"){
+            val articulos = obtenerDatosGuardados("CF")
+            val cuerpoDocumentosC = createCuerpoDocumentoC(articulos)
+
+            documento2.cuerpoDocumento = cuerpoDocumentosC
+
+            // Crear una instancia de ObjectMapper
+            val mapper = ObjectMapper().registerModule(KotlinModule())
+            mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+
+            // Convertir la instancia de Documento a JSON
+            val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento2)
+
+            saveJsonToExternalStorage(json,numeroContol)
+        }
     }
+
+    private fun createCuerpoDocumentoC(dataList: List<String>): List<CuerpoDocumentoC> {
+        return dataList.mapIndexed { index, dataString ->
+            val data = dataString.split("\n")
+            CuerpoDocumentoC(
+                ivaItem = data[9].toDouble(),
+                psv = data[13].toDouble(),
+                noGravado = data[14].toDouble(),
+                numItem = index + 1,
+                tipoItem = data[0].toInt(),
+                numeroDocumento = null,
+                cantidad = data[1].toDouble(),
+                codigo = null,
+                codTributo = null,
+                uniMedida = data[2].toInt(),
+                descripcion = data[3],
+                precioUni = data[5].toDouble(),
+                montoDescu = 0.0,
+                ventaNoSuj = data[8].toDouble(),
+                ventaExenta = data[7].toDouble(),
+                ventaGravada = data[6].toDouble(),
+                tributos = null
+            )
+        }
+    }
+
     private fun FyH_emicion(): String{
         val calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -373,15 +522,20 @@ class PDF_CFActivity : AppCompatActivity() {
         // Devuelve la lista de datos
         return dataList
     }
-    private fun obtenerDatosGuardados(): List<String> {
+    private fun obtenerDatosGuardados(letra:String): List<String> {
         // Obtén la instancia de la base de datos desde la aplicación
         val app = application as MyApp
         val database = app.database
-
+        var nombre: String = ""
+        if(letra=="F"){
+            nombre = "Articulocf"
+        }else if(letra=="CF"){
+            nombre = "Articuloccf"
+        }
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
+            .where(Expression.property("tipo").equalTo(Expression.string(nombre)))
 
         // Ejecuta la consulta
         val result = query.execute()
@@ -751,11 +905,17 @@ class PDF_CFActivity : AppCompatActivity() {
 
             val app = application as MyApp
             val database = app.database
-
+            val JSON = intent.getStringExtra("JSON")
+            var Articulo:String=""
+            if(JSON=="Factura"){
+                Articulo = "Articulocf"
+            }else{
+                Articulo = "Articuloccf"
+            }
             // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
             val query = QueryBuilder.select(SelectResult.all())
                 .from(DataSource.database(database))
-                .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
+                .where(Expression.property("tipo").equalTo(Expression.string(Articulo)))
 
             // Ejecuta la consulta
             val result = query.execute()
@@ -1056,12 +1216,18 @@ class PDF_CFActivity : AppCompatActivity() {
         }
         return json
     }
-    private fun borrararticulos() {
+    private fun borrararticulos(l:String) {
         val app = application as MyApp
         val database = app.database
+        var articulos:String=""
+        if(l=="Factura"){
+            articulos = "Articulocf"
+        }else{
+            articulos = "Articuloccf"
+        }
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
+            .where(Expression.property("tipo").equalTo(Expression.string(articulos)))
 
         try {
             val resultSet = query.execute()
@@ -1089,13 +1255,18 @@ class PDF_CFActivity : AppCompatActivity() {
             Log.e("Prin_Re_Cliente", "Error al eliminar los artículos: ${e.message}", e)
         }
     }
-    private fun borrarDui() {
+    private fun borrarDui(l:String) {
         val app = application as MyApp
         val database = app.database
-
+        var TYPE:String=""
+        if(l=="Factura"){
+            TYPE = "DUI"
+        }else{
+            TYPE = "NRC"
+        }
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("DUI")))
+            .where(Expression.property("tipo").equalTo(Expression.string(TYPE)))
 
         try {
             val resultSet = query.execute()
@@ -1122,7 +1293,6 @@ class PDF_CFActivity : AppCompatActivity() {
     private fun borrarClienteTemporal() {
         val app = application as MyApp
         val database = app.database
-
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
             .where(Expression.property("tipo").equalTo(Expression.string("clientetemporal")))
@@ -1152,13 +1322,18 @@ class PDF_CFActivity : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-    private fun borrarNCCG() {
+    private fun borrarNCCG(l:String) {
         val app = application as MyApp
         val database = app.database
-
+        var NCCG:String=""
+        if(l=="Factura"){
+            NCCG = "NCCG"
+        }else{
+            NCCG = "NCCGCCF"
+        }
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("NCCG")))
+            .where(Expression.property("tipo").equalTo(Expression.string(NCCG)))
 
         try {
             val resultSet = query.execute()
@@ -1182,7 +1357,8 @@ class PDF_CFActivity : AppCompatActivity() {
             Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
-    private fun guardarDatosF() {
+    private fun guardarDatosF(l:String) {
+        var tipoDC: String = ""
         val app = application as MyApp
         val database = app.database
         val numeroControl = intent.getStringExtra("numeroControl")
@@ -1200,7 +1376,11 @@ class PDF_CFActivity : AppCompatActivity() {
                 fecEmi = datos[0]
             }
         }
-
+        if(l=="Factura"){
+            tipoDC = "Factura Consumidor Final"
+        }else{
+            tipoDC = "Comprobante Crédito Fiscal"
+        }
         val subTotalVentas= totalExenta!! + totalGravada!! + totalNoSuj!!
         val cliente=intent.getStringExtra("Cliente")
         if (cliente != null) {
@@ -1215,7 +1395,7 @@ class PDF_CFActivity : AppCompatActivity() {
                 println("Los datos del cliente no están en el formato esperado.")
             }
         } else {
-            // Maneja el caso donde `cliente` es null
+            // Maneja el caso donde cliente es null
             println("No se recibió información del cliente.")
         }
 
@@ -1231,7 +1411,7 @@ class PDF_CFActivity : AppCompatActivity() {
             .setString("tipo","factura")
             .setString("numeroControl",numeroControl)
             .setString("fechaEmi",fecEmi)
-            .setString("tipoD","Factura Consumidor Final")
+            .setString("tipoD",tipoDC)
         try {
             // Guardar el documento en la base de datos
             database.save(document)
