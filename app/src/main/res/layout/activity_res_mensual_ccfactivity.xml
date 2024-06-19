@@ -208,6 +208,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
+                    android:visibility="visible"
                     android:stretchColumns="1"
                     tools:ignore="UselessParent">
                     <!-- Header row -->
@@ -232,7 +233,7 @@
                             android:layout_gravity="center"
 
                             android:padding="16dp"
-                            android:text="Número de \nresolucion"
+                            android:text="Clase de Documento"
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
@@ -243,7 +244,7 @@
                             android:layout_gravity="center"
 
                             android:padding="16dp"
-                            android:text="Serie del \ndocumento"
+                            android:text="Tipo de Documento"
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
@@ -253,7 +254,7 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:padding="16dp"
-                            android:text="Número del \ndocumento"
+                            android:text="Número de Resolución"
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
@@ -263,7 +264,7 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:padding="16dp"
-                            android:text="Número del \ncontrol interno"
+                            android:text="Serie del Documento"
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
@@ -274,7 +275,7 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:padding="16dp"
-                            android:text="NIT o NRC del \nCliente"
+                            android:text="Número de Documento"
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
@@ -284,7 +285,27 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:padding="16dp"
-                            android:text="Nombre, Razón Social \no Denominación"
+                            android:text="Número de Control \nInterno"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="NIT o NRC del Cliente"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Nombre Razón Social o Denominación"
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
@@ -324,6 +345,36 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:padding="16dp"
+                            android:text="Debito Fiscal"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Ventas a Cuentas de Terceros \nNO Domiciliados"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Debito Fiscal por Ventas \na Cuentas de Terceros"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
                             android:text="Total de Ventas"
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
@@ -334,13 +385,258 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:padding="16dp"
-                            android:text="DUI del cliente"
+                            android:text="Número de DUI \ndel cliente"
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Número del Anexo"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
                     </TableRow>
 
                 </TableLayout>
+                <TableLayout
+                    android:id="@+id/tableLayout2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:visibility="visible"
+                    android:layout_marginEnd="20dp"
+                    android:stretchColumns="1"
+                    tools:ignore="UselessParent">
+                    <!-- Header row -->
+                    <TableRow android:background="#4A8C74">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+
+                            android:padding="16dp"
+                            android:text="Fecha de Emisión"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+
+                            android:padding="16dp"
+                            android:text="Clase de Documento"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+
+                            android:padding="16dp"
+                            android:text="Tipo de Documento"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Número de Resolución"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Serie del Documento"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Número de Control \nInterno DEL"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Número de Control \nInterno AL"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Número de Documento (DEL)"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Número de Documento (AL)"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Número de Maquina \nRegistradora"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Ventas Exentas"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Ventas Internas Exentas\n No Sujetas a Proporcionalidad"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Ventas No Sujetas"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Ventas Gravadas Locales"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Exportaciones Dentro \ndel Área de CentroAmérica"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Exportaciones Fuera \ndel Área de CentroAmérica"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Exportaciones de Servicio"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Ventas a Zonas Francas\n y DPA (Tasa Cero)"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Ventas a Cuenta \nde Terceros no Domiciliados"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Total de Ventas"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="16dp"
+                            android:text="Número del Anexo"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+
+                    </TableRow>
+
+                </TableLayout>
+
             </LinearLayout>
 
         </ScrollView>
