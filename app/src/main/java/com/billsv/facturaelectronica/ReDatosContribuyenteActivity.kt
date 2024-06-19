@@ -567,56 +567,21 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         btnAgregar.setOnClickListener{
             if(validarEntradas() && Check.isChecked){
                 guardarDatosContribuyente()
-                val nombreValue = razonSocial.text.toString()
-                val duivalue = dui.text.toString()
-                val nitvalue = nit.text.toString()
-                val AcEco = actividadEconomica.text.toString()
-                val NRC = nrc.text.toString()
-                val dep = spinnerDep.selectedItem.toString()
-                val mun = spinnerMun.selectedItem.toString()
-                val direccionValue = direccion.text.toString()
-                val emailValue = email.text.toString()
-                val telefonoValue = telefono.text.toString()
-                // Iniciar otra actividad
+                val duivalue= dui.text.toString().replace("-","")
                 val intent = Intent(this, EmitirCCFActivity::class.java)
                 // Crear un Intent y agregar los datos
-                intent.putExtra("nombre", nombreValue)
                 intent.putExtra("dui", duivalue)
-                intent.putExtra("nit", nitvalue)
-                intent.putExtra("ActividadE", AcEco)
-                intent.putExtra("nrc", NRC)
-                intent.putExtra("departamento", dep)
-                intent.putExtra("municipio", mun)
-                intent.putExtra("direccion", direccionValue)
-                intent.putExtra("email", emailValue)
-                intent.putExtra("telefono", telefonoValue)
+                intent.putExtra("letra", "P")
                 startActivity(intent)
                 limpiarEditText()
                 finish()
             }else if(validarEntradas()){
-                val nombreValue = razonSocial.text.toString()
-                val duivalue = dui.text.toString()
-                val nitvalue = nit.text.toString()
-                val AcEco = actividadEconomica.text.toString()
-                val NRC = nrc.text.toString()
-                val dep = spinnerDep.selectedItem.toString()
-                val mun = spinnerMun.selectedItem.toString()
-                val direccionValue = direccion.text.toString()
-                val emailValue = email.text.toString()
-                val telefonoValue = telefono.text.toString()
-                // Iniciar otra actividad
+                guardarInfoTemporal()
+                val duivalue= dui.text.toString().replace("-","")
                 val intent = Intent(this, EmitirCCFActivity::class.java)
                 // Crear un Intent y agregar los datos
-                intent.putExtra("nombre", nombreValue)
                 intent.putExtra("dui", duivalue)
-                intent.putExtra("nit", nitvalue)
-                intent.putExtra("ActividadE", AcEco)
-                intent.putExtra("nrc", NRC)
-                intent.putExtra("departamento", dep)
-                intent.putExtra("municipio", mun)
-                intent.putExtra("direccion", direccionValue)
-                intent.putExtra("email", emailValue)
-                intent.putExtra("telefono", telefonoValue)
+                intent.putExtra("letra", "T")
                 startActivity(intent)
                 limpiarEditText()
                 finish()
@@ -634,6 +599,56 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         }*/
 
 
+    }
+
+    private fun guardarInfoTemporal() {
+        val razonSocialText = razonSocial.text.toString()
+        val duiText = dui.text.toString().replace("-", "")
+        val nitText = nit.text.toString().replace("-", "")
+        val actividadEconomicaText = actividadEconomica.text.toString()
+        val nrcText = nrc.text.toString()
+        val direccionText = direccion.text.toString()
+        val emailText = email.text.toString().trim()
+        val telefonoText = telefono.text.toString().replace("-", "")
+        val departamentoText = spinnerDep.selectedItem.toString()
+        val municipioText = spinnerMun.selectedItem.toString()
+        val departamentoCodigo = departamentosMap[departamentoText]
+        val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
+        val telefonoMostrar = telefono.text.toString()
+        val duiMostrar=dui.text.toString()
+        val nitMostrar=nit.text.toString()
+
+        // Crear un documento mutable para guardar en la base de datos
+        val document = MutableDocument()
+            .setString("nombre", razonSocialText)
+            .setString("dui",duiText)
+            .setString("nit", nitText)
+            .setString("actividadEconomica", actividadEconomicaText)
+            .setString("nrc", nrcText)
+            .setString("direccion", direccionText)
+            .setString("email", emailText)
+            //.setString("NombreComercial", nombreComercialText)
+            .setString("telefono", telefonoText)
+            .setString("tipo", "clientetemporal")
+            .setString("departamento", departamentoCodigo)
+            .setString("municipio", municipioCodigo)
+            .setString("tipoCliente","Contribuyente")
+            .setString("telefonoM",telefonoMostrar)
+            .setString("duiM",duiMostrar)
+            .setString("nitM",nitMostrar)
+            .setString("municipioT",municipioText)
+            .setString("departamentoT",departamentoText)
+
+        try {
+            // Guardar el documento en la base de datos
+            datosContribuyente.save(document)
+            Log.d("ContribuyenteActivity", "Datos guardados correctamente: \n $document")
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+            returnToMenu()  // Regresar al menú
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ContribuyenteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onBackPressed() {

@@ -24,7 +24,7 @@ class FacturaAdapter(
     override fun onBindViewHolder(holder: FacturaViewHolder, position: Int) {
         val factura = facturaList[position]
         holder.textViewNombre.text = factura.nombre
-        holder.textViewTelefono.text = "Teléfono: ${factura.telefono}"
+        holder.textViewTelefono.text = factura.telefono
         holder.textViewDui.text = "DUI: ${factura.dui}"
     }
 

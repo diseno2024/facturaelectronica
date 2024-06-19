@@ -56,7 +56,7 @@ class FacturaFragment : Fragment() {
         etDui = view.findViewById(R.id.etDui)
         btnBuscar = view.findViewById(R.id.btnBuscar)
         btnBuscar.setOnClickListener {
-            val dui = etDui.text.toString().replace("-", "")
+            val dui = etDui.text.toString()
             buscarPorDui(dui)
         }
 
@@ -140,7 +140,7 @@ class FacturaFragment : Fragment() {
 
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipoCliente").equalTo(Expression.string("Consumidor Final")))
+            .where(Expression.property("tipoD").equalTo(Expression.string("Factura Consumidor Final")))
             .limit(Expression.intValue(limit), Expression.intValue(offset))
 
         val result = query.execute()
@@ -149,11 +149,9 @@ class FacturaFragment : Fragment() {
         result.allResults().forEach { result ->
             val dict = result.getDictionary(database.name)
             val nombre = dict?.getString("nombre") ?: ""
-            val telefono = dict?.getString("telefono") ?: ""
+            val numeroControl = dict?.getString("numeroControl") ?: ""
             val dui = dict?.getString("dui") ?: ""
-            val duiFormateado = formatearDUI(dui)
-            val telefonoFormateado = formatearTelefono(telefono)
-            val factura = Factura(nombre, telefonoFormateado, duiFormateado)
+            val factura = Factura(nombre, numeroControl, dui)
             dataList.add(factura)
         }
 
@@ -174,11 +172,9 @@ class FacturaFragment : Fragment() {
         result.allResults().forEach { result ->
             val dict = result.getDictionary(database.name)
             val nombre = dict?.getString("nombre") ?: ""
-            val telefono = dict?.getString("telefono") ?: ""
+            val numeroControl = dict?.getString("numeroControl") ?: ""
             val duiResult = dict?.getString("dui") ?: ""
-            val duiFormateado = formatearDUI(duiResult)
-            val telefonoFormateado = formatearTelefono(telefono)
-            val factura = Factura(nombre, telefonoFormateado, duiFormateado)
+            val factura = Factura(nombre, numeroControl, dui)
             dataList.add(factura)
         }
 
@@ -207,17 +203,6 @@ class FacturaFragment : Fragment() {
             dui
         }
     }
-
-    private fun formatearTelefono(telefono: String): String {
-        return if (telefono.length >= 8) {
-            val primerosDigitos = telefono.substring(0, 4)
-            val siguientesDigitos = telefono.substring(4)
-            "$primerosDigitos-$siguientesDigitos"
-        } else {
-            telefono
-        }
-    }
-
     private fun updateButtonVisibility() {
         btnLoadMore.visibility = if (currentData.size >= pageSize) View.VISIBLE else View.GONE
         btnLoadPrevious.visibility = if (currentPage > 1) View.VISIBLE else View.GONE
