@@ -171,7 +171,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
         // Limpia todas las filas excepto la cabecera
         tableLayout.removeViews(1, tableLayout.childCount - 1)
 
-        tableLayout2.removeViews(1, tableLayout.childCount - 1)
+        tableLayout2.removeViews(1, tableLayout2.childCount - 1)
 
         // Obtén una referencia a la base de datos
         val app = application as MyApp
