@@ -23,7 +23,10 @@ import android.os.Environment
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.Toast
@@ -33,7 +36,10 @@ import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
 import com.couchbase.lite.Meta
+import com.couchbase.lite.MutableDocument
+import com.couchbase.lite.Query
 import com.couchbase.lite.QueryBuilder
+import com.couchbase.lite.ResultSet
 import com.couchbase.lite.SelectResult
 import com.google.android.material.card.MaterialCardView
 import org.json.JSONObject
@@ -41,9 +47,15 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.lang.Exception
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.UUID
 
 class EmitirCCFActivity : AppCompatActivity() {
     private lateinit var tableLayout: TableLayout
+    private lateinit var spinnerOp: Spinner
+    private var currentControlNumber = 0L
+    var total = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -53,8 +65,12 @@ class EmitirCCFActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val Num = obtenerNumeroControl()
+        Num.forEach { data ->
+            val nums = data.split("\n")
+            currentControlNumber = nums[0].toLong()
+        }
         tableLayout = findViewById(R.id.Tabla)
-        var total = 0.0
         var precioIva: Double
         val dataList = obtenerDatosGuardados()
         if (dataList.isNotEmpty()) {
@@ -63,15 +79,8 @@ class EmitirCCFActivity : AppCompatActivity() {
                 val cantidad = datos[1]
                 val producto = datos[3]
                 val precio = datos[5]
-                val tipoV= datos[4]
-                Log.e("emitircf","$tipoV")
-                if (tipoV=="Gravado"){
-                    precioIva=((precio.toDoubleOrNull() ?: 0.0)*(1.0+0.13))
-                    Log.e("emitircf","$precioIva")
-                    total += ((cantidad.toIntOrNull() ?: 0) * precioIva)
-                }else{
-                    total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
-                }
+
+                total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
 
                 val tableRow = TableRow(this)
 
@@ -119,6 +128,20 @@ class EmitirCCFActivity : AppCompatActivity() {
             emptyRow.addView(emptyTextView)
             tableLayout.addView(emptyRow)
         }
+        val Total: TextView = findViewById(R.id.Total)
+        total= BigDecimal(total).setScale(2, RoundingMode.HALF_UP).toDouble()
+        Total.text = total.toString()
+        spinnerOp= findViewById(R.id.CoOperacion)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.Operacion,
+            R.layout.spinner_descripcion
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears.
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_per)
+            // Apply the adapter to the spinner.
+            spinnerOp.adapter = adapter
+        }
 
         val buttonAtras = findViewById<ImageButton>(R.id.atras)
         buttonAtras.setOnClickListener {
@@ -126,29 +149,46 @@ class EmitirCCFActivity : AppCompatActivity() {
         }
         // Recupera los datos pasados desde la otra actividad
         val datosGuardados = intent.getStringExtra("Cliente")
+        val Letrai = intent.getStringExtra("letrai")
         val Nombre: TextView = findViewById(R.id.nombreR)
         val NRC: TextView = findViewById(R.id.nrcR)
         // Aquí puedes usar los datos como necesites
-        datosGuardados?.let{
-            val datos = it.split("\n")
-            Nombre.text = datos[0]
-            NRC.text = datos[9]
+        if (datosGuardados != null) {
+            if(datosGuardados.isNotEmpty())
+                datosGuardados.let{
+                    val datos = it.split("\n")
+                    guardarCliente(Letrai, datos[8])
+                }
+        }else{
+            val duiRecibido = intent.getStringExtra("dui")
+            val Letra = intent.getStringExtra("letra")
+            if(Letra!=null){
+                guardarCliente(Letra, duiRecibido)
+            }
         }
-        val Nombrep = intent.getStringExtra("nombre")
-        val duip = intent.getStringExtra("dui")
-        val nitp = intent.getStringExtra("nit")
-        val AcEcop = intent.getStringExtra("ActividadE")
-        val nrcp = intent.getStringExtra("nrc")
-        val depp = intent.getStringExtra("departamento")
-        val munp = intent.getStringExtra("municipio")
-        val direcp = intent.getStringExtra("direccion")
-        val emailp = intent.getStringExtra("email")
-        val telefonop = intent.getStringExtra("telefono")
-        if(Nombrep!=null){
-            Nombre.text = Nombrep
-            NRC.text = nrcp
+        val datacliente = obtenerDui()
+        if(datacliente.isNotEmpty()){
+            datacliente.forEach{data->
+                val datos = data.split("\n")
+                val dui = datos[0]
+                val letra = datos[1]
+                val cliente = cargarData(dui,letra)
+                Log.d("ReClienteActivity", cliente.toString())
+                if (cliente.isNotEmpty()) {
+                    cliente.forEach{info->
+                        val infocliente = info.split("\n")
+                        Nombre.text = infocliente[0]
+                        NRC.text = infocliente[9]
+                        /*= datos[14]
+                        = datos[15]
+                        = datos[3]
+                         = datos[2]
+                         = datos[13]
+                         = datos[11]*/
+                    }
+                }
+            }
         }
-
         val editar: ImageButton = findViewById(R.id.cambiarCliente)
         val carta: MaterialCardView = findViewById(R.id.Receptor)
         if (Nombre.text != ""){
@@ -160,11 +200,72 @@ class EmitirCCFActivity : AppCompatActivity() {
             Nombre.text = ""
             NRC.text = ""
             editar.visibility = View.GONE
+            if (datacliente.isNotEmpty()){
+                datacliente.forEach{data->
+                    val datos = data.split("\n")
+                    val letra = datos[1]
+                    if(letra=="T"){
+                        borrarDui()
+                        borrarClienteTemporal()
+                    }else if(letra=="P"){
+                        borrarDui()
+                    }
+                }
+            }
+        }
+        val editarA: ImageButton = findViewById(R.id.editarArticulos)
+        if (Total.text != "0.0"){
+            editarA.visibility = View.VISIBLE
+        }
+        editarA.setOnClickListener {
+            val dialogoCliente = Dialog(this@EmitirCCFActivity) // Usa el contexto de la actividad
+            dialogoCliente.setContentView(R.layout.dialogo_articulos)
+            val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+            val height = (resources.displayMetrics.heightPixels * 0.8).toInt()
+            dialogoCliente.window?.setLayout(width, height)
+            dialogoCliente.setCanceledOnTouchOutside(false)
+
+            // Busca containerLayout dentro del diálogo, no de la actividad
+            val linearLayout1 = dialogoCliente.findViewById<LinearLayout>(R.id.containerLayout)
+            val articulos = obtenerDatosGuardados()
+
+            if(articulos.isNotEmpty()) {
+                articulos.forEach { data ->
+                    val datosv = data.split("\n")
+                    val itemLayout2 = dialogoCliente.layoutInflater.inflate(R.layout.articulos, linearLayout1, false)
+
+                    val Editar2 = itemLayout2.findViewById<ImageButton>(R.id.btnEditarData)
+                    val textViewCantidad = itemLayout2.findViewById<TextView>(R.id.cantidad)
+                    val textViewProducto = itemLayout2.findViewById<TextView>(R.id.producto)
+                    val textViewPrecio = itemLayout2.findViewById<TextView>(R.id.precio)
+
+                    textViewCantidad.text = datosv[1]
+                    textViewProducto.text = datosv[3]
+                    textViewPrecio.text = datosv[5]
+
+                    Editar2.setOnClickListener {
+                        borrararticulo(data, itemLayout2, linearLayout1)
+                    }
+                    linearLayout1.addView(itemLayout2)
+                }
+            }
+
+            val btnExit = dialogoCliente.findViewById<ImageButton>(R.id.exit)
+            btnExit.setOnClickListener {
+                dialogoCliente.dismiss()
+                recreate()
+            }
+
+            dialogoCliente.show()
+        }
+        val control = intent.getStringExtra("numeroControl")
+        val codigoG = intent.getStringExtra("codigoGeneracion")
+        if(control != null && codigoG != null){
+            guardarNCyCG(control, codigoG)
         }
 
-
         // Botón para poder crear el documento PDF
-        val btnGenerarPdf = findViewById<Button>(R.id.btnCrearPdf)
+        val btnGenerarPdf = findViewById<Button>(R.id.Siguiente)
         // Verifica los permisos si están aceptados cuando vamos a hacer la generación
         if (checkPermission()) {
             // El permiso está aceptado
@@ -175,94 +276,30 @@ class EmitirCCFActivity : AppCompatActivity() {
         }
         // Llama la función para poder generar el archivo PDF
         btnGenerarPdf.setOnClickListener {
-            generarPdf()
+            if(validarfactura()&&validarcliente()) {
+                emitirFactura()
+                enviarDatos()
+            }
+            //generarPdf()
         }
     }
-    override fun onBackPressed() {
-        val app = application as MyApp
-        val database = app.database
-        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
-            .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Articuloccf")))
 
-        // Ejecuta la consulta
-        val result = query.execute()
-        if(result.allResults().isNotEmpty()){
-            val dialogoCliente = Dialog(this)
-            dialogoCliente.setContentView(R.layout.layout_datos_perdidos) // R.layout.layout_custom_dialog es tu diseño personalizado
-            val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
-            val height = (resources.displayMetrics.heightPixels * 0.5).toInt() // 60% del alto de la pantalla
-            dialogoCliente.window?.setLayout(width, height)
-            dialogoCliente.setCanceledOnTouchOutside(false)
-            val btnsi = dialogoCliente.findViewById<Button>(R.id.btnsi)
-            val btnno = dialogoCliente.findViewById<Button>(R.id.btnno)
-            btnsi.setOnClickListener {
-                borrararticulos()
-                val intent = Intent(this, MenuActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            btnno.setOnClickListener {
-                dialogoCliente.dismiss()
-            }
-            dialogoCliente.show()
-        } else {
-            // Si no hay artículos, llama a super.onBackPressed()
-            super.onBackPressed()
-            val intent = Intent(this, MenuActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-    }
-    private fun verificar(){
+    private fun guardarNCyCG(control: String, codigoG: String) {
         val app = application as MyApp
         val database = app.database
-        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
-            .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Articuloccf")))
 
-        // Ejecuta la consulta
-        val result = query.execute()
-        if(result.allResults().isNotEmpty()){
-            val dialogoCliente = Dialog(this)
-            dialogoCliente.setContentView(R.layout.layout_datos_perdidos) // R.layout.layout_custom_dialog es tu diseño personalizado
-            val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
-            val height = (resources.displayMetrics.heightPixels * 0.5).toInt() // 60% del alto de la pantalla
-            dialogoCliente.window?.setLayout(width, height)
-            dialogoCliente.setCanceledOnTouchOutside(false)
-            val btnsi = dialogoCliente.findViewById<Button>(R.id.btnsi)
-            val btnno = dialogoCliente.findViewById<Button>(R.id.btnno)
-            btnsi.setOnClickListener {
-                borrararticulos()
-                val intent = Intent(this, MenuActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            btnno.setOnClickListener {
-                dialogoCliente.dismiss()
-            }
-            dialogoCliente.show()
-        }else{
-            val intent = Intent(this, MenuActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-    }
-    private fun borrararticulos() {
-        val app = application as MyApp
-        val database = app.database
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Articuloccf")))
+            .where(Expression.property("tipo").equalTo(Expression.string("NCCGCCF")))
 
         try {
             val resultSet = query.execute()
             val results = resultSet.allResults()
 
             if (results.isNotEmpty()) {
-                // Itera sobre los resultados y elimina cada documento
+                // Iterar sobre los resultados y eliminar cada documento
                 for (result in results) {
-                    val docId = result.getString("id") // Obtener el ID del documento
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
                     docId?.let {
                         val document = database.getDocument(it)
                         document?.let {
@@ -270,54 +307,81 @@ class EmitirCCFActivity : AppCompatActivity() {
                         }
                     }
                 }
-
-                Log.d("Prin_Re_Cliente", "Se eliminaron los artículos")
-                showToast("Artículos eliminados")
-            } else {
-                Log.d("Prin_Re_Cliente", "No se encontraron artículos")
-                showToast("No se encontraron artículos")
+                Log.d("ReClienteActivity", "Documento existente borrado")
             }
-        } catch (e: CouchbaseLiteException) {
-            Log.e("Prin_Re_Cliente", "Error al eliminar los artículos: ${e.message}", e)
-        }
-    }
-    fun DataReceptor(view: View) {
-        val dialogoCliente = Dialog(this)
-        dialogoCliente.setContentView(R.layout.layout_dialogo_cliente) // R.layout.layout_custom_dialog es tu diseño personalizado
-        val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
-        val height = (resources.displayMetrics.heightPixels * 0.5).toInt() // 60% del alto de la pantalla
-        dialogoCliente.window?.setLayout(width, height)
-        dialogoCliente.setCanceledOnTouchOutside(false)
-        val btnImportar = dialogoCliente.findViewById<Button>(R.id.btnImportar)
-        val btnAgregar = dialogoCliente.findViewById<Button>(R.id.btnAgregar)
-        val btnExit = dialogoCliente.findViewById<ImageButton>(R.id.exit)
-        btnAgregar.setOnClickListener {
-            //Pagina para agregar datos de clientes
-            val intent = Intent(this, ReDatosContribuyenteActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-        btnImportar.setOnClickListener {
-            //Pagina para agregar datos de clientes
-            val intent = Intent(this, ImportarClientes::class.java)
-            intent.putExtra("letra","r")
-            startActivity(intent)
-            finish()
-        }
-        btnExit.setOnClickListener {
-            // Acción al hacer clic en el botón "Cancelar"
-            dialogoCliente.dismiss()
-        }
+            // Crear un nuevo documento
+            val document = MutableDocument()
+                .setString("numeroControl", control)
+                .setString("codigoGeneracion", codigoG)
+                .setString("tipo", "NCCGCCF")
 
-        dialogoCliente.show()
+            // Guardar el nuevo documento
+            database.save(document)
+            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
     }
-    fun DataArticulo(view: View) {
-        val intent = Intent(this, DescripcionActivity::class.java)
-        intent.putExtra("clave", "ccf")
-        startActivity(intent)
-        finish()
+
+    private fun numeroControl(): String {
+        val numerocontrolBase = "DTE-03-OFIC0001-"
+        val numeroDigitos = 15
+        val formatoNumero = "%0${numeroDigitos}d"
+
+        // Incrementar el número de control
+        currentControlNumber = (currentControlNumber + 1) % 1000000000000000L
+
+        // Formatear el número de control
+        val numeroFormateado = String.format(formatoNumero, currentControlNumber)
+
+        guardarNumeroControl(currentControlNumber)
+
+        // Retornar el número de control completo
+        return numerocontrolBase + numeroFormateado
     }
-    private fun obtenerDatosGuardados(): List<String> {
+    private fun guardarNumeroControl(Long :Long) {
+        val app = application as MyApp
+        val database = app.database
+        // Buscar si ya existe un documento del tipo "ConfEmisor"
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("NumeroControlCCF")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+            // Crear un nuevo documento
+            val document = MutableDocument()
+                //.setString("numero", Long.toString())
+                .setString("numero", 0.toString())//para recetear
+                .setString("tipo", "NumeroControl")
+
+            // Guardar el nuevo documento
+            database.save(document)
+            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun obtenerNumeroControl(): List<String> {
         // Obtén la instancia de la base de datos desde la aplicación
         val app = application as MyApp
         val database = app.database
@@ -325,7 +389,7 @@ class EmitirCCFActivity : AppCompatActivity() {
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Articuloccf")))
+            .where(Expression.property("tipo").equalTo(Expression.string("NumeroControlCCF")))
 
         // Ejecuta la consulta
         val result = query.execute()
@@ -339,22 +403,105 @@ class EmitirCCFActivity : AppCompatActivity() {
             val dict = result.getDictionary(database.name)
 
             // Extrae los valores de los campos del documento
-            val Tipo = dict?.getString("Tipod")
-            val cantidad = dict?.getString("Cantidad")
-            val unidad = dict?.getString("Unidad")
-            val Producto = dict?.getString("Producto")
-            val TipoV = dict?.getString("Tipo de Venta")
-            val Precio = dict?.getString("Precio")
+            val numero = dict?.getString("numero")
 
             // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$Tipo\n$cantidad\n$unidad\n$Producto\n$TipoV\n$Precio"
+            val dataString = "$numero"
             dataList.add(dataString)
         }
 
         // Devuelve la lista de datos
         return dataList
     }
-    // Función para poder generar el PDF
+
+    private fun validarcliente(): Boolean {
+        val app = application as MyApp
+        val database = app.database
+
+        val queryCliente = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("NRC")))
+        try {
+            val resulCliente = queryCliente.execute()
+            val resultsC = resulCliente.allResults()
+
+            if (resultsC.isNotEmpty()) {
+                return true
+            }else{
+                showToast("Falta la informacion del Cliente")
+                return false
+            }
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+        return false
+    }
+
+    private fun enviarDatos() {
+
+    }
+
+    private fun emitirFactura() {
+        val NCCG = obtenerNCCG()
+        var numeroControl:String = ""
+        var codigoGeneracion:String = ""
+        if(NCCG.isNotEmpty()){
+            NCCG.forEach{data->
+                val datos = data.split("\n")
+                numeroControl = datos[0]
+                codigoGeneracion = datos[1]
+            }
+        }else{
+            numeroControl = numeroControl()
+            codigoGeneracion = generarUUIDv4()
+        }
+        val currentreceptor = obtenerDui()
+        val condicionO=spinnerOp.selectedItem.toString()
+        var codigo=""
+        when (condicionO) {
+            "Contado" -> {
+                codigo="1"
+
+            }
+            "Credito" -> {
+                codigo="2"
+            }
+            else -> {
+                codigo="3"
+            }
+        }
+        /*val totalNS=totalNoSuj.toString()
+        val totalEx=totalExenta.toString()
+        val totalGr=totalGravada.toString()*/
+        val totalT=total.toString()
+        var Info: String = ""
+        if(currentreceptor.isNotEmpty()){
+            currentreceptor.forEach{data->
+                val datos = data.split("\n")
+                val receptor = cargarData(datos[0],datos[1])
+                if (receptor.isNotEmpty()) {
+                    receptor.forEach { info ->
+                        Info = info
+                    }
+                }
+            }
+        }
+        val intent = Intent(this, PDF_CFActivity::class.java)
+        intent.putExtra("Cliente", Info)
+        intent.putExtra("numeroControl", numeroControl)
+        intent.putExtra("codGeneracion", codigoGeneracion)
+        /*intent.putExtra("totalNoSuj",totalNS)
+        intent.putExtra("totalExenta",totalEx)
+        intent.putExtra("totalGravada",totalGr)*/
+        intent.putExtra("total",totalT)
+        intent.putExtra("totalIva",totalT)
+        intent.putExtra("condicionOperacion",codigo)
+
+
+        startActivity(intent)
+        finish()
+    }
     private fun generarPdf() {
         // Variable para poder almacenar el contenido del json através de una función
         val jsonData = leerJsonDesdeAssets("CCF.json")
