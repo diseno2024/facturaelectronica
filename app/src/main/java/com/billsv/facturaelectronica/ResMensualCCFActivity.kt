@@ -23,12 +23,14 @@ import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import java.util.Calendar
+
 
 class ResMensualCCFActivity : AppCompatActivity() {
     private lateinit var textViewMes: TextView
     private lateinit var textViewYear: TextView
     private lateinit var tipoD: Spinner
-    private lateinit var atras:ImageButton
+    private lateinit var atras: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,24 +41,30 @@ class ResMensualCCFActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        tipoD=findViewById(R.id.tipoD)
+        tipoD = findViewById(R.id.tipoD)
         // spinner tipoC
-        val opcionesD = arrayOf("Comprobante Crédito Fiscal", "Factura Consumidor Final")
+        val opcionesD = arrayOf("Todo","Comprobante Crédito Fiscal", "Factura Consumidor Final")
         val adapterD = ArrayAdapter(this, R.layout.spinner_descripcion, opcionesD)
         adapterD.setDropDownViewResource(R.layout.spinner_dropdown_per)
         tipoD.adapter = adapterD
         textViewMes = findViewById(R.id.textViewMes)
         textViewYear = findViewById(R.id.textViewYear)
-        atras=findViewById(R.id.atras)
+        atras = findViewById(R.id.atras)
 
         val cardViewMonth: CardView = findViewById(R.id.cardViewMes)
         val cardViewYear: CardView = findViewById(R.id.cardViewYear)
+
+        // Inicializar con el mes y año actuales
+        val calendar = Calendar.getInstance()
+        textViewMes.text = getMonthName(calendar.get(Calendar.MONTH))
+        textViewYear.text = calendar.get(Calendar.YEAR).toString()
 
         cardViewMonth.setOnClickListener {
             val monthPickerDialog = MonthPickerDialog()
             monthPickerDialog.setOnMonthSelectedListener(object : MonthPickerDialog.OnMonthSelectedListener {
                 override fun onMonthSelected(month: Int) {
                     textViewMes.text = getMonthName(month)
+                    actualizarTabla()
                 }
             })
             monthPickerDialog.show(supportFragmentManager, "MonthPickerDialog")
@@ -64,15 +72,16 @@ class ResMensualCCFActivity : AppCompatActivity() {
 
         cardViewYear.setOnClickListener {
             val yearPickerDialog = YearPickerDialog()
-            yearPickerDialog.setOnYearSelectedListener(object : YearPickerDialog
-                .OnYearSelectedListener {
+            yearPickerDialog.setOnYearSelectedListener(object : YearPickerDialog.OnYearSelectedListener {
                 override fun onYearSelected(year: Int) {
                     textViewYear.text = year.toString()
+                    actualizarTabla()
                 }
             })
             yearPickerDialog.show(supportFragmentManager, "YearPickerDialog")
         }
-        atras.setOnClickListener{
+
+        atras.setOnClickListener {
             super.onBackPressed() // Llama al método onBackPressed() de la clase base
             val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
@@ -89,23 +98,35 @@ class ResMensualCCFActivity : AppCompatActivity() {
             }
         }
 
-
+        // Actualizar la tabla al iniciar la actividad
+        actualizarTabla()
     }
+
     private fun getMonthName(month: Int): String {
         val months = arrayOf(
             "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-            "Julio", "Augosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+        )
         return months[month]
     }
+
+    private fun getMonthNumber(monthName: String): Int {
+        val months = arrayOf(
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+        )
+        return months.indexOf(monthName) + 1
+    }
+
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
         val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
         finish()
     }
+
     private fun actualizarTabla() {
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
-
 
         // Limpia todas las filas excepto la cabecera
         tableLayout.removeViews(1, tableLayout.childCount - 1)
@@ -114,12 +135,22 @@ class ResMensualCCFActivity : AppCompatActivity() {
         val app = application as MyApp
         val database = app.database
         val tipoDSeleccionado = tipoD.selectedItem.toString()
-        Log.e("ResMen", "$tipoDSeleccionado")
+        val mesSeleccionado = textViewMes.text.toString()
+        val anioSeleccionado = textViewYear.text.toString()
 
-        // Crea una consulta para seleccionar todos los documentos con el tipo seleccionado
+        // Validación de selección de mes y año
+        val mesNumero = getMonthNumber(mesSeleccionado)
+        val anioNumero = anioSeleccionado.toInt()
+
+        // Crear expresiones para la consulta
+        val whereExpression = Expression.property("tipoD").equalTo(Expression.string(tipoDSeleccionado))
+            .and(Expression.property("fechaEmi").greaterThanOrEqualTo(Expression.string("$anioNumero-${mesNumero.toString().padStart(2, '0')}-01")))
+            .and(Expression.property("fechaEmi").lessThanOrEqualTo(Expression.string("$anioNumero-${mesNumero.toString().padStart(2, '0')}-31")))
+
+        // Crea una consulta para seleccionar todos los documentos con el tipo seleccionado y rango de fechas
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipoD").equalTo(Expression.string(tipoDSeleccionado)))
+            .where(whereExpression)
 
         // Ejecuta la consulta
         val result = query.execute()
@@ -152,6 +183,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
             Log.e("VALOR TOTAL G", totalG.toString())
             Log.e("VALOR TOTAL", total.toString())
             Log.e("VALOR NUM CONTROL", numC)
+            Log.e("VALOR FECHA", fechE) // Imprime la fecha de emisión del documento actual
 
             // Crea y agrega una fila a la tabla con los datos del documento
             addRowToTable(
@@ -162,6 +194,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
             )
         }
     }
+
 
     private fun addRowToTable(
         tableLayout: TableLayout,

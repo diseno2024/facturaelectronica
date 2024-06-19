@@ -1383,16 +1383,19 @@ class PDF_CFActivity : AppCompatActivity() {
         }
         val subTotalVentas= totalExenta!! + totalGravada!! + totalNoSuj!!
         val cliente=intent.getStringExtra("Cliente")
-        if (cliente != null) {
-            val datos = cliente.split("\n")
+        Log.e("Cliente","$cliente")
+        if (cliente != "") {
+            val datos = cliente?.split("\n")
 
-            if (datos.isNotEmpty()) {
-                nombre = datos[0]
-                nit = datos[11]
-                dui = datos[12]
-            } else {
-                // Maneja el caso donde los datos no están completos o el formato no es el esperado
-                println("Los datos del cliente no están en el formato esperado.")
+            if (datos != null) {
+                if (datos.isNotEmpty()) {
+                    nombre = datos[0]
+                    nit = datos[11]
+                    dui = datos[12]
+                } else {
+                    // Maneja el caso donde los datos no están completos o el formato no es el esperado
+                    println("Los datos del cliente no están en el formato esperado.")
+                }
             }
         } else {
             // Maneja el caso donde cliente es null
