@@ -20,9 +20,17 @@ import com.couchbase.lite.SelectResult
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
 import android.graphics.Color
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Button
+import android.widget.Toast
+import com.couchbase.lite.CouchbaseLiteException
+import com.couchbase.lite.MutableDocument
+import java.io.File
+import java.io.FileWriter
+import java.io.IOException
 import java.util.Calendar
 
 
@@ -41,6 +49,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        var documentosList:MutableList<Map<String, String>>
         tipoD = findViewById(R.id.tipoD)
         // spinner tipoC
         val opcionesD = arrayOf("Comprobante Crédito Fiscal", "Factura Consumidor Final")
@@ -64,7 +73,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
             monthPickerDialog.setOnMonthSelectedListener(object : MonthPickerDialog.OnMonthSelectedListener {
                 override fun onMonthSelected(month: Int) {
                     textViewMes.text = getMonthName(month)
-                    actualizarTabla()
+                    documentosList = actualizarTabla()
                 }
             })
             monthPickerDialog.show(supportFragmentManager, "MonthPickerDialog")
@@ -75,7 +84,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
             yearPickerDialog.setOnYearSelectedListener(object : YearPickerDialog.OnYearSelectedListener {
                 override fun onYearSelected(year: Int) {
                     textViewYear.text = year.toString()
-                    actualizarTabla()
+                    documentosList = actualizarTabla()
                 }
             })
             yearPickerDialog.show(supportFragmentManager, "YearPickerDialog")
@@ -90,16 +99,20 @@ class ResMensualCCFActivity : AppCompatActivity() {
 
         tipoD.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                actualizarTabla()
+                documentosList = actualizarTabla()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // No hacer nada
             }
         }
+        documentosList = actualizarTabla()
+        val generar: Button = findViewById(R.id.Generar)
+        generar.setOnClickListener {
+            // Generar el archivo CSV con los datos recuperados
+            escribirDatosEnCSV(documentosList, "documentos.csv")
+        }
 
-        // Actualizar la tabla al iniciar la actividad
-        actualizarTabla()
     }
 
     private fun getMonthName(month: Int): String {
@@ -125,7 +138,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun actualizarTabla() {
+    private fun actualizarTabla():MutableList<Map<String, String>> {
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
 
         // Limpia todas las filas excepto la cabecera
@@ -154,6 +167,9 @@ class ResMensualCCFActivity : AppCompatActivity() {
 
         // Ejecuta la consulta
         val result = query.execute()
+
+        // Lista para almacenar los datos de los documentos
+        val documentosList = mutableListOf<Map<String, String>>()
 
         // Itera sobre todos los resultados de la consulta
         result.allResults().forEach { result ->
@@ -192,6 +208,57 @@ class ResMensualCCFActivity : AppCompatActivity() {
                 nombre, totalEx.toString(), totalNS.toString(), totalG.toString(), total.toString(),
                 dui
             )
+
+            // Añadir los datos del documento a la lista
+            val documento = mapOf(
+                "nombre" to nombre,
+                "nit" to nit,
+                "dui" to dui,
+                "totalNoSuj" to totalNS.toString(),
+                "totalExenta" to totalEx.toString(),
+                "totalGravada" to totalG.toString(),
+                "total" to total.toString(),
+                "numeroControl" to numC,
+                "fechaEmi" to fechE,
+                "numR" to numR,
+                "serieD" to serieD,
+                "numD" to numD
+            )
+            documentosList.add(documento)
+        }
+        return documentosList
+    }
+
+    private fun escribirDatosEnCSV(datosList: List<Map<String, String>>, fileName: String) {
+        // Get the Downloads directory
+        val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val csvFile = File(downloadsDir, fileName)
+
+        try {
+            FileWriter(csvFile).use { writer ->
+                // Write the CSV header
+                writer.append("nombre,nit,dui,totalNoSuj,totalExenta,totalGravada,total,numeroControl,fechaEmi,numR,serieD,numD\n")
+
+                // Write the data
+                for (documento in datosList) {
+                    writer.append(documento["nombre"]).append(',')
+                    writer.append(documento["nit"]).append(',')
+                    writer.append(documento["dui"]).append(',')
+                    writer.append(documento["totalNoSuj"]).append(',')
+                    writer.append(documento["totalExenta"]).append(',')
+                    writer.append(documento["totalGravada"]).append(',')
+                    writer.append(documento["total"]).append(',')
+                    writer.append(documento["numeroControl"]).append(',')
+                    writer.append(documento["fechaEmi"]).append(',')
+                    writer.append(documento["numR"]).append(',')
+                    writer.append(documento["serieD"]).append(',')
+                    writer.append(documento["numD"]).append('\n')
+                }
+            }
+            Toast.makeText(this, "Archivo CSV creado exitosamente!", Toast.LENGTH_SHORT).show()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(this, "Error al crear el archivo CSV: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -219,4 +286,5 @@ class ResMensualCCFActivity : AppCompatActivity() {
 
         tableLayout.addView(tableRow)
     }
+
 }
