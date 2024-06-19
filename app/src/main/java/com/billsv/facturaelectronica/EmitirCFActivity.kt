@@ -203,15 +203,6 @@ class EmitirCFActivity : AppCompatActivity() {
             }
             //generarPdf()
         }
-        val crearjson: Button = findViewById(R.id.CrearJson)
-        crearjson.setOnClickListener {
-            generarPdf()
-            /*json()
-            /*borrararticulos()*/
-            val intent = Intent(this, ConfHacienda::class.java)
-            startActivity(intent)
-            finish()*/
-        }
         // Recupera los datos pasados desde la otra actividad
         val datosGuardados = intent.getStringExtra("Cliente")
         val Letrai = intent.getStringExtra("letrai")

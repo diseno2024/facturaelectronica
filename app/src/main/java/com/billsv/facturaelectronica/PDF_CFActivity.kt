@@ -61,10 +61,19 @@ class PDF_CFActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        val TIPO = intent.getStringExtra("JSON")
+        if(TIPO=="Factura"){
+            binding.Generar.text = "Generar Factura"
+        }else{
+            binding.Generar.text = "Generar Crédito Fiscal"
+        }
         binding.Generar.setOnClickListener {
             val dialogoGenerar = Dialog(this)
-            dialogoGenerar.setContentView(R.layout.layout_generar) // R.layout.layout_custom_dialog es tu diseño personalizado
+            if(TIPO=="Factura"){
+                dialogoGenerar.setContentView(R.layout.layout_generar) // R.layout.layout_custom_dialog es tu diseño personalizado
+            }else{
+                dialogoGenerar.setContentView(R.layout.layout_generar2) // R.layout.layout_custom_dialog es tu diseño personalizado
+            }
             val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
             val height = (resources.displayMetrics.heightPixels * 0.45).toInt() // 60% del alto de la pantalla
             dialogoGenerar.window?.setLayout(width, height)
@@ -708,11 +717,14 @@ class PDF_CFActivity : AppCompatActivity() {
         try {
 
             // Aquí se empieza a generar el PDF en base a toda la info
-
+            val TIPO = intent.getStringExtra("JSON")
             // Dibujar el Encabezado
             canvas.drawText("DOCUMENTO TRIBUTARIO ELECTRÓNICO", 210f, 25f, paintEncabezado)
-            canvas.drawText("COMPROBANTE DE CONSUMIDOR FINAL", 220f, 40f, paintEncabezado)
-
+            if(TIPO=="Factura"){
+                canvas.drawText("COMPROBANTE DE CONSUMIDOR FINAL", 220f, 40f, paintEncabezado)
+            }else{
+                canvas.drawText("COMPROBANTE DE CRÉDITO FISCAL", 220f, 40f, paintEncabezado)
+            }
             // IDENTIFICACIÓN
             /*   Lado izquierdo   */
             val codigoGeneracion = intent.getStringExtra("codGeneracion")
