@@ -61,6 +61,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
             insets
         }
         requestNotificationPermission()
+        var tipoDSeleccionado:String=""
         var documentosList:MutableList<Map<String, String>>
         tipoD = findViewById(R.id.tipoD)
         // spinner tipoC
@@ -86,6 +87,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
                 override fun onMonthSelected(month: Int) {
                     textViewMes.text = getMonthName(month)
                     documentosList = actualizarTabla()
+                    tipoDSeleccionado = tipoD.selectedItem.toString()
                 }
             })
             monthPickerDialog.show(supportFragmentManager, "MonthPickerDialog")
@@ -97,6 +99,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
                 override fun onYearSelected(year: Int) {
                     textViewYear.text = year.toString()
                     documentosList = actualizarTabla()
+                    tipoDSeleccionado = tipoD.selectedItem.toString()
                 }
             })
             yearPickerDialog.show(supportFragmentManager, "YearPickerDialog")
@@ -112,6 +115,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
         tipoD.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 documentosList = actualizarTabla()
+                tipoDSeleccionado = tipoD.selectedItem.toString()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -120,11 +124,16 @@ class ResMensualCCFActivity : AppCompatActivity() {
         }
         documentosList = actualizarTabla()
         val generar: Button = findViewById(R.id.Generar)
-        val tipoDSeleccionado = tipoD.selectedItem.toString()
         generar.setOnClickListener {
             if(contarDocumentos(tipoDSeleccionado)) {
                 // Generar el archivo CSV con los datos recuperados
-                escribirDatosEnCSV(documentosList, "documentos.csv")
+                val mesSeleccionado = textViewMes.text.toString()
+                val anioSeleccionado = textViewYear.text.toString()
+                if(tipoDSeleccionado=="Comprobante Crédito Fiscal") {
+                    escribirDatosEnCSV(documentosList, "ResumenCCF$mesSeleccionado$anioSeleccionado.csv")
+                }else{
+                    escribirDatosEnCSV(documentosList, "ResumenCF$mesSeleccionado$anioSeleccionado.csv")
+                }
             }else{
                 Toast.makeText(this, "No hay DTE's para exportar", Toast.LENGTH_SHORT).show()
             }
