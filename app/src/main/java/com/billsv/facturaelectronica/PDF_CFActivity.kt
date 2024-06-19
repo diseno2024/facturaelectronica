@@ -206,6 +206,9 @@ class PDF_CFActivity : AppCompatActivity() {
         val total= intent.getStringExtra("total")?.toDouble()
         val totalIva= intent.getStringExtra("totalIva")?.toDouble()
         val condicionOperacion= intent.getStringExtra("condicionOperacion")?.toInt()
+        //ccf
+        val valorIva = intent.getStringExtra("Iva")?.toDouble()
+        val totalF= valorIva?.plus(total!!)
         val fechayHora = FyH_emicion()
         if (fechayHora.isNotEmpty()) {
             fechayHora.let {
@@ -359,16 +362,6 @@ class PDF_CFActivity : AppCompatActivity() {
             ventaTercero = null,
             cuerpoDocumento = emptyList(),
             resumen = ResumenC(
-                totalIva = totalIva,
-                porcentajeDescuento = 0.0,
-                ivaRete1 = 0.0,
-                reteRenta = 0.0,
-                totalNoGravado = 0.0,
-                totalPagar = total,
-                saldoFavor = 0.0,
-                condicionOperacion = condicionOperacion,
-                pagos = null,
-                numPagoElectronico = null,
                 totalNoSuj = totalNoSujeto,
                 totalExenta = totalExenta,
                 totalGravada = totalGravada,
@@ -376,22 +369,32 @@ class PDF_CFActivity : AppCompatActivity() {
                 descuNoSuj = 0.0,
                 descuExenta = 0.0,
                 descuGravada = 0.0,
+                porcentajeDescuento = 0.0,
                 totalDescu = 0.0,
                 tributos =  tributosC(
                     codigo = "20",
                     descripcion = "Impuesto al Valor Agregado 13%",
-                    valor = 0.13
+                    valor = valorIva
                 ),
                 subTotal = total,
-                montoTotalOperacion = total,
-                totalLetras = precioEnLetras(total)
+                ivaPercil = 0.0,
+                ivaRete1 = 0.0,
+                reteRenta = 0.0,
+                montoTotalOperacion = totalF,
+                totalNoGravado = 0.0,
+                totalPagar = totalF,
+                totalLetras = precioEnLetras(totalF),
+                saldoFavor = 0.0,
+                condicionOperacion = condicionOperacion,
+                pagos = null,
+                numPagoElectronico = null,
             ),
             extension = ExtensionC(
                 placaVehiculo = null,
                 docuEntrega = null,
                 nombEntrega = null,
-                docuRecibe = null,
-                nombRecibe = null,
+                docuRecibe = nit,
+                nombRecibe = nombre,
                 observaciones = null
             ),
             apendice = null,
@@ -977,7 +980,9 @@ class PDF_CFActivity : AppCompatActivity() {
             val finalPosition1 = startX + 495
             val finalPosition2 = startX + 530
             // Info de Suma Total de Operaciones con su respectivo monto
-            val subTotalVentas =  intent.getStringExtra("total")
+
+            val subTotalVentas = intent.getStringExtra("total")
+
             canvas.drawText("Suma Total de Operaciones:", finalPosition1 - paintTITULO.measureText("Suma Total de Operaciones:"), startY + 15, paintTITULO)
             canvas.drawText("$$subTotalVentas", finalPosition2 - paintTITULO.measureText(subTotalVentas), startY + 15, paintInfoDocumento)
 
@@ -1010,7 +1015,7 @@ class PDF_CFActivity : AppCompatActivity() {
                     val tributo = tributos.getJSONObject(i)
                     if (tributo.getString("codigo") == "20") {
                         descripcion20 = tributo.getString("descripcion")
-                        valor20 = tributo.getDouble("valor")
+                        valor20 = tributo.getDouble("Iva")
                         break  // Suponiendo que solo hay un tributo con código "20"
                     }
                 }
@@ -1039,8 +1044,17 @@ class PDF_CFActivity : AppCompatActivity() {
             canvas.drawText("Retención Renta:", finalPosition1 - paintTITULO.measureText("Retención Renta:"), startY + 103, paintTITULO)
             canvas.drawText("$$reteRenta", finalPosition2 - paintTITULO.measureText(reteRenta), startY + 103, paintInfoDocumento)
 
+            var montoTotalOperacion = "0.0"
+            val tF = intent.getStringExtra("JSON")
+            if (tF=="Factura"){
+                montoTotalOperacion = intent.getStringExtra("total").toString()
+            }else if(tF=="CreditoFiscal"){
+                val total = intent.getStringExtra("total")?.toDouble()
+                val iva= intent.getStringExtra("Iva")?.toDouble()
+                val monto= total!! + iva!!
+                montoTotalOperacion = monto.toString()
+            }
             // Muesta Info sobre el Monto Total de la Operación
-            val montoTotalOperacion =  intent.getStringExtra("total")
             canvas.drawText("Monto Total de la Operación:", finalPosition1 - paintTITULO.measureText("Monto Total de la Operación:"), startY + 114, paintTITULO)
             canvas.drawText("$$montoTotalOperacion", finalPosition2 - paintTITULO.measureText(montoTotalOperacion), startY + 114, paintInfoDocumento)
 
@@ -1050,7 +1064,15 @@ class PDF_CFActivity : AppCompatActivity() {
             canvas.drawText("$$totalNoGravado", finalPosition2 - paintTITULO.measureText(totalNoGravado), startY + 125, paintInfoDocumento)
 
             // Muesta Info sobre el Total a Pagar
-            val totalPagar =  intent.getStringExtra("total")
+            var totalPagar = "0.0"
+            if (tF=="Factura"){
+                totalPagar = intent.getStringExtra("total").toString()
+            }else if(tF=="CreditoFiscal"){
+                val total = intent.getStringExtra("total")?.toDouble()
+                val iva= intent.getStringExtra("Iva")?.toDouble()
+                val totalm= total!! + iva!!
+                totalPagar = totalm.toString()
+            }
             canvas.drawText("Total a Pagar:", finalPosition1 - paintTITULO.measureText("Total a Pagar:"), startY + 136, paintTITULO)
             canvas.drawText("$$totalPagar", finalPosition2 - paintTITULO.measureText(totalPagar), startY + 136, paintInfoDocumento)
 
@@ -1126,12 +1148,15 @@ class PDF_CFActivity : AppCompatActivity() {
             // Muestra información extra que requiere hacienda
             canvas.drawText("EXTENSIÓN", startX + 125, startY + 42, paintTITULO)
 
-            canvas.drawText("Emisor Responsable:", startX, startY + 60, paintTITULO)
-            canvas.drawText("No. documento:", startX, startY + 70, paintTITULO)
+            canvas.drawText("Emisor Responsable: ", startX, startY + 60, paintTITULO)
+            //canvas.drawText("$nombreE", startX+80, startY + 60, paintTITULO)
+            canvas.drawText("No. documento: ", startX, startY + 70, paintTITULO)
+            //canvas.drawText("$nitE", startX+60, startY + 70, paintTITULO)
 
-            canvas.drawText("Receptor Responsable:", startX, startY + 90, paintTITULO)
-            canvas.drawText("No. documento:", startX, startY + 100, paintTITULO)
-
+            canvas.drawText("Receptor Responsable: ", startX, startY + 90, paintTITULO)
+            canvas.drawText("$nombre", startX+87, startY + 90, paintTITULO)
+            canvas.drawText("No. documento: ", startX, startY + 100, paintTITULO)
+            canvas.drawText("$nit", startX+60, startY + 100, paintTITULO)
             canvas.drawText("Observaciones:", startX, startY + 120, paintTITULO)
 
 
@@ -1362,9 +1387,11 @@ class PDF_CFActivity : AppCompatActivity() {
         val app = application as MyApp
         val database = app.database
         val numeroControl = intent.getStringExtra("numeroControl")
+        val codigoG =intent.getStringExtra("codGeneracion")
         var nombre=""
         var nit=""
         var dui=""
+        var nrc = ""
         val totalExenta= intent.getStringExtra("totalExenta")?.toDouble()
         val totalGravada= intent.getStringExtra("totalGravada")?.toDouble()
         val totalNoSuj= intent.getStringExtra("totalNoSuj")?.toDouble()
@@ -1392,6 +1419,7 @@ class PDF_CFActivity : AppCompatActivity() {
                     nombre = datos[0]
                     nit = datos[11]
                     dui = datos[12]
+                    nrc = datos[9]
                 } else {
                     // Maneja el caso donde los datos no están completos o el formato no es el esperado
                     println("Los datos del cliente no están en el formato esperado.")
@@ -1415,6 +1443,8 @@ class PDF_CFActivity : AppCompatActivity() {
             .setString("numeroControl",numeroControl)
             .setString("fechaEmi",fecEmi)
             .setString("tipoD",tipoDC)
+            .setString("nrc",nrc)
+            .setString("codigoGeneracion",codigoG)
         try {
             // Guardar el documento en la base de datos
             database.save(document)

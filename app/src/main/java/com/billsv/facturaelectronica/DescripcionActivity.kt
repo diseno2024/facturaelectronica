@@ -155,15 +155,21 @@ class DescripcionActivity : AppCompatActivity() {
         }
         when (TipoV) {
             "Gravado" -> {
+                if (articulo=="Articulocf") {
+                    val precioDouble: Double = Precio.toDouble()
+                    val cantidadDouble: Double = cantidad.toDouble()
+                    val ventaGT = precioDouble * cantidadDouble
+                    ventaG = ventaGT.toString()
 
-                val precioDouble: Double =  Precio.toDouble()
-                val cantidadDouble: Double =cantidad.toDouble()
-                val ventaGT=precioDouble*cantidadDouble
-                ventaG=ventaGT.toString()
-
-                val ivaItem=(((precioDouble*cantidadDouble)/1.13)*0.13).toBigDecimal().setScale(6,RoundingMode.HALF_UP).toDouble()
-                ivaItemT=ivaItem.toString()
-                Log.e("Descripcion","$ivaItem")
+                    val ivaItem = (((precioDouble * cantidadDouble) / 1.13) * 0.13).toBigDecimal()
+                        .setScale(6, RoundingMode.HALF_UP).toDouble()
+                    ivaItemT = ivaItem.toString()
+                }else{
+                    val precioDouble: Double = Precio.toDouble()
+                    val cantidadDouble: Double = cantidad.toDouble()
+                    val ventaGT = precioDouble * cantidadDouble
+                    ventaG = ventaGT.toString()
+                }
 
             }
             "Exento" -> {

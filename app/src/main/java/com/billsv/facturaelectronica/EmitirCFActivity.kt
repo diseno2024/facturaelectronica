@@ -533,6 +533,7 @@ class EmitirCFActivity : AppCompatActivity() {
         val totalEx=totalExenta.toString()
         val totalGr=totalGravada.toString()
         val totalT=total.toString()
+        val totalI = totalIva.toString()
         var Info: String = ""
         if(currentreceptor.isNotEmpty()){
             currentreceptor.forEach{data->
@@ -553,7 +554,7 @@ class EmitirCFActivity : AppCompatActivity() {
         intent.putExtra("totalExenta",totalEx)
         intent.putExtra("totalGravada",totalGr)
         intent.putExtra("total",totalT)
-        intent.putExtra("totalIva",totalT)
+        intent.putExtra("totalIva",totalI)
         intent.putExtra("condicionOperacion",codigo)
         intent.putExtra("JSON","Factura")
 

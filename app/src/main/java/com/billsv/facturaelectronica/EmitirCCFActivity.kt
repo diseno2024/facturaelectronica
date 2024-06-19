@@ -83,6 +83,13 @@ class EmitirCCFActivity : AppCompatActivity() {
                 val cantidad = datos[1]
                 val producto = datos[3]
                 val precio = datos[5]
+                val totalNS=datos[8].toDouble()
+                val totalEx=datos[7].toDouble()
+                val totalGr=datos[6].toDouble()
+
+                totalNoSuj+=totalNS
+                totalExenta+=totalEx
+                totalGravada+=totalGr
 
                 total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
 
@@ -479,6 +486,10 @@ class EmitirCCFActivity : AppCompatActivity() {
         val totalEx=totalExenta.toString()
         val totalGr=totalGravada.toString()
         val totalT=total.toString()
+        val iva= total*0.13
+        val totalI = iva.toString()
+
+
         var Info: String = ""
         if(currentreceptor.isNotEmpty()){
             currentreceptor.forEach{data->
@@ -499,7 +510,7 @@ class EmitirCCFActivity : AppCompatActivity() {
         intent.putExtra("totalExenta",totalEx)
         intent.putExtra("totalGravada",totalGr)
         intent.putExtra("total",totalT)
-        intent.putExtra("totalIva",totalT)
+        intent.putExtra("Iva",totalI)
         intent.putExtra("condicionOperacion",codigo)
         intent.putExtra("JSON","CreditoFiscal")
 
@@ -1016,9 +1027,14 @@ class EmitirCCFActivity : AppCompatActivity() {
             val Producto = dict?.getString("Producto")
             val TipoV = dict?.getString("Tipo de Venta")
             val Precio = dict?.getString("Precio")
+            val VentaG = dict?.getString("ventaG")
+            val VentaE = dict?.getString("ventaE")
+            val VentaNS = dict?.getString("ventaNS")
+            val noGravado = dict?.getString("noGravado")
 
             // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$Tipo\n$cantidad\n$unidad\n$Producto\n$TipoV\n$Precio"
+            val dataString = "$Tipo\n$cantidad\n$unidad\n$Producto\n$TipoV\n$Precio\n$VentaG\n$VentaE\n$VentaNS\n$noGravado"
+
             dataList.add(dataString)
         }
 
