@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bordeSup"
         app:layout_constraintVertical_bias="0.297"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintWidth_percent="0.9" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bordeSup"
@@ -93,7 +93,7 @@
         android:id="@+id/textInformacionRespaldo"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Información de Respaldo:"
+        android:text="Información de Respaldo"
         android:textAlignment="center"
         android:textColor="#2E594A"
         android:textSize="@dimen/textSize_bordeback"
@@ -284,7 +284,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:text="Exito"
+            android:text="Éxito"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/textSize_bordeup"
