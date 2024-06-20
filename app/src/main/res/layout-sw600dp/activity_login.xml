@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="LoginActivity">
+
+    <!-- Background Image -->
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/s_shape"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Login Layout -->
+    <LinearLayout
+        android:id="@+id/loginLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="380dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Title -->
+
+        <!-- PIN EditText -->
+        <EditText
+            android:id="@+id/pinEditText"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@drawable/edittext_custom"
+            android:layout_marginBottom="80dp"
+            android:hint="Ingrese PIN"
+            android:inputType="number"
+            android:maxLength="6"
+            android:padding="15dp"
+            android:textSize="35sp" />
+
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginBottom="70dp"
+            android:backgroundTint="@color/verde_menta_1"
+            android:strokeColor="@color/black"
+            android:text="Ingresar"
+            android:textColor="@color/white"
+            android:textSize="35sp"
+            android:textStyle="bold" />
+        <!-- link-->
+        <TextView
+            android:id="@+id/linkTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Leer mas sobre nosotros aquí"
+            android:layout_marginStart="5dp"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="25sp"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="360dp"
+        android:shadowColor="@color/black"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="15"
+        android:text="Iniciar sesión:"
+        android:textColor="@color/white"
+        android:textSize="70sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
