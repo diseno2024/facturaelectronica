@@ -257,7 +257,7 @@ class DescripcionActivity : AppCompatActivity() {
                 // Guardar el documento en la base de datos
                 database.save(document)
                 Log.d("Descripcion", "Datos guardados correctamente: \n $document")
-                Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Articulo agregado", Toast.LENGTH_SHORT).show()
             } catch (e: CouchbaseLiteException) {
                 Log.e(
                     "Descripcion",

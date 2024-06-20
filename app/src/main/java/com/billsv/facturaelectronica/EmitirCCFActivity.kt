@@ -329,10 +329,8 @@ class EmitirCCFActivity : AppCompatActivity() {
             // Guardar el nuevo documento
             database.save(document)
             Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
-            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
         } catch (e: CouchbaseLiteException) {
             Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
-            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -386,10 +384,8 @@ class EmitirCCFActivity : AppCompatActivity() {
             // Guardar el nuevo documento
             database.save(document)
             Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
-            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
         } catch (e: CouchbaseLiteException) {
             Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
-            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
     private fun obtenerNumeroControl(): List<String> {
@@ -618,7 +614,6 @@ class EmitirCCFActivity : AppCompatActivity() {
 
 
                 Log.d("Prin_Re_Cliente", "Se eliminó el cliente")
-                showToast("Cliente eliminado")
             } else {
                 Log.d("Prin_Re_Cliente", "No existe el cliente")
                 showToast("No se encontró el cliente para eliminar")
@@ -759,10 +754,8 @@ class EmitirCCFActivity : AppCompatActivity() {
             // Guardar el nuevo documento
             database.save(document)
             Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
-            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
         } catch (e: CouchbaseLiteException) {
             Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
-            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -987,10 +980,8 @@ class EmitirCCFActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
-            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
         } catch (e: CouchbaseLiteException) {
             Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
-            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
     fun DataArticulo(view: View) {

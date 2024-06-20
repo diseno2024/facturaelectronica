@@ -36,7 +36,6 @@ import retrofit2.Response
 class ConfHacienda : AppCompatActivity() {
     private lateinit var usuario: EditText
     private lateinit var contraseña: EditText
-    private lateinit var apiService: ApiService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,58 +48,7 @@ class ConfHacienda : AppCompatActivity() {
         // Obtener instancia de la aplicación
         val app = application as MyApp
         // Ejemplo de cómo cambiar el valor de environment
-
         verificar()
-        val credenciales = obtenerDatosGuardados()
-        var usuarioapi = ""
-        var contraseñaapi = ""
-        credenciales.forEach { data ->
-            val datosapi = data.split("\n")
-            usuarioapi = datosapi[0]
-            contraseñaapi = datosapi[1]
-            if(usuarioapi!="") {
-                apiService = RetrofitClient.instance.create(ApiService::class.java)
-
-                val authRequest = AuthRequest(usuarioapi, contraseñaapi)
-
-                Log.d("API_REQUEST", "Enviando solicitud a la API")
-
-                apiService.authenticate(authRequest).enqueue(object : Callback<AuthResponse> {
-                    override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
-                        if (response.isSuccessful) {
-                            response.body()?.let { authResponse ->
-                                if (authResponse.status == "OK") {
-                                    val authBody = authResponse.body
-                                    Toast.makeText(this@ConfHacienda, "Token: ${authBody?.token}", Toast.LENGTH_LONG).show()
-                                    Log.d("API_RESPONSE", "Token: ${authBody?.token}")
-                                } else {
-                                    handleErrorResponse(response)
-                                }
-                            }
-                        } else {
-                            handleErrorResponse(response)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                        Toast.makeText(this@ConfHacienda, "Error: ${t.message}", Toast.LENGTH_LONG).show()
-                        Log.e("API_ERROR", "Error: ${t.message}", t)
-                    }
-                })
-            }
-        }
-
-        /* val uuid: TextView = findViewById(R.id.textView55)
-         val uuid2: TextView = findViewById(R.id.textView57)
-         val calendar = Calendar.getInstance()
-         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-         val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-         // Formatea la fecha y la hora
-         val formattedDate = dateFormat.format(calendar.time)
-         //uuid.text = formattedDate
-         val formattedTime = timeFormat.format(calendar.time)
-         //uuid2.text = formattedTime*/
-
         usuario = findViewById(R.id.usuario)
         contraseña = findViewById(R.id.contraseña)
 
@@ -135,16 +83,6 @@ class ConfHacienda : AppCompatActivity() {
             finish()
         }
 
-    }
-    private fun handleErrorResponse(response: Response<AuthResponse>) {
-        try {
-            val errorResponse = Gson().fromJson(response.errorBody()?.charStream(), ErrorResponse::class.java)
-            Toast.makeText(this, "Error: ${errorResponse.message}", Toast.LENGTH_LONG).show()
-            Log.e("API_ERROR_RESPONSE", "Error: ${errorResponse.message}")
-        } catch (e: JsonSyntaxException) {
-            Toast.makeText(this, "Error desconocido", Toast.LENGTH_LONG).show()
-            Log.e("API_ERROR_RESPONSE", "Error desconocido", e)
-        }
     }
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base

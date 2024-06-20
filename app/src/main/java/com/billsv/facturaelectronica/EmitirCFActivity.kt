@@ -354,11 +354,9 @@ class EmitirCFActivity : AppCompatActivity() {
 
             // Guardar el nuevo documento
             database.save(document)
-            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
-            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+            Log.d("ReClienteActivity", "Datos NCCG guardados correctamente: \n $document")
         } catch (e: CouchbaseLiteException) {
             Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
-            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -391,10 +389,8 @@ class EmitirCFActivity : AppCompatActivity() {
 
 
                 Log.d("Prin_Re_Cliente", "Se eliminó el cliente")
-                showToast("Cliente eliminado")
             } else {
                 Log.d("Prin_Re_Cliente", "No existe el cliente")
-                showToast("No se encontró el cliente para eliminar")
             }
         } catch (e: CouchbaseLiteException) {
             Log.e("Prin_Re_Cliente", "Error al eliminar al cliente: ${e.message}", e)
@@ -748,11 +744,9 @@ class EmitirCFActivity : AppCompatActivity() {
 
             // Guardar el nuevo documento
             database.save(document)
-            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
-            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+            Log.d("ReClienteActivity", "Datos DUI guardados correctamente: \n $document")
         } catch (e: CouchbaseLiteException) {
             Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
-            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
     private fun obtenerDui(): List<String>{
@@ -833,11 +827,9 @@ class EmitirCFActivity : AppCompatActivity() {
 
             // Guardar el nuevo documento
             database.save(document)
-            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
-            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+            Log.d("ReClienteActivity", "Datos LONG guardados correctamente: \n $document")
         } catch (e: CouchbaseLiteException) {
             Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
-            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
     private fun obtenerNumeroControl(): List<String> {
@@ -924,16 +916,14 @@ class EmitirCFActivity : AppCompatActivity() {
 
                 dialogoCliente.show()
 
-                Log.d("ReClienteActivity", "Documento existente borrado")
             }else{
                 val intent = Intent(this, ReClienteActivity::class.java)
                 startActivity(intent)
                 finish()
             }
-            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+
         } catch (e: CouchbaseLiteException) {
-            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
-            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+            Log.e("EmitirCFActivity", "Error al cargar cliente: ${e.message}", e)
         }
     }
     override fun onBackPressed() {

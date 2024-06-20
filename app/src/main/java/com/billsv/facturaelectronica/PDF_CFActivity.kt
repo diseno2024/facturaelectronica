@@ -34,6 +34,8 @@ import com.couchbase.lite.SelectResult
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -48,8 +50,12 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
 import com.pdfview.PDFView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PDF_CFActivity : AppCompatActivity() {
+    private lateinit var apiService: ApiService
     private lateinit var binding: ActivityPdfCfactivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,6 +98,46 @@ class PDF_CFActivity : AppCompatActivity() {
                     borrarDui(JSON)
                     borrarClienteTemporal()
                     borrarNCCG(JSON)
+                    if(autentificar()){
+                        val credenciales = obtenerUsuarioAPI()
+                        var usuarioapi = ""
+                        var contraseñaapi = ""
+                        credenciales.forEach { data ->
+                            val datosapi = data.split("\n")
+                            usuarioapi = datosapi[0]
+                            contraseñaapi = datosapi[1]
+                            if(usuarioapi!="") {
+                                apiService = RetrofitClient.instance.create(ApiService::class.java)
+                                apiService = RetrofitClient2.instance.create(ApiService::class.java)
+                                val authRequest = AuthRequest(usuarioapi, contraseñaapi)
+
+                                Log.d("API_REQUEST", "Enviando solicitud a la API")
+
+                                apiService.authenticate(authRequest).enqueue(object : Callback<AuthResponse> {
+                                    override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
+                                        if (response.isSuccessful) {
+                                            response.body()?.let { authResponse ->
+                                                if (authResponse.status == "OK") {
+                                                    val authBody = authResponse.body
+                                                    Toast.makeText(this@PDF_CFActivity, "Token: ${authBody?.token}", Toast.LENGTH_LONG).show()
+                                                    Log.d("API_RESPONSE", "Token: ${authBody?.token}")
+                                                } else {
+                                                    handleErrorResponse(response)
+                                                }
+                                            }
+                                        } else {
+                                            handleErrorResponse(response)
+                                        }
+                                    }
+
+                                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                                        Toast.makeText(this@PDF_CFActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+                                        Log.e("API_ERROR", "Error: ${t.message}", t)
+                                    }
+                                })
+                            }
+                        }
+                    }
                 }
                 dialogoGenerar.dismiss()
                 val intent = Intent(this, EmitirCFActivity::class.java)
@@ -115,8 +161,55 @@ class PDF_CFActivity : AppCompatActivity() {
         binding.VistaPdf.isZoomEnabled = true
         binding.VistaPdf.show()
 
+    }
 
+    private fun autentificar(): Boolean {
+        return false
+    }
 
+    private fun obtenerUsuarioAPI(): List<String> {
+        // Obtén la instancia de la base de datos desde la aplicación
+        val app = application as MyApp
+        val database = app.database
+
+        // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacion")))
+
+        // Ejecuta la consulta
+        val result = query.execute()
+
+        // Lista para almacenar los datos obtenidos
+        val dataList = mutableListOf<String>()
+
+        // Itera sobre todos los resultados de la consulta
+        result.allResults().forEach { result ->
+            // Obtiene el diccionario del documento del resultado actual
+            val dict = result.getDictionary(database.name)
+
+            // Extrae los valores de los campos del documento
+            val usuario = dict?.getString("usuario")
+            val contraseña = dict?.getString("contraseña")
+
+            // Formatea los datos como una cadena y la agrega a la lista
+            val dataString = "$usuario\n$contraseña"
+            dataList.add(dataString)
+        }
+
+        // Devuelve la lista de datos
+        return dataList
+    }
+
+    private fun handleErrorResponse(response: Response<AuthResponse>) {
+        try {
+            val errorResponse = Gson().fromJson(response.errorBody()?.charStream(), ErrorResponse::class.java)
+            Toast.makeText(this, "Error: ${errorResponse.message}", Toast.LENGTH_LONG).show()
+            Log.e("API_ERROR_RESPONSE", "Error: ${errorResponse.message}")
+        } catch (e: JsonSyntaxException) {
+            Toast.makeText(this, "Error desconocido", Toast.LENGTH_LONG).show()
+            Log.e("API_ERROR_RESPONSE", "Error desconocido", e)
+        }
     }
     override fun onBackPressed() {
         super.onBackPressed() // Llama al método onBackPressed() de la clase base
@@ -1330,10 +1423,8 @@ class PDF_CFActivity : AppCompatActivity() {
                 }
 
                 Log.d("Prin_Re_Cliente", "Se eliminaron los artículos")
-                showToast("Artículos eliminados")
             } else {
                 Log.d("Prin_Re_Cliente", "No se encontraron artículos")
-                showToast("No se encontraron artículos")
             }
         } catch (e: CouchbaseLiteException) {
             Log.e("Prin_Re_Cliente", "Error al eliminar los artículos: ${e.message}", e)
@@ -1508,7 +1599,6 @@ class PDF_CFActivity : AppCompatActivity() {
             // Guardar el documento en la base de datos
             database.save(document)
             Log.d("TuClase", "Datos guardados correctamente: \n $document")
-            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
         } catch (e: CouchbaseLiteException) {
             Log.e(
                 "TuClase",
