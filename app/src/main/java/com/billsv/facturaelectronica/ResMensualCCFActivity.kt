@@ -429,7 +429,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
             try {
                 FileWriter(csvFile).use { writer ->
                     // Write the CSV header
-                    writer.append("Fecha de Emisión,Clase de Documento,Tipo de Documento,Número de Resolución,Serie del Documento,Número de Control Interno DEL,Número de Control Interno AL,Número de Documento (DEL),Número de Documento (AL),Número de Maquina Registradora,Ventas Exentas,Ventas Internas Exentas No Sujetas a Proporcionalidad,Ventas No Sujetas,Ventas Gravadas Locales,Exportaciones Dentro del Área de CentroAmérica,Exportaciones Fuera del Área de CentroAmérica,Exportaciones de Servicio,Ventas a Zonas Francas y DPA (Tasa Cero),Ventas a Cuenta de Terceros no Domiciliados,Total de Ventas,Número del Anexo\n")
+
 
                     // Write the data
                     for (documento in datosList) {
