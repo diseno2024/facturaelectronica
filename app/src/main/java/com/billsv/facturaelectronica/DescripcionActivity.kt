@@ -96,41 +96,65 @@ class DescripcionActivity : AppCompatActivity() {
 
         val Agregar: Button = findViewById(R.id.Agregar)
         Agregar.setOnClickListener {
-            guardarItem()
-            val Item = Dialog(this)
-            Item.setContentView(R.layout.layout_item) // R.layout.layout_custom_dialog es tu diseño personalizado
-            val width = (resources.displayMetrics.widthPixels * 0.92).toInt() // 80% del ancho de la pantalla
-            val height = (resources.displayMetrics.heightPixels * 0.5).toInt() // 60% del alto de la pantalla
-            Item.window?.setLayout(width, height)
-            Item.setCanceledOnTouchOutside(false)
-            val btnAgregar = Item.findViewById<Button>(R.id.AggItem)
-            val btnRegresar = Item.findViewById<Button>(R.id.Regresar)
-            btnAgregar.setOnClickListener {
-                Cantidad.text.clear()
-                Producto.text.clear()
-                Precio.text.clear()
-                //cierra el dialogo
-                Item.dismiss()
-                Tipo.setSelection(0)
-                TipoV.setSelection(0)
-                Unidad.setSelection(0)
-            }
-            val clave = intent.getStringExtra("clave")
-            btnRegresar.setOnClickListener {
-                if(clave == "ccf"){
-                    val intent = Intent(this, EmitirCCFActivity::class.java)
-                    startActivity(intent)
+            if(Validar()) {
+                guardarItem()
+                val Item = Dialog(this)
+                Item.setContentView(R.layout.layout_item) // R.layout.layout_custom_dialog es tu diseño personalizado
+                val width =
+                    (resources.displayMetrics.widthPixels * 0.92).toInt() // 80% del ancho de la pantalla
+                val height =
+                    (resources.displayMetrics.heightPixels * 0.5).toInt() // 60% del alto de la pantalla
+                Item.window?.setLayout(width, height)
+                Item.setCanceledOnTouchOutside(false)
+                val btnAgregar = Item.findViewById<Button>(R.id.AggItem)
+                val btnRegresar = Item.findViewById<Button>(R.id.Regresar)
+                btnAgregar.setOnClickListener {
+                    Cantidad.text.clear()
+                    Producto.text.clear()
+                    Precio.text.clear()
+                    //cierra el dialogo
                     Item.dismiss()
-                }else {
-                    val intent = Intent(this, EmitirCFActivity::class.java)
-                    startActivity(intent)
-                    Item.dismiss()
+                    Tipo.setSelection(0)
+                    TipoV.setSelection(0)
+                    Unidad.setSelection(0)
                 }
-            }
+                val clave = intent.getStringExtra("clave")
+                btnRegresar.setOnClickListener {
+                    if (clave == "ccf") {
+                        val intent = Intent(this, EmitirCCFActivity::class.java)
+                        startActivity(intent)
+                        Item.dismiss()
+                    } else {
+                        val intent = Intent(this, EmitirCFActivity::class.java)
+                        startActivity(intent)
+                        Item.dismiss()
+                    }
+                }
 
-            Item.show()
+                Item.show()
+            }
 
         }
+    }
+
+    private fun Validar(): Boolean {
+        val cantidad = Cantidad.text.toString()
+        val producto = Producto.text.toString()
+        val Precio = Precio.text.toString()
+        if(cantidad != "" && producto != "" && Precio != ""){
+            return true
+        }else{
+            if(cantidad == ""){
+                Toast.makeText(this, "Ingrese la cantidad", Toast.LENGTH_SHORT).show()
+            }
+            if(producto == ""){
+                Toast.makeText(this, "Ingrese un producto", Toast.LENGTH_SHORT).show()
+            }
+            if(Precio == ""){
+                Toast.makeText(this, "Ingrese un precio", Toast.LENGTH_SHORT).show()
+            }
+        }
+        return false
     }
 
     private fun guardarItem() {
