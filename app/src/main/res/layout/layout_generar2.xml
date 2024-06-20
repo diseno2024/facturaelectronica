@@ -51,7 +51,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Se creara el Crédito Fiscal con los datos ingresados\n¿Esta seguro?"
+        android:text="Se creará el Crédito Fiscal con los datos ingresados\n¿Está seguro?"
         android:textAlignment="center"
         android:textColor="#4a8c74"
         android:textSize="33sp"
