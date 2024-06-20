@@ -503,7 +503,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("CSV creado")
             .setContentText("Archivo CSV guardado en: ${csvFile.name}")
-            .setSmallIcon(R.drawable.ic_notification) // Asegúrate de tener un icono de notificación en tu proyecto
+            .setSmallIcon(R.mipmap.ic_launcher) // Asegúrate de tener un icono de notificación en tu proyecto
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .build()
