@@ -99,5 +99,6 @@ dependencies {
     implementation ("org.bitbucket.b_c:jose4j:0.7.9")
     implementation ("javax.servlet:javax.servlet-api:4.0.1")
     implementation ("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5")
+    implementation ("com.itextpdf:itext7-core:7.1.16")
 
 }

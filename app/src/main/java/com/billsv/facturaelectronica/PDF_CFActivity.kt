@@ -1,6 +1,7 @@
 package com.billsv.facturaelectronica
 
 import android.app.Dialog
+import android.content.ContentResolver
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -9,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -20,6 +22,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.net.toUri
 import com.billsv.facturaelectronica.databinding.ActivityPdfCfactivityBinding
 import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
@@ -721,10 +724,24 @@ class PDF_CFActivity : AppCompatActivity() {
             // Dibujar el Encabezado
             canvas.drawText("DOCUMENTO TRIBUTARIO ELECTRÓNICO", 210f, 25f, paintEncabezado)
             if(TIPO=="Factura"){
-                canvas.drawText("COMPROBANTE DE CONSUMIDOR FINAL", 220f, 40f, paintEncabezado)
+                canvas.drawText("FACTURA DE CONSUMIDOR FINAL", 230f, 40f, paintEncabezado)
             }else{
                 canvas.drawText("COMPROBANTE DE CRÉDITO FISCAL", 220f, 40f, paintEncabezado)
             }
+            //imagen
+            // Obtener la imagen desde la URI
+            val imageUri = obtenerUriGuardada()?.toUri()
+            Log.e("imageUri","$imageUri")
+            val contentResolver: ContentResolver = contentResolver
+            val imageStream: InputStream? = imageUri?.let { contentResolver.openInputStream(it) }
+            val bitmap = BitmapFactory.decodeStream(imageStream)
+
+            // Dibuja la imagen en el PDF
+            if (bitmap != null) {
+                val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 150, 112, false)
+                canvas.drawBitmap(scaledBitmap, 40f, 50f, null)
+            }
+
             // IDENTIFICACIÓN
             /*   Lado izquierdo   */
             val codigoGeneracion = intent.getStringExtra("codGeneracion")
@@ -865,15 +882,42 @@ class PDF_CFActivity : AppCompatActivity() {
                 }
             }
             // RECEPTOR
-            val nombre2 = nombre
-            val nit2 = nit
-            val nrc2 = nrc
-            val descActividad2 = desAcEco
-            val municipio2 = municipio
-            val departamento2 = departamento
-            val complemento2 = complemento
-            val telefono2 = telefono
-            val correo2 = correo
+            var nombre2 = nombre
+            if (nombre2==null){
+                nombre2=""
+            }
+            var nit2 = nit
+            if (nit2==null){
+                nit2=""
+            }
+            var nrc2 = nrc
+            if (nrc2==null){
+                nrc2=""
+            }
+            var descActividad2 = desAcEco
+            if (descActividad2==null){
+                descActividad2=""
+            }
+            var municipio2 = municipio
+            if (municipio2==null){
+                municipio2=""
+            }
+            var departamento2 = departamento
+            if (departamento2==null){
+                departamento2=""
+            }
+            var complemento2 = complemento
+            if (complemento2==null){
+                complemento2=""
+            }
+            var telefono2 = telefono
+            if (telefono2==null){
+                telefono2=""
+            }
+            var correo2 = correo
+            if (correo2==null){
+                correo2=""
+            }
             // Coordenadas del rectángulo del RECEPTOR
             val emisorLeftReceptor = 321f
             val emisorTopReceptor = 215f
@@ -1165,10 +1209,11 @@ class PDF_CFActivity : AppCompatActivity() {
             canvas.drawText("No. documento: ", startX, startY + 70, paintTITULO)
             //canvas.drawText("$nitE", startX+60, startY + 70, paintTITULO)
 
+
             canvas.drawText("Receptor Responsable: ", startX, startY + 90, paintTITULO)
-            canvas.drawText("$nombre", startX+87, startY + 90, paintTITULO)
+            canvas.drawText("$nombre2", startX+87, startY + 90, paintTITULO)
             canvas.drawText("No. documento: ", startX, startY + 100, paintTITULO)
-            canvas.drawText("$nit", startX+60, startY + 100, paintTITULO)
+            canvas.drawText("$nit2", startX+60, startY + 100, paintTITULO)
             canvas.drawText("Observaciones:", startX, startY + 120, paintTITULO)
 
 
@@ -1469,6 +1514,24 @@ class PDF_CFActivity : AppCompatActivity() {
                 e
             )
             Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun obtenerUriGuardada(): String? {
+        val app = application as MyApp
+        val database = app.database
+
+        val query = QueryBuilder.select(SelectResult.property("URI"))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Imagen")))
+
+        return try {
+            val resultSet = query.execute()
+            val result = resultSet.next()
+
+            result?.getString("URI")
+        } catch (e: CouchbaseLiteException) {
+            Log.e("Prin_Re_Cliente", "Error al obtener la URI de la base de datos: ${e.message}", e)
+            null
         }
     }
 
