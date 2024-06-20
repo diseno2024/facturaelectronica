@@ -36,7 +36,7 @@
             android:id="@+id/title_factura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Autentificacion Hacienda"
+            android:text="Autentificación Hacienda"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -134,7 +134,7 @@
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Produccion"
+            android:text="Producción"
             app:rippleColor="#95BFB0"
             app:backgroundTint="@color/colort"/>
     </com.google.android.material.button.MaterialButtonToggleGroup>
