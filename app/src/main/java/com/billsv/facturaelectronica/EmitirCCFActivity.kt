@@ -377,8 +377,8 @@ class EmitirCCFActivity : AppCompatActivity() {
             }
             // Crear un nuevo documento
             val document = MutableDocument()
-                //.setString("numero", Long.toString())
-                .setString("numero", 0.toString())//para recetear
+                .setString("numero", Long.toString())
+                //.setString("numero", 0.toString())//para recetear
                 .setString("tipo", "NumeroControl")
 
             // Guardar el nuevo documento
