@@ -159,7 +159,7 @@ class EmitirCFActivity : AppCompatActivity() {
             // Si no hay datos, puedes agregar una fila indicando que no hay datos disponibles
             val emptyRow = TableRow(this)
             val emptyTextView = TextView(this).apply {
-                text = "no hay articulos"
+                text = "No hay artículos"
                 layoutParams = TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply {
                     setMargins(8, 8, 8, 8)
                 }
@@ -416,7 +416,7 @@ class EmitirCFActivity : AppCompatActivity() {
             if (resultsC.isNotEmpty()) {
                 return true
             }else{
-                showToast("Falta la informacion del Cliente")
+                showToast("Falta la información del Cliente")
                 return false
             }
         } catch (e: CouchbaseLiteException) {
@@ -447,10 +447,10 @@ class EmitirCFActivity : AppCompatActivity() {
                return true
             }else{
                 if(resultsE.isEmpty()){
-                    showToast("Falta la informacion del Emisor")
+                    showToast("Falta la información del Emisor")
                 }
                 if(resultsA.isEmpty()){
-                    showToast("Debe de haber al menos un Articulo")
+                    showToast("Debe de haber al menos un Artículo")
                 }
                 return false
             }

@@ -265,7 +265,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="35dp"
                 android:padding="8dp"
-                android:text="Condicion de Operacion"
+                android:text="Condición de Operación"
                 android:textColor="#4a8c74"
                 android:textSize="@dimen/Texto"
                 android:textStyle="bold"
