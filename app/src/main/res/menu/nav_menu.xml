@@ -21,6 +21,10 @@
             android:id="@+id/nav_configuracion"
             android:icon="@drawable/ic_user"
             android:title="Conf. del Emisor"/>
+        <item
+            android:id="@+id/nav_confiHacienda"
+            android:icon="@drawable/config"
+            android:title="Conf. Hacienda"/>
 
         <item
             android:id="@+id/nav_resumenes"

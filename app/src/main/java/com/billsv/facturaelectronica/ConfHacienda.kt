@@ -1,11 +1,13 @@
 package com.billsv.facturaelectronica
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -44,6 +46,10 @@ class ConfHacienda : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        // Obtener instancia de la aplicación
+        val app = application as MyApp
+        // Ejemplo de cómo cambiar el valor de environment
+
         verificar()
         val credenciales = obtenerDatosGuardados()
         var usuarioapi = ""
@@ -113,7 +119,20 @@ class ConfHacienda : AppCompatActivity() {
         toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
                 saveSelectedButton(checkedId)
+                when (checkedId) {
+                    R.id.btnPrueba -> app.ambiente = "00"
+                    R.id.btnProduccion -> app.ambiente = "01"
+                }
+                // Mostrar el nuevo estado para confirmar
+                Toast.makeText(this, "Entorno: ${app.ambiente}", Toast.LENGTH_SHORT).show()
             }
+        }
+        val atras = findViewById<ImageButton>(R.id.atras)
+        atras.setOnClickListener {
+            super.onBackPressed() // Llama al método onBackPressed() de la clase base
+            val intent = Intent(this, MenuActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
     }
@@ -126,6 +145,12 @@ class ConfHacienda : AppCompatActivity() {
             Toast.makeText(this, "Error desconocido", Toast.LENGTH_LONG).show()
             Log.e("API_ERROR_RESPONSE", "Error desconocido", e)
         }
+    }
+    override fun onBackPressed() {
+        super.onBackPressed() // Llama al método onBackPressed() de la clase base
+        val intent = Intent(this, MenuActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun verificar():Boolean {
@@ -271,6 +296,7 @@ class ConfHacienda : AppCompatActivity() {
         editor.putInt("selectedButton", buttonId)
         editor.apply()
     }
+
     private fun restoreSelectedButton() {
         val sharedPreferences = getSharedPreferences("ButtonStatePrefs", Context.MODE_PRIVATE)
         val selectedButtonId = sharedPreferences.getInt("selectedButton", View.NO_ID)

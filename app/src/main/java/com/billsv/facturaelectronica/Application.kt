@@ -6,7 +6,7 @@ import com.couchbase.lite.DatabaseConfiguration
 
 class MyApp : Application() {
     lateinit var database: Database
-
+    var ambiente: String = "00" // Valor por defecto
     override fun onCreate() {
         super.onCreate()
 

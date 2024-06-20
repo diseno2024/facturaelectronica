@@ -90,6 +90,13 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 finish()
                 return true
             }
+            R.id.nav_confiHacienda ->{
+                // Iniciar ResMensualesActivity al seleccionar "Conf.Datos del contribuyente"
+                val intent = Intent(this, ConfHacienda::class.java)
+                startActivity(intent)
+                finish()
+                return true
+            }
 
             R.id.nav_registro -> {
                 // Iniciar ReClienteActivity al seleccionar "Registro del cliente"

@@ -229,10 +229,12 @@ class PDF_CFActivity : AppCompatActivity() {
                 horEmi = datos[1]
             }
         }
+        val app = application as MyApp
+        val ambiente = app.ambiente
         val documento = Documento(
             identificacion = Identificacion(
                 version = 1,
-                ambiente = "00",
+                ambiente = ambiente,
                 tipoDte = "01",
                 numeroControl = numeroContol,
                 codigoGeneracion = codigoGeneracion,
@@ -322,7 +324,7 @@ class PDF_CFActivity : AppCompatActivity() {
         val documento2 = DocumentoC(
             identificacion = IdentificacionC(
                 version = 1,
-                ambiente = "00",
+                ambiente = ambiente,
                 tipoDte = "03",
                 numeroControl = numeroContol,
                 codigoGeneracion = codigoGeneracion,
