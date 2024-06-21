@@ -26,6 +26,7 @@ import com.couchbase.lite.Expression
 import com.couchbase.lite.Meta
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
+import android.text.InputFilter
 
 
 
@@ -585,6 +586,23 @@ class ReClienteActivity : AppCompatActivity() {
         // Inicializar la base de datos
         val app = application as MyApp
         database = app.database
+
+        // Filtro personalizado para convertir todas las letras a minúsculas
+        val lowerCaseFilter = InputFilter { source, start, end, dest, dstart, dend ->
+            val result = StringBuilder()
+            for (i in start until end) {
+                val char = source[i]
+                if (char.isUpperCase()) {
+                    result.append(char.lowercaseChar())
+                } else {
+                    result.append(char)
+                }
+            }
+            result.toString()
+        }
+
+        // Aplicar el filtro al campo de correo electrónico
+        email.filters = arrayOf(lowerCaseFilter)
 
     }
 
