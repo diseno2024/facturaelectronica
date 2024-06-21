@@ -23,7 +23,7 @@ import com.couchbase.lite.CouchbaseLiteException
 class CFiscalFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var facturaAdaptercf: FacturaAdapter
+    private lateinit var facturaAdapterc: FacturaAdaptercf
     private lateinit var btnLoadMore: ImageButton
     private lateinit var btnLoadPrevious: ImageButton
     private lateinit var etDui: EditText
@@ -101,8 +101,8 @@ class CFiscalFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        facturaAdaptercf = FacturaAdapter(requireContext(), mutableListOf())
-        recyclerView.adapter = facturaAdaptercf
+        facturaAdapterc = FacturaAdaptercf(requireContext(), mutableListOf())
+        recyclerView.adapter = facturaAdapterc
 
         // Cargar la primera página de datos
         loadMoreItems()
@@ -114,21 +114,35 @@ class CFiscalFragment : Fragment() {
         val newData = obtenerDatosPaginados(currentPage * pageSize, pageSize)
         if (newData.isNotEmpty()) {
             currentData = newData
-            facturaAdaptercf.setFacturas(currentData)
+            facturaAdapterc.setFacturas(currentData)
             currentPage++
+            totalResults = obtenerTotalResultados() // Asegúrate de actualizar totalResults
             updateButtonVisibility()
             updatePageNumberTextView() // Actualizar el número de página
-            // Si hay un filtro activo, mostrar el botón de limpiar filtro
-            if (etDui.text.isNotBlank()) {
-                btnClearFilter.visibility = View.VISIBLE
-            }
         }
     }
 
+    private fun loadPreviousItems() {
+        if (currentPage > 1) {
+            currentPage-- // Retroceder una página
+            val previousData = obtenerDatosPaginados((currentPage - 1) * pageSize, pageSize)
+            currentData = previousData
+            facturaAdapterc.setFacturas(currentData)
+            updateButtonVisibility()
+            updatePageNumberTextView() // Actualizar el número de página
+        }
+    }
+
+
     private fun updatePageNumberTextView() {
-        val totalPages = getTotalPages()
-        val pageNumberText = "Page $currentPage/$totalPages"
-        viewpage.text = pageNumberText
+        if (totalResults > pageSize) {
+            val totalPages = getTotalPages()
+            val pageNumberText = "Page $currentPage/$totalPages"
+            viewpage.text = pageNumberText
+            viewpage.visibility = View.VISIBLE
+        } else {
+            viewpage.visibility = View.GONE
+        }
     }
 
     private fun getTotalPages(): Int {
@@ -143,20 +157,7 @@ class CFiscalFragment : Fragment() {
         return currentData.size
     }
 
-    private fun loadPreviousItems() {
-        if (currentPage > 1) {
-            currentPage-- // Retroceder una página
-            val previousData = obtenerDatosPaginados((currentPage - 1) * pageSize, pageSize)
-            currentData = previousData
-            facturaAdaptercf.setFacturas(currentData)
-            updateButtonVisibility()
-            updatePageNumberTextView() // Actualizar el número de página
-            // Si hay un filtro activo, mostrar el botón de limpiar filtro
-            if (etDui.text.isNotBlank()) {
-                btnClearFilter.visibility = View.VISIBLE
-            }
-        }
-    }
+
 
     private fun obtenerDatosPaginados(offset: Int, limit: Int): List<Factura> {
         val app = requireActivity().application as MyApp
@@ -164,7 +165,7 @@ class CFiscalFragment : Fragment() {
 
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipoD").equalTo(Expression.string("Factura Consumidor Final")))
+            .where(Expression.property("tipoD").equalTo(Expression.string("Comprobante Crédito Fiscal")))
             .limit(Expression.intValue(limit), Expression.intValue(offset))
 
         val result = query.execute()
@@ -207,7 +208,7 @@ class CFiscalFragment : Fragment() {
 
         if (dataList.isNotEmpty()) {
             currentData = dataList
-            facturaAdaptercf.setFacturas(currentData)
+            facturaAdapterc.setFacturas(currentData)
             btnClearFilter.visibility = View.VISIBLE // Mostrar el botón de limpiar filtro
             btnBuscar.visibility = View.GONE // Ocultar el botón de buscar
         } else {
@@ -232,9 +233,8 @@ class CFiscalFragment : Fragment() {
             dui
         }
     }
-
     private fun updateButtonVisibility() {
-        btnLoadMore.visibility = if (currentData.size >= pageSize) View.VISIBLE else View.GONE
+        btnLoadMore.visibility = if ((currentPage * pageSize) < totalResults) View.VISIBLE else View.GONE
         btnLoadPrevious.visibility = if (currentPage > 1) View.VISIBLE else View.GONE
     }
 
@@ -243,7 +243,7 @@ class CFiscalFragment : Fragment() {
         val database = app.database
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipoD").equalTo(Expression.string("Factura Consumidor Final")))
+            .where(Expression.property("tipoD").equalTo(Expression.string("Comprobante Crédito Fiscal")))
 
         try {
             val result = query.execute()

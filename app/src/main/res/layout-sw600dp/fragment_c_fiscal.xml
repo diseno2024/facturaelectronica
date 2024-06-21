@@ -11,13 +11,14 @@
         android:id="@+id/etDui"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="90dp"
         android:backgroundTint="#2E594A"
         android:hint="Buscar por DUI"
         android:inputType="number"
         android:textColor="#4A8C74"
+        android:textSize="30dp"
         android:textColorHint="#4A8C74"
         app:layout_constraintEnd_toEndOf="@id/btnBuscar"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +27,8 @@
 
     <ImageButton
         android:id="@+id/btnBuscar"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="20dp"
         android:elevation="5dp"
         android:visibility="visible"
@@ -40,8 +41,8 @@
 
     <ImageButton
         android:id="@+id/btnClearFilter"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="20dp"
         android:background="@android:color/transparent"
         android:src="@drawable/quitar"
@@ -55,8 +56,8 @@
 
     <ImageButton
         android:id="@+id/btnLoadMore"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginEnd="109dp"
         android:layout_marginBottom="90dp"
         android:background="@android:color/transparent"
@@ -68,8 +69,8 @@
 
     <ImageButton
         android:id="@+id/btnLoadPrevious"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="111dp"
         android:layout_marginBottom="90dp"
         android:background="@android:color/transparent"

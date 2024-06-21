@@ -66,6 +66,7 @@
         android:layout_marginBottom="90dp"
         android:background="@android:color/transparent"
         android:elevation="5dp"
+        android:visibility="gone"
         android:src="@drawable/siguiente"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -79,7 +80,7 @@
         android:background="@android:color/transparent"
         android:elevation="5dp"
         android:src="@drawable/anterior"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -101,7 +102,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="100dp"
         android:padding="8dp"
-        android:text="Page 1/5"
+        android:text=""
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
