@@ -534,7 +534,9 @@ class PDF_CFActivity : AppCompatActivity() {
             // Convertir la instancia de Documento a JSON
             val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
 
-            saveJsonToExternalStorage(json,numeroContol)
+            // Anterior
+            //saveJsonToExternalStorage(json,numeroContol)
+            saveJsonToExternalStorage(json,codigoGeneracion)
         }else if(JSON=="CreditoFiscal"){
             val articulos = obtenerDatosGuardados("CF")
             val cuerpoDocumentosC = createCuerpoDocumentoC(articulos)
@@ -548,7 +550,9 @@ class PDF_CFActivity : AppCompatActivity() {
             // Convertir la instancia de Documento a JSON
             val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento2)
 
-            saveJsonToExternalStorage(json,numeroContol)
+            // Anterior
+            //saveJsonToExternalStorage(json,numeroContol)
+            saveJsonToExternalStorage(json,codigoGeneracion)
         }
     }
 
@@ -590,8 +594,9 @@ class PDF_CFActivity : AppCompatActivity() {
 
     // Los Parámetros que estaban antes, cuando se guardaba con el numero de control
     //jsonData: String,numeroControl:String?
-    private fun saveJsonToExternalStorage(jsonData: String,numeroControl:String?) {
-        val fileName = "$numeroControl.json"
+    private fun saveJsonToExternalStorage(jsonData: String,codigoGeneracion:String?) {
+        // El json ahora se guarda con el código de generación por igual
+        val fileName = "$codigoGeneracion.json"
         val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val file = File(directory, fileName)
 
