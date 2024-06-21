@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:text="Los Articulos agregados se perderan, esta seguro de querer salir?"
+        android:text="Los artículos agregados se perderán, ¿está seguro de querer salir?"
         android:textAlignment="center"
         android:textColor="#4a8c74"
         android:textSize="33sp"

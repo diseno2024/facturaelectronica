@@ -51,7 +51,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="El ítem ha sido agregado, deseas seguir añadiendo más items? "
+        android:text="El ítem ha sido agregado, ¿desea seguir añadiendo más items? "
         android:textAlignment="center"
         android:textColor="#4a8c74"
         android:textSize="33sp"
