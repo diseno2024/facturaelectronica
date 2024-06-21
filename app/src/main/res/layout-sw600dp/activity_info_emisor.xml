@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InfoEmisorActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#4a8c74"
+        android:minHeight="?attr/actionBarSize"
+        android:elevation="4dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/atras"
+            android:layout_width="51dp"
+            android:layout_height="51dp"
+            android:background="@drawable/click_effect"
+            android:clickable="true"
+            android:contentDescription="bottom"
+            android:focusable="true"
+            android:layout_gravity="start"
+            app:srcCompat="@drawable/icons8_back_arrow_48"
+            app:tint="#FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Información del Emisor"
+            android:textColor="#FFFFFF"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/Imagen"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginStart="120dp"
+                android:layout_marginTop="160dp"
+                android:layout_marginEnd="120dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="showGallery"
+                app:cardCornerRadius="7dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.4"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="2dp">
+                <ImageView
+                    android:id="@+id/Logo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:background="#EFEEEE"/>
+
+                <ImageButton
+                    android:id="@+id/btnBorrarImagen"
+                    android:layout_width="51dp"
+                    android:layout_height="51dp"
+                    android:layout_gravity="end"
+                    android:background="@drawable/click_effect"
+                    android:clickable="true"
+                    android:contentDescription="bottom"
+                    android:focusable="true"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/icons8_delete_32_1_"
+                    app:tint="#00b861"/>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="72dp"
+                android:layout_marginBottom="1dp"
+                android:text="Logo "
+                android:textColor="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintBottom_toTopOf="@+id/Imagen"
+                app:layout_constraintStart_toStartOf="@+id/Imagen" />
+
+            <EditText
+                android:id="@+id/nombre"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="Nombre o Razón Social"
+                android:inputType="text"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Imagen"
+                app:layout_constraintWidth_percent="0.8" />
+            <EditText
+                android:id="@+id/nombreC"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="Nombre Comercial"
+                android:inputType="text"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nombre"
+                app:layout_constraintWidth_percent="0.8" />
+            <EditText
+                android:id="@+id/DUI"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="DUI"
+                android:inputType="number"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nombreC"
+                app:layout_constraintWidth_percent="0.8" />
+            <EditText
+                android:id="@+id/NIT"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="NIT"
+                android:inputType="number"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/DUI"
+                app:layout_constraintWidth_percent="0.8" />
+            <EditText
+                android:id="@+id/NRC"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="NRC"
+                android:inputType="number"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/NIT"
+                app:layout_constraintWidth_percent="0.8" />
+            <EditText
+                android:id="@+id/AcEco"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="Actividad Económica"
+                android:inputType="text"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/NRC"
+                app:layout_constraintWidth_percent="0.8" />
+            <TextView
+                android:id="@+id/textdep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Departamento"
+                android:textColor="#4A8C74"
+                android:textSize="@dimen/TextoEtiquetas"
+                app:layout_constraintTop_toBottomOf="@+id/AcEco"
+                app:layout_constraintStart_toStartOf="@+id/departamento" />
+
+            <Spinner
+                android:id="@+id/departamento"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="83dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/input_text"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textdep"
+                app:layout_constraintWidth_percent="0.38" />
+            <EditText
+                android:id="@+id/Direccion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="Dirección"
+                android:inputType="text"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/departamento"
+                app:layout_constraintWidth_percent="0.8" />
+            <TextView
+                android:id="@+id/textView56"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Municipio"
+                android:textColor="#4A8C74"
+                android:textSize="@dimen/TextoEtiquetas"
+                app:layout_constraintBottom_toTopOf="@+id/municipio"
+                app:layout_constraintStart_toStartOf="@+id/municipio"
+                app:layout_constraintTop_toBottomOf="@+id/AcEco" />
+
+            <Spinner
+                android:id="@+id/municipio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="83dp"
+                android:background="@drawable/input_text"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView56"
+                app:layout_constraintWidth_percent="0.38" />
+            <EditText
+                android:id="@+id/NumT"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="Número de Teléfono"
+                android:inputType="number"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Direccion"
+                app:layout_constraintWidth_percent="0.8" />
+            <EditText
+                android:id="@+id/Correo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#2E594A"
+                android:ems="10"
+                android:hint="Correo Electrónico"
+                android:inputType="textEmailAddress"
+                android:textColor="#4a8c74"
+                android:textColorHint="#4a8c74"
+                android:textSize="@dimen/textSize_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/NumT"
+                app:layout_constraintWidth_percent="0.8" />
+
+
+            <Button
+                android:id="@+id/Guardar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="100dp"
+                android:layout_marginBottom="40dp"
+                android:backgroundTint="#96D0B9"
+                android:text="Guardar"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/Texto"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Correo"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="3dp" />
+            <Button
+                android:id="@+id/Editar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="100dp"
+                android:layout_marginBottom="40dp"
+                android:backgroundTint="#96D0B9"
+                android:text="Editar"
+                android:visibility="gone"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/Texto"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Correo"
+                app:strokeColor="#4a8c74"
+                app:strokeWidth="3dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

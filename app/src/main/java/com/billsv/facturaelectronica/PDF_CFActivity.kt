@@ -634,9 +634,11 @@ class PDF_CFActivity : AppCompatActivity() {
             val direccion = dict?.getString("direccion")
             val telefono = dict?.getString("telefono")
             val correo = dict?.getString("correo")
+            val deptext = dict?.getString("deptext")
+            val muntext = dict?.getString("muntext")
 
             // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$nombre\n$nombrec\n$nit\n$nrc\n$AcEco\n$direccion\n$telefono\n$correo\n$dui\n$departamento\n$municipio"
+            val dataString = "$nombre\n$nombrec\n$nit\n$nrc\n$AcEco\n$direccion\n$telefono\n$correo\n$dui\n$departamento\n$municipio\n$deptext\n$muntext"
             dataList.add(dataString)
         }
 
@@ -907,8 +909,8 @@ class PDF_CFActivity : AppCompatActivity() {
                     nombreE = datos[0]
                     nombrecE = datos[1]
                     telefonoE = datos[6]
-                    departamentoE = datos[9]
-                    municipioE = datos[10]
+                    departamentoE = datos[11]
+                    municipioE = datos[12]
                     complementoE = datos[5]
                     correoE = datos[7]
                     nitE = datos[2].replace("-","")
@@ -969,8 +971,8 @@ class PDF_CFActivity : AppCompatActivity() {
                         dui = datos[8]
                         nombre = datos[0]
                         telefono = datos[6]
-                        departamento = datos[4]
-                        municipio = datos[5]
+                        departamento = datos[14]
+                        municipio = datos[15]
                         complemento = datos[3]
                         correo = datos[2]
                         nit = datos[1]

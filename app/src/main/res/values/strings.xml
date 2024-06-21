@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FacturaElectronica</string>
+    <string name="app_name">Billsv</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="open_nav">Open Navigation Drawer</string>
     <string name="close_nav">Close Navigation Drawer</string>

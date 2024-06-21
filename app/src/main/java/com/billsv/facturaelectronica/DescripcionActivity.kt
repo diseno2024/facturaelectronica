@@ -8,7 +8,9 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -37,6 +39,13 @@ class DescripcionActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+        val clave = intent.getStringExtra("clave")
+        val textotoll: TextView = findViewById(R.id.Detalles)
+        if(clave == "ccf"){
+            textotoll.text = "Articulos"
+        }else{
+            textotoll.text = "Detalles de la Factura"
         }
         Tipo = findViewById(R.id.TipoS)
 // Create an ArrayAdapter using the string array and a default spinner layout.

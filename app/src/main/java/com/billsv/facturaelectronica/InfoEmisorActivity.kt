@@ -954,6 +954,8 @@ class InfoEmisorActivity : AppCompatActivity() {
                 .setString("direccion", direccion)
                 .setString("telefono", telefono)
                 .setString("correo", correo)
+                .setString("deptext", departamento)
+                .setString("muntext", municipio)
                 .setString("tipo", "ConfEmisor")
 
             // Guardar el nuevo documento
@@ -998,9 +1000,11 @@ class InfoEmisorActivity : AppCompatActivity() {
             val direccion = dict?.getString("direccion")
             val telefono = dict?.getString("telefono")
             val correo = dict?.getString("correo")
+            val deptext = dict?.getString("deptext")
+            val muntext = dict?.getString("muntext")
 
             // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$nombre\n$nombrec\n$nit\n$nrc\n$AcEco\n$direccion\n$telefono\n$correo\n$dui\n$departamento\n$municipio"
+            val dataString = "$nombre\n$nombrec\n$nit\n$nrc\n$AcEco\n$direccion\n$telefono\n$correo\n$dui\n$departamento\n$municipio\n$deptext\n$muntext"
             dataList.add(dataString)
         }
 
