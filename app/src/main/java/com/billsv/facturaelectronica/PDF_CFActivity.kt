@@ -152,9 +152,15 @@ class PDF_CFActivity : AppCompatActivity() {
                     }
                 }
                 dialogoGenerar.dismiss()
-                val intent = Intent(this, EmitirCFActivity::class.java)
-                startActivity(intent)
-                finish()
+                if(JSON=="CreditoFiscal") {
+                    val intent = Intent(this, EmitirCCFActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }else{
+                    val intent = Intent(this, EmitirCFActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
             }
 
             btnNo.setOnClickListener {

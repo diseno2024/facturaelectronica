@@ -71,6 +71,7 @@ class EmitirCCFActivity : AppCompatActivity() {
             insets
         }
         val Num = obtenerNumeroControl()
+        Log.e("","$Num")
         Num.forEach { data ->
             val nums = data.split("\n")
             currentControlNumber = nums[0].toLong()
@@ -357,6 +358,7 @@ class EmitirCCFActivity : AppCompatActivity() {
         return numerocontrolBase + numeroFormateado
     }
     private fun guardarNumeroControl(Long :Long) {
+        Log.e("act","$Long")
         val app = application as MyApp
         val database = app.database
         // Buscar si ya existe un documento del tipo "ConfEmisor"
@@ -385,7 +387,7 @@ class EmitirCCFActivity : AppCompatActivity() {
             val document = MutableDocument()
                 .setString("numero", Long.toString())
                 //.setString("numero", 0.toString())//para recetear
-                .setString("tipo", "NumeroControl")
+                .setString("tipo", "NumeroControlCCF")
 
             // Guardar el nuevo documento
             database.save(document)
