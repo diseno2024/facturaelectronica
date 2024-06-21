@@ -230,8 +230,7 @@ class BackupActivity : AppCompatActivity() {
     }
 
     private fun createBackupFolder() {
-        val parentDir =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+        val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
         val backupDirectoryName = "respaldo_factura2024"
         val backupDirectory = File(parentDir, backupDirectoryName)
 
@@ -239,49 +238,31 @@ class BackupActivity : AppCompatActivity() {
         if (!backupDirectory.exists()) {
             try {
                 if (backupDirectory.mkdirs()) {
-                    Log.d(
-                        "BackupActivity",
-                        "Directorio de respaldo creado en: ${backupDirectory.absolutePath}"
-                    )
-                    Toast.makeText(
-                        this,
-                        "Directorio de respaldo creado exitosamente",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val directoryPath = backupDirectory.absolutePath
+                    Log.d("BackupActivity", "Directorio de respaldo creado en: $directoryPath")
+                    Toast.makeText(this, "Directorio de respaldo creado en: $directoryPath", Toast.LENGTH_SHORT).show()
                 } else {
-                    Log.e("BackupActivity", "Error al crear el directorio de respaldo")
-                    Toast.makeText(
-                        this,
-                        "Error al crear el directorio de respaldo",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    val directoryPath = backupDirectory.absolutePath
+                    Log.e("BackupActivity", "Error al crear el directorio de respaldo en: $directoryPath")
+                    Toast.makeText(this, "Error al crear el directorio de respaldo en: $directoryPath", Toast.LENGTH_SHORT).show()
                     return
                 }
             } catch (e: Exception) {
-                Log.e(
-                    "BackupActivity",
-                    "Excepción al crear el directorio de respaldo: ${e.message}"
-                )
-                Toast.makeText(
-                    this,
-                    "Excepción al crear el directorio de respaldo",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+                val directoryPath = backupDirectory.absolutePath
+                Log.e("BackupActivity", "Excepción al crear el directorio de respaldo en: $directoryPath - ${e.message}")
+                Toast.makeText(this, "Excepción al crear el directorio de respaldo en: $directoryPath", Toast.LENGTH_SHORT).show()
                 return
             }
         } else {
-            Log.d(
-                "BackupActivity",
-                "El directorio de respaldo ya existe en: ${backupDirectory.absolutePath}"
-            )
-            Toast.makeText(this, "El directorio de respaldo ya existe", Toast.LENGTH_SHORT).show()
+            val directoryPath = backupDirectory.absolutePath
+            Log.d("BackupActivity", "El directorio de respaldo ya existe en: $directoryPath")
+            Toast.makeText(this, "El directorio de respaldo ya existe en: $directoryPath", Toast.LENGTH_SHORT).show()
         }
 
         // Realizar respaldo de la base de datos después de crear el directorio
         backupDatabase(backupDirectory)
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
