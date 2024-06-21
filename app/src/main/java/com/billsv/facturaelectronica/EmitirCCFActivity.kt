@@ -13,6 +13,7 @@ import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Dialog
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -94,12 +95,13 @@ class EmitirCCFActivity : AppCompatActivity() {
                 total += ((cantidad.toIntOrNull() ?: 0) * (precio.toDoubleOrNull() ?: 0.0))
 
                 val tableRow = TableRow(this)
-
+                val textSiz = if (isTablet()) 26f else 14f
                 val cantidadTextView = TextView(this).apply {
                     text = cantidad
                     layoutParams = TableRow.LayoutParams(40, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                         setMargins(8, 8, 8, 8)
                         gravity = Gravity.CENTER
+                        textSize = textSiz
                     }
                     textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                 }
@@ -108,6 +110,7 @@ class EmitirCCFActivity : AppCompatActivity() {
                     text = producto
                     layoutParams = TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply {
                         setMargins(8, 8, 8, 8)
+                        textSize = textSiz
                     }
                     textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                 }
@@ -116,6 +119,7 @@ class EmitirCCFActivity : AppCompatActivity() {
                     text = precio
                     layoutParams = TableRow.LayoutParams(70, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                         setMargins(8, 8, 8, 8)
+                        textSize = textSiz
                     }
                     textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                 }
@@ -129,10 +133,12 @@ class EmitirCCFActivity : AppCompatActivity() {
         } else {
             // Si no hay datos, puedes agregar una fila indicando que no hay datos disponibles
             val emptyRow = TableRow(this)
+            val textSiz = if (isTablet()) 26f else 14f
             val emptyTextView = TextView(this).apply {
                 text = "No hay artículos"
                 layoutParams = TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply {
                     setMargins(8, 8, 8, 8)
+                    textSize = textSiz
                 }
                 textAlignment = TextView.TEXT_ALIGNMENT_CENTER
             }
@@ -1481,5 +1487,8 @@ class EmitirCCFActivity : AppCompatActivity() {
     }
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+    private fun isTablet(): Boolean {
+        return (resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
     }
 }
