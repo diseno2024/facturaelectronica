@@ -8,6 +8,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Build
 import android.view.Gravity
@@ -167,16 +168,21 @@ class ResMensualCCFActivity : AppCompatActivity() {
     private fun actualizarTabla():MutableList<Map<String, String>> {
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
         val tableLayout2 = findViewById<TableLayout>(R.id.tableLayout2)
-
+        val tipoDSeleccionado = tipoD.selectedItem.toString()
         // Limpia todas las filas excepto la cabecera
         tableLayout.removeViews(1, tableLayout.childCount - 1)
 
         tableLayout2.removeViews(1, tableLayout2.childCount - 1)
-
+        if(tipoDSeleccionado=="Comprobante Crédito Fiscal"){
+            tableLayout2.visibility = View.GONE
+            tableLayout.visibility = View.VISIBLE
+        }else{
+            tableLayout2.visibility = View.VISIBLE
+            tableLayout.visibility = View.GONE
+        }
         // Obtén una referencia a la base de datos
         val app = application as MyApp
         val database = app.database
-        val tipoDSeleccionado = tipoD.selectedItem.toString()
         val mesSeleccionado = textViewMes.text.toString()
         val anioSeleccionado = textViewYear.text.toString()
 
@@ -511,11 +517,9 @@ class ResMensualCCFActivity : AppCompatActivity() {
         // Mostrar la notificación
         notificationManager.notify(0, notification)
     }
-
-
-
-
-
+    private fun isTablet(): Boolean {
+        return (resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
+    }
     private fun addRowToTable(
         tableLayout: TableLayout,
         vararg values: String?
@@ -527,12 +531,15 @@ class ResMensualCCFActivity : AppCompatActivity() {
         )
         tableRow.layoutParams = params
 
+        val textSiz = if (isTablet()) 28f else 12f
+
         values.forEach { value ->
             val textView = TextView(this).apply {
                 text = value ?: ""
                 gravity = Gravity.CENTER
                 setPadding(16, 16, 16, 16)
                 setTextColor(Color.BLACK)
+                textSize = textSiz
             }
             tableRow.addView(textView)
         }
