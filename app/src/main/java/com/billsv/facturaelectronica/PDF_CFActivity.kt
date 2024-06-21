@@ -53,6 +53,7 @@ import com.pdfview.PDFView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.math.RoundingMode
 
 class PDF_CFActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
@@ -1096,11 +1097,16 @@ class PDF_CFActivity : AppCompatActivity() {
                 val cantidad = dict?.getString("Cantidad")
                 val uniMedida = dict?.getString("Unidad")
                 val descripcion = dict?.getString("Producto")
-                val precioUni = dict?.getString("Precio")
-                val montoDescu = dict?.getString("montoDesc")
-                val ventaNoSuj = dict?.getString("ventaNS")
-                val ventaExenta = dict?.getString("ventaE")
-                val ventaGravada = dict?.getString("ventaG")
+                val precioUni = dict?.getString("Precio")?.toBigDecimal()
+                    ?.setScale(2, RoundingMode.HALF_UP).toString()
+                val montoDescu = dict?.getString("montoDesc")?.toBigDecimal()
+                    ?.setScale(2, RoundingMode.HALF_UP).toString()
+                val ventaNoSuj = dict?.getString("ventaNS")?.toBigDecimal()
+                    ?.setScale(2, RoundingMode.HALF_UP).toString()
+                val ventaExenta = dict?.getString("ventaE")?.toBigDecimal()
+                    ?.setScale(2, RoundingMode.HALF_UP).toString()
+                val ventaGravada = dict?.getString("ventaG")?.toBigDecimal()
+                    ?.setScale(2, RoundingMode.HALF_UP).toString()
                 // Dibujar cada celda de la fila
                 if (numItem != null) {
                     canvas.drawText(numItem, startX + 2, startY, paintInfoDocumento)
@@ -1132,9 +1138,16 @@ class PDF_CFActivity : AppCompatActivity() {
             val totalNoSuj = intent.getStringExtra("totalNoSuj")?.toDouble()
             val totalExenta = intent.getStringExtra("totalExenta")?.toDouble()
             val totalGravada = intent.getStringExtra("totalGravada")?.toDouble()
-            canvas.drawText("$$totalNoSuj", startX + 414, startY, paintInfoDocumento)
-            canvas.drawText("$$totalExenta", startX + 468, startY, paintInfoDocumento)
-            canvas.drawText("$$totalGravada", startX + 509, startY, paintInfoDocumento)
+
+            val totalNoSujshow = intent.getStringExtra("totalGravada")?.toDouble()?.toBigDecimal()
+                ?.setScale(2, RoundingMode.HALF_UP)
+            val totalExentashow = totalExenta?.toBigDecimal()
+                ?.setScale(2, RoundingMode.HALF_UP)
+            val totalGravadashow = totalNoSuj?.toBigDecimal()
+                ?.setScale(2, RoundingMode.HALF_UP)
+            canvas.drawText("$$totalNoSujshow", startX + 414, startY, paintInfoDocumento)
+            canvas.drawText("$$totalExentashow", startX + 468, startY, paintInfoDocumento)
+            canvas.drawText("$$totalGravadashow", startX + 509, startY, paintInfoDocumento)
 
             // LLama a los demás datos de DETALLES
 
@@ -1227,12 +1240,14 @@ class PDF_CFActivity : AppCompatActivity() {
 
             var montoTotalOperacion = "0.0"
             if (tF=="Factura"){
-                montoTotalOperacion = intent.getStringExtra("total").toString()
+                montoTotalOperacion = intent.getStringExtra("total")?.toDouble()?.toBigDecimal()
+                    ?.setScale(2, RoundingMode.HALF_UP).toString()
             }else if(tF=="CreditoFiscal"){
                 val total = intent.getStringExtra("total")?.toDouble()
                 val iva= intent.getStringExtra("Iva")?.toDouble()
                 val monto= total!! + iva!!
-                montoTotalOperacion = monto.toString()
+                montoTotalOperacion = monto.toBigDecimal()
+                    .setScale(2, RoundingMode.HALF_UP).toString()
             }
             // Muesta Info sobre el Monto Total de la Operación
             canvas.drawText("Monto Total de la Operación:", finalPosition1 - paintTITULO.measureText("Monto Total de la Operación:"), startY + 114, paintTITULO)
@@ -1246,12 +1261,14 @@ class PDF_CFActivity : AppCompatActivity() {
             // Muesta Info sobre el Total a Pagar
             var totalPagar = "0.0"
             if (tF=="Factura"){
-                totalPagar = intent.getStringExtra("total").toString()
+                totalPagar = intent.getStringExtra("total")?.toDouble()?.toBigDecimal()
+                    ?.setScale(2, RoundingMode.HALF_UP).toString()
             }else if(tF=="CreditoFiscal"){
                 val total = intent.getStringExtra("total")?.toDouble()
                 val iva= intent.getStringExtra("Iva")?.toDouble()
                 val totalm= total!! + iva!!
-                totalPagar = totalm.toString()
+                totalPagar = totalm.toBigDecimal()
+                    .setScale(2, RoundingMode.HALF_UP).toString()
             }
             canvas.drawText("Total a Pagar:", finalPosition1 - paintTITULO.measureText("Total a Pagar:"), startY + 136, paintTITULO)
             canvas.drawText("$$totalPagar", finalPosition2 - paintTITULO.measureText(totalPagar), startY + 136, paintInfoDocumento)
