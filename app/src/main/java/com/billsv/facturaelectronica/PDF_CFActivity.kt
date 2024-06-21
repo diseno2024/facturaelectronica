@@ -587,6 +587,9 @@ class PDF_CFActivity : AppCompatActivity() {
         val tiempo = "$formattedDate\n$formattedTime"
         return tiempo
     }
+
+    // Los Parámetros que estaban antes, cuando se guardaba con el numero de control
+    //jsonData: String,numeroControl:String?
     private fun saveJsonToExternalStorage(jsonData: String,numeroControl:String?) {
         val fileName = "$numeroControl.json"
         val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -1377,9 +1380,11 @@ class PDF_CFActivity : AppCompatActivity() {
             // El acceso lo hace através del directorio de la descargas
             val downloadsDir =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            // Con ese nombre se le va a guardar el PDF
-            val numeroControl = intent.getStringExtra("numeroControl")
-            val outputFilePath = File(downloadsDir, "$numeroControl.pdf")
+            // Con ese nombre se le va a guardar el PDF - Usando el código de generación
+            // El número de control ya no se va a guardar para guardar el PDF en CCF
+            //val numeroControl = intent.getStringExtra("numeroControl")
+            val codeGeneracionPDF = intent.getStringExtra("codGeneracion")
+            val outputFilePath = File(downloadsDir, "$codeGeneracionPDF.pdf")
 
             // Valida si el PDF no tuvo errores para generarse
             try {
