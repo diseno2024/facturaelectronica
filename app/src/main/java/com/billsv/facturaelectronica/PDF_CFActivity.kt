@@ -92,7 +92,18 @@ class PDF_CFActivity : AppCompatActivity() {
             btnYes.setOnClickListener {
                 val JSON = intent.getStringExtra("JSON")
                 if(JSON!=null) {
-                    json()
+                    var fecEmi:String = ""
+                    var horEmi:String = ""
+                    val fechayHora = FyH_emicion()
+                    if (fechayHora.isNotEmpty()) {
+                        fechayHora.let {
+                            val datos = it.split("\n")
+                            fecEmi = datos[0]
+                            horEmi = datos[1]
+                        }
+                    }
+                    json(fecEmi,horEmi)
+                    generarPdf("PDF",fecEmi,horEmi)
                     guardarDatosF(JSON)
                     borrararticulos(JSON)
                     borrarDui(JSON)
@@ -153,7 +164,7 @@ class PDF_CFActivity : AppCompatActivity() {
             dialogoGenerar.show()
         }
         // Crear y guardar el PDF en un archivo temporal
-        val pdfDocument = generarPdf()
+        val pdfDocument = generarPdf("VP","","")
         val pdfFile = savePdfToCache(this, pdfDocument)
 
         // Mostrar el PDF utilizando PDFView
@@ -230,7 +241,7 @@ class PDF_CFActivity : AppCompatActivity() {
             finish()
         }
     }
-    private fun json(){
+    private fun json(fecEmi:String,horEmi:String){
         var dui: String? = null
         var nombre: String? = null
         var telefono: String? = null
@@ -301,8 +312,8 @@ class PDF_CFActivity : AppCompatActivity() {
 
             }
         }
-        var fecEmi: String? = null
-        var horEmi: String? = null
+        /*var fecEmi: String? = null
+        var horEmi: String? = null*/
         val numeroContol = intent.getStringExtra("numeroControl")
         val codigoGeneracion = intent.getStringExtra("codGeneracion")
         val totalNoSujeto = intent.getStringExtra("totalNoSuj")?.toDouble()
@@ -314,14 +325,14 @@ class PDF_CFActivity : AppCompatActivity() {
         //ccf
         val valorIva = intent.getStringExtra("Iva")?.toDouble()
         val totalF= valorIva?.plus(total!!)
-        val fechayHora = FyH_emicion()
+        /*val fechayHora = FyH_emicion()
         if (fechayHora.isNotEmpty()) {
             fechayHora.let {
                 val datos = it.split("\n")
                 fecEmi = datos[0]
                 horEmi = datos[1]
             }
-        }
+        }*/
         val app = application as MyApp
         val ambiente = app.ambiente
         val documento = Documento(
@@ -762,7 +773,7 @@ class PDF_CFActivity : AppCompatActivity() {
 
         return "$letrasEntera $letrasDecimal".trim()
     }
-    private fun generarPdf():PdfDocument {
+    private fun generarPdf(letra:String,fecEmi:String,horEmi:String):PdfDocument {
         // Variable para poder almacenar el contenido del json através de una función
         //val jsonData = leerJsonDesdeAssets("DTE-01-OFIC0001-000000000000012.json")
 
@@ -849,8 +860,7 @@ class PDF_CFActivity : AppCompatActivity() {
             /*   Lado derecho   */
             val tipoModelo = 1
             val tipoOperacion = 1
-            val fecEmi = ""
-            val horEmi = ""
+
             // Dibujar el texto en el PDF
             // Info Modelo de Facturación
             if (tipoModelo == 1) {
@@ -1151,39 +1161,57 @@ class PDF_CFActivity : AppCompatActivity() {
             val descuGravada = "0.0"
             canvas.drawText("Monto global Desc., Rebajas y otros a ventas gravadas:", finalPosition1 - paintTITULO.measureText("Monto global Desc., Rebajas y otros a ventas gravadas:"), startY + 48, paintTITULO)
             canvas.drawText("$$descuGravada", finalPosition2 - paintTITULO.measureText(descuGravada), startY + 48, paintInfoDocumento)
-
+            val tF = intent.getStringExtra("JSON")
             // Obtener el array de tributos
-            val tributos: JSONArray? = null
-
+            var tributos: String? = null
+            if (tF=="Factura"){
+                tributos = null
+            }else{
+                tributos = "si"
+            }
 
 
             // Variables para almacenar la descripción y el valor
             var descripcion20 = ""
-            var valor20 = 0.0
+            var valor20: String = ""
             // Buscar y almacenar la descripción y el valor del tributo con código "20"
             if (tributos != null) {
-                for (i in 0 until tributos.length()) {
-                    val tributo = tributos.getJSONObject(i)
-                    if (tributo.getString("codigo") == "20") {
-                        descripcion20 = tributo.getString("descripcion")
-                        valor20 = tributo.getDouble("Iva")
-                        break  // Suponiendo que solo hay un tributo con código "20"
-                    }
-                }
+                descripcion20 = "Impuesto al Valor Agregado 13%"
+                valor20 = "0.13"
+            }else{
+                descripcion20 = ""
+                valor20 = ""
             }
-            // Dibuja lo que es el monto de IVA (13%) sobre el total de la venta
-            canvas.drawText(descripcion20, finalPosition1 - paintTITULO.measureText(descripcion20), startY + 59, paintTITULO)
-            canvas.drawText("$$valor20", finalPosition2 - paintTITULO.measureText(valor20.toString()), startY + 59, paintInfoDocumento)
-
+            if (tF=="Factura"){
+                // Dibuja lo que es el monto de IVA (13%) sobre el total de la venta
+                canvas.drawText(descripcion20, finalPosition1 - paintTITULO.measureText(descripcion20), startY + 59, paintTITULO)
+                canvas.drawText("$valor20", finalPosition2 - paintTITULO.measureText(valor20.toString()), startY + 59, paintInfoDocumento)
+            }else{
+                // Dibuja lo que es el monto de IVA (13%) sobre el total de la venta
+                canvas.drawText(descripcion20, finalPosition1 - paintTITULO.measureText(descripcion20), startY + 59, paintTITULO)
+                canvas.drawText("$$valor20", finalPosition2 - paintTITULO.measureText(valor20.toString()), startY + 59, paintInfoDocumento)
+            }
             // Muesta Info sobre el Sub-Total
             val subTotal =  intent.getStringExtra("total")
             canvas.drawText("Sub-Total:", finalPosition1 - paintTITULO.measureText("Sub-Total:"), startY + 70, paintTITULO)
             canvas.drawText("$$subTotal", finalPosition2 - paintTITULO.measureText(subTotal), startY + 70, paintInfoDocumento)
+            if(tF=="Factura"){
 
-            // Muesta Info sobre el IVA Percibido
-            /*val ivaPerci1 = resumen.getString("ivaPerci1")
-            canvas.drawText("IVA Percibido:", finalPosition1 - paintTITULO.measureText("IVA Percibido:"), startY + 81, paintTITULO)
-            canvas.drawText("$$ivaPerci1", finalPosition2 - paintTITULO.measureText(ivaPerci1), startY + 81, paintInfoDocumento)*/
+            }else{
+                // Muesta Info sobre el IVA Percibido
+                if (totalGravada != null) {
+                    if(totalGravada>=100){
+                        val ivaPerci1 = totalGravada?.times(0.01)
+                        canvas.drawText("IVA Percibido:", finalPosition1 - paintTITULO.measureText("IVA Percibido:"), startY + 81, paintTITULO)
+                        canvas.drawText("$$ivaPerci1", finalPosition2 - paintTITULO.measureText(ivaPerci1.toString()), startY + 81, paintInfoDocumento)
+                    }else{
+                        val ivaPerci1 = 0.00
+                        canvas.drawText("IVA Percibido:", finalPosition1 - paintTITULO.measureText("IVA Percibido:"), startY + 81, paintTITULO)
+                        canvas.drawText("$$ivaPerci1", finalPosition2 - paintTITULO.measureText(ivaPerci1.toString()), startY + 81, paintInfoDocumento)
+                    }
+
+                }
+            }
 
             // Muesta Info sobre el IVA Retenido
             val ivaRete1 = "0.0"
@@ -1196,7 +1224,6 @@ class PDF_CFActivity : AppCompatActivity() {
             canvas.drawText("$$reteRenta", finalPosition2 - paintTITULO.measureText(reteRenta), startY + 103, paintInfoDocumento)
 
             var montoTotalOperacion = "0.0"
-            val tF = intent.getStringExtra("JSON")
             if (tF=="Factura"){
                 montoTotalOperacion = intent.getStringExtra("total").toString()
             }else if(tF=="CreditoFiscal"){
@@ -1326,29 +1353,36 @@ class PDF_CFActivity : AppCompatActivity() {
 
         // Aquí dejan de generarse páginas del pdf
         pdfDocument.finishPage(pagina1)
-        /*
-                // Accede al directorio de descargas del dispositivo, ya sea virtual o físico
-                // El acceso lo hace através del directorio de la descargas
-                val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                // Con ese nombre se le va a guardar el PDF
-                val outputFilePath = File(downloadsDir, "Comprobante de Consumidor Final.pdf")
+        if(letra=="PDF") {
+            // Accede al directorio de descargas del dispositivo, ya sea virtual o físico
+            // El acceso lo hace através del directorio de la descargas
+            val downloadsDir =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            // Con ese nombre se le va a guardar el PDF
+            val numeroControl = intent.getStringExtra("numeroControl")
+            val outputFilePath = File(downloadsDir, "$numeroControl.pdf")
 
-                // Valida si el PDF no tuvo errores para generarse
-                try {
-                    pdfDocument.writeTo(FileOutputStream(outputFilePath))
-                    Toast.makeText(this, "Se creó el PDF correctamente en: ${outputFilePath.absolutePath}", Toast.LENGTH_LONG).show()
+            // Valida si el PDF no tuvo errores para generarse
+            try {
+                pdfDocument.writeTo(FileOutputStream(outputFilePath))
+                Toast.makeText(
+                    this,
+                    "Se creó el PDF correctamente en: ${outputFilePath.absolutePath}",
+                    Toast.LENGTH_LONG
+                ).show()
 
-                    val intentCF = Intent(applicationContext, VerPdfCF::class.java)
-                    startActivity(intentCF)
+                val intentCF = Intent(applicationContext, VerPdfCF::class.java)
+                startActivity(intentCF)
 
-                } catch (e: Exception) {
-                    // En caso de que los haya habido muestra un mensaje
-                    e.printStackTrace()
-                    Toast.makeText(this, "Error al crear el PDF: ${e.message}", Toast.LENGTH_LONG).show()
-                }*/
-
-        // Aquí finaliza la generación del documento pdf
-        // pdfDocument.close()
+            } catch (e: Exception) {
+                // En caso de que los haya habido muestra un mensaje
+                e.printStackTrace()
+                Toast.makeText(this, "Error al crear el PDF: ${e.message}", Toast.LENGTH_LONG)
+                    .show()
+            }
+            // Aquí finaliza la generación del documento pdf
+            pdfDocument.close()
+        }
         return pdfDocument
 
     }
