@@ -98,6 +98,14 @@ class RestauracionActivity : AppCompatActivity() {
         return if (timestamp != -1L) Date(timestamp) else null
     }
 
+    private fun getFriendlyPath(absolutePath: String): String {
+        val rootPath = "/storage/emulated/0"
+        return if (absolutePath.startsWith(rootPath)) {
+            "Storage" + absolutePath.substring(rootPath.length)
+        } else {
+            absolutePath
+        }
+    }
     // Función para obtener el rango de fechas de restauración
     private fun obtenerRangoRestauracion(): Pair<Date, Date>? {
         // Aquí deberías implementar la lógica para obtener el rango de fechas de restauración
@@ -151,14 +159,16 @@ class RestauracionActivity : AppCompatActivity() {
                 if (restorationDirectory.mkdirs()) {
                     // Copiar todos los archivos del directorio de respaldo al directorio de restauración
                     copyDirectory(backupDirectory, restorationDirectory)
-                    Log.d("RestauracionActivity", "Datos restaurados con éxito en: ${restorationDirectory.absolutePath}")
+                    val restorationDirectoryPath = getFriendlyPath(restorationDirectory.absolutePath)
+                    Log.d("RestauracionActivity", "Datos restaurados con éxito en: $restorationDirectoryPath")
                     Toast.makeText(this, "Datos restaurados con éxito", Toast.LENGTH_SHORT).show()
 
                     // Crear archivo ZIP con los datos restaurados
                     val zipFile = File(parentDir, "$restorationDirectoryName.zip")
                     zipDirectory(restorationDirectory, zipFile)
-                    Log.d("RestauracionActivity", "Datos comprimidos con éxito en: ${zipFile.absolutePath}")
-                    Toast.makeText(this, "Datos comprimidos con éxito en: ${zipFile.absolutePath}", Toast.LENGTH_LONG).show()
+                    val zipFilePath = getFriendlyPath(zipFile.absolutePath)
+                    Log.d("RestauracionActivity", "Datos comprimidos con éxito en: $zipFilePath")
+                    Toast.makeText(this, "Datos comprimidos con éxito en: $zipFilePath", Toast.LENGTH_LONG).show()
                 } else {
                     Log.e("RestauracionActivity", "Error al crear el directorio de restauración")
                     Toast.makeText(this, "Error al crear el directorio de restauración", Toast.LENGTH_SHORT).show()

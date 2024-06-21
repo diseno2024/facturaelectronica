@@ -238,23 +238,23 @@ class BackupActivity : AppCompatActivity() {
         if (!backupDirectory.exists()) {
             try {
                 if (backupDirectory.mkdirs()) {
-                    val directoryPath = backupDirectory.absolutePath
+                    val directoryPath = getFriendlyPath(backupDirectory.absolutePath)
                     Log.d("BackupActivity", "Directorio de respaldo creado en: $directoryPath")
                     Toast.makeText(this, "Directorio de respaldo creado en: $directoryPath", Toast.LENGTH_SHORT).show()
                 } else {
-                    val directoryPath = backupDirectory.absolutePath
+                    val directoryPath = getFriendlyPath(backupDirectory.absolutePath)
                     Log.e("BackupActivity", "Error al crear el directorio de respaldo en: $directoryPath")
                     Toast.makeText(this, "Error al crear el directorio de respaldo en: $directoryPath", Toast.LENGTH_SHORT).show()
                     return
                 }
             } catch (e: Exception) {
-                val directoryPath = backupDirectory.absolutePath
+                val directoryPath = getFriendlyPath(backupDirectory.absolutePath)
                 Log.e("BackupActivity", "Excepción al crear el directorio de respaldo en: $directoryPath - ${e.message}")
                 Toast.makeText(this, "Excepción al crear el directorio de respaldo en: $directoryPath", Toast.LENGTH_SHORT).show()
                 return
             }
         } else {
-            val directoryPath = backupDirectory.absolutePath
+            val directoryPath = getFriendlyPath(backupDirectory.absolutePath)
             Log.d("BackupActivity", "El directorio de respaldo ya existe en: $directoryPath")
             Toast.makeText(this, "El directorio de respaldo ya existe en: $directoryPath", Toast.LENGTH_SHORT).show()
         }
@@ -289,22 +289,25 @@ class BackupActivity : AppCompatActivity() {
             }
             // Copiar todos los archivos al directorio de respaldo
             copyDirectory(dbDir, backupDirDb)
-            Log.d("BackupActivity", "Respaldo realizado con éxito: ${backupDirDb.absolutePath}")
-            Toast.makeText(this, "Respaldo realizado con éxito", Toast.LENGTH_SHORT).show()
+            val directoryPath = getFriendlyPath(backupDirDb.absolutePath)
+            Log.d("BackupActivity", "Respaldo realizado con éxito en: $directoryPath")
+            Toast.makeText(this, "Respaldo realizado con éxito en: $directoryPath", Toast.LENGTH_SHORT).show()
 
             // Crear archivo zip
             val zipFile = File(backupDir, "${backupDirDb.name}.zip")
             zipDirectory(backupDirDb, zipFile)
-            Log.d("BackupActivity", "Archivos comprimidos con éxito: ${zipFile.absolutePath}")
-            Toast.makeText(this, "Archivos comprimidos con éxito", Toast.LENGTH_SHORT).show()
+            val zipFilePath = getFriendlyPath(zipFile.absolutePath)
+            Log.d("BackupActivity", "Archivos comprimidos con éxito en: $zipFilePath")
+            Toast.makeText(this, "Archivos comprimidos con éxito en: $zipFilePath", Toast.LENGTH_SHORT).show()
 
             // Actualizar la fecha del último respaldo
             actualizarFechaUltimoRespaldo(Date())
             textFecha.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
         } catch (e: IOException) {
             e.printStackTrace()
-            Log.e("BackupActivity", "Error al realizar el respaldo: ${e.message}")
-            Toast.makeText(this, "Error al realizar el respaldo", Toast.LENGTH_SHORT).show()
+            val directoryPath = getFriendlyPath(backupDirDb.absolutePath)
+            Log.e("BackupActivity", "Error al realizar el respaldo en: $directoryPath - ${e.message}")
+            Toast.makeText(this, "Error al realizar el respaldo en: $directoryPath", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -357,7 +360,12 @@ class BackupActivity : AppCompatActivity() {
     }
 
     private fun getFriendlyPath(absolutePath: String): String {
-        return absolutePath.replace("/storage/emulated/0", "Internal Storage")
+        val rootPath = "/storage/emulated/0"
+        return if (absolutePath.startsWith(rootPath)) {
+            "Storage" + absolutePath.substring(rootPath.length)
+        } else {
+            absolutePath
+        }
     }
 
     private fun leerFechaUltimoRespaldo(): Date? {
