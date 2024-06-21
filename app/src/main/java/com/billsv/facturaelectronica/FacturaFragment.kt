@@ -118,19 +118,33 @@ class FacturaFragment : Fragment() {
             currentData = newData
             facturaAdapter.setFacturas(currentData)
             currentPage++
+            totalResults = obtenerTotalResultados() // Asegúrate de actualizar totalResults
             updateButtonVisibility()
             updatePageNumberTextView() // Actualizar el número de página
-            // Si hay un filtro activo, mostrar el botón de limpiar filtro
-            if (etDui.text.isNotBlank()) {
-                btnClearFilter.visibility = View.VISIBLE
-            }
         }
     }
 
+    private fun loadPreviousItems() {
+        if (currentPage > 1) {
+            currentPage-- // Retroceder una página
+            val previousData = obtenerDatosPaginados((currentPage - 1) * pageSize, pageSize)
+            currentData = previousData
+            facturaAdapter.setFacturas(currentData)
+            updateButtonVisibility()
+            updatePageNumberTextView() // Actualizar el número de página
+        }
+    }
+
+
     private fun updatePageNumberTextView() {
-        val totalPages = getTotalPages()
-        val pageNumberText = "Page $currentPage/$totalPages"
-        viewpage.text = pageNumberText
+        if (totalResults > pageSize) {
+            val totalPages = getTotalPages()
+            val pageNumberText = "Page $currentPage/$totalPages"
+            viewpage.text = pageNumberText
+            viewpage.visibility = View.VISIBLE
+        } else {
+            viewpage.visibility = View.GONE
+        }
     }
 
     private fun getTotalPages(): Int {
@@ -145,20 +159,7 @@ class FacturaFragment : Fragment() {
         return currentData.size
     }
 
-    private fun loadPreviousItems() {
-        if (currentPage > 1) {
-            currentPage-- // Retroceder una página
-            val previousData = obtenerDatosPaginados((currentPage - 1) * pageSize, pageSize)
-            currentData = previousData
-            facturaAdapter.setFacturas(currentData)
-            updateButtonVisibility()
-            updatePageNumberTextView() // Actualizar el número de página
-            // Si hay un filtro activo, mostrar el botón de limpiar filtro
-            if (etDui.text.isNotBlank()) {
-                btnClearFilter.visibility = View.VISIBLE
-            }
-        }
-    }
+
 
     private fun obtenerDatosPaginados(offset: Int, limit: Int): List<Factura> {
         val app = requireActivity().application as MyApp
@@ -235,9 +236,10 @@ class FacturaFragment : Fragment() {
         }
     }
     private fun updateButtonVisibility() {
-        btnLoadMore.visibility = if (currentData.size >= pageSize) View.VISIBLE else View.GONE
+        btnLoadMore.visibility = if ((currentPage * pageSize) < totalResults) View.VISIBLE else View.GONE
         btnLoadPrevious.visibility = if (currentPage > 1) View.VISIBLE else View.GONE
     }
+
     private fun obtenerTotalResultados(): Int {
         val app = requireActivity().application as MyApp
         val database = app.database
