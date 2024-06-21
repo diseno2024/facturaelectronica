@@ -3,6 +3,7 @@ package com.billsv.facturaelectronica
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,20 +16,23 @@ import com.couchbase.lite.SelectResult
 import com.couchbase.lite.DataSource
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
-
-
+import com.couchbase.lite.CouchbaseLiteException
 
 
 class FacturaFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var facturaAdapter: FacturaAdapter
-    private lateinit var btnLoadMore: Button
-    private lateinit var btnLoadPrevious: Button
+    private lateinit var btnLoadMore: ImageButton
+    private lateinit var btnLoadPrevious: ImageButton
     private lateinit var etDui: EditText
-    private lateinit var btnBuscar: Button
-    private lateinit var btnClearFilter: Button
+    private lateinit var btnBuscar: ImageButton
+    private lateinit var btnClearFilter: ImageButton
+    private lateinit var viewpage: TextView
+    private var totalResults = 0
 
     private var currentPage = 0
     private val pageSize = 3
@@ -52,7 +56,8 @@ class FacturaFragment : Fragment() {
         btnLoadPrevious.setOnClickListener {
             loadPreviousItems()
         }
-
+        // Inicializa viewpage
+        viewpage = view.findViewById(R.id.viewpage)
         etDui = view.findViewById(R.id.etDui)
         btnBuscar = view.findViewById(R.id.btnBuscar)
         btnBuscar.setOnClickListener {
@@ -114,7 +119,7 @@ class FacturaFragment : Fragment() {
             facturaAdapter.setFacturas(currentData)
             currentPage++
             updateButtonVisibility()
-
+            updatePageNumberTextView() // Actualizar el número de página
             // Si hay un filtro activo, mostrar el botón de limpiar filtro
             if (etDui.text.isNotBlank()) {
                 btnClearFilter.visibility = View.VISIBLE
@@ -122,15 +127,32 @@ class FacturaFragment : Fragment() {
         }
     }
 
+    private fun updatePageNumberTextView() {
+        val totalPages = getTotalPages()
+        val pageNumberText = "Page $currentPage/$totalPages"
+        viewpage.text = pageNumberText
+    }
+
+    private fun getTotalPages(): Int {
+        // Calcular el número total de páginas basado en el total de resultados y el tamaño de página
+        return (totalResults + pageSize - 1) / pageSize
+    }
+
+    private fun obtenerTotalDatos(): Int {
+        // Retorna el tamaño total de los datos
+        // Aquí deberías implementar la lógica para obtener el total de datos desde tu fuente de datos
+        // Por ejemplo, si currentData es una lista, puedes retornar currentData.size
+        return currentData.size
+    }
+
     private fun loadPreviousItems() {
         if (currentPage > 1) {
-            currentPage -= 2 // Retroceder dos páginas para cargar los datos anteriores
-            val previousData = obtenerDatosPaginados(currentPage * pageSize, pageSize)
+            currentPage-- // Retroceder una página
+            val previousData = obtenerDatosPaginados((currentPage - 1) * pageSize, pageSize)
             currentData = previousData
             facturaAdapter.setFacturas(currentData)
-            currentPage++
             updateButtonVisibility()
-
+            updatePageNumberTextView() // Actualizar el número de página
             // Si hay un filtro activo, mostrar el botón de limpiar filtro
             if (etDui.text.isNotBlank()) {
                 btnClearFilter.visibility = View.VISIBLE
@@ -159,6 +181,9 @@ class FacturaFragment : Fragment() {
             dataList.add(factura)
         }
 
+        // Actualizar el total de resultados cuando se cargan nuevos datos
+        totalResults = obtenerTotalResultados()
+
         return dataList
     }
 
@@ -186,6 +211,7 @@ class FacturaFragment : Fragment() {
             currentData = dataList
             facturaAdapter.setFacturas(currentData)
             btnClearFilter.visibility = View.VISIBLE // Mostrar el botón de limpiar filtro
+            btnBuscar.visibility = View.GONE // Ocultar el botón de buscar
         } else {
             Toast.makeText(context, "No se encontraron facturas con ese DUI", Toast.LENGTH_SHORT).show()
         }
@@ -195,7 +221,8 @@ class FacturaFragment : Fragment() {
         etDui.text.clear()
         currentPage = 0
         loadMoreItems()
-        btnClearFilter.visibility = View.GONE
+        btnClearFilter.visibility = View.GONE // Ocultar el botón de limpiar filtro
+        btnBuscar.visibility = View.VISIBLE // Mostrar el botón de buscar
     }
 
     private fun formatearDUI(dui: String): String {
@@ -210,5 +237,22 @@ class FacturaFragment : Fragment() {
     private fun updateButtonVisibility() {
         btnLoadMore.visibility = if (currentData.size >= pageSize) View.VISIBLE else View.GONE
         btnLoadPrevious.visibility = if (currentPage > 1) View.VISIBLE else View.GONE
+    }
+    private fun obtenerTotalResultados(): Int {
+        val app = requireActivity().application as MyApp
+        val database = app.database
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipoD").equalTo(Expression.string("Factura Consumidor Final")))
+
+        try {
+            val result = query.execute()
+            totalResults = result.allResults().size
+            Log.d("ReClienteActivity", "Número de documentos de tipo 'cf': $totalResults")
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al contar los documentos de tipo 'ConfEmisor': ${e.message}", e)
+        }
+
+        return totalResults
     }
 }

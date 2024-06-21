@@ -7,88 +7,104 @@
     android:layout_height="match_parent"
     tools:context=".FacturaFragment">
 
-    <Button
-        android:id="@+id/btnLoadPrevious"
-        android:layout_width="136dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:text="Anterior"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/listaFactura"
-        app:layout_constraintEnd_toStartOf="@id/listaFactura"
-        app:layout_constraintHorizontal_bias="0.129"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/listaFactura"
-        android:layout_width="wrap_content"
+
+
+    <EditText
+        android:id="@+id/etDui"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Factura"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="40dp"
+        android:backgroundTint="#2E594A"
+        android:hint="Buscar por DUI"
+        android:inputType="number"
+        android:textColor="#4A8C74"
+        android:textColorHint="#4A8C74"
+        app:layout_constraintEnd_toEndOf="@id/btnBuscar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnLoadMore"
-        android:layout_width="136dp"
-        android:layout_height="50dp"
-        android:text="Mostrar más"
+
+    <ImageButton
+        android:id="@+id/btnBuscar"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="20dp"
+        android:elevation="5dp"
+        android:visibility="visible"
+        android:src="@drawable/buscar"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/etDui"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
-        app:layout_constraintStart_toEndOf="@id/listaFactura"
-        app:layout_constraintTop_toTopOf="@id/listaFactura" />
+        app:layout_constraintStart_toEndOf="@+id/etDui"
+        app:layout_constraintTop_toTopOf="@id/etDui" />
+
+    <ImageButton
+        android:id="@+id/btnClearFilter"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="20dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/quitar"
+        android:text="Quitar filtro"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/etDui"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etDui"
+        app:layout_constraintTop_toTopOf="@id/etDui" />
+
+
+    <ImageButton
+        android:id="@+id/btnLoadMore"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="109dp"
+        android:layout_marginBottom="90dp"
+        android:background="@android:color/transparent"
+        android:elevation="5dp"
+        android:src="@drawable/siguiente"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnLoadPrevious"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="111dp"
+        android:layout_marginBottom="90dp"
+        android:background="@android:color/transparent"
+        android:elevation="5dp"
+        android:src="@drawable/anterior"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listRecycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@id/btnLoadMore"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etDui" />
+
+    <TextView
+        android:id="@+id/viewpage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="97dp"
+        android:padding="8dp"
+        android:text="Page 1/5"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/listaFactura" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/etDui"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Buscar por DUI"
-        android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@id/btnBuscar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/listaFactura"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"/>
-
-
-    <Button
-        android:id="@+id/btnBuscar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Buscar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/etDui"
-        app:layout_constraintTop_toBottomOf="@id/listaFactura"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"/>
-
-    <Button
-        android:id="@+id/btnClearFilter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
-        android:text="Quitar filtro"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.875"
-        app:layout_constraintStart_toEndOf="@id/btnBuscar"
-        app:layout_constraintTop_toBottomOf="@id/listaFactura" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
