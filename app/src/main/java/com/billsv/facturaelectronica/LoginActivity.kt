@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.SpannableString
@@ -33,9 +34,18 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         private const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 100
-        private val permissionList = listOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
+        private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            listOf(
+                Manifest.permission.READ_MEDIA_AUDIO,
+                Manifest.permission.READ_MEDIA_VIDEO,
+                Manifest.permission.READ_MEDIA_IMAGES
+            )
+        } else {
+            listOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
