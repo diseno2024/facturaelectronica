@@ -450,6 +450,19 @@ class EmitirCFActivity : AppCompatActivity() {
             }else{
                 if(resultsE.isEmpty()){
                     showToast("Falta la información del Emisor")
+                    val faltaempresa = Dialog(this)
+                    faltaempresa.setContentView(R.layout.layout_dialogo_llenar) // R.layout.layout_custom_dialog es tu diseño personalizado
+                    val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // 80% del ancho de la pantalla
+                    val height = (resources.displayMetrics.heightPixels * 0.5).toInt() // 60% del alto de la pantalla
+                    faltaempresa.window?.setLayout(width, height)
+                    faltaempresa.setCanceledOnTouchOutside(false)
+                    val llenar = faltaempresa.findViewById<Button>(R.id.btnllenar)
+                    llenar.setOnClickListener {
+                        val intent = Intent(this, InfoEmisorActivity::class.java)
+                        intent.putExtra("clave","faltacf")
+                        startActivity(intent)
+                    }
+                    faltaempresa.show()
                 }
                 if(resultsA.isEmpty()){
                     showToast("Debe de haber al menos un Artículo")

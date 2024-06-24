@@ -989,7 +989,7 @@ class PrinReClienteActivity : AppCompatActivity() {
         //////
 
         // Verifica que todos los campos estén llenos
-        if (nombreText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() ) {
+        if (nombreText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() ) {
             Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
             return false
         }

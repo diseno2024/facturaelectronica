@@ -621,11 +621,29 @@ class InfoEmisorActivity : AppCompatActivity() {
             }
 
         })
+        val clave = intent.getStringExtra("clave")
+        if(clave=="faltacf" || clave=="faltaccf"){
+            btnAtras.visibility = View.GONE
+        }
         val btnGuardar: Button = findViewById(R.id.Guardar)
         btnGuardar.setOnClickListener {
             if (validarEntradas()){
-                guardarInformacion()
-                recreate()
+                if(clave=="faltacf"){
+                    guardarInformacion()
+                    recreate()
+                    val intent = Intent(this,EmitirCFActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }else if(clave=="faltaccf"){
+                    guardarInformacion()
+                    recreate()
+                    val intent = Intent(this,EmitirCCFActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }else{
+                    guardarInformacion()
+                    recreate()
+                }
                 /*val intent = Intent(this, MenuActivity::class.java)
                 startActivity(intent)*/
             }
