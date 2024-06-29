@@ -1072,8 +1072,11 @@ class InfoEmisorActivity : AppCompatActivity() {
         val emailText = Correo.text.toString()
 
         // Verifica que todos los campos estén llenos
-        if (nombreText.isEmpty() || nitText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() || AcEco.isEmpty() || nombrecText.isEmpty()){
+        if (nombreText.isEmpty() || emailText.isEmpty() || telefonoText.isEmpty() || AcEco.isEmpty() || nombrecText.isEmpty()) {
             Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+            return false
+        } else if (nitText.isEmpty() && duiText.isEmpty()) {
+            Toast.makeText(this, "Debe proporcionar NIT o DUI", Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -1082,17 +1085,18 @@ class InfoEmisorActivity : AppCompatActivity() {
             Toast.makeText(this, "Correo electrónico no válido", Toast.LENGTH_SHORT).show()
             return false
         }
-        // Verifica que el dui sea un número válido de 8 dígitos
-        if (!duiText.matches(Regex("\\d{9}"))) {
+        // Verifica que el DUI sea un número válido de 9 dígitos solo si no está vacío
+        if (duiText.isNotEmpty() && !duiText.matches(Regex("\\d{9}"))) {
             Toast.makeText(this, "DUI debe ser un número válido de 9 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
 
         // Verifica que el NIT sea un número válido
-        if (!nitText.matches(Regex("\\d{14}"))) {
+        if (nitText.isNotEmpty() && !nitText.matches(Regex("\\d{14}"))) {
             Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
             return false
         }
+
         if (!nrcText.matches(Regex("\\d{7}"))) {
             Toast.makeText(this, "NRC debe ser un número válido", Toast.LENGTH_SHORT).show()
             return false
