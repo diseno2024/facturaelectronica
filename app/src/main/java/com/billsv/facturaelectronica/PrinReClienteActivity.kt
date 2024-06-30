@@ -769,10 +769,13 @@ class PrinReClienteActivity : AppCompatActivity() {
 
         //////
 
-        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+        val query = QueryBuilder
+            .select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("dui").equalTo(Expression.string(duiText)))
-
+            .where(
+                Expression.property("dui").equalTo(Expression.string(duiText))
+                    .and(Expression.property("dui").notEqualTo(Expression.string("")))
+            )
         try {
             val resultSet = query.execute()
             val results = resultSet.allResults()
@@ -970,12 +973,14 @@ class PrinReClienteActivity : AppCompatActivity() {
             showToast("Error al buscar el NIT")
         }
 
-        //////
-
-        val query3 = QueryBuilder.select(SelectResult.expression(Meta.id))
+        // Query para verificar si ya existe un cliente con el mismo NRC
+        val query3 = QueryBuilder
+            .select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("nrc").equalTo(Expression.string(nrcText)))
-
+            .where(
+                Expression.property("nrc").equalTo(Expression.string(nrcText))
+                    .and(Expression.property("nrc").notEqualTo(Expression.string("")))
+            )
         try {
             val resultSet = query3.execute()
             val results = resultSet.allResults()
@@ -992,15 +997,13 @@ class PrinReClienteActivity : AppCompatActivity() {
             showToast("Error al buscar el NRC")
         }
 
-        //////
-
         // Verifica que todos los campos estén llenos
         if (nombreText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() ) {
             Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
             return false
         }
         // Verifica que el dui sea un número válido de 8 dígitos
-        if (!duiText.matches(Regex("\\d{9}"))) {
+        if (duiText.isNotEmpty() && !duiText.matches(Regex("\\d{9}"))) {
             Toast.makeText(this, "DUI debe ser un número válido de 9 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
@@ -1017,13 +1020,13 @@ class PrinReClienteActivity : AppCompatActivity() {
         }
         if (tipoCText=="Contribuyente"){
             // Verifica que todos los campos estén llenos
-            if (nrcText.isEmpty() || nitText.isEmpty()  ||   actividadEcoText.isEmpty()) {
+            if (nrcText.isEmpty()  ||   actividadEcoText.isEmpty()) {
                 Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
                 return false
             }
 
             // Verifica que el NIT sea un número válido
-            if (!nitText.matches(Regex("\\d{14}"))) {
+            if (nitText.isNotEmpty() && !nitText.matches(Regex("\\d{14}"))) {
                 Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
                 return false
             }
