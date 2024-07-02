@@ -128,5 +128,5 @@ data class DocumentoC(
     val extension: ExtensionC,
     val apendice: String?,
     val selloRecibido: String?,
-    val firmaElectronica: String?
+    var firmaElectronica: String?
 )
