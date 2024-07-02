@@ -660,17 +660,20 @@ class ReClienteActivity : AppCompatActivity() {
 
         //////
         // Verifica que todos los campos estén llenos
-        if (nombreText.isEmpty() || duiText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() || nitText.isEmpty()) {
+        if (nombreText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty()) {
             Toast.makeText(this, "Llene todos los campos necesarios", Toast.LENGTH_SHORT).show()
             return false
+        }else if (nitText.isEmpty() && duiText.isEmpty()) {
+            Toast.makeText(this, "Debe proporcionar NIT o DUI", Toast.LENGTH_SHORT).show()
+            return false
         }
-        // Verifica que el dui sea un número válido de 8 dígitos
-        if (!duiText.matches(Regex("\\d{9}"))) {
+        // Verifica que el DUI sea un número válido de 9 dígitos solo si no está vacío
+        if (duiText.isNotEmpty() && !duiText.matches(Regex("\\d{9}"))) {
             Toast.makeText(this, "DUI debe ser un número válido de 9 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
         // Verifica que el NIT sea un número válido
-        if (!nitText.matches(Regex("\\d{14}"))) {
+        if (nitText.isNotEmpty() && !nitText.matches(Regex("\\d{14}"))) {
             Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
             return false
         }
