@@ -101,4 +101,5 @@ dependencies {
     implementation ("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5")
     implementation ("com.itextpdf:itext7-core:7.1.16")
 
+    implementation ("org.bouncycastle:bcprov-jdk15on:1.68")
 }
