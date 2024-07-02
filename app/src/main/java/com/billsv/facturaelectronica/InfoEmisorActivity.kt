@@ -3,6 +3,7 @@ package com.billsv.facturaelectronica
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
@@ -34,6 +35,15 @@ import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
 import com.google.android.material.card.MaterialCardView
 import android.text.InputFilter
+import android.util.Base64.encodeToString
+import androidx.annotation.RequiresApi
+
+import com.billsv.signer.*;
+import java.io.ByteArrayInputStream
+import java.security.Key
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
+import java.util.Base64
 
 class InfoEmisorActivity : AppCompatActivity() {
     private lateinit var database: Database
@@ -997,7 +1007,9 @@ class InfoEmisorActivity : AppCompatActivity() {
             // Guardar el nuevo documento
             database.save(document)
             Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
+            generarClavesyCertificado();
             Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+
         } catch (e: CouchbaseLiteException) {
             Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
             Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
@@ -1111,4 +1123,47 @@ class InfoEmisorActivity : AppCompatActivity() {
         return true
     }
 
+    private fun generarClavesyCertificado() {
+        val userInfo = obtenerInfoEmisor(database)
+        Log.d("InfoEmisorActivity", "Entran a generarClavesyCertificado")
+        userInfo?.let {
+            try {
+                val keyPair = generadorClaves.generarParClaves()
+                Log.d("InfoEmisorActivity", "Llaves generadas")
+                val certificate = generadorClaves.generarCertificado(keyPair, it)
+                Log.d("InfoEmisorActivity", "Certificado generado")
+
+                // Guardar claves y certificado en el Keystore
+                val keystoreManager = guardarClavesEnKeystore()
+                keystoreManager.guardarClavesEnKeystore(keyPair, certificate)
+                Log.d("InfoEmisorActivity", "Llaves y certificado guardados en el Keystore")
+
+                // Imprimir certificado en formato X.509
+                Log.d("InfoEmisorActivity", "Imprimir certificado en formato X.509")
+                val encodedCert = certificate.toString()
+                Log.d("InfoEmisorActivity", "Certificado: \n$encodedCert")
+
+                // Imprimir llave pública y privada en formato hexadecimal
+                Log.d("InfoEmisorActivity", "Imprimir llave pública en formato hexadecimal")
+                val encodedPublicKey = toHex(keyPair.public.encoded)
+                Log.d("InfoEmisorActivity", "Llave pública: \n$encodedPublicKey")
+
+                Log.d("InfoEmisorActivity", "Imprimir llave privada en formato hexadecimal")
+                val encodedPrivateKey = toHex(keyPair.private.encoded)
+                Log.d("InfoEmisorActivity", "Llave privada: \n$encodedPrivateKey")
+            } catch (e: Exception) {
+                Log.e("InfoEmisorActivity", "Error al generar claves y certificado: ${e.message}")
+            }
+        } ?: run {
+            Log.e("InfoEmisorActivity", "No se encontró información del emisor")
+        }
+    }
+
+    private fun toHex(bytes: ByteArray): String {
+        val sb = StringBuilder()
+        for (b in bytes) {
+            sb.append(String.format("%02x", b))
+        }
+        return sb.toString()
+    }
 }
