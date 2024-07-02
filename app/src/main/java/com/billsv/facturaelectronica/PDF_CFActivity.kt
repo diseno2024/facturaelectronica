@@ -24,6 +24,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.net.toUri
 import com.billsv.facturaelectronica.databinding.ActivityPdfCfactivityBinding
+import com.billsv.signer.firmarDatos
+import com.billsv.signer.obtenerClavePrivada
+import com.billsv.signer.obtenerClavePublica
 import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
@@ -54,6 +57,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.math.RoundingMode
+import android.util.Base64
 
 class PDF_CFActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
@@ -526,39 +530,57 @@ class PDF_CFActivity : AppCompatActivity() {
             selloRecibido = "Sello de recibido",
             firmaElectronica = "Firma electrónica"
         )
+
         val JSON = intent.getStringExtra("JSON")
-        if(JSON=="Factura"){
-            val articulos = obtenerDatosGuardados("F")
-            val cuerpoDocumentos = createCuerpoDocumento(articulos)
+        var jsonString: String? = null
 
-            documento.cuerpoDocumento = cuerpoDocumentos
+        // Obtener clave privada y pública
+        val alias = "BillSV"
+        val clavePrivada = obtenerClavePrivada(alias)
 
-            // Crear una instancia de ObjectMapper
-            val mapper = ObjectMapper().registerModule(KotlinModule())
-            mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        clavePrivada?.let {
+            if (JSON=="Factura") {
+                val articulos = obtenerDatosGuardados("F")
+                val cuerpoDocumentos = createCuerpoDocumento(articulos)
+                documento.cuerpoDocumento = cuerpoDocumentos
 
-            // Convertir la instancia de Documento a JSON
-            val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
+                // Firmar el JSON
+                val firma = firmarDatos(documento, clavePrivada)
 
-            // Anterior
-            //saveJsonToExternalStorage(json,numeroContol)
-            saveJsonToExternalStorage(json,codigoGeneracion)
-        }else if(JSON=="CreditoFiscal"){
-            val articulos = obtenerDatosGuardados("CF")
-            val cuerpoDocumentosC = createCuerpoDocumentoC(articulos)
+                //Agregar la firma al documento
+                documento.firmaElectronica = firma
 
-            documento2.cuerpoDocumento = cuerpoDocumentosC
+                // Crear una instancia de ObjectMapper
+                val mapper = ObjectMapper().registerModule(KotlinModule())
+                mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
 
-            // Crear una instancia de ObjectMapper
-            val mapper = ObjectMapper().registerModule(KotlinModule())
-            mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+                // Convertir el objeto a JSON
+                jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
+            } else if (JSON == "CreditoFiscal") {
+                val articulos = obtenerDatosGuardados("CF")
+                val cuerpoDocumentosC = createCuerpoDocumentoC(articulos)
+                documento2.cuerpoDocumento = cuerpoDocumentosC
 
-            // Convertir la instancia de Documento a JSON
-            val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento2)
+                // Firmar el JSON
+                val firma = firmarDatos(documento2, clavePrivada)
 
-            // Anterior
-            //saveJsonToExternalStorage(json,numeroContol)
-            saveJsonToExternalStorage(json,codigoGeneracion)
+                // Agregar la firma al documento
+                documento2.firmaElectronica = firma
+
+                // Crear una instancia de ObjectMapper
+                val mapper = ObjectMapper().registerModule(KotlinModule())
+                mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+
+                // Convertir el objeto a JSON
+                jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento2)
+            }
+
+            // Guardar el JSON en un archivo
+            jsonString?.let {
+                saveJsonToExternalStorage(it, codigoGeneracion)
+            }
+        } ?: run {
+            Log.d("PDF_CFActivity", "No se pudo obtener la clave privada para el alias $alias")
         }
     }
 
