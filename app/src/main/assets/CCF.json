@@ -1,0 +1,151 @@
+{
+  "identificacion": {
+    "version": 3,
+    "ambiente": "01",
+    "tipoDte": "03",
+    "numeroControl": "0123",
+    "codigoGeneracion": "0123",
+    "tipoModelo": 1,
+    "tipoOperacion": 1,
+    "tipoContingencia": null,
+    "motivoContin": null,
+    "fecEmi": "2024-02-06",
+    "horEmi": "10:15:09",
+    "tipoMoneda": "USD"
+  },
+  "documentoRelacionado": null,
+  "emisor": {
+    "nit": "06142604071063",
+    "nrc": "1931029",
+    "nombre": "INVERSIONES RAMIREZ QUINTANILLA, S.A. DE C.V.",
+    "codActividad": "47300",
+    "descActividad": "Venta de combustibles, lubricantes y otros (gasolineras)",
+    "nombreComercial": "INVERSIONES RAMIREZ QUINTANILLA, S.A. DE C.V.",
+    "tipoEstablecimiento": "01",
+    "direccion": {
+      "departamento": "06",
+      "municipio": "14",
+      "complemento": "km60 Carretera Panamericana a San Salvador"
+    },
+    "telefono": "25228856",
+    "correo": "soporte.dte@gruporvq.com",
+    "codEstableMH": "0000",
+    "codEstable": "0000",
+    "codPuntoVentaMH": "0000",
+    "codPuntoVenta": "0000"
+  },
+  "receptor": {
+    "nit": "0123456789",
+    "nrc": "0123456",
+    "nombre": "Nombre Nombre Apellido Apellido",
+    "codActividad": "00000",
+    "descActividad": "Ventas",
+    "nombreComercial": "Nombre Apellido",
+    "direccion": {
+      "departamento": "02",
+      "municipio": "10",
+      "complemento": "Santa Ana, Santa Ana"
+    },
+    "telefono": "00000000",
+    "correo": "correo@gmail.com"
+  },
+  "otrosDocumentos": null,
+  "ventaTercero": null,
+  "cuerpoDocumento": [
+    {
+      "numItem": 1,
+      "tipoItem": 1,
+      "numeroDocumento": null,
+      "codigo": null,
+      "codTributo": null,
+      "descripcion": "DIESEL-1",
+      "cantidad": 3.88601,
+      "uniMedida": 22,
+      "precioUni": 3.150442,
+      "montoDescu": 0.0,
+      "ventaNoSuj": 0.0,
+      "ventaExenta": 0.0,
+      "ventaGravada": 12.242651,
+      "tributos": ["20", "D1", "C8"],
+      "psv": 0.0,
+      "noGravado": 0.0
+    }
+  ],
+  "resumen": {
+    "totalNoSuj": 0.0,
+    "totalExenta": 0.0,
+    "totalGravada": 12.24,
+    "subTotalVentas": 12.24,
+    "descuNoSuj": 0.0,
+    "descuExenta": 0.0,
+    "descuGravada": 0.0,
+    "porcentajeDescuento": 0.0,
+    "totalDescu": 0.0,
+    "tributos": [
+      {
+        "codigo": "20",
+        "descripcion": "Impuesto al Valor Agregado 13%",
+        "valor": 1.59
+      },
+      {
+        "codigo": "C8",
+        "descripcion": "COTRANS ($0.10 Ctvs. por galón)",
+        "valor": 0.39
+      },
+      {
+        "codigo": "D1",
+        "descripcion": "FOVIAL ($0.20 Ctvs. por galón)",
+        "valor": 0.78
+      }
+    ],
+    "subTotal": 12.24,
+    "ivaPerci1": 0.0,
+    "ivaRete1": 0.0,
+    "reteRenta": 0.0,
+    "montoTotalOperacion": 15.0,
+    "totalNoGravado": 0.0,
+    "totalPagar": 15.0,
+    "totalLetras": "quince 00/100 dolares",
+    "saldoFavor": 0.0,
+    "condicionOperacion": 1,
+    "pagos": null,
+    "numPagoElectronico": null
+  },
+  "extension": null,
+  "apendice": [
+    {
+      "campo": "EMP",
+      "etiqueta": "EMPLEADO",
+      "valor": "199"
+    },
+    {
+      "campo": "NO_UNICO",
+      "etiqueta": "NO_UNICO",
+      "valor": "4124080"
+    },
+    {
+      "campo": "OBSERVACION",
+      "etiqueta": "OBSERVACION",
+      "valor": "-"
+    },
+    {
+      "campo": "SUCURSAL",
+      "etiqueta": "SUCURSAL",
+      "valor": "TEXACO LAS ARBOLEDAS"
+    }
+  ],
+  "respuestaHacienda": {
+    "version": 2,
+    "ambiente": "01",
+    "versionApp": "2",
+    "estado": "PROCESADO",
+    "codigoGeneracion": "0123",
+    "selloRecibido": "0123",
+    "fhProcesamiento": "06/02/2024 10:15:16",
+    "clasificaMsg": "10",
+    "codigoMsg": "002",
+    "descripcionMsg": "RECIBIDO CON OBSERVACIONES",
+    "observaciones": null
+  },
+  "firma":"hey"
+  }

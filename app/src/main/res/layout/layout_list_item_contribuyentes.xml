@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:id="@+id/main"
+android:layout_width="match_parent"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_height="match_parent"
+tools:context=".ImportarClientes">
+
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="5dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/Carddata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/click_effect"
+        android:translationZ="5dp"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="7dp"
+        app:cardElevation="4dp"
+        app:strokeColor="#4a8c74"
+        app:strokeWidth="3dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="3dp"
+                    android:text="Nombre:"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textViewNombreComercial"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:padding="3dp"
+                    android:textAlignment="center" />
+
+            </TableRow>
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="3dp"
+                    android:text="NRC:"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textViewNrc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:padding="3dp"
+                    android:textAlignment="center" />
+
+            </TableRow>
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="3dp"
+                    android:text="Telefono:"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textViewTelefono"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:padding="3dp"
+                    android:textAlignment="center" />
+
+            </TableRow>
+        </TableLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <ImageButton
+        android:id="@+id/btnBorrarData"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:layout_gravity="end|bottom"
+        android:background="@drawable/click_effect"
+        android:clickable="true"
+        android:contentDescription="bottom"
+        android:elevation="5dp"
+        android:focusable="true"
+        android:visibility="visible"
+        app:srcCompat="@drawable/icons8_delete_32_1_"
+        app:tint="#00b861" />
+
+    <ImageButton
+        android:id='@+id/btnEditarData'
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:layout_gravity="end|top"
+        android:background="@drawable/click_effect"
+        android:clickable="true"
+        android:contentDescription="bottom"
+        android:elevation="5dp"
+        android:focusable="true"
+        android:visibility="visible"
+        app:srcCompat="@drawable/editar"
+        app:tint="#00b861" />
+
+    <ImageButton
+        android:id='@+id/btnVerData'
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:layout_gravity="end|top"
+        android:background="@drawable/click_effect"
+        android:clickable="true"
+        android:contentDescription="bottom"
+        android:elevation="5dp"
+        android:focusable="true"
+        android:visibility="gone"
+        app:srcCompat="@drawable/icons8_visible_32_1_"  />
+
+</FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

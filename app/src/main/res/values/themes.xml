@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.FacturaElectronica" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/verde_menta_2</item>
+        <item name="colorPrimaryVariant">@color/verde_menta_1</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/verde_menta_2</item>
+    </style>
+    <style name="NavigationViewStyle">
+        <item name="android:listSelector">@color/verde_menta_3</item>
+    </style>
+</resources>

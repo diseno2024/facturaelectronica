@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="Inicio"
+            />
+
+        <item
+            android:id="@+id/nav_registro"
+            android:icon="@drawable/ic_person_add"
+            android:title="Registro del cliente"
+            />
+        <item
+            android:id="@+id/nav_configuracion"
+            android:icon="@drawable/ic_user"
+            android:title="Conf. del Emisor"/>
+        <item
+            android:id="@+id/nav_confiHacienda"
+            android:icon="@drawable/config"
+            android:title="Conf. Hacienda"/>
+
+        <item
+            android:id="@+id/nav_resumenes"
+            android:icon="@drawable/ic_file_text"
+            android:title="Resumenes mensuales"/>
+        <item
+            android:id="@+id/nav_respaldo"
+            android:icon="@drawable/ic_cloud_upload"
+            android:title="Respaldo de datos"/>
+        <item
+            android:id="@+id/nav_restauracion"
+            android:icon="@drawable/ic_cloud_download"
+            android:title="Restauración de Datos"/>
+
+
+
+
+        <item
+            android:id="@+id/nav_crear_pin"
+            android:icon="@drawable/add_24"
+            android:title="Crear Nuevo PIN" />
+
+        <item
+            android:id="@+id/nav_cerrar_sesion"
+            android:icon="@drawable/logout_icon_138409"
+            android:title="Cerrar Sesión" />
+
+    </group>
+
+</menu>

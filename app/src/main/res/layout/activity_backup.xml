@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Ajusta los valores según tus necesidades específicas -->
+
+
+    <Button
+        android:id="@+id/btnRegistrar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4A8C74"
+        android:text="Realizar Respaldo"
+        android:textColor="@color/white"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9999"
+        app:layout_constraintWidth_percent="0.8"
+        android:textSize="@dimen/textSize_bordeup"/>
+
+    <view
+        android:id="@+id/fondoDato"
+        class="androidx.appcompat.widget.ActionMenuView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/borde_con_fondo"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegistrar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.8"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bordeSup"
+        app:layout_constraintVertical_bias="0.297"
+        app:layout_constraintWidth_percent="0.9" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bordeSup"
+        android:layout_width="0dp"
+        android:layout_height="66dp"
+        android:background="#4A8C74"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageButton
+            android:id="@+id/atras"
+            android:layout_width="57dp"
+            android:layout_height="51dp"
+            android:background="@drawable/click_effect"
+            android:clickable="true"
+            android:contentDescription="bottom"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/textRespaldoDeDatos"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.02"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:srcCompat="@drawable/icons8_back_arrow_48"
+            app:tint="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/textRespaldoDeDatos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:text="Respaldo de Datos"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/textSize_textToolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textInformacionRespaldo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Información de Respaldo"
+        android:textAlignment="center"
+        android:textColor="#2E594A"
+        android:textSize="@dimen/textSize_bordeback"
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toTopOf="@+id/fondoDato"
+        app:layout_constraintVertical_bias="0.018"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <TextView
+        android:id="@+id/textConfiguracionRespaldo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Configuración de Respaldo"
+        android:textAlignment="center"
+        android:textColor="#2E594A"
+        android:textSize="@dimen/textSize_bordeback"
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/nuevoFondoDato"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textRespaldoAutomatico"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Respaldo Automático:"
+        android:textAlignment="center"
+        android:textColor="#2E594A"
+        android:textSize="@dimen/textSize_suback"
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textConfiguracionRespaldo"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Switch
+        android:id="@+id/switchEncendido"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:checked="false"
+        android:textAlignment="center"
+        android:textOff="Apagado"
+        android:textOn="Encendido"
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textEstado"
+        app:layout_constraintVertical_bias="0.027" />
+
+    <TextView
+        android:id="@+id/textEstado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apagado"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="@dimen/textSize_bordeup"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textRespaldoAutomatico" />
+
+    <!-- activity_backup.xml -->
+
+    <TextView
+        android:id="@+id/textFrecuencia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Frecuencia:"
+        android:textAlignment="center"
+        android:textColor="#2E594A"
+        android:textSize="@dimen/textSize_suback"
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/switchEncendido"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <Spinner
+        android:id="@+id/spinnerFrecuencia"
+        android:layout_width="123dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textFrecuencia"
+        app:layout_constraintVertical_bias="0.0"
+        android:textSize="@dimen/textSize_bordeup"/>
+
+    <TextView
+        android:id="@+id/textHorario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Horario"
+        android:textAlignment="center"
+        android:textColor="#2E594A"
+        android:textSize="@dimen/textSize_suback"
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerFrecuencia"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/nuevoFondoDato"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rounded_background_green_ligth"
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textInformacionRespaldo"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.6">
+        <!-- Ajusta los valores según tus necesidades específicas -->
+
+        <TextView
+
+            android:id="@+id/textFechaUltimoRespaldo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:text="Fecha último respaldo:"
+            android:textAlignment="center"
+            android:textColor="#2E594A"
+            android:textSize="@dimen/textSize_bordeup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <!-- TextView: Estado -->
+
+        <TextView
+            android:id="@+id/textFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="0dp"
+            android:text="Ninguno"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="@dimen/textSize_bordeup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:text="Estado:"
+            android:textAlignment="center"
+            android:textColor="#2E594A"
+            android:textSize="@dimen/textSize_bordeup"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.35"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textFecha"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:text="Éxito"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize_bordeup"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.65"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textFecha"
+            app:layout_constraintVertical_bias="0.5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <Button
+        android:id="@+id/buttonSelectTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:backgroundTint="#4A8C74"
+        android:text="Seleccionar Hora"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSize_bordeup"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="@+id/fondoDato"
+        app:layout_constraintStart_toStartOf="@+id/fondoDato"
+        app:layout_constraintTop_toBottomOf="@+id/textHorario"
+        app:layout_constraintVertical_bias="0.096" />
+
+    <EditText
+        android:id="@+id/editTextSelectedTime"
+        android:layout_width="176dp"
+        android:layout_height="57dp"
+        android:layout_below="@id/buttonSelectTime"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:inputType="none"
+        android:text="Hora seleccionada:"
+        android:textAlignment="center"
+        android:textSize="@dimen/textSize_bordeup"
+        app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSelectTime"
+        app:layout_constraintVertical_bias="0.092" />
+</androidx.constraintlayout.widget.ConstraintLayout>

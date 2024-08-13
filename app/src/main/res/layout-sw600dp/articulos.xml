@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/DescripcionCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:translationZ="5dp"
+            app:strokeColor="#4a8c74"
+            app:strokeWidth="2dp"
+            app:cardCornerRadius="7dp"
+            app:cardElevation="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+            <TableLayout
+                android:id="@+id/Tabla"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/cantidad"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/producto"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="8dp"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/precio"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textAlignment="center" />
+
+                </TableRow>
+            </TableLayout>
+
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <ImageButton
+            android:id='@+id/btnEditarData'
+            android:layout_width="51dp"
+            android:layout_height="51dp"
+            android:layout_gravity="end|top"
+            android:background="@drawable/click_effect"
+            android:clickable="true"
+            android:contentDescription="bottom"
+            android:elevation="5dp"
+            android:focusable="true"
+            android:visibility="visible"
+            app:srcCompat="@drawable/icons8_delete_32_1_"
+            app:tint="#00b861" />
+
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
