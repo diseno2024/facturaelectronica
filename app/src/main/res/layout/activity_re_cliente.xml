@@ -63,6 +63,7 @@
                 android:textColor="#4a8c74"
                 android:textColorHint="#4a8c74"
                 android:textSize="@dimen/textSize_input"
+                android:nextFocusDown="@+id/dui"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -81,6 +82,7 @@
                 android:textColor="#4a8c74"
                 android:textColorHint="#4a8c74"
                 android:textSize="@dimen/textSize_input"
+                android:nextFocusDown="@+id/nit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nombre" />
@@ -100,6 +102,7 @@
                 android:textColorHint="#4a8c74"
                 android:textSize="@dimen/textSize_input"
                 android:visibility="visible"
+                android:nextFocusDown="@+id/departamento"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dui" />
@@ -124,6 +127,7 @@
                 android:layout_marginTop="0dp"
                 android:background="@drawable/input_text"
                 android:textSize="@dimen/textSize_input"
+                android:nextFocusDown="@+id/municipio"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textdep"
                 app:layout_constraintWidth_percent="0.38" />
@@ -148,6 +152,7 @@
                 android:layout_marginEnd="39dp"
                 android:background="@drawable/input_text"
                 android:textSize="@dimen/textSize_input"
+                android:nextFocusDown="@+id/complemento"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView56"
                 app:layout_constraintWidth_percent="0.38" />
@@ -166,6 +171,7 @@
                 android:textColor="#4a8c74"
                 android:textColorHint="#4a8c74"
                 android:textSize="@dimen/textSize_input"
+                android:nextFocusDown="@+id/correo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/departamento" />
@@ -184,6 +190,7 @@
                 android:textColor="#4a8c74"
                 android:textColorHint="#4a8c74"
                 android:textSize="@dimen/textSize_input"
+                android:nextFocusDown="@+id/telefono"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/complemento" />
@@ -202,6 +209,7 @@
                 android:textColor="#4a8c74"
                 android:textColorHint="#4a8c74"
                 android:textSize="@dimen/textSize_input"
+                android:nextFocusDown="@+id/checkGuardar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/correo" />
@@ -217,6 +225,7 @@
                 android:text="Guardar datos del cliente permanentemente"
                 android:textColor="#4A8C74"
                 android:textSize="@dimen/TextoEtiquetas"
+                android:nextFocusDown="@+id/btnAgregar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/telefono" />

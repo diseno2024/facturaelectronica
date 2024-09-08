@@ -429,13 +429,20 @@ class PrinReClienteActivity : AppCompatActivity() {
                 val selectedType = parent.getItemAtPosition(position).toString()
 
                 // Habilitar o deshabilitar campos basado en la selección
-                if (selectedType == "Contribuyente") {
-                    nrc.isEnabled = true
-                    actividadEconomica.isEnabled = true
-                } else {
+                if (selectedType == "Consumidor Final") {
                     nrc.isEnabled = false
                     actividadEconomica.isEnabled = false
+                    nrc.setText("")
+                    actividadEconomica.setText("")
+                    nrc.visibility = View.GONE
+                    actividadEconomica.visibility = View.GONE
+                } else {
+                    nrc.isEnabled = true
+                    actividadEconomica.isEnabled = true
+                    nrc.visibility = View.VISIBLE
+                    actividadEconomica.visibility = View.VISIBLE
                 }
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {

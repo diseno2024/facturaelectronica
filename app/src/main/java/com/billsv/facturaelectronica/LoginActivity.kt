@@ -75,10 +75,28 @@ class LoginActivity : AppCompatActivity() {
         // Configurar el botón de inicio de sesión
         loginButton.setOnClickListener {
             val enteredPin = pinEditText.text.toString()
+
+            // Verificar que el campo de PIN no esté vacío
+            if (enteredPin.isEmpty()) {
+                Toast.makeText(this, "Por favor, ingrese el PIN", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val savedPins = loadPinsFromMenuActivity()
+
+            // Verificar que la lista de PINs guardados no esté vacía
+            if (savedPins.isNullOrEmpty()) {
+                Toast.makeText(this, "No hay PINs guardados", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             if (savedPins.contains(enteredPin)) {
-                // PIN correcto, iniciar MenuActivity
-                val intent = Intent(this, MenuActivity::class.java)
+                // PIN correcto, iniciar la actividad correspondiente
+                val intent = if (isFirstTime) {
+                    Intent(this, InfoEmisorActivity::class.java)
+                } else {
+                    Intent(this, MenuActivity::class.java)
+                }
                 startActivity(intent)
                 requestPermissions()
                 finish() // Finalizar LoginActivity para evitar que el usuario regrese presionando el botón Atrás

@@ -166,7 +166,9 @@
             android:textColor="#4a8c74"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
 
     </com.google.android.material.card.MaterialCardView>
 

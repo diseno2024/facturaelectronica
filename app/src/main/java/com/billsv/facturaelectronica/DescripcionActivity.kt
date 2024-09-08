@@ -98,7 +98,9 @@ class DescripcionActivity : AppCompatActivity() {
             }
         }
         Cantidad = findViewById(R.id.Cantidad)
+        Cantidad.setText("1")
         Producto = findViewById(R.id.Producto)
+        Producto.requestFocus();
         Precio = findViewById(R.id.Precio)
 
 
@@ -126,6 +128,8 @@ class DescripcionActivity : AppCompatActivity() {
                     Tipo.setSelection(0)
                     TipoV.setSelection(0)
                     Unidad.setSelection(0)
+                    Cantidad.setText("1")
+                    Producto.requestFocus();
                 }
                 val clave = intent.getStringExtra("clave")
                 btnRegresar.setOnClickListener {
@@ -150,11 +154,14 @@ class DescripcionActivity : AppCompatActivity() {
         val cantidad = Cantidad.text.toString()
         val producto = Producto.text.toString()
         val Precio = Precio.text.toString()
-        if(cantidad != "" && producto != "" && Precio != ""){
+        if(cantidad != "" && producto != "" && Precio != "" && cantidad != "0"){
             return true
         }else{
             if(cantidad == ""){
                 Toast.makeText(this, "Ingrese la cantidad", Toast.LENGTH_SHORT).show()
+            }
+            if(cantidad == "0"){
+                Toast.makeText(this, "Cantidad no Valida", Toast.LENGTH_SHORT).show()
             }
             if(producto == ""){
                 Toast.makeText(this, "Ingrese un producto", Toast.LENGTH_SHORT).show()

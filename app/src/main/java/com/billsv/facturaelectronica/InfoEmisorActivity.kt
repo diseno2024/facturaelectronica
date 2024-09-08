@@ -1,6 +1,9 @@
 package com.billsv.facturaelectronica
 
 import android.content.Intent
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
@@ -40,6 +43,7 @@ import androidx.annotation.RequiresApi
 
 import com.billsv.signer.*;
 import java.io.ByteArrayInputStream
+import java.io.FileNotFoundException
 import java.security.Key
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
@@ -75,6 +79,8 @@ class InfoEmisorActivity : AppCompatActivity() {
         "Morazán" to "13",
         "La Unión" to "14"
     )
+    private val REQUEST_CODE_PERMISSIONS = 1001
+    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     private val municipiosMap = mapOf(
         "Ahuachapán" to listOf(
@@ -373,6 +379,16 @@ class InfoEmisorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_info_emisor)
+
+        if (!allPermissionsGranted()) {
+            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+        } else {
+            loadOnCreate()
+        }
+
+    }
+
+    private fun loadOnCreate() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -802,26 +818,35 @@ class InfoEmisorActivity : AppCompatActivity() {
         }
     }
 
-    private fun mostrarImagen(){
+    private fun mostrarImagen() {
         val uri = obtenerUriGuardada()?.toUri()
-        if(uri!=null){
-            val Imagen: ImageView = findViewById(R.id.Logo)
-            Imagen.setBackgroundColor(Color.TRANSPARENT)
-            Imagen.setImageURI(uri)
-            // Mostrar el botón de borrar
-            val btnBorrarImagen: ImageButton = findViewById(R.id.btnBorrarImagen)
-            btnBorrarImagen.visibility = View.VISIBLE
-            val Card: MaterialCardView = findViewById(R.id.Imagen)
-            Card.setClickable(false)
-            showToast("Imagen cargada")
-        }else{
-            val Imagen: ImageView = findViewById(R.id.Logo)
-            val drawable = ContextCompat.getDrawable(this, R.drawable.ic_add_photo)
-            Imagen.setImageDrawable(drawable)
+        try {
+            val imagen: ImageView = findViewById(R.id.Logo)
+            if (uri != null) {
+                val resolver = contentResolver
+                resolver.openInputStream(uri)?.use {
+                    imagen.setBackgroundColor(Color.TRANSPARENT)
+                    imagen.setImageURI(uri)
+                    // Mostrar el botón de borrar
+                    val btnBorrarImagen: ImageButton = findViewById(R.id.btnBorrarImagen)
+                    btnBorrarImagen.visibility = View.VISIBLE
+                    val card: MaterialCardView = findViewById(R.id.Imagen)
+                    card.isClickable = false
+                    showToast("Imagen cargada")
+                } ?: run {
+                    throw FileNotFoundException("No se puede abrir la URI: $uri")
+                }
+            } else {
+                val drawable = ContextCompat.getDrawable(this, R.drawable.ic_add_photo)
+                imagen.setImageDrawable(drawable)
+            }
+        } catch (e: Exception) {
+            Log.e("Prin_Re_Cliente", "Error al mostrar la imagen: ${e.message}", e)
+            showToast("Error al mostrar la imagen")
         }
     }
-    private fun obtenerUriGuardada(): String? {
 
+    private fun obtenerUriGuardada(): String? {
         val query = QueryBuilder.select(SelectResult.property("URI"))
             .from(DataSource.database(database))
             .where(Expression.property("tipo").equalTo(Expression.string("Imagen")))
@@ -829,18 +854,18 @@ class InfoEmisorActivity : AppCompatActivity() {
         return try {
             val resultSet = query.execute()
             val result = resultSet.next()
-
             result?.getString("URI")
         } catch (e: CouchbaseLiteException) {
             Log.e("Prin_Re_Cliente", "Error al obtener la URI de la base de datos: ${e.message}", e)
             null
         }
     }
+
     fun showGallery(view: View?) {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, REQUEST_CODE_IMAGE_PICKER)
-
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_IMAGE_PICKER && resultCode == RESULT_OK) {
@@ -866,6 +891,7 @@ class InfoEmisorActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun guardarURI(uri: Uri) {
         val uriString = uri.toString()
         // Consulta para verificar si la URI ya existe
@@ -895,17 +921,18 @@ class InfoEmisorActivity : AppCompatActivity() {
         }
         mostrarImagen()
     }
-    private fun borrarImagen(){
-        // Eliminar la imagen seleccionada (puedes reiniciar la variable 'logo' a null)
-        val Imagen: ImageView = findViewById(R.id.Logo)
+
+    private fun borrarImagen() {
+        // Eliminar la imagen seleccionada
+        val imagen: ImageView = findViewById(R.id.Logo)
         val drawable = ContextCompat.getDrawable(this, R.drawable.ic_add_photo)
-        Imagen.setBackgroundColor(hexToColorInt("#EFEEEE"))
-        Imagen.setImageDrawable(drawable)
+        imagen.setBackgroundColor(hexToColorInt("#EFEEEE"))
+        imagen.setImageDrawable(drawable)
         // Ocultar el botón de borrar
         val btnBorrarImagen: ImageButton = findViewById(R.id.btnBorrarImagen)
         btnBorrarImagen.visibility = View.GONE
-        val Card: MaterialCardView = findViewById(R.id.Imagen)
-        Card.setClickable(true)
+        val card: MaterialCardView = findViewById(R.id.Imagen)
+        card.isClickable = true
         // Realiza una consulta para obtener todos los documentos que contienen URI
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
@@ -936,6 +963,7 @@ class InfoEmisorActivity : AppCompatActivity() {
             Log.e("Prin_Re_Cliente", "Error al eliminar las URI de la base de datos: ${e.message}", e)
         }
     }
+
     fun hexToColorInt(hex: String): Int {
         return try {
             Color.parseColor(hex)
@@ -1009,7 +1037,8 @@ class InfoEmisorActivity : AppCompatActivity() {
             Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
             generarClavesyCertificado();
             Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
-
+            val intent = Intent(this, MenuActivity::class.java)
+            startActivity(intent)
         } catch (e: CouchbaseLiteException) {
             Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
             Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
@@ -1165,5 +1194,23 @@ class InfoEmisorActivity : AppCompatActivity() {
             sb.append(String.format("%02x", b))
         }
         return sb.toString()
+    }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted()) {
+                loadOnCreate()
+            } else {
+                Toast.makeText(this, "Permisos no otorgados", Toast.LENGTH_SHORT).show()
+                finish() // Cierra la actividad si no se otorgan los permisos
+            }
+        }
     }
 }
