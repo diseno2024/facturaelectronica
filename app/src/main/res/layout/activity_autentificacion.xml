@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:background="@drawable/intro_design7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </View>
+
+    <ImageView
+        android:id="@+id/imgAuth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="25dp"
+        android:background="@android:color/transparent"
+        android:elevation="2dp"
+        android:src="@drawable/authimg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+
+    <TextView
+        android:id="@+id/textViewPrueba"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="190dp"
+        android:elevation="2dp"
+        android:text="Prueba"
+        android:textAlignment="center"
+        android:textColor="#4A8C74"
+        android:textSize="20sp"
+
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="@id/imgAuth"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toTopOf="@id/imgAuth" />
+
+    <EditText
+        android:id="@+id/userp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="115dp"
+        android:elevation="2dp"
+        android:hint="Usuario"
+        android:textAlignment="center"
+        android:textColorHint="#95BFB0"
+        android:backgroundTint="#4A8C74"
+        app:layout_constraintEnd_toEndOf="@+id/imgAuth"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toTopOf="@id/textViewPrueba"
+        app:layout_constraintWidth_percent="0.6" />
+
+    <EditText
+        android:id="@+id/contrapr"
+        android:layout_width="0dp"
+        android:inputType="textPassword"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="115dp"
+        android:backgroundTint="#4A8C74"
+        android:elevation="2dp"
+        android:hint="Contrasena"
+        android:textAlignment="center"
+        android:textColorHint="#95BFB0"
+        app:layout_constraintEnd_toEndOf="@+id/imgAuth"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toTopOf="@id/userp"
+        app:layout_constraintWidth_percent="0.6" />
+
+    <TextView
+        android:id="@+id/textViewProduc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="190dp"
+        android:elevation="2dp"
+        android:text="Produccion"
+        android:textAlignment="center"
+        android:textColor="#4A8C74"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="@id/imgAuth"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toBottomOf="@+id/contrapr" />
+
+    <EditText
+        android:id="@+id/userpr"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="115dp"
+        android:elevation="2dp"
+        android:hint="Usuario"
+        android:textAlignment="center"
+        android:textColorHint="#95BFB0"
+        android:backgroundTint="#4A8C74"
+        app:layout_constraintEnd_toEndOf="@+id/imgAuth"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toTopOf="@id/textViewProduc"
+        app:layout_constraintWidth_percent="0.6" />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="115dp"
+        android:backgroundTint="#4A8C74"
+        android:elevation="2dp"
+        android:hint="Contrasena"
+        android:inputType="textPassword"
+        android:textAlignment="center"
+        android:textColorHint="#95BFB0"
+        app:layout_constraintEnd_toEndOf="@+id/imgAuth"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toTopOf="@id/userpr"
+        app:layout_constraintWidth_percent="0.6" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="75dp"
+        android:text="Configuremos tus \ncredenciales"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

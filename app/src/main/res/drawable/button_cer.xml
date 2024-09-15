@@ -1,0 +1,10 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Capa de fondo (color base del botón) -->
+    <item>
+        <shape>
+            <solid android:color="#2E594A" /> <!-- Color base del botón (morado) -->
+            <corners android:radius="4dp" /> <!-- Esquinas cuadradas -->
+        </shape>
+    </item>
+
+</layer-list>
