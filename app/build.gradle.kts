@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
 }
-
 android {
     namespace = "com.billsv.facturaelectronica"
     compileSdk = 34
@@ -54,7 +53,6 @@ android {
     }
     buildToolsVersion = "34.0.0"
 }
-
 dependencies {
     val appcompat_version = "1.6.1"
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -100,6 +98,8 @@ dependencies {
     implementation ("javax.servlet:javax.servlet-api:4.0.1")
     implementation ("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5")
     implementation ("com.itextpdf:itext7-core:7.1.16")
-
+    implementation ("com.github.AppIntro:AppIntro:6.3.1")
     implementation ("org.bouncycastle:bcprov-jdk15on:1.68")
+    implementation("com.github.KeepSafe:TapTargetView:1.13.2")
+    implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.23")
 }

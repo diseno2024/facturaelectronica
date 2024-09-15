@@ -20,4 +20,8 @@
     <color name="verde_menta_4">#95BFB0</color>
     <color name="verde_menta_5">#BFD9CF</color>
 
+    <color name="selected_indicator_color">#2E594A</color>
+    <color name="unselected_indicator_color">#4A8C74</color>
+
+
 </resources>

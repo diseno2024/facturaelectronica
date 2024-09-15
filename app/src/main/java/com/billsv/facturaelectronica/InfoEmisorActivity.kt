@@ -80,8 +80,21 @@ class InfoEmisorActivity : AppCompatActivity() {
         "La Unión" to "14"
     )
     private val REQUEST_CODE_PERMISSIONS = 1001
-    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
 
+    // Lista de permisos adaptada según la versión de Android
+    private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 33) {
+        listOf(
+            Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.READ_MEDIA_VIDEO,
+            Manifest.permission.READ_MEDIA_IMAGES
+        )
+    } else {
+        listOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
     private val municipiosMap = mapOf(
         "Ahuachapán" to listOf(
             "Ahuachapán" to "01",
@@ -381,7 +394,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         setContentView(R.layout.activity_info_emisor)
 
         if (!allPermissionsGranted()) {
-            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+            ActivityCompat.requestPermissions(this, permissionList.toTypedArray(), REQUEST_CODE_PERMISSIONS)
         } else {
             loadOnCreate()
         }
@@ -1196,7 +1209,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         return sb.toString()
     }
 
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+    private fun allPermissionsGranted() = permissionList.all {
         ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
     }
 

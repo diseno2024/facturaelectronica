@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:background="@drawable/intro_design4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </View>
+
+    <EditText
+        android:id="@+id/duionit"
+        android:layout_width="162dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#FFFFFF"
+        android:inputType="number"
+        android:textAlignment="viewStart"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/tel"
+        app:layout_constraintEnd_toStartOf="@id/spinnerdn"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/tel"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#000000"
+        android:inputType="text"
+        android:hint="Telefono"
+        android:textAlignment="viewStart"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
+        app:layout_constraintBottom_toTopOf="@id/spinnerm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+    <EditText
+        android:id="@+id/correo"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="150dp"
+        android:backgroundTint="#000000"
+        android:inputType="textEmailAddress"
+        android:hint="Correo Electronico"
+        android:textAlignment="viewStart"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinnerdn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#FFFFFF"
+        android:inputType="number"
+        android:elevation="2dp"
+        android:textAlignment="viewStart"
+        android:textColorHint="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@id/tel"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <Spinner
+        android:id="@+id/spinnerm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#FFFFFF"
+        android:inputType="number"
+        android:elevation="2dp"
+        android:textAlignment="viewStart"
+        android:textColorHint="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@id/correo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/spinnerd"/>
+    <Spinner
+        android:id="@+id/spinnerd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#FFFFFF"
+        android:inputType="number"
+        android:elevation="2dp"
+        android:textAlignment="viewStart"
+        android:textColorHint="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@id/correo"
+        app:layout_constraintStart_toEndOf="@id/spinnerm"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/img1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/infoemisor_imagen_intro"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.056" />
+
+    <ImageView
+        android:id="@+id/img2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/infoemisor_imagen_intro2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.894" />
+
+    <EditText
+        android:id="@+id/nombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#FFFFFF"
+        android:hint="Nombre Comercial"
+        android:textColor="#FFFFFF"
+        android:inputType="text"
+        android:textAlignment="viewStart"
+        android:textColorHint="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@id/duionit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="Ingresa tu\ninformación"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

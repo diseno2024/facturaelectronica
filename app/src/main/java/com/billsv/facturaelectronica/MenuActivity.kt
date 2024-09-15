@@ -16,8 +16,11 @@ import com.google.gson.reflect.TypeToken
 import android.content.Intent
 import android.text.InputFilter
 import android.text.InputType
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.couchbase.lite.Database
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
@@ -26,7 +29,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
-
+        // Configura tu NavigationView
         drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -39,6 +42,36 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
+// Encuentra la vista del toggle dentro del toolbar
+        val toggleView = toolbar.getChildAt(1) as View
+
+        TapTargetView.showFor(
+            this, // La Activity o Fragment
+            TapTarget.forView(
+                toggleView, // Aquí se usa la vista del toggle encontrada
+                "Este es un botón", "Aquí puedes hacer clic para acceder al menú"
+            )
+                .outerCircleColor(R.color.verde_menta_2) // Color del círculo exterior
+                .outerCircleAlpha(0.2f) // Transparencia del círculo exterior
+                .targetCircleColor(R.color.verde_menta_1) // Color del círculo objetivo
+                .titleTextSize(20) // Tamaño del texto del título
+                .titleTextColor(R.color.white) // Color del texto del título
+                .descriptionTextSize(16) // Tamaño del texto de la descripción
+                .descriptionTextColor(R.color.white) // Color del texto de la descripción
+                .textColor(R.color.white) // Color del texto
+                .dimColor(R.color.black) // Color de atenuación del fondo
+                .drawShadow(true) // Dibujar sombra debajo del TapTarget
+                .cancelable(false) // Hacer que el TapTarget no se pueda cancelar con un toque fuera
+                .tintTarget(true) // Tintar el objetivo
+                .transparentTarget(true), // Hacer transparente el objetivo
+            object : TapTargetView.Listener() {
+                override fun onTargetClick(view: TapTargetView?) {
+                    super.onTargetClick(view)
+                    // Acción a realizar cuando se toca el TapTarget
+                    drawerLayout.openDrawer(GravityCompat.START) // Abre el drawer
+                }
+            }
+        )
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment()).commit()
@@ -115,7 +148,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
         }
-
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
