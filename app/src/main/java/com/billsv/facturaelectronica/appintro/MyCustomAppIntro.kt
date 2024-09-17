@@ -26,7 +26,7 @@ class MyCustomAppIntro : AppIntro() {
         addSlide(PIN.newInstance())
         addSlide(InfoEmisor1.newInstance())
         addSlide(InfoEmisor2.newInstance())
-        //logo
+        addSlide(Logo.newInstance())
         addSlide(Autentificacion.newInstance())
         addSlide(Certificado.newInstance())
     }
