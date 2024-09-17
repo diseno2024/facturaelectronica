@@ -13,8 +13,8 @@
     <dimen name="top_left_radius">50dp</dimen>
     <dimen name="top_right_radius">50dp</dimen>
 
-    <dimen name="textSize_bordeback">24sp</dimen>
-    <dimen name="textSize_bordeup">18sp</dimen>
-    <dimen name="textSize_suback">20sp</dimen>
+    <dimen name="textSize_bordeback">28sp</dimen>
+    <dimen name="textSize_bordeup">24sp</dimen>
+    <dimen name="textSize_suback">22sp</dimen>
 
 </resources>

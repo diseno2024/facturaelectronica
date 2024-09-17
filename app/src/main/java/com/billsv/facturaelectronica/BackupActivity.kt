@@ -51,17 +51,12 @@ class BackupActivity : AppCompatActivity() {
         setContentView(R.layout.activity_backup)
 
         // Inicializar vistas y componentes
-        switchEncendido = findViewById(R.id.switchEncendido)
-        textEstado = findViewById(R.id.textEstado)
         textFecha = findViewById(R.id.textFecha)
-        editTextSelectedTime = findViewById(R.id.editTextSelectedTime)
         buttonManualBackup = findViewById(R.id.btnRegistrar)
 
         // Obtener SharedPreferences para guardar la configuración
         sharedPrefs = getSharedPreferences("BackupPrefs", Context.MODE_PRIVATE)
 
-        switchEncendido.isChecked = sharedPrefs.getBoolean("automatic_backup_enabled", false)
-        textEstado.text = if (switchEncendido.isChecked) "Encendido" else "Apagado"
 
         val savedHour = sharedPrefs.getInt("automatic_backup_hour", -1)
         val savedMinute = sharedPrefs.getInt("automatic_backup_minute", -1)
@@ -74,76 +69,15 @@ class BackupActivity : AppCompatActivity() {
 
         val savedFrequency = sharedPrefs.getString("automatic_backup_frequency", null)
         if (savedFrequency != null) {
-            val spinnerFrecuencia = findViewById<Spinner>(R.id.spinnerFrecuencia)
             val opciones = resources.getStringArray(R.array.frecuencia_options)
             val position = opciones.indexOf(savedFrequency)
             if (position != -1) {
-                spinnerFrecuencia.setSelection(position)
             }
         }
 
-        switchEncendido.setOnCheckedChangeListener { _, isChecked ->
-            textEstado.text = if (isChecked) "Encendido" else "Apagado"
 
-            with(sharedPrefs.edit()) {
-                putBoolean("automatic_backup_enabled", isChecked)
-                apply()
-            }
 
-            if (isChecked) {
-                val spinnerFrecuencia = findViewById<Spinner>(R.id.spinnerFrecuencia)
-                val opcionSeleccionada = spinnerFrecuencia.selectedItem as String
-                scheduleAutomaticBackup(opcionSeleccionada)
-            } else {
-                cancelAutomaticBackup()
-            }
-        }
 
-        // Configurar listener para el spinner de frecuencia
-        val spinnerFrecuencia = findViewById<Spinner>(R.id.spinnerFrecuencia)
-        val opciones = resources.getStringArray(R.array.frecuencia_options)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, opciones)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerFrecuencia.adapter = adapter
-
-        spinnerFrecuencia.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val opcionSeleccionada = opciones[position]
-
-                saveAutomaticBackupFrequency(opcionSeleccionada)
-
-                if (switchEncendido.isChecked) {
-                    scheduleAutomaticBackup(opcionSeleccionada)
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        buttonSelectTime = findViewById(R.id.buttonSelectTime)
-        editTextSelectedTime = findViewById(R.id.editTextSelectedTime)
-
-        buttonSelectTime.setOnClickListener {
-            val cal = Calendar.getInstance()
-            val hour = cal.get(Calendar.HOUR_OF_DAY)
-            val minute = cal.get(Calendar.MINUTE)
-
-            val timePickerDialog = TimePickerDialog(
-                this,
-                TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
-                    saveAutomaticBackupTime(selectedHour, selectedMinute)
-                    val period = if (selectedHour < 12) "AM" else "PM"
-                    val hour12Format = if (selectedHour > 12) selectedHour - 12 else selectedHour
-                    val selectedTime =
-                        String.format("%02d:%02d %s", hour12Format, selectedMinute, period)
-                    editTextSelectedTime.setText("Hora seleccionada: $selectedTime")
-                },
-                hour,
-                minute,
-                true
-            )
-            timePickerDialog.show()
-        }
 
         val buttonAtras = findViewById<ImageButton>(R.id.atras)
         buttonAtras.setOnClickListener {
@@ -183,8 +117,6 @@ class BackupActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        switchEncendido.isChecked = sharedPrefs.getBoolean("automatic_backup_enabled", false)
-        textEstado.text = if (switchEncendido.isChecked) "Encendido" else "Apagado"
 
         val savedHour = sharedPrefs.getInt("automatic_backup_hour", -1)
         val savedMinute = sharedPrefs.getInt("automatic_backup_minute", -1)
@@ -197,11 +129,9 @@ class BackupActivity : AppCompatActivity() {
 
         val savedFrequency = sharedPrefs.getString("automatic_backup_frequency", null)
         if (savedFrequency != null) {
-            val spinnerFrecuencia = findViewById<Spinner>(R.id.spinnerFrecuencia)
             val opciones = resources.getStringArray(R.array.frecuencia_options)
             val position = opciones.indexOf(savedFrequency)
             if (position != -1) {
-                spinnerFrecuencia.setSelection(position)
             }
         }
     }
@@ -386,52 +316,10 @@ class BackupActivity : AppCompatActivity() {
         }
     }
 
-    private fun showTimePickerDialog() {
-        val cal = Calendar.getInstance()
-        val hour = cal.get(Calendar.HOUR_OF_DAY)
-        val minute = cal.get(Calendar.MINUTE)
-
-        val timePickerDialog = TimePickerDialog(
-            this,
-            TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
-                val period = if (selectedHour < 12) "AM" else "PM"
-                val hour12Format = if (selectedHour > 12) selectedHour - 12 else selectedHour
-                val selectedTime =
-                    String.format("%02d:%02d %s", hour12Format, selectedMinute, period)
-                editTextSelectedTime.setText("Hora seleccionada: $selectedTime")
-
-                // Guardar la hora seleccionada para el respaldo automático
-                saveAutomaticBackupTime(selectedHour, selectedMinute)
-            },
-            hour,
-            minute,
-            true
-        )
-        timePickerDialog.show()
-    }
 
     private val PREFS_FILENAME = "BackupPrefs"
-    private val PREF_AUTOMATIC_BACKUP_HOUR = "automatic_backup_hour"
-    private val PREF_AUTOMATIC_BACKUP_MINUTE = "automatic_backup_minute"
-    private val PREF_AUTOMATIC_BACKUP_FREQUENCY = "automatic_backup_frequency"
 
-    // Método para guardar la hora seleccionada en SharedPreferences
-    private fun saveAutomaticBackupTime(hour: Int, minute: Int) {
-        // Obtener el SharedPreferences
-        with(sharedPrefs.edit()) {
-            // Guardar la hora y los minutos seleccionados
-            putInt("automatic_backup_hour", hour)
-            putInt("automatic_backup_minute", minute)
-            apply()
-        }
 
-        // Informar al usuario que la hora de respaldo automático se ha guardado
-        Toast.makeText(
-            this,
-            "Hora de respaldo automático guardada: ${formatTime(hour, minute)}",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
 
     // Método para guardar la frecuencia seleccionada en SharedPreferences
     private fun saveAutomaticBackupFrequency(frequency: String) {
@@ -540,17 +428,6 @@ class BackupActivity : AppCompatActivity() {
         }
     }
 
-    private fun restoreAutomaticBackupSettings() {
-        val sharedPrefs = getSharedPreferences(PREFS_FILENAME, Context.MODE_PRIVATE)
-        val hour = sharedPrefs.getInt(PREF_AUTOMATIC_BACKUP_HOUR, -1)
-        val minute = sharedPrefs.getInt(PREF_AUTOMATIC_BACKUP_MINUTE, -1)
-
-        if (hour != -1 && minute != -1) {
-            // Aplicar la configuración de respaldo automático guardada
-            val selectedTime = formatTime(hour, minute)
-            editTextSelectedTime.setText("Hora seleccionada: $selectedTime")
-        }
-    }
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
