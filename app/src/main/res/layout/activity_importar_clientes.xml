@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ImportarClientes">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -13,24 +14,25 @@
         android:background="#4a8c74"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:contentInsetStart="0dp">
+
         <ImageButton
             android:id="@+id/atras"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/click_effect"
             android:clickable="true"
-            android:contentDescription="bottom"
+            android:contentDescription="button"
             android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-            app:layout_constraintEnd_toEndOf="@+id/toolbar"
-            app:layout_constraintHorizontal_bias="0.04"
-            app:layout_constraintStart_toStartOf="@+id/toolbar"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintHorizontal_bias="0.04"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icons8_back_arrow_48"
             app:tint="#FFFFFF" />
         <TextView
@@ -39,7 +41,7 @@
             android:layout_height="wrap_content"
             android:text="Clientes"
             android:textColor="#FFFFFF"
-            android:textSize="@dimen/textSize_textToolbar"
+            android:textSize="30sp"
             app:layout_constraintVertical_bias="0.35"
             app:layout_constraintHorizontal_bias="0.4"
             android:textStyle="bold"
@@ -49,33 +51,114 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_gravity="center"
             />
-
+        <ImageButton
+            android:id="@+id/btn_buscar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/click_effect"
+            android:clickable="true"
+            android:contentDescription="button"
+            android:focusable="true"
+            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintHorizontal_bias="0.04"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icons8_search_48"
+            app:tint="#FFFFFF"
+            android:layout_gravity="end"
+            />
+        <ImageButton
+            android:id="@+id/btn_cerrar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/click_effect"
+            android:clickable="true"
+            android:contentDescription="button"
+            android:focusable="true"
+            android:visibility="gone"
+            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintHorizontal_bias="0.04"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icons8_close_window_48"
+            app:tint="#FFFFFF"
+            android:layout_gravity="end"
+            />
     </androidx.appcompat.widget.Toolbar>
+
+
+    <EditText
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="90dp"
+        android:backgroundTint="#2E594A"
+        android:hint="Buscar..."
+        android:inputType="text"
+        android:textColor="#4a8c74"
+        android:textColorHint="#4a8c74"
+        android:textSize="@dimen/textSize_input"
+        android:visibility="gone"
+        android:imeOptions="actionSearch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btn_buscador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="39dp"
+        android:background="@drawable/click_effect"
+        android:clickable="true"
+        android:contentDescription="button"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.993"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icons8_search_48_green" />
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="1206dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="120dp"
+        android:layout_marginBottom="60dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/search_bar"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/containerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="389dp"
+            android:layout_height="643dp"
+            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="1206dp"
+            android:layout_marginEnd="10dp">
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/containerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <ImageButton
@@ -87,7 +170,7 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/click_effect"
         android:clickable="true"
-        android:contentDescription="bottom"
+        android:contentDescription="buttom"
         android:elevation="5dp"
         android:focusable="true"
         android:visibility="gone"
@@ -96,7 +179,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/agregar" />
     <!-- Inicialmente oculto -->
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

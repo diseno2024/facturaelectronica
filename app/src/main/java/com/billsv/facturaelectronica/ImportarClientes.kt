@@ -5,128 +5,47 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.couchbase.lite.CouchbaseLiteException
-import com.couchbase.lite.Database
-import com.couchbase.lite.QueryBuilder
-import com.couchbase.lite.SelectResult
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
 import com.couchbase.lite.Meta
-import com.google.android.material.card.MaterialCardView
+import com.couchbase.lite.QueryBuilder
+import com.couchbase.lite.SelectResult
 
 class ImportarClientes : AppCompatActivity() {
     private var letra:String?=null
+    private lateinit var btnBuscar: ImageButton
+    private lateinit var btnCerrarBusqueda: ImageButton
+    private lateinit var btnBusqueda: ImageButton
+    private lateinit var searchBar: EditText
+    private lateinit var linearLayout: LinearLayout
+    private lateinit var dataList: List<String>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_importar_clientes)
-        val linearLayout = findViewById<LinearLayout>(R.id.containerLayout)
-        val dataList = obtenerDatosGuardados()
+        linearLayout = findViewById<LinearLayout>(R.id.containerLayout)
+        // Inicializar la barra de búsqueda y el botón
+        btnBuscar = findViewById(R.id.btn_buscar)
+        btnCerrarBusqueda = findViewById(R.id.btn_cerrar)
+        btnBusqueda = findViewById(R.id.btn_buscador)
+        searchBar = findViewById<EditText>(R.id.search_bar)
+        dataList = obtenerDatosGuardados()
         // Obtener la letra pasada en el Intent
         val letra = intent.getStringExtra("letra")
 
+        // Mostrar los datos en la vista
         dataList.forEach { data ->
-            val datosv = data.split("\n")
-            if(datosv[7]=="Contribuyente"){
-                val itemLayout2 = layoutInflater.inflate(R.layout.layout_list_item_contribuyentes, null)
-
-                val borrar2 = itemLayout2.findViewById<ImageButton>(R.id.btnBorrarData)
-                val Editar2 = itemLayout2.findViewById<ImageButton>(R.id.btnEditarData)
-                val Ver2 = itemLayout2.findViewById<ImageButton>(R.id.btnVerData)
-                val textViewNombre2 = itemLayout2.findViewById<TextView>(R.id.textViewNombreComercial)
-                val textViewNRC = itemLayout2.findViewById<TextView>(R.id.textViewNrc)
-                val textViewTelefono = itemLayout2.findViewById<TextView>(R.id.textViewTelefono)
-                val datos = data.split("\n")
-                textViewNombre2.text = datos[0]
-                textViewNRC.text = datos[9]
-                textViewTelefono.text = datos[13]
-
-                // Establece un onClickListener para cada tarjeta
-                itemLayout2.setOnClickListener {
-                    if(letra=="r" || letra=="c"){
-                        Pasardata(data)
-                    }else if(letra=="s"){
-                        mostrardialogo(data)
-                    }
-                }
-                if (letra=="r"||letra=="c"){
-                    borrar2.visibility = View.GONE
-                    Editar2.visibility = View.GONE
-                    Ver2.visibility = View.VISIBLE
-                }else if(letra=="s"){
-                    borrar2.visibility = View.VISIBLE
-                    Editar2.visibility = View.VISIBLE
-                    Ver2.visibility = View.GONE
-                }
-                borrar2.setOnClickListener {
-                    Borrardatos(data, itemLayout2, linearLayout)
-                }
-                Editar2.setOnClickListener{
-                    editardatos(data)
-                }
-                Ver2.setOnClickListener{
-                    mostrardialogo(data)
-                }
-
-                linearLayout.addView(itemLayout2)
-
-            }else{
-                val itemLayout = layoutInflater.inflate(R.layout.layout_list_item_cliente, null)
-
-                val borrar = itemLayout.findViewById<ImageButton>(R.id.btnBorrarData)
-                val Editar = itemLayout.findViewById<ImageButton>(R.id.btnEditarData)
-                val Ver = itemLayout.findViewById<ImageButton>(R.id.btnVerData)
-                val textViewNombre = itemLayout.findViewById<TextView>(R.id.textViewNombre)
-                val textViewTelefono = itemLayout.findViewById<TextView>(R.id.textViewTelefono)
-                val textViewNit = itemLayout.findViewById<TextView>(R.id.textViewNit)
-
-
-                val datos = data.split("\n")
-                textViewNombre.text = datos[0]
-                textViewTelefono.text = datos[13]
-                textViewNit.text = datos[12]
-
-                // Establece un onClickListener para cada tarjeta
-                itemLayout.setOnClickListener {
-                    if(letra=="c"){
-                        Pasardata(data)
-                    }else if(letra=="s"){
-                        mostrardialogo(data)
-                    }
-                }
-                if (letra=="r"||letra=="c"){
-                    borrar.visibility = View.GONE
-                    Editar.visibility = View.GONE
-                    Ver.visibility = View.VISIBLE
-                }else if(letra=="s"){
-                    borrar.visibility = View.VISIBLE
-                    Editar.visibility = View.VISIBLE
-                    Ver.visibility = View.GONE
-                }
-
-                borrar.setOnClickListener {
-                    Borrardatos(data, itemLayout, linearLayout)
-                }
-                Editar.setOnClickListener{
-                    editardatos(data)
-                }
-                Ver.setOnClickListener{
-                    mostrardialogo(data)
-                }
-                if(letra=="r"){
-                    //solo muestra nrc
-                    //linearLayout.addView(itemLayout)
-                }else{
-                    linearLayout.addView(itemLayout)
-                }
-
+            if (letra != null) {
+                agregarItemALinearLayout(data, letra)
             }
         }
 
@@ -159,6 +78,182 @@ class ImportarClientes : AppCompatActivity() {
             }
             startActivity(intent)
             finish()
+        }
+
+        // Establecer un OnClickListener para el botón de búsqueda
+        btnBuscar.setOnClickListener {
+            searchBar.visibility = View.VISIBLE
+            btnBusqueda.visibility = View.VISIBLE
+            btnBuscar.visibility = View.GONE
+            btnCerrarBusqueda.visibility = View.VISIBLE
+        }
+        // Establecer un OnClickListener para el botón de cerrar búsqueda
+        btnCerrarBusqueda.setOnClickListener {
+            searchBar.visibility = View.GONE
+            btnBusqueda.visibility = View.GONE
+            btnCerrarBusqueda.visibility = View.GONE
+            btnBuscar.visibility = View.VISIBLE
+            searchBar.text.clear()
+
+            // Actualizar el dataList con los datos actuales
+            linearLayout.removeAllViews()
+            dataList = obtenerDatosGuardados()
+            dataList.forEach { data ->
+                if (letra != null) {
+                    agregarItemALinearLayout(data, letra)
+                }
+            }
+        }
+
+        // Establecer un OnClickListener para el botón de búsqueda
+        btnBusqueda.setOnClickListener {
+            val query = searchBar.text.toString()
+            if (letra != null) {
+                realizarBusqueda(query, letra)
+            }
+        }
+        // Establecer ejecución de la búsqueda al presionar Enter
+        searchBar.setOnEditorActionListener { _, _, _ ->
+            val query = searchBar.text.toString()
+            if (letra != null) {
+                realizarBusqueda(query, letra)
+            }
+            true
+        }
+        // Establecer ejecución de la búsqueda al presionar Enter
+        searchBar.setOnEditorActionListener { _, actionId, event ->
+            Log.d("Prin_Re_Cliente", "Se presionó una tecla: $actionId")
+            val query = searchBar.text.toString()
+            when (actionId) {
+                EditorInfo.IME_ACTION_SEARCH, EditorInfo.IME_ACTION_DONE -> {
+                    if (letra != null) {
+                        realizarBusqueda(query, letra)
+                    }
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun realizarBusqueda(query: String, letra: String) {
+        // Limpiar resultados anteriores
+        linearLayout.removeAllViews()
+
+        // Normalizar la entrada del usuario eliminando guiones y espacios
+        val cleanedQuery = query.replace("-", "").replace(" ", "").trim()
+
+        val filteredList = dataList.filter { data ->
+            val datos = data.split("\n")
+            val dui = datos[8].replace("-", "").replace(" ", "").trim()  // Asumiendo que el DUI está en la posición 8
+            val nit = datos[11].replace("-", "").replace(" ", "").trim() // Asumiendo que el NIT está en la posición 11
+            val nrc = datos[9].replace("-", "").replace(" ", "").trim()  // Asumiendo que el NRC está en la posición 9
+
+            // Comparar la entrada con los datos normalizados
+            dui.contains(cleanedQuery, ignoreCase = true) ||
+                    nit.contains(cleanedQuery, ignoreCase = true) ||
+                    nrc.contains(cleanedQuery, ignoreCase = true)
+        }
+
+        // Mostrar los datos filtrados
+        filteredList.forEach { data ->
+            agregarItemALinearLayout(data, letra)
+        }
+    }
+
+    private fun agregarItemALinearLayout(data: String, letra: String) {
+        val datos = data.split("\n")
+
+        if (datos[7] == "Contribuyente") {
+            val itemLayout2 = layoutInflater.inflate(R.layout.layout_list_item_contribuyentes, null)
+
+            val borrar2 = itemLayout2.findViewById<ImageButton>(R.id.btnBorrarData)
+            val Editar2 = itemLayout2.findViewById<ImageButton>(R.id.btnEditarData)
+            val Ver2 = itemLayout2.findViewById<ImageButton>(R.id.btnVerData)
+            val textViewNombre2 = itemLayout2.findViewById<TextView>(R.id.textViewNombreComercial)
+            val textViewNRC = itemLayout2.findViewById<TextView>(R.id.textViewNrc)
+            val textViewTelefono = itemLayout2.findViewById<TextView>(R.id.textViewTelefono)
+
+            textViewNombre2.text = datos[0]
+            textViewNRC.text = datos[9]
+            textViewTelefono.text = datos[13]
+
+            // Establece un onClickListener para cada tarjeta
+            itemLayout2.setOnClickListener {
+                if (letra == "r" || letra == "c") {
+                    Pasardata(data)
+                } else if (letra == "s") {
+                    mostrardialogo(data)
+                }
+            }
+
+            // Control de visibilidad de botones
+            controlarVisibilidadBotones(letra, borrar2, Editar2, Ver2)
+
+            borrar2.setOnClickListener {
+                Borrardatos(data, itemLayout2, linearLayout)
+            }
+            Editar2.setOnClickListener {
+                editardatos(data)
+            }
+            Ver2.setOnClickListener {
+                mostrardialogo(data)
+            }
+
+            linearLayout.addView(itemLayout2)
+
+        } else {
+            val itemLayout = layoutInflater.inflate(R.layout.layout_list_item_cliente, null)
+
+            val borrar = itemLayout.findViewById<ImageButton>(R.id.btnBorrarData)
+            val Editar = itemLayout.findViewById<ImageButton>(R.id.btnEditarData)
+            val Ver = itemLayout.findViewById<ImageButton>(R.id.btnVerData)
+            val textViewNombre = itemLayout.findViewById<TextView>(R.id.textViewNombre)
+            val textViewTelefono = itemLayout.findViewById<TextView>(R.id.textViewTelefono)
+            val textViewNit = itemLayout.findViewById<TextView>(R.id.textViewNit)
+
+            textViewNombre.text = datos[0]
+            textViewTelefono.text = datos[13]
+            textViewNit.text = datos[12]
+
+            // Establece un onClickListener para cada tarjeta
+            itemLayout.setOnClickListener {
+                if (letra == "c") {
+                    Pasardata(data)
+                } else if (letra == "s") {
+                    mostrardialogo(data)
+                }
+            }
+
+            // Control de visibilidad de botones
+            controlarVisibilidadBotones(letra, borrar, Editar, Ver)
+
+            borrar.setOnClickListener {
+                Borrardatos(data, itemLayout, linearLayout)
+            }
+            Editar.setOnClickListener {
+                editardatos(data)
+            }
+            Ver.setOnClickListener {
+                mostrardialogo(data)
+            }
+
+            if (letra != "r") {
+                linearLayout.addView(itemLayout)
+            }
+        }
+    }
+
+    // Función para controlar la visibilidad de los botones
+    private fun controlarVisibilidadBotones(letra: String, borrar: ImageButton, editar: ImageButton, ver: ImageButton) {
+        if (letra == "r" || letra == "c") {
+            borrar.visibility = View.GONE
+            editar.visibility = View.GONE
+            ver.visibility = View.VISIBLE
+        } else if (letra == "s") {
+            borrar.visibility = View.VISIBLE
+            editar.visibility = View.VISIBLE
+            ver.visibility = View.GONE
         }
     }
 
