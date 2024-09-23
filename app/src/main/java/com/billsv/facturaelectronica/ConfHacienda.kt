@@ -71,6 +71,13 @@ class ConfHacienda : AppCompatActivity() {
                     R.id.btnPrueba -> app.ambiente = "00"
                     R.id.btnProduccion -> app.ambiente = "01"
                 }
+
+                //Cargar Datos del Entorno
+                cargarDatosDelEntorno()
+
+                //Reiniciar el estado de edición dependiendo de los datos
+                verificarEstadoEdicion()
+
                 // Mostrar el nuevo estado para confirmar
                 Toast.makeText(this, "Entorno: ${app.ambiente}", Toast.LENGTH_SHORT).show()
             }
@@ -151,16 +158,65 @@ class ConfHacienda : AppCompatActivity() {
         val uuid = UUID.randomUUID()
         return uuid.toString().toUpperCase()
     }*/
+
+    private fun cargarDatosDelEntorno(){
+        val app = application as MyApp
+        val datos = obtenerDatosGuardados()
+
+        if (datos.isNotEmpty()){
+            mostrardata(datos)
+            verificarEstadoEdicion()
+        } else {
+            limpiarCampos()
+        }
+    }
+
+    private fun limpiarCampos() {
+        val usuario: EditText = findViewById(R.id.usuario)
+        val contraseña: EditText = findViewById(R.id.contraseña)
+
+        //Limpiar los campos si no hay datos guardados
+        usuario.setText("")
+        contraseña.setText("")
+
+        //Habilitar edición de los campos para ingresar nuevos datos
+        usuario.isEnabled = true
+        contraseña.isEnabled = true
+    }
+
+    private fun verificarEstadoEdicion() {
+        val usuarioTexto = usuario.text.toString().trim()
+        val contraseñaTexto = contraseña.text.toString().trim()
+
+        val botonGuardar: Button = findViewById(R.id.button2)
+        val botonEditar: Button = findViewById(R.id.button3)
+
+        if (usuarioTexto.isNotEmpty() && contraseñaTexto.isNotEmpty()) {
+            usuario.isEnabled = false
+            contraseña.isEnabled = false
+            botonGuardar.visibility = View.GONE
+            botonEditar.visibility = View.VISIBLE
+        } else {
+            usuario.isEnabled = true
+            contraseña.isEnabled = true
+            botonGuardar.visibility = View.VISIBLE
+            botonEditar.visibility = View.GONE
+        }
+    }
+
     private fun guardarInformacion() {
         val app = application as MyApp
         val database = app.database
         val usuario = usuario.text.toString()
         val contraseña = contraseña.text.toString()
 
+        //Establecer un tipo de documeto diferente para cada entorno
+        val tipoAutenticacion = if (app.ambiente == "00") "AutenticacionPrueba" else "AutenticacionProduccion"
+
         // Buscar si ya existe un documento del tipo "ConfEmisor"
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacion")))
+            .where(Expression.property("tipo").equalTo(Expression.string(tipoAutenticacion)))
 
         try {
             val resultSet = query.execute()
@@ -184,7 +240,7 @@ class ConfHacienda : AppCompatActivity() {
             val document = MutableDocument()
                 .setString("usuario", usuario)
                 .setString("contraseña", contraseña)
-                .setString("tipo", "Autentificacion")
+                .setString("tipo", tipoAutenticacion)
 
             // Guardar el nuevo documento
             database.save(document)
@@ -199,11 +255,12 @@ class ConfHacienda : AppCompatActivity() {
         // Obtén la instancia de la base de datos desde la aplicación
         val app = application as MyApp
         val database = app.database
+        val tipoAutenticacion = if (app.ambiente == "00") "AutenticacionPrueba" else "AutenticacionProduccion"
 
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacion")))
+            .where(Expression.property("tipo").equalTo(Expression.string(tipoAutenticacion)))
 
         // Ejecuta la consulta
         val result = query.execute()
