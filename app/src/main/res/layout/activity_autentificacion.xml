@@ -67,10 +67,11 @@
         app:layout_constraintEnd_toEndOf="@+id/imgAuth"
         app:layout_constraintStart_toStartOf="@id/imgAuth"
         app:layout_constraintTop_toTopOf="@id/textViewPrueba"
-        app:layout_constraintWidth_percent="0.6" />
+        app:layout_constraintWidth_percent="0.6"
+        android:ellipsize="end"/>
 
     <EditText
-        android:id="@+id/contrapr"
+        android:id="@+id/contrap"
         android:layout_width="0dp"
         android:inputType="textPassword"
         android:layout_height="wrap_content"
@@ -85,7 +86,8 @@
         app:layout_constraintEnd_toEndOf="@+id/imgAuth"
         app:layout_constraintStart_toStartOf="@id/imgAuth"
         app:layout_constraintTop_toTopOf="@id/userp"
-        app:layout_constraintWidth_percent="0.6" />
+        app:layout_constraintWidth_percent="0.6"
+        android:ellipsize="end"/>
 
     <TextView
         android:id="@+id/textViewProduc"
@@ -102,7 +104,7 @@
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="@id/imgAuth"
         app:layout_constraintStart_toStartOf="@id/imgAuth"
-        app:layout_constraintTop_toBottomOf="@+id/contrapr" />
+        app:layout_constraintTop_toBottomOf="@+id/contrap" />
 
     <EditText
         android:id="@+id/userpr"
@@ -119,9 +121,11 @@
         app:layout_constraintEnd_toEndOf="@+id/imgAuth"
         app:layout_constraintStart_toStartOf="@id/imgAuth"
         app:layout_constraintTop_toTopOf="@id/textViewProduc"
-        app:layout_constraintWidth_percent="0.6" />
+        app:layout_constraintWidth_percent="0.6"
+        android:ellipsize="end"/>
 
     <EditText
+        android:id="@+id/contrapr"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -136,7 +140,8 @@
         app:layout_constraintEnd_toEndOf="@+id/imgAuth"
         app:layout_constraintStart_toStartOf="@id/imgAuth"
         app:layout_constraintTop_toTopOf="@id/userpr"
-        app:layout_constraintWidth_percent="0.6" />
+        app:layout_constraintWidth_percent="0.6"
+        android:ellipsize="end"/>
 
     <TextView
         android:id="@+id/textView8"

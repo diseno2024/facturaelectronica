@@ -35,7 +35,18 @@ class MyCustomAppIntro : AppIntro() {
         addSlide(Certificado.newInstance())
 
     }
+
+    override fun onNextPressed(currentFragment: Fragment?) {
+        super.onNextPressed(currentFragment)
+        if (currentFragment is Autentificacion){
+            currentFragment.guardarInformacion()
+        }
+    }
     override fun onDonePressed(currentFragment: Fragment?) {
+        if (currentFragment is Certificado){
+            currentFragment.guardarCertificado()
+            currentFragment.guardarClavePublica()
+        }
         val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
         finish()

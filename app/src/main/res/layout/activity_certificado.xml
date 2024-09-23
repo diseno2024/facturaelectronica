@@ -53,7 +53,7 @@
     <TextView
         android:id="@+id/selected_cer"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/picker_clave"
         android:padding="11dp"
@@ -64,7 +64,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
-        app:layout_constraintWidth_percent="0.7" />
+        app:layout_constraintWidth_percent="0.7"
+        android:ellipsize="end"/>
 
 
     <Button
@@ -86,7 +87,7 @@
     <TextView
         android:id="@+id/selected_clave"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginTop="100dp"
         android:background="@drawable/picker_cer"
         android:padding="11dp"
@@ -97,7 +98,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_select_cer"
-        app:layout_constraintWidth_percent="0.7" />
+        app:layout_constraintWidth_percent="0.7"
+        android:ellipsize="end"/>
 
     <Button
         android:id="@+id/btn_select_clave"
