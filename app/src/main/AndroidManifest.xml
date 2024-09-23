@@ -121,11 +121,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".appintro.MyCustomAppIntro"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".appintro.MyCustomAppIntro"
+            android:name=".SplashScreen"
             android:exported="true"
             android:screenOrientation="portrait" >
             <intent-filter>
