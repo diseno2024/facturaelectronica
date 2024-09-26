@@ -33,6 +33,7 @@ class MyCustomAppIntro : AppIntro() {
         addSlide(Logo.newInstance()) // Aquí es donde se mostrará el botón "Saltar"
         addSlide(Autentificacion.newInstance())
         addSlide(Certificado.newInstance())
+        addSlide(DonePage.newInstance())
 
     }
 
@@ -41,12 +42,12 @@ class MyCustomAppIntro : AppIntro() {
         if (currentFragment is Autentificacion){
             currentFragment.guardarInformacion()
         }
-    }
-    override fun onDonePressed(currentFragment: Fragment?) {
         if (currentFragment is Certificado){
             currentFragment.guardarCertificado()
             currentFragment.guardarClavePublica()
         }
+    }
+    override fun onDonePressed(currentFragment: Fragment?) {
         val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
         finish()

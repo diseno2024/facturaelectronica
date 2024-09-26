@@ -63,7 +63,7 @@ class Certificado : Fragment() {
     // Abrir el picker de archivos, solo permite archivos .pem
     private fun openFilePicker(requestCode: Int) {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        intent.type = "*/*" // Limitar a archivos .pem
+        intent.type = "*/*" // Permite cualquier tipo de archivo y verificamos despues
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         startActivityForResult(intent, requestCode)
     }
@@ -75,7 +75,7 @@ class Certificado : Fragment() {
             data?.data?.let { uri ->
                 val fileName = getFileName(uri)
 
-                if (fileName != null) {
+                if (fileName != null && fileName.endsWith(".pem")) {
                     when (requestCode) {
                         PICK_CERTIFICATE_REQUEST_CODE -> {
                             selectedCerUri = uri
@@ -90,13 +90,11 @@ class Certificado : Fragment() {
                     }
                 } else {
                     // Mostrar error si no se puede obtener el nombre del archivo
-                    Toast.makeText(context, "No se pudo obtener el nombre del archivo", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Por favor selecciona un archivo .pem válido", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
-
-
 
     // Obtener el nombre del archivo
     private fun getFileName(uri: Uri): String? {
@@ -112,54 +110,43 @@ class Certificado : Fragment() {
 
     // Guardar Certificado en la base de datos
     fun guardarCertificado() {
-        val uri=selectedCerUri
-        val fileName=getFileName(uri)
-        val document = MutableDocument()
-        document.setString("tipo", "certificado")  // Establecer el tipo
-        document.setString("certificado_fileName", fileName)
-        document.setBlob("certificado",
-            context?.contentResolver?.openInputStream(uri)?.let { Blob("application/json", it) })
-        Log.e("Certificado","guardado: $document")
+        if (::selectedCerUri.isInitialized) {
+            val fileName = getFileName(selectedCerUri)
+            val document = MutableDocument()
+            document.setString("tipo", "certificado")  // Establecer el tipo
+            document.setString("certificado_fileName", fileName)
+            document.setString("certificado_uri", selectedCerUri.toString())  // Guardar la URI
 
-        // Guarda el documento en Couchbase Lite
-        database.save(document)
+            Log.d("Certificado", "Certificado guardado: $document")
+
+            // Guarda el documento en Couchbase Lite
+            database.save(document)
+        } else {
+            Toast.makeText(context, "Por favor selecciona un certificado antes de guardar", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
     // Guardar Clave Pública en la base de datos
     fun guardarClavePublica() {
-        val uri=selectedKeyUri
-        guardarArchivoEnBaseDeDatos(uri, "clave_publica", "application/x-pem-file")
-    }
-
-    // Guardar archivo en Couchbase Lite
-   private fun guardarArchivoEnBaseDeDatos(uri: Uri, tipo: String, mimeType: String) {
-        try {
-            val inputStream = context?.contentResolver?.openInputStream(uri)
-            if (inputStream == null) {
-                Log.e("Certificado", "No se pudo abrir el archivo: $uri")
-                return
-            }
-
-            // Convertir el archivo en un Blob
-            val blob = Blob(mimeType, inputStream)
-
-            // Crear el documento y asignar tipo (certificado o clave pública)
+        if (::selectedKeyUri.isInitialized) {
+            val fileName = getFileName(selectedKeyUri) // Obtener el nombre del archivo
             val document = MutableDocument()
-            document.setBlob(tipo, blob)
-            document.setString("tipo", tipo)
+            document.setString("tipo", "clave_publica")  // Establecer el tipo como clave pública
+            document.setString("clave_publica_fileName", fileName)  // Guardar el nombre del archivo
+            document.setString("clave_publica_uri", selectedKeyUri.toString())  // Guardar la URI
 
-            // Guardar el documento en la base de datos
+            Log.d("Certificado", "Clave pública guardada: $document")
+
+            // Guarda el documento en Couchbase Lite
             database.save(document)
 
-            Log.d("Certificado", "$tipo guardado correctamente en la base de datos")
-            Toast.makeText(context, "$tipo guardado correctamente", Toast.LENGTH_SHORT).show()
-
-        } catch (e: Exception) {
-            Log.e("Certificado", "Error al guardar el archivo en la base de datos: ${e.message}", e)
-            Toast.makeText(context, "Error al guardar $tipo", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Clave pública guardada correctamente", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Por favor selecciona una clave pública antes de guardar", Toast.LENGTH_SHORT).show()
         }
     }
+
 
 
     companion object {

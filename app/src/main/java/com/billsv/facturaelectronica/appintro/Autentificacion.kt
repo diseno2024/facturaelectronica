@@ -96,6 +96,13 @@ class Autentificacion : Fragment() {
             Toast.makeText(requireContext(), "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
+    fun validar(): Boolean{
+        val userPrueba=userp.text.toString()
+        val contraPrueba=contrap.text.toString()
+        val userProduccion=userp.text.toString()
+
+        return true
+    }
 
     companion object {
         // Puedes pasar argumentos aquí si lo necesitas
