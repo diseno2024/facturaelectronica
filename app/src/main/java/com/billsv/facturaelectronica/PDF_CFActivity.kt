@@ -1199,20 +1199,23 @@ class PDF_CFActivity : AppCompatActivity() {
             canvas.drawText("$$subTotalVentas", finalPosition2 - paintTITULO.measureText(subTotalVentas), startY + 15, paintInfoDocumento)
 
             // Info de Descuento para Ventas no sujetas con su respectivo monto
-            val descuNoSuj = "0.0"
-            canvas.drawText("Monto global Desc., Rebajas y otros a ventas no sujetas:", finalPosition1 - paintTITULO.measureText("Monto global Desc., Rebajas y otros a ventas no sujetas:"), startY + 26, paintTITULO)
-            canvas.drawText("$$descuNoSuj", finalPosition2 - paintTITULO.measureText(descuNoSuj), startY + 26, paintInfoDocumento)
+            // Convertir los valores a cadenas, o asignar "0.0" si son nulos
+            val totalNoSujStr = totalNoSuj?.toString() ?: "0.0"
+            val totalExentaStr = totalExenta?.toString() ?: "0.0"
+            val totalGravadaStr = totalGravada?.toString() ?: "0.0"
 
-            // Info de Descuento para Ventas exentas con su respectivo monto
-            val descuExenta = "0.0"
-            canvas.drawText("Monto global Desc., Rebajas y otros a ventas exentas:", finalPosition1 - paintTITULO.measureText("Monto global Desc., Rebajas y otros a ventas exentas:"), startY + 37, paintTITULO)
-            canvas.drawText("$$descuExenta", finalPosition2 - paintTITULO.measureText(descuExenta), startY + 37, paintInfoDocumento)
+// Dibujar las ventas no sujetas, exentas y gravadas
+            canvas.drawText("Ventas No Sujetas:", finalPosition1 - paintTITULO.measureText("Ventas No Sujetas:"), startY + 26, paintTITULO)
+            canvas.drawText("$$totalNoSujStr", finalPosition2 - paintTITULO.measureText(totalNoSujStr), startY + 26, paintInfoDocumento)
 
-            // Info de Descuento para Ventas gravadas con su respectivo monto
-            val descuGravada = "0.0"
-            canvas.drawText("Monto global Desc., Rebajas y otros a ventas gravadas:", finalPosition1 - paintTITULO.measureText("Monto global Desc., Rebajas y otros a ventas gravadas:"), startY + 48, paintTITULO)
-            canvas.drawText("$$descuGravada", finalPosition2 - paintTITULO.measureText(descuGravada), startY + 48, paintInfoDocumento)
+            canvas.drawText("Ventas Exentas:", finalPosition1 - paintTITULO.measureText("Ventas Exentas:"), startY + 37, paintTITULO)
+            canvas.drawText("$$totalExentaStr", finalPosition2 - paintTITULO.measureText(totalExentaStr), startY + 37, paintInfoDocumento)
+
+            canvas.drawText("Ventas Gravadas:", finalPosition1 - paintTITULO.measureText("Ventas Gravadas:"), startY + 48, paintTITULO)
+            canvas.drawText("$$totalGravadaStr", finalPosition2 - paintTITULO.measureText(totalGravadaStr), startY + 48, paintInfoDocumento)
+
             val tF = intent.getStringExtra("JSON")
+
             // Obtener el array de tributos
             var tributos: String? = null
             if (tF=="Factura"){
@@ -1220,19 +1223,23 @@ class PDF_CFActivity : AppCompatActivity() {
             }else{
                 tributos = "si"
             }
-
-
+            
             // Variables para almacenar la descripción y el valor
             var descripcion20 = ""
             var valor20: String = ""
-            // Buscar y almacenar la descripción y el valor del tributo con código "20"
-            if (tributos != null) {
-                descripcion20 = "Impuesto al Valor Agregado 13%"
-                valor20 = "0.13"
-            }else{
+
+// Suponiendo que el valor del IVA ya está calculado y almacenado en "totalIva" como el 10% del total
+            val totalIva = intent.getStringExtra("Iva")?.toDouble()?.toBigDecimal()?.setScale(2, RoundingMode.HALF_UP)
+
+// Buscar y almacenar la descripción y el valor del tributo con código "20"
+            if (tributos != null && totalIva != null) {
+                descripcion20 = "Impuesto al Valor Agregado 13%" // Cambia la descripción si corresponde
+                valor20 = totalIva.toString() // Usa el valor dinámico calculado para el IVA
+            } else {
                 descripcion20 = ""
                 valor20 = ""
             }
+
             if (tF=="Factura"){
                 // Dibuja lo que es el monto de IVA (13%) sobre el total de la venta
                 canvas.drawText(descripcion20, finalPosition1 - paintTITULO.measureText(descripcion20), startY + 59, paintTITULO)
@@ -1275,6 +1282,7 @@ class PDF_CFActivity : AppCompatActivity() {
             canvas.drawText("$$reteRenta", finalPosition2 - paintTITULO.measureText(reteRenta), startY + 103, paintInfoDocumento)
 
             var montoTotalOperacion = "0.0"
+
             if (tF=="Factura"){
                 montoTotalOperacion = intent.getStringExtra("total")?.toDouble()?.toBigDecimal()
                     ?.setScale(2, RoundingMode.HALF_UP).toString()

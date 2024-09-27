@@ -490,7 +490,7 @@ class EmitirCCFActivity : AppCompatActivity() {
         val totalEx=totalExenta.toString()
         val totalGr=totalGravada.toString()
         val totalT=total.toString()
-        val iva= total*0.13
+        val iva= totalGravada*0.13
         val totalI = iva.toString()
 
 

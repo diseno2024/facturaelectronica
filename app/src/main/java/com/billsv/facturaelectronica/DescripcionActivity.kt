@@ -254,11 +254,25 @@ class DescripcionActivity : AppCompatActivity() {
                 "99"
             }
         }
+        // Condicional para mostrar los valores correspondientes
+        codigoUnidad = when (codigoUnidad) {
+            "59" -> "1"      // Mostrar 1 en lugar de 59
+            "58" -> "12"     // Mostrar 12 en lugar de 58
+            "57" -> "100"    // Mostrar 100 en lugar de 57
+            "99" -> "Otros"  // Mostrar "Otros" en lugar de 99
+            else -> codigoUnidad // Retorna el valor original si no coincide
+        }
+
+// Imprime el resultado
+        println("Valor mostrado: $codigoUnidad")
+
+
 
         var count=0
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")))
+            .where(Expression.property("tipo").equalTo(Expression.string("Articulocf")).or(Expression.property("tipo").equalTo(Expression.string("Articuloccf"))))
+
 
         try {
             val result = query.execute()
