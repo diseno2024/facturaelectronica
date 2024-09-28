@@ -50,6 +50,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.math.RoundingMode
+import org.json.JSONObject
 
 class PDF_CFActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
@@ -99,24 +100,41 @@ class PDF_CFActivity : AppCompatActivity() {
                             horEmi = datos[1]
                         }
                     }
-                    json(fecEmi,horEmi)
-                    generarPdf("PDF",fecEmi,horEmi)
-                    guardarDatosF(JSON)
-                    borrararticulos(JSON)
-                    borrarDui(JSON)
-                    borrarClienteTemporal()
-                    borrarNCCG(JSON)
+                    val auth = obtenerUsuarioAPI()
+                    var user = ""
+                    var pwd = ""
+                    var entorno = ""
+                    auth.forEach(){data->
+                        val credenciales = data.split("\n")
+                        val FacturaPro = credenciales[4]
+                        val CreditoPro = credenciales[5]
+                        if(JSON=="Factura"){
+                            if(FacturaPro=="true"){
+                                entorno = "P"
+                                user = credenciales[2]
+                                pwd = credenciales[3]
+                            }else{
+                                entorno = "N"
+                                user = credenciales[0]
+                                pwd = credenciales[1]
+                            }
+                        }else{
+                            if(CreditoPro=="true"){
+                                entorno = "P"
+                                user = credenciales[2]
+                                pwd = credenciales[3]
+                            }else{
+                                entorno = "N"
+                                user = credenciales[0]
+                                pwd = credenciales[1]
+                            }
+
+                        }
+                        Log.e("Credenciales", "${user},${pwd}")
+                    }
+                    json(fecEmi,horEmi,user,pwd, entorno)
                 }
                 dialogoGenerar.dismiss()
-                if(JSON=="CreditoFiscal") {
-                    val intent = Intent(this, EmitirCCFActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }else{
-                    val intent = Intent(this, EmitirCFActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
             }
 
             btnNo.setOnClickListener {
@@ -136,7 +154,7 @@ class PDF_CFActivity : AppCompatActivity() {
         binding.VistaPdf.show()
 
     }
-    private fun enviarRecepcionDTE(token: String, ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?){
+    private fun enviarRecepcionDTE(token: String, ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?, fecEmi: String,horEmi: String){
         val apiServiceR = RetrofitClient0.getInstance(token).create(ApiServiceR::class.java)
         //Parametros a enviar en la api recepcion se tomaran del json que se esta generando
         val recepcionRequest = RecepcionRequest(ambiente,idenvio,version,tipoDTE,documento,codigoGeneracion)
@@ -149,6 +167,28 @@ class PDF_CFActivity : AppCompatActivity() {
                             Toast.makeText(this@PDF_CFActivity, "SelloRecibido: ${recepcionResponse.selloRecibido}", Toast.LENGTH_LONG).show()
                             Log.d("API_RESPONSE", "SelloRecibido: ${recepcionResponse.selloRecibido}")
                             guardarSello(recepcionResponse.selloRecibido)
+                            val JSON = intent.getStringExtra("JSON")
+                            val jsonObject = JSONObject(documento)
+                            jsonObject.put("selloRecibido", recepcionResponse.selloRecibido)
+                            val updatedJsonString = jsonObject.toString(4)
+                            saveJsonToExternalStorage(updatedJsonString, codigoGeneracion)
+                            if (JSON != null) {
+                                generarPdf("PDF",fecEmi,horEmi)
+                                guardarDatosF(JSON)
+                                borrararticulos(JSON)
+                                borrarDui(JSON)
+                                borrarClienteTemporal()
+                                borrarNCCG(JSON)
+                            }
+                            if(JSON=="CreditoFiscal") {
+                                val intent = Intent(applicationContext, EmitirCCFActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }else{
+                                val intent = Intent(applicationContext, EmitirCFActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
                         } else {
                             handleErrorRResponse(response)
                         }
@@ -199,6 +239,7 @@ class PDF_CFActivity : AppCompatActivity() {
 
             // Guardar el nuevo documento
             database.save(document)
+            savestate(false)
             Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
         } catch (e: CouchbaseLiteException) {
             Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
@@ -206,12 +247,13 @@ class PDF_CFActivity : AppCompatActivity() {
         }
     }
 
-    private fun enviaraMH(ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?){
-
-                apiService = RetrofitClient.instance.create(ApiService::class.java)
-                apiService = RetrofitClient2.instance.create(ApiService::class.java)
-                val authRequest = AuthRequest("jesus", "123456")
-                var sello = ""
+    private fun enviaraMH(ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?,user:String,pwd:String, fecEmi: String,horEmi: String,letra: String){
+                if(letra=="P"){
+                    apiService = RetrofitClient.instance.create(ApiService::class.java)
+                }else{
+                    apiService = RetrofitClient2.instance.create(ApiService::class.java)
+                }
+                val authRequest = AuthRequest(user, pwd)
                 Log.d("API_REQUEST", "Enviando solicitud a la API")
 
                 apiService.authenticate(authRequest).enqueue(object : Callback<AuthResponse> {
@@ -222,18 +264,21 @@ class PDF_CFActivity : AppCompatActivity() {
                                     val authBody = authResponse.body
                                     Toast.makeText(this@PDF_CFActivity, "Token: ${authBody?.token}", Toast.LENGTH_LONG).show()
                                     Log.d("API_RESPONSE", "Token: ${authBody?.token}")
-                                    enviarRecepcionDTE(authBody?.token.toString(),ambiente, idenvio, version, tipoDTE, documento, codigoGeneracion)
-
+                                    savestate(false)
+                                    enviarRecepcionDTE(authBody?.token.toString(),ambiente, idenvio, version, tipoDTE, documento, codigoGeneracion, fecEmi, horEmi)
                                 } else {
                                     handleErrorResponse(response)
+                                    savestate(true)
                                 }
                             }
                         } else {
                             handleErrorResponse(response)
+                            savestate(true)
                         }
                     }
 
                     override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                        savestate(true)
                         Toast.makeText(this@PDF_CFActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
                         Log.e("API_ERROR", "Error: ${t.message}", t)
                     }
@@ -242,6 +287,46 @@ class PDF_CFActivity : AppCompatActivity() {
 
     }
 
+    private fun savestate(value : Boolean) {
+        val app = application as MyApp
+        val database = app.database
+        // Buscar si ya existe un documento del tipo "ConfEmisor"
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("authOK")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+
+            // Crear un nuevo documento
+            val document = MutableDocument()
+                .setString("value",value.toString())
+                .setString("tipo", "authOK")
+
+            // Guardar el nuevo documento
+            database.save(document)
+            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            showToast("Error al guardar")
+        }
+
+    }
     private fun obtenerUsuarioAPI(): List<String> {
         // Obtén la instancia de la base de datos desde la aplicación
         val app = application as MyApp
@@ -264,11 +349,15 @@ class PDF_CFActivity : AppCompatActivity() {
             val dict = result.getDictionary(database.name)
 
             // Extrae los valores de los campos del documento
-            val usuario = dict?.getString("usuario")
-            val contraseña = dict?.getString("contraseña")
+            val usuarioP = dict?.getString("usuarioPrueba")
+            val contraseñaP = dict?.getString("contraseñaPrueba")
+            val usuarioPro = dict?.getString("usuarioProduccion")
+            val contraseñaPro = dict?.getString("contraseñaProduccion")
+            val checkF = dict?.getString("consumidorFinal")
+            val checkCF = dict?.getString("creditoFiscal")
 
             // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$usuario\n$contraseña"
+            val dataString = "$usuarioP\n$contraseñaP\n$usuarioPro\n$contraseñaPro\n$checkF\n$checkCF"
             dataList.add(dataString)
         }
 
@@ -280,6 +369,7 @@ class PDF_CFActivity : AppCompatActivity() {
         try {
             val errorResponse = Gson().fromJson(response.errorBody()?.charStream(), ErrorResponse::class.java)
             Toast.makeText(this, "Error: ${errorResponse.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Usuario no valido por favor verifique su usuario", Toast.LENGTH_LONG).show()
             Log.e("API_ERROR_RESPONSE", "Error: ${errorResponse.message}")
         } catch (e: JsonSyntaxException) {
             Toast.makeText(this, "Error desconocido", Toast.LENGTH_LONG).show()
@@ -315,7 +405,7 @@ class PDF_CFActivity : AppCompatActivity() {
             finish()
         }
     }
-    private fun json(fecEmi:String,horEmi:String){
+    private fun json(fecEmi:String,horEmi:String, user: String,pwd: String, entorno:String){
         var dui: String? = null
         var nombre: String? = null
         var telefono: String? = null
@@ -620,10 +710,7 @@ class PDF_CFActivity : AppCompatActivity() {
 
                 // Convertir el objeto a JSON
                 jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
-                enviaraMH(ambiente,"Bill-01", 1, "01" , jsonString .toString(), codigoGeneracion )
-                documento.selloRecibido = sello()
-                jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
-
+                enviaraMH(ambiente,"Bill-01", 1, "01" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
             } else if (JSON == "CreditoFiscal") {
                 val articulos = obtenerDatosGuardados("CF")
                 val cuerpoDocumentosC = createCuerpoDocumentoC(articulos)
@@ -641,16 +728,45 @@ class PDF_CFActivity : AppCompatActivity() {
 
                 // Convertir el objeto a JSON
                 jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento2)
+                enviaraMH(ambiente,"Bill-01", 1, "03" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi,entorno)
             }
 
-            // Guardar el JSON en un archivo
-            jsonString?.let {
-                saveJsonToExternalStorage(it, codigoGeneracion)
-            }
        // } ?: run {
         //    Log.d("PDF_CFActivity", "No se pudo obtener la clave privada para el alias $alias")
        // }
     }
+
+    private fun getstateauth(): String?{
+        val app = application as MyApp
+        val database = app.database
+
+        // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("authOK")))
+
+        // Ejecuta la consulta
+        val result = query.execute()
+
+        // Lista para almacenar los datos obtenidos
+        var dataList : String? = ""
+
+        // Itera sobre todos los resultados de la consulta
+        result.allResults().forEach { result ->
+            // Obtiene el diccionario del documento del resultado actual
+            val dict = result.getDictionary(database.name)
+
+            // Extrae los valores de los campos del documento
+            dataList = dict?.getString("value")
+
+            // Formatea los datos como una cadena y la agrega a la lista
+
+        }
+
+        // Devuelve la lista de datos
+        return dataList
+    }
+
 
     private fun sello(): String?{
         val app = application as MyApp

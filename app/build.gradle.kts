@@ -102,4 +102,8 @@ dependencies {
     implementation ("org.bouncycastle:bcprov-jdk15on:1.68")
     implementation("com.github.KeepSafe:TapTargetView:1.13.2")
     implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.23")
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
 }
