@@ -24,9 +24,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.net.toUri
 import com.billsv.facturaelectronica.databinding.ActivityPdfCfactivityBinding
-import com.billsv.signer.firmarDatos
 import com.billsv.signer.obtenerClavePrivada
-import com.billsv.signer.obtenerClavePublica
 import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
@@ -39,9 +37,6 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileWriter
@@ -51,13 +46,10 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import java.util.UUID
-import com.pdfview.PDFView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.math.RoundingMode
-import android.util.Base64
 
 class PDF_CFActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
@@ -114,46 +106,6 @@ class PDF_CFActivity : AppCompatActivity() {
                     borrarDui(JSON)
                     borrarClienteTemporal()
                     borrarNCCG(JSON)
-                    if(autentificar()){
-                        val credenciales = obtenerUsuarioAPI()
-                        var usuarioapi = ""
-                        var contraseñaapi = ""
-                        credenciales.forEach { data ->
-                            val datosapi = data.split("\n")
-                            usuarioapi = datosapi[0]
-                            contraseñaapi = datosapi[1]
-                            if(usuarioapi!="") {
-                                apiService = RetrofitClient.instance.create(ApiService::class.java)
-                                apiService = RetrofitClient2.instance.create(ApiService::class.java)
-                                val authRequest = AuthRequest(usuarioapi, contraseñaapi)
-
-                                Log.d("API_REQUEST", "Enviando solicitud a la API")
-
-                                apiService.authenticate(authRequest).enqueue(object : Callback<AuthResponse> {
-                                    override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
-                                        if (response.isSuccessful) {
-                                            response.body()?.let { authResponse ->
-                                                if (authResponse.status == "OK") {
-                                                    val authBody = authResponse.body
-                                                    Toast.makeText(this@PDF_CFActivity, "Token: ${authBody?.token}", Toast.LENGTH_LONG).show()
-                                                    Log.d("API_RESPONSE", "Token: ${authBody?.token}")
-                                                } else {
-                                                    handleErrorResponse(response)
-                                                }
-                                            }
-                                        } else {
-                                            handleErrorResponse(response)
-                                        }
-                                    }
-
-                                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                                        Toast.makeText(this@PDF_CFActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
-                                        Log.e("API_ERROR", "Error: ${t.message}", t)
-                                    }
-                                })
-                            }
-                        }
-                    }
                 }
                 dialogoGenerar.dismiss()
                 if(JSON=="CreditoFiscal") {
@@ -184,9 +136,110 @@ class PDF_CFActivity : AppCompatActivity() {
         binding.VistaPdf.show()
 
     }
+    private fun enviarRecepcionDTE(token: String, ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?){
+        val apiServiceR = RetrofitClient0.getInstance(token).create(ApiServiceR::class.java)
+        //Parametros a enviar en la api recepcion se tomaran del json que se esta generando
+        val recepcionRequest = RecepcionRequest(ambiente,idenvio,version,tipoDTE,documento,codigoGeneracion)
+        apiServiceR.reception(recepcionRequest).enqueue(object : Callback<RecepcionResponse> {
+            override fun onResponse(call: Call<RecepcionResponse>, response: Response<RecepcionResponse>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@PDF_CFActivity, "Recepción exitosa", Toast.LENGTH_LONG).show()
+                    response.body()?.let { recepcionResponse ->
+                        if (recepcionResponse.estado == "PROCESADO") {
+                            Toast.makeText(this@PDF_CFActivity, "SelloRecibido: ${recepcionResponse.selloRecibido}", Toast.LENGTH_LONG).show()
+                            Log.d("API_RESPONSE", "SelloRecibido: ${recepcionResponse.selloRecibido}")
+                            guardarSello(recepcionResponse.selloRecibido)
+                        } else {
+                            handleErrorRResponse(response)
+                        }
+                    }
+                } else {
+                    // Manejar error de la respuesta
+                    handleErrorRResponse(response)
+                }
+            }
 
-    private fun autentificar(): Boolean {
-        return false
+            override fun onFailure(call: Call<RecepcionResponse>, t: Throwable) {
+                Toast.makeText(this@PDF_CFActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+                Log.e("API_ERROR", "Error: ${t.message}", t)
+            }
+        })
+    }
+
+    private fun guardarSello(selloRecibido: String) {
+        val app = application as MyApp
+        val database = app.database
+        // Buscar si ya existe un documento del tipo "ConfEmisor"
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("sello")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+
+            // Crear un nuevo documento
+            val document = MutableDocument()
+                .setString("value",selloRecibido)
+                .setString("tipo", "sello")
+
+            // Guardar el nuevo documento
+            database.save(document)
+            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            showToast("Error al guardar")
+        }
+    }
+
+    private fun enviaraMH(ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?){
+
+                apiService = RetrofitClient.instance.create(ApiService::class.java)
+                apiService = RetrofitClient2.instance.create(ApiService::class.java)
+                val authRequest = AuthRequest("jesus", "123456")
+                var sello = ""
+                Log.d("API_REQUEST", "Enviando solicitud a la API")
+
+                apiService.authenticate(authRequest).enqueue(object : Callback<AuthResponse> {
+                    override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
+                        if (response.isSuccessful) {
+                            response.body()?.let { authResponse ->
+                                if (authResponse.status == "OK") {
+                                    val authBody = authResponse.body
+                                    Toast.makeText(this@PDF_CFActivity, "Token: ${authBody?.token}", Toast.LENGTH_LONG).show()
+                                    Log.d("API_RESPONSE", "Token: ${authBody?.token}")
+                                    enviarRecepcionDTE(authBody?.token.toString(),ambiente, idenvio, version, tipoDTE, documento, codigoGeneracion)
+
+                                } else {
+                                    handleErrorResponse(response)
+                                }
+                            }
+                        } else {
+                            handleErrorResponse(response)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                        Toast.makeText(this@PDF_CFActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+                        Log.e("API_ERROR", "Error: ${t.message}", t)
+                    }
+                })
+
+
     }
 
     private fun obtenerUsuarioAPI(): List<String> {
@@ -228,6 +281,16 @@ class PDF_CFActivity : AppCompatActivity() {
             val errorResponse = Gson().fromJson(response.errorBody()?.charStream(), ErrorResponse::class.java)
             Toast.makeText(this, "Error: ${errorResponse.message}", Toast.LENGTH_LONG).show()
             Log.e("API_ERROR_RESPONSE", "Error: ${errorResponse.message}")
+        } catch (e: JsonSyntaxException) {
+            Toast.makeText(this, "Error desconocido", Toast.LENGTH_LONG).show()
+            Log.e("API_ERROR_RESPONSE", "Error desconocido", e)
+        }
+    }
+    private fun handleErrorRResponse(response: Response<RecepcionResponse>) {
+        try {
+            val errorResponse = Gson().fromJson(response.errorBody()?.charStream(), RecepcionResponse::class.java)
+            Toast.makeText(this, "Error: ${errorResponse.descripcionMsg}", Toast.LENGTH_LONG).show()
+            Log.e("API_ERROR_RESPONSE", "Error: ${errorResponse.descripcionMsg}")
         } catch (e: JsonSyntaxException) {
             Toast.makeText(this, "Error desconocido", Toast.LENGTH_LONG).show()
             Log.e("API_ERROR_RESPONSE", "Error desconocido", e)
@@ -534,21 +597,22 @@ class PDF_CFActivity : AppCompatActivity() {
         val JSON = intent.getStringExtra("JSON")
         var jsonString: String? = null
 
+
         // Obtener clave privada y pública
         val alias = "BillSV"
         val clavePrivada = obtenerClavePrivada(alias)
 
-        clavePrivada?.let {
+        //clavePrivada?.let {
             if (JSON=="Factura") {
                 val articulos = obtenerDatosGuardados("F")
                 val cuerpoDocumentos = createCuerpoDocumento(articulos)
                 documento.cuerpoDocumento = cuerpoDocumentos
 
                 // Firmar el JSON
-                val firma = firmarDatos(documento, clavePrivada)
+                //val firma = firmarDatos(documento, clavePrivada)
 
                 //Agregar la firma al documento
-                documento.firmaElectronica = firma
+                documento.firmaElectronica = "firma"
 
                 // Crear una instancia de ObjectMapper
                 val mapper = ObjectMapper().registerModule(KotlinModule())
@@ -556,16 +620,20 @@ class PDF_CFActivity : AppCompatActivity() {
 
                 // Convertir el objeto a JSON
                 jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
+                enviaraMH(ambiente,"Bill-01", 1, "01" , jsonString .toString(), codigoGeneracion )
+                documento.selloRecibido = sello()
+                jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
+
             } else if (JSON == "CreditoFiscal") {
                 val articulos = obtenerDatosGuardados("CF")
                 val cuerpoDocumentosC = createCuerpoDocumentoC(articulos)
                 documento2.cuerpoDocumento = cuerpoDocumentosC
 
                 // Firmar el JSON
-                val firma = firmarDatos(documento2, clavePrivada)
+                //val firma = firmarDatos(documento2, clavePrivada)
 
                 // Agregar la firma al documento
-                documento2.firmaElectronica = firma
+                documento2.firmaElectronica = "firma"
 
                 // Crear una instancia de ObjectMapper
                 val mapper = ObjectMapper().registerModule(KotlinModule())
@@ -579,9 +647,41 @@ class PDF_CFActivity : AppCompatActivity() {
             jsonString?.let {
                 saveJsonToExternalStorage(it, codigoGeneracion)
             }
-        } ?: run {
-            Log.d("PDF_CFActivity", "No se pudo obtener la clave privada para el alias $alias")
+       // } ?: run {
+        //    Log.d("PDF_CFActivity", "No se pudo obtener la clave privada para el alias $alias")
+       // }
+    }
+
+    private fun sello(): String?{
+        val app = application as MyApp
+        val database = app.database
+
+        // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("sello")))
+
+        // Ejecuta la consulta
+        val result = query.execute()
+
+        // Lista para almacenar los datos obtenidos
+        var dataList : String? = ""
+
+        // Itera sobre todos los resultados de la consulta
+        result.allResults().forEach { result ->
+            // Obtiene el diccionario del documento del resultado actual
+            val dict = result.getDictionary(database.name)
+
+            // Extrae los valores de los campos del documento
+            dataList = dict?.getString("value")
+
+            // Formatea los datos como una cadena y la agrega a la lista
+
         }
+
+        // Devuelve la lista de datos
+        return dataList
+
     }
 
     private fun createCuerpoDocumentoC(dataList: List<String>): List<CuerpoDocumentoC> {

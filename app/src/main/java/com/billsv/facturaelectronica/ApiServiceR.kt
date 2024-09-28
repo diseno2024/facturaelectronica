@@ -1,15 +1,15 @@
 package com.billsv.facturaelectronica
 
+
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
-
-interface ApiService {
+interface ApiServiceR {
     @Headers(
         "Content-Type: application/json",
-        "User-Agent: Billsv/1.0"
+        "User-Agent: Billsv/1.0",
     )
-    @POST("/auth")
-    fun authenticate(@Body request: AuthRequest): Call<AuthResponse>
+    @POST("/recepciondte")
+    fun reception(@Body request: RecepcionRequest): Call<RecepcionResponse>
 }

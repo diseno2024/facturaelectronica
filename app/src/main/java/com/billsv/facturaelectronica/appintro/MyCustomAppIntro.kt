@@ -17,7 +17,7 @@ class MyCustomAppIntro : AppIntro() {
             unselectedIndicatorColor = getColor(R.color.unselected_indicator_color)
         )
         setImmersiveMode()
-
+        setDoneText("comencemos")
         // Configurar los colores de los botones
         setSeparatorColor(getColor(R.color.transparent))
         setNextArrowColor(getColor(R.color.selected_indicator_color))

@@ -1,5 +1,5 @@
 package com.billsv.facturaelectronica
-
+//auth
 data class AuthRequest(val user: String, val pwd: String)
 
 data class AuthResponse(
@@ -29,4 +29,26 @@ data class ErrorResponse(
     val status: String,
     val error: String,
     val message: String
+)
+//recepcion
+data class RecepcionRequest(
+    val ambiente: String,
+    val idenvio: String,
+    val version: Int,
+    val tipoDTE: String,
+    val documento: String,
+    val codigoGeneracion: String?
+)
+data class RecepcionResponse(
+    val version: Int,
+    val ambiente: String,
+    val versionApp: Int,
+    val estado: String,
+    val codigoGeneracion: String,
+    val selloRecibido: String,
+    val fhProcesamiento: String,
+    val clasificaMsg: String,
+    val codigoMsg: String,
+    val descripcionMsg: String,
+    val observaciones: List<String>
 )

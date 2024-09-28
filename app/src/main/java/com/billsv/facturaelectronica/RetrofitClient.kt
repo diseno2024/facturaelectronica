@@ -4,10 +4,27 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+object RetrofitClient0 {
+    private const val BASE_URL = "http://192.168.1.17:3000/recepciondte/"
+    fun getInstance(token: String): Retrofit {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(token))
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL) // Reemplaza con tu base URL
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+}
 
 object RetrofitClient {
-    private const val BASE_URL = "https://api.dtes.mh.gob.sv/seguridad/authw/"
+    //real private const val BASE_URL = "https://api.dtes.mh.gob.sv/seguridad/authw/"
+    //prueba backend fake
+    val url = "http://192.168.1.17:3000/auth"
 
+    private const val BASE_URL = "http://192.168.1.17:3000/auth/"
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
@@ -25,8 +42,9 @@ object RetrofitClient {
     }
 }
 object RetrofitClient2 {
-    private const val BASE_URL = "https://apitest.dtes.mh.gob.sv/seguridad/auth/"
-
+    //real private const val BASE_URL = "https://apitest.dtes.mh.gob.sv/seguridad/auth/"
+    private const val BASE_URL = "http://192.168.1.17:3000/auth/"
+    //prueba backend fake
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }

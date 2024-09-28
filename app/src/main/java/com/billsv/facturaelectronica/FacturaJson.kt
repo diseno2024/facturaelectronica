@@ -122,6 +122,6 @@ data class Documento(
     val resumen: Resumen,
     val extension: Extension,
     val apendice: String?,
-    val selloRecibido: String?,
+    var selloRecibido: String?,
     var firmaElectronica: String?
 )
