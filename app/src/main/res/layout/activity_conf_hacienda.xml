@@ -85,6 +85,26 @@
         app:layout_constraintStart_toStartOf="@+id/textView57"
         app:layout_constraintTop_toBottomOf="@+id/textView57" />
 
+    <CheckBox
+        android:id="@+id/checkBox_consumidor_final"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Consumidor Final"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/contraseña"
+        app:layout_constraintEnd_toStartOf="@+id/checkBox_credito_fiscal"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkBox_credito_fiscal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Credito Fiscal"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/checkBox_consumidor_final"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contraseña"/>
+
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
@@ -92,7 +112,7 @@
         android:text="Guardar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contraseña" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_credito_fiscal" />
 
     <Button
         android:id="@+id/button3"
@@ -102,7 +122,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contraseña" />
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
 
 
     <com.google.android.material.button.MaterialButtonToggleGroup
