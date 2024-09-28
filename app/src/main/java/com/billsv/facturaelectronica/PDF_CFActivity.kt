@@ -16,6 +16,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.graphics.pdf.PdfRenderer
+import android.net.Uri
 import android.os.Environment
 import android.os.ParcelFileDescriptor
 import android.util.Log
@@ -24,6 +25,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.net.toUri
 import com.billsv.facturaelectronica.databinding.ActivityPdfCfactivityBinding
+import com.billsv.signer.cargarClavePrivada
+import com.billsv.signer.firmarDatos
 import com.billsv.signer.obtenerClavePrivada
 import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
@@ -687,53 +690,77 @@ class PDF_CFActivity : AppCompatActivity() {
         val JSON = intent.getStringExtra("JSON")
         var jsonString: String? = null
 
+        // Usar la clave almacenado para firmar
+        val claveUriString = obtenerClaveDesdeDB()
+        val claveUri = Uri.parse(claveUriString)  // Convertir a Uri
+        Log.d("Clave URI", "URI recuperada: $claveUri")
+        if (claveUri != null) {
+            val clavePrivada = cargarClavePrivada(this, claveUri)  // Función para leer clave del .pem o .key
 
-        // Obtener clave privada y pública
-        val alias = "BillSV"
-        val clavePrivada = obtenerClavePrivada(alias)
+            clavePrivada?.let {
+                if (JSON == "Factura") {
+                    // Firmar el JSON de la factura
+                    val articulos = obtenerDatosGuardados("F")
+                    val cuerpoDocumentos = createCuerpoDocumento(articulos)
+                    documento.cuerpoDocumento = cuerpoDocumentos
 
-        //clavePrivada?.let {
-            if (JSON=="Factura") {
-                val articulos = obtenerDatosGuardados("F")
-                val cuerpoDocumentos = createCuerpoDocumento(articulos)
-                documento.cuerpoDocumento = cuerpoDocumentos
+                    // Firmar el JSON
+                    val firma = firmarDatos(documento, clavePrivada)
 
-                // Firmar el JSON
-                //val firma = firmarDatos(documento, clavePrivada)
+                    // Agregar la firma al documento
+                    documento.firmaElectronica = firma
 
-                //Agregar la firma al documento
-                documento.firmaElectronica = "firma"
+                    // Convertir el objeto a JSON
+                    val mapper = ObjectMapper().registerModule(KotlinModule())
+                    mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+                    jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
+                } else if (JSON == "CreditoFiscal") {
+                    // Firmar el JSON de crédito fiscal
+                    val articulos = obtenerDatosGuardados("CF")
+                    val cuerpoDocumentosC = createCuerpoDocumentoC(articulos)
+                    documento2.cuerpoDocumento = cuerpoDocumentosC
 
-                // Crear una instancia de ObjectMapper
-                val mapper = ObjectMapper().registerModule(KotlinModule())
-                mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+                    // Firmar el JSON
+                    val firma = firmarDatos(documento2, clavePrivada)
 
-                // Convertir el objeto a JSON
-                jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
-                enviaraMH(ambiente,"Bill-01", 1, "01" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
-            } else if (JSON == "CreditoFiscal") {
-                val articulos = obtenerDatosGuardados("CF")
-                val cuerpoDocumentosC = createCuerpoDocumentoC(articulos)
-                documento2.cuerpoDocumento = cuerpoDocumentosC
+                    // Agregar la firma al documento
+                    documento2.firmaElectronica = firma
 
-                // Firmar el JSON
-                //val firma = firmarDatos(documento2, clavePrivada)
+                    // Convertir el objeto a JSON
+                    val mapper = ObjectMapper().registerModule(KotlinModule())
+                    mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+                    jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento2)
+                }
 
-                // Agregar la firma al documento
-                documento2.firmaElectronica = "firma"
-
-                // Crear una instancia de ObjectMapper
-                val mapper = ObjectMapper().registerModule(KotlinModule())
-                mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
-
-                // Convertir el objeto a JSON
-                jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento2)
-                enviaraMH(ambiente,"Bill-01", 1, "03" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi,entorno)
+                // Guardar el JSON firmado
+                jsonString?.let {
+                    saveJsonToExternalStorage(it, codigoGeneracion)
+                }
+                Log.d("PDF_CFActivity", "JSON firmado: $jsonString")
+            } ?: run {
+                Log.d("PDF_CFActivity", "No se pudo obtener la clave privada.")
             }
+        } else {
+            Log.d("Clave", "No se encontró la clave privada en la base de datos.")
+        }
+    }
 
-       // } ?: run {
-        //    Log.d("PDF_CFActivity", "No se pudo obtener la clave privada para el alias $alias")
-       // }
+    // Obtener la clave desde la base de datos
+    private fun obtenerClaveDesdeDB(): String? {
+        val app = application as MyApp
+        val database = app.database
+
+        val query = QueryBuilder
+            .select(SelectResult.property("clave_privada_uri"))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("clave_privada")))
+
+        val result = query.execute().allResults()
+        return if (result.isNotEmpty()) {
+            result[0].getString("clave_privada_uri")
+        } else {
+            null
+        }
     }
 
     private fun getstateauth(): String?{

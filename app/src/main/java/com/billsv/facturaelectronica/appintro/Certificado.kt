@@ -26,6 +26,7 @@ class Certificado : Fragment() {
     private val PICK_PUBLIC_KEY_REQUEST_CODE = 2
     private lateinit var selectedCerUri: Uri
     private lateinit var selectedKeyUri: Uri
+    private lateinit var selectedKeyPrivUri: Uri
     private lateinit var selectedCerTextView: TextView
     private lateinit var selectedClaveTextView: TextView
     private lateinit var database: Database
@@ -75,17 +76,19 @@ class Certificado : Fragment() {
             data?.data?.let { uri ->
                 val fileName = getFileName(uri)
 
-                if (fileName != null && fileName.endsWith(".pem")) {
+                if (fileName != null && (fileName.endsWith(".pem") || fileName.endsWith(".key"))) {
                     when (requestCode) {
                         PICK_CERTIFICATE_REQUEST_CODE -> {
                             selectedCerUri = uri
                             selectedCerTextView.text = fileName
                             cerLoaded = true // Indica que se ha cargado el certificado
+                            guardarCertificado()
                         }
                         PICK_PUBLIC_KEY_REQUEST_CODE -> {
-                            selectedKeyUri = uri
+                            selectedKeyPrivUri = uri
                             selectedClaveTextView.text = fileName
                             keyLoaded = true // Indica que se ha cargado la clave pública
+                            guardarClavePrivada()
                         }
                     }
                 } else {
@@ -111,18 +114,60 @@ class Certificado : Fragment() {
     // Guardar Certificado en la base de datos
     fun guardarCertificado() {
         if (::selectedCerUri.isInitialized) {
+            // Conceder permisos de lectura persistentes
+            try {
+                context?.contentResolver?.takePersistableUriPermission(
+                    selectedCerUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            } catch (e: Exception) {
+                Log.e("Certificado", "Error al conceder permisos persistentes: ${e.message}")
+                Toast.makeText(context, "Error al conceder permisos persistentes", Toast.LENGTH_SHORT).show()
+                return
+            }
+
             val fileName = getFileName(selectedCerUri)
             val document = MutableDocument()
             document.setString("tipo", "certificado")  // Establecer el tipo
             document.setString("certificado_fileName", fileName)
             document.setString("certificado_uri", selectedCerUri.toString())  // Guardar la URI
 
-            Log.d("Certificado", "Certificado guardado: $document")
+            //Log.d("Certificado", "Certificado guardado: $document")
 
             // Guarda el documento en Couchbase Lite
             database.save(document)
         } else {
             Toast.makeText(context, "Por favor selecciona un certificado antes de guardar", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Guardar Certificado en la base de datos
+    fun guardarClavePrivada() {
+        if (::selectedKeyPrivUri.isInitialized) {
+            // Conceder permisos de lectura persistentes
+            try {
+                context?.contentResolver?.takePersistableUriPermission(
+                    selectedKeyPrivUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            } catch (e: Exception) {
+                Log.e("Clave", "Error al conceder permisos persistentes: ${e.message}")
+                Toast.makeText(context, "Error al conceder permisos persistentes", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            val fileName = getFileName(selectedKeyPrivUri)
+            val document = MutableDocument()
+            document.setString("tipo", "clave_privada")  // Establecer el tipo
+            document.setString("clave_privada_fileName", fileName)
+            document.setString("clave_privada_uri", selectedKeyPrivUri.toString())  // Guardar la URI
+
+            //Log.d("Clave Privada", "Clave privada guardada: $document")
+
+            // Guarda el documento en Couchbase Lite
+            database.save(document)
+        } else {
+            Toast.makeText(context, "Por favor selecciona una clave antes de guardar", Toast.LENGTH_SHORT).show()
         }
     }
 
