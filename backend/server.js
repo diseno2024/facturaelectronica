@@ -95,6 +95,8 @@ function generarSello(documentoJson) {
 app.post('/recepciondte', (req, res) => {
     const { ambiente, idenvio, version, tipoDTE, documento, codigoGeneracion } = req.body;
     const headers = req.headers;
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
 
     // Obtener el token del header Authorization
     const authHeader = headers.authorization;
