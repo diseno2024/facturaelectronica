@@ -714,6 +714,7 @@ class PDF_CFActivity : AppCompatActivity() {
                     val mapper = ObjectMapper().registerModule(KotlinModule())
                     mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
                     jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
+                    enviaraMH(ambiente,"Bill-01", 1, "01" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
                 } else if (JSON == "CreditoFiscal") {
                     // Firmar el JSON de crédito fiscal
                     val articulos = obtenerDatosGuardados("CF")
@@ -730,13 +731,8 @@ class PDF_CFActivity : AppCompatActivity() {
                     val mapper = ObjectMapper().registerModule(KotlinModule())
                     mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
                     jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento2)
+                    enviaraMH(ambiente,"Bill-01", 1, "03" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
                 }
-
-                // Guardar el JSON firmado
-                jsonString?.let {
-                    saveJsonToExternalStorage(it, codigoGeneracion)
-                }
-                Log.d("PDF_CFActivity", "JSON firmado: $jsonString")
             } ?: run {
                 Log.d("PDF_CFActivity", "No se pudo obtener la clave privada.")
             }
@@ -1162,10 +1158,10 @@ class PDF_CFActivity : AppCompatActivity() {
 
 
             // SELLO DE RECEPCIÓN
-            //val respuestaHacienda = jsonObject.getJSONObject("respuestaHacienda")
-            //val selloRecibido = respuestaHacienda.getString("selloRecibido")
-            // Este es el sello de recibido otrogado por el Ministerio de Hacienda
-            //canvas.drawText("Sello de Recepción: $selloRecibido", 25f, 195f, paintInfoDocumento)
+
+            val selloRecibido = sello()
+            //Este es el sello de recibido otrogado por el Ministerio de Hacienda
+            canvas.drawText("Sello de Recepción: $selloRecibido", 25f, 195f, paintInfoDocumento)
 
             var duiE: String? = null
             var nombreE: String? = null
@@ -1876,6 +1872,7 @@ class PDF_CFActivity : AppCompatActivity() {
     }
     private fun guardarDatosF(l:String) {
         var tipoDC: String = ""
+        val selloRecibido = sello()
         val app = application as MyApp
         val database = app.database
         val numeroControl = intent.getStringExtra("numeroControl")
@@ -1931,7 +1928,7 @@ class PDF_CFActivity : AppCompatActivity() {
             .setDouble("totalExenta", totalExenta)
             .setDouble("totalGravada", totalGravada)
             .setDouble("total",subTotalVentas)
-            .setString("tipo","factura")
+            .setString("selloRecibido",selloRecibido)
             .setString("numeroControl",numeroControl)
             .setString("fechaEmi",fecEmi)
             .setString("tipoD",tipoDC)

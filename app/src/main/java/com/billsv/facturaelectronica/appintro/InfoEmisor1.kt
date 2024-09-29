@@ -2,6 +2,9 @@ package com.billsv.facturaelectronica.appintro
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +28,7 @@ import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
 
 class InfoEmisor1 : Fragment() {
-
+    private var currentTextWatcher: TextWatcher? = null
     private lateinit var database: Database
     private lateinit var nombre: EditText
     private lateinit var DUI_NIT: EditText
@@ -394,8 +397,153 @@ class InfoEmisor1 : Fragment() {
                 // No hace nada
             }
         }
+        NumT.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            private val mask = "####-####"
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating) return
+
+                isUpdating = true
+                val formatted = formatPhoneNumber(s.toString())
+                NumT.setText(formatted)
+                NumT.setSelection(formatted.length)
+                isUpdating = false
+            }
+
+            private fun formatPhoneNumber(phone: String): String {
+                val digits = phone.replace(Regex("\\D"), "")
+                val formatted = StringBuilder()
+
+                var i = 0
+                for (m in mask.toCharArray()) {
+                    if (m != '#') {
+                        formatted.append(m)
+                        continue
+                    }
+                    if (i >= digits.length) break
+                    formatted.append(digits[i])
+                    i++
+                }
+                return formatted.toString()
+            }
+
+        })
+        // Variable global para almacenar el TextWatcher actual
+        spinnerDN.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedItem = parent.getItemAtPosition(position).toString()
+
+                // Elimina el TextWatcher anterior si existe
+                currentTextWatcher?.let {
+                    DUI_NIT.removeTextChangedListener(it)
+                }
+
+                // Crea un nuevo TextWatcher basado en la selección
+                currentTextWatcher = if (selectedItem == "DUI") {
+                    object : TextWatcher {
+                        private var isUpdating = false
+                        private val mask = "########-#" // La máscara del DUI
+
+                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+                        override fun afterTextChanged(s: Editable?) {
+                            if (isUpdating) return
+
+                            isUpdating = true
+                            val formatted = formatDui(s.toString())
+                            DUI_NIT.setText(formatted)
+                            DUI_NIT.setSelection(formatted.length)
+                            isUpdating = false
+                        }
+
+                        private fun formatDui(dui: String): String {
+                            val digits = dui.replace(Regex("\\D"), "")
+                            val formatted = StringBuilder()
+
+                            var i = 0
+                            for (m in mask.toCharArray()) {
+                                if (m != '#') {
+                                    formatted.append(m)
+                                    continue
+                                }
+                                if (i >= digits.length) break
+                                formatted.append(digits[i])
+                                i++
+                            }
+                            return formatted.toString()
+                        }
+                    }
+                } else {
+                    object : TextWatcher {
+                        private var isUpdating = false
+                        private val mask = "####-######-###-#" // La máscara del NIT
+
+                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+                        override fun afterTextChanged(s: Editable?) {
+                            if (isUpdating) return
+
+                            isUpdating = true
+                            val formatted = formatNIT(s.toString())
+                            DUI_NIT.setText(formatted)
+                            DUI_NIT.setSelection(formatted.length)
+                            isUpdating = false
+                        }
+
+                        private fun formatNIT(nit: String): String {
+                            val digits = nit.replace(Regex("\\D"), "")
+                            val formatted = StringBuilder()
+
+                            var i = 0
+                            for (m in mask.toCharArray()) {
+                                if (m != '#') {
+                                    formatted.append(m)
+                                    continue
+                                }
+                                if (i >= digits.length) break
+                                formatted.append(digits[i])
+                                i++
+                            }
+                            return formatted.toString()
+                        }
+                    }
+                }
+
+                // Agrega el nuevo TextWatcher
+                DUI_NIT.addTextChangedListener(currentTextWatcher)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // No hacer nada si no hay selección
+            }
+        }
 
         Correo = view.findViewById(R.id.correo)
+        // Filtro personalizado para convertir todas las letras a minúsculas
+        val lowerCaseFilter = InputFilter { source, start, end, dest, dstart, dend ->
+            val result = StringBuilder()
+            for (i in start until end) {
+                val char = source[i]
+                if (char.isUpperCase()) {
+                    result.append(char.lowercaseChar())
+                } else {
+                    result.append(char)
+                }
+            }
+            result.toString()
+        }
+
+        // Aplicar el filtro al campo de correo electrónico
+        Correo.filters = arrayOf(lowerCaseFilter)
         return view
     }
     fun guardarInformacion() {
