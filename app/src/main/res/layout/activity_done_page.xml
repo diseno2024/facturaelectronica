@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:text="Terminamos!!\nYa puedes\nutilizar BillSV"
+        android:text="¡Terminamos!\nYa puedes\nutilizar BillSV"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="40sp"

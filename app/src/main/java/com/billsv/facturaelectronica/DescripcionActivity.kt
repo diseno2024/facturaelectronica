@@ -150,24 +150,37 @@ class DescripcionActivity : AppCompatActivity() {
         }
     }
 
+    // Valida que el precio no tenga más de 4 decimales
+    private fun tieneMaximoCuatroDecimales(valor: String): Boolean {
+        val partes = valor.split(".")
+        return if (partes.size == 2) partes[1].length <= 4 else true
+    }
+
     private fun Validar(): Boolean {
-        val cantidad = Cantidad.text.toString()
+        val cantidadStr = Cantidad.text.toString()
         val producto = Producto.text.toString()
-        val Precio = Precio.text.toString()
-        if(cantidad != "" && producto != "" && Precio != "" && cantidad != "0"){
+        val precioStr = Precio.text.toString()
+
+        if(cantidadStr.isNotEmpty() && cantidadStr.toInt() > 0 && producto.isNotEmpty() && precioStr.isNotEmpty() && precioStr.toDouble() > 0.00 && precioStr.toDouble() < 1000000.00 && tieneMaximoCuatroDecimales(precioStr)){
             return true
         }else{
-            if(cantidad == ""){
+            if(cantidadStr == ""){
                 Toast.makeText(this, "Ingrese la cantidad", Toast.LENGTH_SHORT).show()
             }
-            if(cantidad == "0"){
-                Toast.makeText(this, "Cantidad no Valida", Toast.LENGTH_SHORT).show()
+            if(cantidadStr.toInt() < 0 || cantidadStr.toInt() == 0){
+                Toast.makeText(this, "Cantidad no válida", Toast.LENGTH_SHORT).show()
             }
             if(producto == ""){
-                Toast.makeText(this, "Ingrese un producto", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Ingrese el producto", Toast.LENGTH_SHORT).show()
             }
-            if(Precio == ""){
-                Toast.makeText(this, "Ingrese un precio", Toast.LENGTH_SHORT).show()
+            if(precioStr == ""){
+                Toast.makeText(this, "Ingrese el precio", Toast.LENGTH_SHORT).show()
+            }
+            if(precioStr == "0"){
+                Toast.makeText(this, "Precio no válido", Toast.LENGTH_SHORT).show()
+            }
+            if (!tieneMaximoCuatroDecimales(precioStr)) {
+                Toast.makeText(this, "El precio no puede tener más de 4 decimales", Toast.LENGTH_SHORT).show()
             }
         }
         return false
@@ -311,7 +324,7 @@ class DescripcionActivity : AppCompatActivity() {
                 // Guardar el documento en la base de datos
                 database.save(document)
                 Log.d("Descripcion", "Datos guardados correctamente: \n $document")
-                Toast.makeText(this, "Articulo agregado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Artículo agregado", Toast.LENGTH_SHORT).show()
             } catch (e: CouchbaseLiteException) {
                 Log.e(
                     "Descripcion",
