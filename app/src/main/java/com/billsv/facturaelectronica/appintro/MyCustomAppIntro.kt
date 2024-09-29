@@ -1,14 +1,35 @@
 package com.billsv.facturaelectronica.appintro
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.billsv.facturaelectronica.MenuActivity
 import com.billsv.facturaelectronica.R
 import com.github.appintro.AppIntro
 
 class MyCustomAppIntro : AppIntro() {
+    private val REQUEST_CODE_PERMISSIONS = 1001
+    private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
+
+    // Lista de permisos adaptada según la versión de Android
+    private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 33) {
+        listOf(
+            Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.READ_MEDIA_VIDEO,
+            Manifest.permission.READ_MEDIA_IMAGES
+        )
+    } else {
+        listOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setProgressIndicator()
@@ -50,6 +71,7 @@ class MyCustomAppIntro : AppIntro() {
     override fun onDonePressed(currentFragment: Fragment?) {
         val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
+        requestPermissions()
         finish()
     }
 
@@ -148,4 +170,25 @@ class MyCustomAppIntro : AppIntro() {
         // Mostrar un mensaje de error, puede ser un Toast o un diálogo
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+    private fun requestPermissions() {
+        val permissionsToRequest = mutableListOf<String>()
+
+        for (permission in permissionList) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission)
+            }
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                this,
+                permissionsToRequest.toTypedArray(),
+                WRITE_EXTERNAL_STORAGE_REQUEST_CODE
+            )
+        } else {
+
+        }
+    }
+
+
 }

@@ -42,7 +42,7 @@
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="40dp"
         android:backgroundTint="#000000"
-        android:inputType="text"
+        android:inputType="number"
         android:hint="Telefono"
         android:textAlignment="viewStart"
         android:textColor="#000000"
@@ -50,7 +50,8 @@
         app:layout_constraintBottom_toTopOf="@id/spinnerm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
     <EditText
         android:id="@+id/correo"
         android:layout_width="match_parent"

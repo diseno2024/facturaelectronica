@@ -64,7 +64,7 @@ class Logo : Fragment() {
 
     private fun guardarURI(uri: Uri) {
         val uriString = uri.toString() // Convertir Uri a String
-        val query = QueryBuilder.select(SelectResult.property("URI"))
+        /*val query = QueryBuilder.select(SelectResult.property("URI"))
             .from(DataSource.database(database))
             .where(Expression.property("tipo").equalTo(Expression.string("Imagen")))
 
@@ -83,6 +83,44 @@ class Logo : Fragment() {
         } catch (e: CouchbaseLiteException) {
             showToast("Error al consultar o guardar los datos en la base de datos")
             Log.e("LogoFragment", "Error al consultar o guardar los datos en la base de datos: ${e.message}", e)
+        }*/
+        // Buscar si ya existe un documento del tipo "ConfEmisor"
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Imagen")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+
+                        }
+                    }
+                }
+                Log.d("LogoFragment", "Documento existente borrado")
+            }
+
+            // Crear un nuevo documento
+            val document = MutableDocument()
+                .setString("URI",uriString)
+                .setString("tipo", "Imagen")
+
+            // Guardar el nuevo documento
+            database.save(document)
+            showToast("URI guardada correctamente")
+            mostrarImagen(view)
+            Log.d("LogoFragment", "URI guardados correctamente: \n $document")
+        } catch (e: CouchbaseLiteException) {
+            Log.e("LogoFragment", "Error al guardar la URI en la base de datos: ${e.message}", e)
+            showToast("Error al guardar")
         }
     }
 

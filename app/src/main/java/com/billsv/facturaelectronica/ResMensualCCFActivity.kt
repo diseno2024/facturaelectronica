@@ -242,7 +242,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
                 claseDocumento = "4"
                 tipoDocumento = "03"
                 codGen = dict?.getString("codigoGeneracion")?.replace("-","").toString()
-                sello = ""
+                sello = dict?.getString("selloRecibido") ?: "N/A"
                 numC = dict?.getString("numeroControl")?.replace("-","").toString()
                 numCI = ""
                 nrc= dict?.getString("nrc")?.replace("-","").toString()
@@ -263,7 +263,7 @@ class ResMensualCCFActivity : AppCompatActivity() {
                 claseDocumento = "4"
                 tipoDocumento = "01"
                 codGen = "N/A"
-                sello = "N/A"
+                sello = dict?.getString("selloRecibido") ?: "N/A"
                 numC = "N/A"
                 numCI = "N/A"
                 nrc= dict?.getString("codigoGeneracion")?.replace("-","").toString()

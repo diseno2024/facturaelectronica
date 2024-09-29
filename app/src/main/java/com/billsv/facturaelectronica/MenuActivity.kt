@@ -45,7 +45,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 // Encuentra la vista del toggle dentro del toolbar
         val toggleView = toolbar.getChildAt(1) as View
 
-        TapTargetView.showFor(
+        /*TapTargetView.showFor(
             this, // La Activity o Fragment
             TapTarget.forView(
                 toggleView, // Aquí se usa la vista del toggle encontrada
@@ -71,7 +71,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     drawerLayout.openDrawer(GravityCompat.START) // Abre el drawer
                 }
             }
-        )
+        )*/
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment()).commit()

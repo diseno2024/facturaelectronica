@@ -1,6 +1,8 @@
 package com.billsv.facturaelectronica.appintro
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +38,42 @@ class InfoEmisor2 : Fragment() {
         NRC = view.findViewById(R.id.nrc)
         AcEco = view.findViewById(R.id.AcEco)
         Direccion = view.findViewById(R.id.Direccion)
+        NRC.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            private val mask = "#######"
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating) return
+
+                isUpdating = true
+                val formatted = formatPhoneNumber(s.toString())
+                NRC.setText(formatted)
+                NRC.setSelection(formatted.length)
+                isUpdating = false
+            }
+
+            private fun formatPhoneNumber(phone: String): String {
+                val digits = phone.replace(Regex("\\D"), "")
+                val formatted = StringBuilder()
+
+                var i = 0
+                for (m in mask.toCharArray()) {
+                    if (m != '#') {
+                        formatted.append(m)
+                        continue
+                    }
+                    if (i >= digits.length) break
+                    formatted.append(digits[i])
+                    i++
+                }
+                return formatted.toString()
+            }
+
+        })
         return view
     }
     fun actualizarInformacion() {

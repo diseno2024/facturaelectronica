@@ -1159,9 +1159,11 @@ class PDF_CFActivity : AppCompatActivity() {
 
             // SELLO DE RECEPCIÓN
 
-            val selloRecibido = sello()
-            //Este es el sello de recibido otrogado por el Ministerio de Hacienda
-            canvas.drawText("Sello de Recepción: $selloRecibido", 25f, 195f, paintInfoDocumento)
+            if (letra=="PDF"){
+                val selloRecibido = sello()
+                //Este es el sello de recibido otrogado por el Ministerio de Hacienda
+                canvas.drawText("Sello de Recepción: $selloRecibido", 25f, 195f, paintInfoDocumento)
+            }
 
             var duiE: String? = null
             var nombreE: String? = null
