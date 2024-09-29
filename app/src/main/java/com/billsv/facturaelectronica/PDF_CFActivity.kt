@@ -1051,6 +1051,7 @@ class PDF_CFActivity : AppCompatActivity() {
 
         return "$letrasEntera $letrasDecimal".trim()
     }
+
     private fun generarPdf(letra:String,fecEmi:String,horEmi:String):PdfDocument {
         // Variable para poder almacenar el contenido del json através de una función
         //val jsonData = leerJsonDesdeAssets("DTE-01-OFIC0001-000000000000012.json")
@@ -1328,8 +1329,8 @@ class PDF_CFActivity : AppCompatActivity() {
             // Tabla de ítems
 
             val startX = 40f // Posición X de inicio de la tabla
-            var startY = 380f // Posición Y de inicio de la tabla
-            val rowHeight = 25f // Altura de cada fila de la tabla
+            var startY = 370f // Posición Y de inicio de la tabla
+            val rowHeight = 15f // Altura de cada fila de la tabla
             // Dibujar encabezados de la tabla
             canvas.drawText("N°", startX, startY, paintTITULO)
             canvas.drawText("Cantidad", startX + 30, startY, paintTITULO)
@@ -1345,7 +1346,7 @@ class PDF_CFActivity : AppCompatActivity() {
             canvas.drawText("Exentas", startX + 460, startY + 10, paintTITULO)
             canvas.drawText("Ventas", startX + 505, startY, paintTITULO)
             canvas.drawText("Gravadas", startX + 505, startY + 10, paintTITULO)
-            startY += rowHeight
+            startY += 25
 
             val app = application as MyApp
             val database = app.database
@@ -1398,10 +1399,10 @@ class PDF_CFActivity : AppCompatActivity() {
                     canvas.drawText(numItem, startX + 2, startY, paintInfoDocumento)
                 }
                 if (cantidad != null) {
-                    canvas.drawText(cantidad, startX + 33, startY, paintInfoDocumento)
+                    canvas.drawText(cantidad, startX + 45, startY, paintInfoDocumento)
                 }
                 if (uniMedida != null) {
-                    canvas.drawText(uniMedida, startX + 86, startY, paintInfoDocumento)
+                    canvas.drawText(uniMedida, startX + 90, startY, paintInfoDocumento)
                 }
                 if (descripcion != null) {
                     canvas.drawText(descripcion, startX + 128, startY, paintInfoDocumento)
@@ -1438,6 +1439,7 @@ class PDF_CFActivity : AppCompatActivity() {
                 // Mover al siguiente renglón
                 startY += rowHeight
             }
+            startY += 20
 
 
 
@@ -1457,11 +1459,11 @@ class PDF_CFActivity : AppCompatActivity() {
 //                ?.setScale(2, RoundingMode.HALF_UP)
 
             val totalNoSujshow = totalNoSuj?.toBigDecimal()
-                ?.setScale(2, RoundingMode.HALF_UP)
+                ?.setScale(2, RoundingMode.HALF_UP).toString()
             val totalExentashow = totalExenta?.toBigDecimal()
-                ?.setScale(2, RoundingMode.HALF_UP)
+                ?.setScale(2, RoundingMode.HALF_UP).toString()
             val totalGravadashow = intent.getStringExtra("totalGravada")?.toDouble()?.toBigDecimal()
-                ?.setScale(2, RoundingMode.HALF_UP)
+                ?.setScale(2, RoundingMode.HALF_UP).toString()
 
             canvas.drawText("$$totalNoSujshow", startX + 406, startY, paintInfoDocumento)
             canvas.drawText("$$totalExentashow", startX + 461, startY, paintInfoDocumento)
@@ -1475,10 +1477,11 @@ class PDF_CFActivity : AppCompatActivity() {
             val finalPosition2 = startX + 530
             // Info de Suma Total de Operaciones con su respectivo monto
 
-            val subTotalVentas = intent.getStringExtra("total")
+            val subTotalVentas = intent.getStringExtra("total")?.toDouble()?.toBigDecimal()
+                ?.setScale(2, RoundingMode.HALF_UP).toString()
 
             canvas.drawText("Suma Total de Operaciones:", finalPosition1 - paintTITULO.measureText("Suma Total de Operaciones:"), startY + 15, paintTITULO)
-            canvas.drawText("$$subTotalVentas", finalPosition2 - paintTITULO.measureText(subTotalVentas), startY + 15, paintInfoDocumento)
+            canvas.drawText("$$subTotalVentas", finalPosition2 - 24, startY + 15, paintInfoDocumento)
 
             // Info de Descuento para Ventas no sujetas con su respectivo monto
 
@@ -1494,13 +1497,13 @@ class PDF_CFActivity : AppCompatActivity() {
 
             // Dibujar las ventas no sujetas, exentas y gravadas
             canvas.drawText("Ventas No Sujetas:", finalPosition1 - paintTITULO.measureText("Ventas No Sujetas:"), startY + 26, paintTITULO)
-            canvas.drawText("$$totalNoSujshow", finalPosition2 - paintTITULO.measureText(totalNoSujStr), startY + 26, paintInfoDocumento)
+            canvas.drawText("$$totalNoSujshow", finalPosition2 - 24, startY + 26, paintInfoDocumento)
 
             canvas.drawText("Ventas Exentas:", finalPosition1 - paintTITULO.measureText("Ventas Exentas:"), startY + 37, paintTITULO)
-            canvas.drawText("$$totalExentashow", finalPosition2 - paintTITULO.measureText(totalExentaStr), startY + 37, paintInfoDocumento)
+            canvas.drawText("$$totalExentashow", finalPosition2 - 24, startY + 37, paintInfoDocumento)
 
             canvas.drawText("Ventas Gravadas:", finalPosition1 - paintTITULO.measureText("Ventas Gravadas:"), startY + 48, paintTITULO)
-            canvas.drawText("$$totalGravadashow", finalPosition2 - paintTITULO.measureText(totalGravadaStr), startY + 48, paintInfoDocumento)
+            canvas.drawText("$$totalGravadashow", finalPosition2 - 24, startY + 48, paintInfoDocumento)
 
             val tF = intent.getStringExtra("JSON")
 
@@ -1531,46 +1534,55 @@ class PDF_CFActivity : AppCompatActivity() {
             if (tF=="Factura"){
                 // Dibuja lo que es el monto de IVA (13%) sobre el total de la venta
                 canvas.drawText(descripcion20, finalPosition1 - paintTITULO.measureText(descripcion20), startY + 59, paintTITULO)
-                canvas.drawText("$valor20", finalPosition2 - paintTITULO.measureText(valor20.toString()), startY + 59, paintInfoDocumento)
+                canvas.drawText("$valor20", finalPosition2 - 24, startY + 59, paintInfoDocumento)
             }else{
+                val valor20show = valor20?.toBigDecimal()
+                    ?.setScale(2, RoundingMode.HALF_UP).toString()
                 // Dibuja lo que es el monto de IVA (13%) sobre el total de la venta
                 canvas.drawText(descripcion20, finalPosition1 - paintTITULO.measureText(descripcion20), startY + 59, paintTITULO)
-                canvas.drawText("$$valor20", finalPosition2 - paintTITULO.measureText(valor20.toString()), startY + 59, paintInfoDocumento)
+                canvas.drawText("$$valor20show", finalPosition2 - 24, startY + 59, paintInfoDocumento)
             }
             // Muesta Info sobre el Sub-Total
             val subTotal =  intent.getStringExtra("total")
+            val subTotalshow = subTotal?.toBigDecimal()
+                ?.setScale(2, RoundingMode.HALF_UP).toString()
             canvas.drawText("Sub-Total:", finalPosition1 - paintTITULO.measureText("Sub-Total:"), startY + 70, paintTITULO)
-            canvas.drawText("$$subTotal", finalPosition2 - paintTITULO.measureText(subTotal), startY + 70, paintInfoDocumento)
+            canvas.drawText("$$subTotalshow", finalPosition2 - 24, startY + 70, paintInfoDocumento)
             if(tF=="Factura"){
 
             }else{
                 // Muesta Info sobre el IVA Percibido
                 if (totalGravada != null) {
-                    if(totalGravada>=100){
+                    if(totalGravada>=10000){
                         val ivaPerci1 = totalGravada?.times(0.01)
                         val ivaPerci1show = ivaPerci1?.toBigDecimal()
-                            ?.setScale(4, RoundingMode.HALF_UP).toString()
+                            ?.setScale(2, RoundingMode.HALF_UP).toString()
                         canvas.drawText("IVA Percibido:", finalPosition1 - paintTITULO.measureText("IVA Percibido:"), startY + 81, paintTITULO)
-                        canvas.drawText("$$ivaPerci1show", finalPosition2 - paintTITULO.measureText(ivaPerci1show.toString()), startY + 81, paintInfoDocumento)
+                        canvas.drawText("$$ivaPerci1show", finalPosition2 - 24, startY + 81, paintInfoDocumento)
                     }else{
                         val ivaPerci1 = 0.00
+                        val ivaPerci1show = ivaPerci1?.toBigDecimal()
+                            ?.setScale(2, RoundingMode.HALF_UP).toString()
                         canvas.drawText("IVA Percibido:", finalPosition1 - paintTITULO.measureText("IVA Percibido:"), startY + 81, paintTITULO)
-                        canvas.drawText("$$ivaPerci1", finalPosition2 - paintTITULO.measureText(ivaPerci1.toString()), startY + 81, paintInfoDocumento)
+                        canvas.drawText("$$ivaPerci1show", finalPosition2 - 24, startY + 81, paintInfoDocumento)
                     }
 
                 }
             }
 
             // Muesta Info sobre el IVA Retenido
-            val ivaRete1 = "0.00"
-            val ivaRete1show = ivaRete1?.toBigDecimal()?.toString() ?: "0.00"
+            val ivaRete1 = 0.00
+            val ivaRete1show = ivaRete1?.toBigDecimal()
+                ?.setScale(2, RoundingMode.HALF_UP).toString()
             canvas.drawText("IVA Retenido:", finalPosition1 - paintTITULO.measureText("IVA Retenido:"), startY + 92, paintTITULO)
-            canvas.drawText("$$ivaRete1show", finalPosition2 - paintTITULO.measureText(ivaRete1), startY + 92, paintInfoDocumento)
+            canvas.drawText("$$ivaRete1show", finalPosition2 - 24, startY + 92, paintInfoDocumento)
 
             // Muesta Info sobre Retención Renta
-            val reteRenta = "0.00"
+            val reteRenta = 0.00
+            val reteRentashow = reteRenta?.toBigDecimal()
+                ?.setScale(2, RoundingMode.HALF_UP).toString()
             canvas.drawText("Retención Renta:", finalPosition1 - paintTITULO.measureText("Retención Renta:"), startY + 103, paintTITULO)
-            canvas.drawText("$$reteRenta", finalPosition2 - paintTITULO.measureText(reteRenta), startY + 103, paintInfoDocumento)
+            canvas.drawText("$$reteRentashow", finalPosition2 - 24, startY + 103, paintInfoDocumento)
 
             var montoTotalOperacion = "0.00"
 
@@ -1586,12 +1598,14 @@ class PDF_CFActivity : AppCompatActivity() {
             }
             // Muesta Info sobre el Monto Total de la Operación
             canvas.drawText("Monto Total de la Operación:", finalPosition1 - paintTITULO.measureText("Monto Total de la Operación:"), startY + 114, paintTITULO)
-            canvas.drawText("$$montoTotalOperacion", finalPosition2 - paintTITULO.measureText(montoTotalOperacion), startY + 114, paintInfoDocumento)
+            canvas.drawText("$$montoTotalOperacion", finalPosition2 - 24, startY + 114, paintInfoDocumento)
 
             // Muesta Info sobre Otros montos posibles no afectos
-            val totalNoGravado = "0.00"
+            val totalNoGravado = 0.00
+            val totalNoGravadoShow = totalNoGravado?.toBigDecimal()
+                ?.setScale(2, RoundingMode.HALF_UP).toString()
             canvas.drawText("Total Otros montos no afectos:", finalPosition1 - paintTITULO.measureText("Total Otros montos no afectos:"), startY + 125, paintTITULO)
-            canvas.drawText("$$totalNoGravado", finalPosition2 - paintTITULO.measureText(totalNoGravado), startY + 125, paintInfoDocumento)
+            canvas.drawText("$$totalNoGravadoShow", finalPosition2 - 24, startY + 125, paintInfoDocumento)
 
             // Muesta Info sobre el Total a Pagar
             var totalPagar = "0.00"
@@ -1605,8 +1619,9 @@ class PDF_CFActivity : AppCompatActivity() {
                 totalPagar = totalm.toBigDecimal()
                     .setScale(2, RoundingMode.HALF_UP).toString()
             }
+
             canvas.drawText("Total a Pagar:", finalPosition1 - paintTITULO.measureText("Total a Pagar:"), startY + 136, paintTITULO)
-            canvas.drawText("$$totalPagar", finalPosition2 - paintTITULO.measureText(totalPagar), startY + 136, paintInfoDocumento)
+            canvas.drawText("$$totalPagar", finalPosition2 - 24, startY + 136, paintInfoDocumento)
 
             // Principal 1 - Coordenadas del rectángulo que encierra valor en letras y demás información
             val rectanguloLeft1 = startX - 10
@@ -1658,7 +1673,8 @@ class PDF_CFActivity : AppCompatActivity() {
 
             // Muestra Info de Valor en Letras
 
-            val totalLetras =precioEnLetras(intent.getStringExtra("total")?.toDouble())
+            //val totalLetras =precioEnLetras(intent.getStringExtra("total")?.toDouble())
+            val totalLetras = precioEnLetras(totalPagar.toDouble())
             canvas.drawText("Valor en Letras: $totalLetras", startX, startY + 5, paintTITULO)
 
             // Muestra Info de Condición de la Operación
