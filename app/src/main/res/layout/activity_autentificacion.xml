@@ -68,7 +68,9 @@
         app:layout_constraintStart_toStartOf="@id/imgAuth"
         app:layout_constraintTop_toTopOf="@id/textViewPrueba"
         app:layout_constraintWidth_percent="0.6"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:inputType="text"
+        android:maxLines="1"/>
 
     <EditText
         android:id="@+id/contrap"
@@ -87,7 +89,8 @@
         app:layout_constraintStart_toStartOf="@id/imgAuth"
         app:layout_constraintTop_toTopOf="@id/userp"
         app:layout_constraintWidth_percent="0.6"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:maxLines="1"/>
 
     <TextView
         android:id="@+id/textViewProduc"
@@ -113,6 +116,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="115dp"
+        android:inputType="text"
         android:elevation="2dp"
         android:hint="Usuario"
         android:textAlignment="center"
@@ -122,7 +126,8 @@
         app:layout_constraintStart_toStartOf="@id/imgAuth"
         app:layout_constraintTop_toTopOf="@id/textViewProduc"
         app:layout_constraintWidth_percent="0.6"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:maxLines="1"/>
 
     <EditText
         android:id="@+id/contrapr"
@@ -141,7 +146,8 @@
         app:layout_constraintStart_toStartOf="@id/imgAuth"
         app:layout_constraintTop_toTopOf="@id/userpr"
         app:layout_constraintWidth_percent="0.6"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:maxLines="1"/>
 
     <TextView
         android:id="@+id/textView8"

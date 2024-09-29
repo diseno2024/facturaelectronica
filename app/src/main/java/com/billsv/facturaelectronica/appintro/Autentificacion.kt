@@ -96,10 +96,16 @@ class Autentificacion : Fragment() {
             Toast.makeText(requireContext(), "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
-    fun validar(): Boolean{
+    fun validarCredenciales(): Boolean{
         val userPrueba=userp.text.toString()
         val contraPrueba=contrap.text.toString()
-        val userProduccion=userp.text.toString()
+        val userProduccion=userpr.text.toString()
+        val contraProduccion=contrapr.text.toString()
+
+        if (userPrueba.isEmpty() || contraPrueba.isEmpty() || userProduccion.isEmpty() || contraProduccion.isEmpty()){
+
+            return false
+        }
 
         return true
     }

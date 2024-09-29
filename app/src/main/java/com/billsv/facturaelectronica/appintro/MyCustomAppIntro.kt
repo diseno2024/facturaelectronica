@@ -44,7 +44,7 @@ class MyCustomAppIntro : AppIntro() {
         }
         if (currentFragment is Certificado){
             currentFragment.guardarCertificado()
-            currentFragment.guardarClavePublica()
+            currentFragment.guardarClavePrivada()
         }
     }
     override fun onDonePressed(currentFragment: Fragment?) {
@@ -71,6 +71,13 @@ class MyCustomAppIntro : AppIntro() {
 
         if (oldFragment is InfoEmisor2) {
             oldFragment.actualizarInformacion()
+        }
+        if (oldFragment is Autentificacion){
+            oldFragment.guardarInformacion()
+        }
+        if (oldFragment is Certificado){
+            oldFragment.guardarClavePrivada()
+            oldFragment.guardarCertificado()
         }
     }
     override fun onCanRequestNextPage(): Boolean {
@@ -101,8 +108,35 @@ class MyCustomAppIntro : AppIntro() {
                  }
              }
          }
+        if (currentFragment is Certificado){
+            val authFragment= supportFragmentManager.fragments.find { it is Autentificacion } as? Autentificacion
 
-         return super.onCanRequestNextPage() // Permitir avanzar en otros casos
+
+            authFragment?.let{
+                if (it.validarCredenciales()){
+
+
+                }else{
+                    return false
+                }
+            }
+        }
+
+
+        if (currentFragment is DonePage){
+            val certiFragment = supportFragmentManager.fragments.find { it is Certificado } as? Certificado
+            certiFragment?.let {
+                if (it.validarCertificados() ){
+
+
+                }else{
+                    return false
+                }
+            }
+        }
+
+
+        return super.onCanRequestNextPage() // Permitir avanzar en otros casos
     }
 
     override fun onSkipPressed(currentFragment: Fragment?) {
