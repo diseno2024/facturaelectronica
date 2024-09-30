@@ -167,7 +167,7 @@ class DescripcionActivity : AppCompatActivity() {
             if(cantidadStr == ""){
                 Toast.makeText(this, "Ingrese la cantidad", Toast.LENGTH_SHORT).show()
             }
-            if(cantidadStr.toInt() < 0 || cantidadStr.toInt() == 0){
+            if(cantidadStr == "0"){
                 Toast.makeText(this, "Cantidad no válida", Toast.LENGTH_SHORT).show()
             }
             if(producto == ""){

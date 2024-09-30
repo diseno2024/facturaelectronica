@@ -19,6 +19,9 @@ import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Environment
 import android.os.ParcelFileDescriptor
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
@@ -1074,17 +1077,29 @@ class PDF_CFActivity : AppCompatActivity() {
             textSize = 7f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         }
-        // Estilo de Letra 3 - Para los títulos
+        // Estilo de Letra 3.1 - Para los títulos
         val paintTITULO = Paint().apply {
             color = Color.BLACK
             textSize = 8f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        }
+        // Estilo de Letra 3.2 - Para los títulos sin Negrita
+        val paintTITULO2 = Paint().apply {
+            color = Color.BLACK
+            textSize = 8f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         }
         // Estilo de Letra 4 - Para la info del emisor y receptor
         val paintInfoContribuyentes = Paint().apply {
             color = Color.BLACK
             textSize = 7f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        }
+        // Estilo de Letra 5 - Para la info del emisor y receptor - TÍTULOS
+        val paintInfoContribuyentes2 = Paint().apply {
+            color = Color.BLACK
+            textSize = 7f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         }
         // Estilo de Rectángulo 1
         val paintRect1 = Paint().apply {
@@ -1107,9 +1122,9 @@ class PDF_CFActivity : AppCompatActivity() {
             // Aquí se empieza a generar el PDF en base a toda la info
             val TIPO = intent.getStringExtra("JSON")
             // Dibujar el Encabezado
-            canvas.drawText("DOCUMENTO TRIBUTARIO ELECTRÓNICO", 210f, 25f, paintEncabezado)
+            canvas.drawText("DOCUMENTO TRIBUTARIO ELECTRÓNICO", 205f, 25f, paintEncabezado)
             if(TIPO=="Factura"){
-                canvas.drawText("FACTURA DE CONSUMIDOR FINAL", 230f, 40f, paintEncabezado)
+                canvas.drawText("FACTURA", 290f, 40f, paintEncabezado)
             }else{
                 canvas.drawText("COMPROBANTE DE CRÉDITO FISCAL", 220f, 40f, paintEncabezado)
             }
@@ -1132,10 +1147,25 @@ class PDF_CFActivity : AppCompatActivity() {
             val codigoGeneracion = intent.getStringExtra("codGeneracion")
             val numeroControl = intent.getStringExtra("numeroControl")
             // Dibujar el texto en el PDF
+
             // Info Código de Generación
-            canvas.drawText("Código de Generación: $codigoGeneracion", 25f, 175f, paintInfoDocumento)
+            val styledTextI1 = "Código de Generación: "
+            val styledTextWidthI1 = paintInfoContribuyentes2.measureText(styledTextI1)
+            canvas.drawText(styledTextI1, 25f, 175f, paintInfoContribuyentes2)
+            if (codigoGeneracion != null) {
+                canvas.drawText(codigoGeneracion, 25f + styledTextWidthI1, 175f, paintInfoContribuyentes)
+            }
+            //canvas.drawText("Código de Generación: $codigoGeneracion", 25f, 175f, paintInfoDocumento)
+
             // Info Número de Control
-            canvas.drawText("Número de Control: $numeroControl", 25f, 185f, paintInfoDocumento)
+            val styledTextI2 = "Número de Control: "
+            val styledTextWidthI2 = paintInfoContribuyentes2.measureText(styledTextI2)
+            canvas.drawText(styledTextI2, 25f, 185f, paintInfoContribuyentes2)
+            if (numeroControl != null) {
+                canvas.drawText(numeroControl, 25f + styledTextWidthI2, 185f, paintInfoContribuyentes)
+            }
+            //canvas.drawText("Número de Control: $numeroControl", 25f, 185f, paintInfoDocumento)
+
             /*   Lado derecho   */
             val tipoModelo = 1
             val tipoOperacion = 1
@@ -1143,27 +1173,62 @@ class PDF_CFActivity : AppCompatActivity() {
             // Dibujar el texto en el PDF
             // Info Modelo de Facturación
             if (tipoModelo == 1) {
-                canvas.drawText("Modelo de Facturación: Modelo Facturación Previo", 375f, 175f, paintInfoDocumento)
+                val respuestaTipoModelo = "Modelo Facturación Previo"
+                val styledTextI3 = "Modelo de Facturación: "
+                val styledTextWidthI3 = paintInfoContribuyentes2.measureText(styledTextI3)
+                canvas.drawText(styledTextI3, 375f, 175f, paintInfoContribuyentes2)
+                canvas.drawText(respuestaTipoModelo, 375f + styledTextWidthI3, 175f, paintInfoContribuyentes)
+                //canvas.drawText("Modelo de Facturación: Modelo Facturación Previo", 375f, 175f, paintInfoDocumento)
+
             } else if (tipoModelo == 2) {
-                canvas.drawText("Modelo de Facturación: Modelo Facturación Diferido", 375f, 175f, paintInfoDocumento)
+                val respuestaTipoModelo = "Modelo Facturación Diferido"
+                val styledTextI3 = "Modelo de Facturación: "
+                val styledTextWidthI3 = paintInfoContribuyentes2.measureText(styledTextI3)
+                canvas.drawText(styledTextI3, 375f, 175f, paintInfoContribuyentes2)
+                canvas.drawText(respuestaTipoModelo, 375f + styledTextWidthI3, 175f, paintInfoContribuyentes)
+                //canvas.drawText("Modelo de Facturación: Modelo Facturación Diferido", 375f, 175f, paintInfoDocumento)
             }
+
             // Info Tipo de Transmisión
             if (tipoOperacion == 1) {
-                canvas.drawText("Tipo de Transmisión: Transmisión Normal", 375f, 185f, paintInfoDocumento)
+                val respuestaTipoTransmision = "Transmisión Normal"
+                val styledTextI4 = "Tipo de Transmisión: "
+                val styledTextWidthI4 = paintInfoContribuyentes2.measureText(styledTextI4)
+                canvas.drawText(styledTextI4, 375f, 185f, paintInfoContribuyentes2)
+                canvas.drawText(respuestaTipoTransmision, 375f + styledTextWidthI4, 185f, paintInfoContribuyentes)
+                //canvas.drawText("Tipo de Transmisión: Transmisión Normal", 375f, 185f, paintInfoDocumento)
+
             } else if (tipoOperacion == 2) {
-                canvas.drawText("Tipo de Transmisión: Transmisión por Contingencia", 375f, 185f, paintInfoDocumento)
+                val respuestaTipoTransmision = "Transmisión por Contingencia"
+                val styledTextI4 = "Tipo de Transmisión: "
+                val styledTextWidthI4 = paintInfoContribuyentes2.measureText(styledTextI4)
+                canvas.drawText(styledTextI4, 375f, 185f, paintInfoContribuyentes2)
+                canvas.drawText(respuestaTipoTransmision, 375f + styledTextWidthI4, 185f, paintInfoContribuyentes)
+                //canvas.drawText("Tipo de Transmisión: Transmisión por Contingencia", 375f, 185f, paintInfoDocumento)
             }
+
             // Info de fecha y hora de generación
-            canvas.drawText("Fecha y Hora de Generación: $fecEmi $horEmi", 375f, 195f, paintInfoDocumento)
-
-
+            val fecha = fecEmi
+            val hora = horEmi
+            val fechaYhora = "$fecha $hora"
+            val styledTextI5 = "Fecha y Hora de Generación: "
+            val styledTextWidthI5 = paintInfoContribuyentes2.measureText(styledTextI5)
+            canvas.drawText(styledTextI5, 375f, 195f, paintInfoContribuyentes2)
+            canvas.drawText(fechaYhora, 375f + styledTextWidthI5, 195f, paintInfoContribuyentes)
+            //canvas.drawText("Fecha y Hora de Generación: $fecEmi $horEmi", 375f, 195f, paintInfoDocumento)
 
             // SELLO DE RECEPCIÓN
 
             if (letra=="PDF"){
                 val selloRecibido = sello()
                 //Este es el sello de recibido otrogado por el Ministerio de Hacienda
-                canvas.drawText("Sello de Recepción: $selloRecibido", 25f, 195f, paintInfoDocumento)
+                val styledTextI6 = "Sello de Recepción: "
+                val styledTextWidthI6 = paintInfoContribuyentes2.measureText(styledTextI6)
+                canvas.drawText(styledTextI6, 25f, 195f, paintInfoContribuyentes2)
+                if (selloRecibido != null) {
+                    canvas.drawText(selloRecibido, 25f + styledTextWidthI6, 195f, paintInfoContribuyentes)
+                }
+                //canvas.drawText("Sello de Recepción: $selloRecibido", 25f, 195f, paintInfoDocumento)
             }
 
             var duiE: String? = null
@@ -1199,6 +1264,7 @@ class PDF_CFActivity : AppCompatActivity() {
 
                 }
             }
+
             // EMISOR
             val nombre1 = nombreE
             val nit1 = nitE
@@ -1209,26 +1275,99 @@ class PDF_CFActivity : AppCompatActivity() {
             val complemento1 = complementoE
             val telefono1 = telefonoE
             val correo1 = correoE
+
             // Coordenadas del rectángulo del EMISOR
             val emisorLeftEmisor = 25f
             val emisorTopEmisor = 215f
             val emisorRightEmisor = 306f
             val emisorBottomEmisor = 340f
+
             // Dibujar rectángulo del EMISOR
             canvas.drawRoundRect(emisorLeftEmisor, emisorTopEmisor, emisorRightEmisor, emisorBottomEmisor, cornerRadius1, cornerRadius1, paintRect1)
+
             // Dibujar el texto del EMISOR
             canvas.drawText("EMISOR", 130f, 230f, paintTITULO) // Dibuja que es la info del Emisor
-            canvas.drawText("Nombre o razón social: $nombre1", 40f, 250f, paintInfoContribuyentes)
-            canvas.drawText("NIT: $nit1", 40f, 260f, paintInfoContribuyentes)
-            canvas.drawText("NRC: $nrc1", 40f, 270f, paintInfoContribuyentes)
-            canvas.drawText("Actividad Económica: $descActividad1", 40f, 280f, paintInfoContribuyentes)
-            canvas.drawText("Municipio: $municipio1", 40f, 290f, paintInfoContribuyentes)
-            canvas.drawText("Departamento: $departamento1", 40f, 300f, paintInfoContribuyentes)
-            canvas.drawText("Dirección: $complemento1", 40f, 310f, paintInfoContribuyentes)
-            canvas.drawText("Número de Teléfono: $telefono1", 40f, 320f, paintInfoContribuyentes)
-            canvas.drawText("Correo Electrónico: $correo1", 40f, 330f, paintInfoContribuyentes)
 
+            // Nombre o razón social
+            val styledTextE1 = "Nombre o Razón Social: "
+            val styledTextWidthE1 = paintInfoContribuyentes2.measureText(styledTextE1)
+            canvas.drawText(styledTextE1, 40f, 250f, paintInfoContribuyentes2)
+            if (nombre1 != null) {
+                canvas.drawText(nombre1, 40f + styledTextWidthE1, 250f, paintInfoContribuyentes)
+            }
+            //canvas.drawText("Nombre o razón social: $nombre1", 40f, 250f, paintInfoContribuyentes)
 
+            // NIT
+            val styledTextE2 = "NIT: "
+            val styledTextWidthE2 = paintInfoContribuyentes2.measureText(styledTextE2)
+            canvas.drawText(styledTextE2, 40f, 260f, paintInfoContribuyentes2)
+            if (nit1 != null) {
+                canvas.drawText(nit1, 40f + styledTextWidthE2, 260f, paintInfoContribuyentes)
+            }
+            //canvas.drawText("NIT: $nit1", 40f, 260f, paintInfoContribuyentes)
+
+            // NRC
+            val styledTextE3 = "NRC: "
+            val styledTextWidthE3 = paintInfoContribuyentes2.measureText(styledTextE3)
+            canvas.drawText(styledTextE3, 40f, 270f, paintInfoContribuyentes2)
+            if (nrc1 != null) {
+                canvas.drawText(nrc1, 40f + styledTextWidthE3, 270f, paintInfoContribuyentes)
+            }
+            //canvas.drawText("NRC: $nrc1", 40f, 270f, paintInfoContribuyentes)
+
+            // Actividad Económica
+            val styledTextE4 = "Actividad Económica: "
+            val styledTextWidthE4 = paintInfoContribuyentes2.measureText(styledTextE4)
+            canvas.drawText(styledTextE4, 40f, 280f, paintInfoContribuyentes2)
+            if (descActividad1 != null) {
+                canvas.drawText(descActividad1, 40f + styledTextWidthE4, 280f, paintInfoContribuyentes)
+            }
+            //canvas.drawText("Actividad Económica: $descActividad1", 40f, 280f, paintInfoContribuyentes)
+
+            // Municipio
+            val styledTextE5 = "Municipio: "
+            val styledTextWidthE5 = paintInfoContribuyentes2.measureText(styledTextE5)
+            canvas.drawText(styledTextE5, 40f, 290f, paintInfoContribuyentes2)
+            if (municipio1 != null) {
+                canvas.drawText(municipio1, 40f + styledTextWidthE5, 290f, paintInfoContribuyentes)
+            }
+            //canvas.drawText("Municipio: $municipio1", 40f, 290f, paintInfoContribuyentes)
+
+            // Departamento
+            val styledTextE6 = "Departamento: "
+            val styledTextWidthE6 = paintInfoContribuyentes2.measureText(styledTextE6)
+            canvas.drawText(styledTextE6, 40f, 300f, paintInfoContribuyentes2)
+            if (departamento1 != null) {
+                canvas.drawText(departamento1, 40f + styledTextWidthE6, 300f, paintInfoContribuyentes)
+            }
+            //canvas.drawText("Departamento: $departamento1", 40f, 300f, paintInfoContribuyentes)
+
+            // Dirección
+            val styledTextE7 = "Dirección: "
+            val styledTextWidthE7 = paintInfoContribuyentes2.measureText(styledTextE7)
+            canvas.drawText(styledTextE7, 40f, 310f, paintInfoContribuyentes2)
+            if (complemento1 != null) {
+                canvas.drawText(complemento1, 40f + styledTextWidthE7, 310f, paintInfoContribuyentes)
+            }
+            //canvas.drawText("Dirección: $complemento1", 40f, 310f, paintInfoContribuyentes)
+
+            // Número de Teléfono
+            val styledTextE8 = "Número de Teléfono: "
+            val styledTextWidthE8 = paintInfoContribuyentes2.measureText(styledTextE8)
+            canvas.drawText(styledTextE8, 40f, 320f, paintInfoContribuyentes2)
+            if (telefono1 != null) {
+                canvas.drawText(telefono1, 40f + styledTextWidthE8, 320f, paintInfoContribuyentes)
+            }
+            //canvas.drawText("Número de Teléfono: $telefono1", 40f, 320f, paintInfoContribuyentes)
+
+            // Correo Electrónico
+            val styledTextE9 = "Correo Electrónico: "
+            val styledTextWidthE9 = paintInfoContribuyentes2.measureText(styledTextE9)
+            canvas.drawText(styledTextE9, 40f, 330f, paintInfoContribuyentes2)
+            if (correo1 != null) {
+                canvas.drawText(correo1, 40f + styledTextWidthE9, 330f, paintInfoContribuyentes)
+            }
+            //canvas.drawText("Correo Electrónico: $correo1", 40f, 330f, paintInfoContribuyentes)
 
             var dui: String? = null
             var nombre: String? = null
@@ -1267,6 +1406,7 @@ class PDF_CFActivity : AppCompatActivity() {
                     }
                 }
             }
+
             // RECEPTOR
             var nombre2 = nombre
             if (nombre2==null){
@@ -1304,26 +1444,139 @@ class PDF_CFActivity : AppCompatActivity() {
             if (correo2==null){
                 correo2=""
             }
+            var dui2 = dui
+            if (dui2==null){
+                dui2=""
+            }
+
             // Coordenadas del rectángulo del RECEPTOR
             val emisorLeftReceptor = 321f
             val emisorTopReceptor = 215f
             val emisorRightReceptor = 587f
             val emisorBottomReceptor = 340f
+
             // Dibujar rectángulo del RECEPTOR
             canvas.drawRoundRect(emisorLeftReceptor, emisorTopReceptor, emisorRightReceptor, emisorBottomReceptor, cornerRadius1, cornerRadius1, paintRect1)
+
             // Dibujar el texto del RECEPTOR
             canvas.drawText("RECEPTOR", 425f, 230f, paintTITULO) // Dibuja que es la info del Receptor
-            canvas.drawText("Nombre o razón social: $nombre2", 336f, 250f, paintInfoContribuyentes)
-            canvas.drawText("NIT: $nit2", 336f, 260f, paintInfoContribuyentes)
-            canvas.drawText("NRC: $nrc2", 336f, 270f, paintInfoContribuyentes)
-            canvas.drawText("Actividad Económica: $descActividad2", 336f, 280f, paintInfoContribuyentes)
-            canvas.drawText("Municipio: $municipio2", 336f, 290f, paintInfoContribuyentes)
-            canvas.drawText("Departamento: $departamento2", 336f, 300f, paintInfoContribuyentes)
-            canvas.drawText("Dirección: $complemento2", 336f, 310f, paintInfoContribuyentes)
-            canvas.drawText("Número de Teléfono: $telefono2", 336f, 320f, paintInfoContribuyentes)
-            canvas.drawText("Correo Electrónico: $correo2", 336f, 330f, paintInfoContribuyentes)
 
+            if(TIPO=="Factura"){
+                // Va a dibujar la información para lo que es un consumidor final
 
+                val styledText1 = "Nombre: "
+                val styledTextWidth1 = paintInfoContribuyentes2.measureText(styledText1)
+                canvas.drawText(styledText1, 336f, 250f, paintInfoContribuyentes2)
+                canvas.drawText(nombre2, 336f + styledTextWidth1, 250f, paintInfoContribuyentes)
+                //canvas.drawText("Nombre: $nombre2", 336f, 250f, paintInfoContribuyentes)
+
+                val styledText2 = "DUI: "
+                val styledTextWidth2 = paintInfoContribuyentes2.measureText(styledText2)
+                canvas.drawText(styledText2, 336f, 260f, paintInfoContribuyentes2)
+                canvas.drawText(dui2, 336f + styledTextWidth2, 260f, paintInfoContribuyentes)
+                //canvas.drawText("DUI: $dui2", 336f, 260f, paintInfoContribuyentes)
+
+                val styledText3 = "Teléfono: "
+                val styledTextWidth3 = paintInfoContribuyentes2.measureText(styledText3)
+                canvas.drawText(styledText3, 336f, 270f, paintInfoContribuyentes2)
+                canvas.drawText(telefono2, 336f + styledTextWidth3, 270f, paintInfoContribuyentes)
+                //canvas.drawText("Teléfono: $telefono2", 336f, 270f, paintInfoContribuyentes)
+
+                val styledText4 = "Correo Electrónico: "
+                val styledTextWidth4 = paintInfoContribuyentes2.measureText(styledText4)
+                canvas.drawText(styledText4, 336f, 280f, paintInfoContribuyentes2)
+                canvas.drawText(correo2, 336f + styledTextWidth4, 280f, paintInfoContribuyentes)
+                //canvas.drawText("Correo Electrónico: $correo2", 336f, 280f, paintInfoContribuyentes)
+
+                val styledText5 = "Municipio: "
+                val styledTextWidth5 = paintInfoContribuyentes2.measureText(styledText5)
+                canvas.drawText(styledText5, 336f, 290f, paintInfoContribuyentes2)
+                canvas.drawText(municipio2, 336f + styledTextWidth5, 290f, paintInfoContribuyentes)
+                //canvas.drawText("Municipio: $municipio2", 336f, 290f, paintInfoContribuyentes)
+
+                val styledText6 = "Departamento: "
+                val styledTextWidth6 = paintInfoContribuyentes2.measureText(styledText6)
+                canvas.drawText(styledText6, 336f, 300f, paintInfoContribuyentes2)
+                canvas.drawText(departamento2, 336f + styledTextWidth6, 300f, paintInfoContribuyentes)
+                //canvas.drawText("Departamento: $departamento2", 336f, 300f, paintInfoContribuyentes)
+
+                val styledText7 = "Dirección: "
+                val styledTextWidth7 = paintInfoContribuyentes2.measureText(styledText7)
+                canvas.drawText(styledText7, 336f, 310f, paintInfoContribuyentes2)
+                canvas.drawText(complemento2, 336f + styledTextWidth7, 310f, paintInfoContribuyentes)
+                //canvas.drawText("Dirección: $complemento2", 336f, 310f, paintInfoContribuyentes)
+
+                //canvas.drawText("Teléfono: $telefono2", 336f, 320f, paintInfoContribuyentes)
+                //canvas.drawText("Correo Electrónico: $correo2", 336f, 330f, paintInfoContribuyentes)
+
+            }else{
+
+                // Va a dibujar la información para lo que es un contribuyente
+
+                // Nombre o razón social
+                val styledTextR1 = "Nombre o razón social: "
+                val styledTextWidthR1 = paintInfoContribuyentes2.measureText(styledTextR1)
+                canvas.drawText(styledTextR1, 336f, 250f, paintInfoContribuyentes2)
+                canvas.drawText(nombre2, 336f + styledTextWidthR1, 250f, paintInfoContribuyentes)
+                //canvas.drawText("Nombre o razón social: $nombre2", 336f, 250f, paintInfoContribuyentes)
+
+                // NIT
+                val styledTextR2 = "NIT: "
+                val styledTextWidthR2 = paintInfoContribuyentes2.measureText(styledTextR2)
+                canvas.drawText(styledTextR2, 336f, 260f, paintInfoContribuyentes2)
+                canvas.drawText(nit2, 336f + styledTextWidthR2, 260f, paintInfoContribuyentes)
+                //canvas.drawText("NIT: $nit2", 336f, 260f, paintInfoContribuyentes)
+
+                // NRC
+                val styledTextR3 = "NRC: "
+                val styledTextWidthR3 = paintInfoContribuyentes2.measureText(styledTextR3)
+                canvas.drawText(styledTextR3, 336f, 270f, paintInfoContribuyentes2)
+                canvas.drawText(nrc2, 336f + styledTextWidthR3, 270f, paintInfoContribuyentes)
+                //canvas.drawText("NRC: $nrc2", 336f, 270f, paintInfoContribuyentes)
+
+                // Actividad Económica
+                val styledTextR4 = "Actividad Económica: "
+                val styledTextWidthR4 = paintInfoContribuyentes2.measureText(styledTextR4)
+                canvas.drawText(styledTextR4, 336f, 280f, paintInfoContribuyentes2)
+                canvas.drawText(descActividad2, 336f + styledTextWidthR4, 280f, paintInfoContribuyentes)
+                //canvas.drawText("Actividad Económica: $descActividad2", 336f, 280f, paintInfoContribuyentes)
+
+                // Municipio
+                val styledTextR5 = "Municipio: "
+                val styledTextWidthR5 = paintInfoContribuyentes2.measureText(styledTextR5)
+                canvas.drawText(styledTextR5, 336f, 290f, paintInfoContribuyentes2)
+                canvas.drawText(municipio2, 336f + styledTextWidthR5, 290f, paintInfoContribuyentes)
+                //canvas.drawText("Municipio: $municipio2", 336f, 290f, paintInfoContribuyentes)
+
+                // Departamento
+                val styledTextR6 = "Departamento: "
+                val styledTextWidthR6 = paintInfoContribuyentes2.measureText(styledTextR6)
+                canvas.drawText(styledTextR6, 336f, 300f, paintInfoContribuyentes2)
+                canvas.drawText(departamento2, 336f + styledTextWidthR6, 300f, paintInfoContribuyentes)
+                //canvas.drawText("Departamento: $departamento2", 336f, 300f, paintInfoContribuyentes)
+
+                // Dirección
+                val styledTextR7 = "Dirección: "
+                val styledTextWidthR7 = paintInfoContribuyentes2.measureText(styledTextR7)
+                canvas.drawText(styledTextR7, 336f, 310f, paintInfoContribuyentes2)
+                canvas.drawText(complemento2, 336f + styledTextWidthR7, 310f, paintInfoContribuyentes)
+                //canvas.drawText("Dirección: $complemento2", 336f, 310f, paintInfoContribuyentes)
+
+                // Número de Teléfono
+                val styledTextR8 = "Número de Teléfono: "
+                val styledTextWidthR8 = paintInfoContribuyentes2.measureText(styledTextR8)
+                canvas.drawText(styledTextR8, 336f, 320f, paintInfoContribuyentes2)
+                canvas.drawText(telefono2, 336f + styledTextWidthR8, 320f, paintInfoContribuyentes)
+                //canvas.drawText("Número de Teléfono: $telefono2", 336f, 320f, paintInfoContribuyentes)
+
+                // Correo Electrónico
+                val styledTextR9 = "Correo Electrónico: "
+                val styledTextWidthR9 = paintInfoContribuyentes2.measureText(styledTextR9)
+                canvas.drawText(styledTextR9, 336f, 330f, paintInfoContribuyentes2)
+                canvas.drawText(correo2, 336f + styledTextWidthR9, 330f, paintInfoContribuyentes)
+                //canvas.drawText("Correo Electrónico: $correo2", 336f, 330f, paintInfoContribuyentes)
+
+            }
 
             // CUERPO
             // Tabla de ítems
@@ -1514,7 +1767,7 @@ class PDF_CFActivity : AppCompatActivity() {
             }else{
                 tributos = "si"
             }
-            
+
             // Variables para almacenar la descripción y el valor
             var descripcion20 = ""
             var valor20: String = ""
@@ -1533,8 +1786,8 @@ class PDF_CFActivity : AppCompatActivity() {
 
             if (tF=="Factura"){
                 // Dibuja lo que es el monto de IVA (13%) sobre el total de la venta
-                canvas.drawText(descripcion20, finalPosition1 - paintTITULO.measureText(descripcion20), startY + 59, paintTITULO)
-                canvas.drawText("$valor20", finalPosition2 - 24, startY + 59, paintInfoDocumento)
+                //canvas.drawText(descripcion20, finalPosition1 - paintTITULO.measureText(descripcion20), startY + 59, paintTITULO)
+                //canvas.drawText("$valor20", finalPosition2 - 24, startY + 59, paintInfoDocumento)
             }else{
                 val valor20show = valor20?.toBigDecimal()
                     ?.setScale(2, RoundingMode.HALF_UP).toString()
@@ -1546,8 +1799,14 @@ class PDF_CFActivity : AppCompatActivity() {
             val subTotal =  intent.getStringExtra("total")
             val subTotalshow = subTotal?.toBigDecimal()
                 ?.setScale(2, RoundingMode.HALF_UP).toString()
-            canvas.drawText("Sub-Total:", finalPosition1 - paintTITULO.measureText("Sub-Total:"), startY + 70, paintTITULO)
-            canvas.drawText("$$subTotalshow", finalPosition2 - 24, startY + 70, paintInfoDocumento)
+            if (tF=="Factura"){
+                canvas.drawText("Sub-Total:", finalPosition1 - paintTITULO.measureText("Sub-Total:"), startY + 59, paintTITULO)
+                canvas.drawText("$$subTotalshow", finalPosition2 - 24, startY + 59, paintInfoDocumento)
+            } else{
+                canvas.drawText("Sub-Total:", finalPosition1 - paintTITULO.measureText("Sub-Total:"), startY + 70, paintTITULO)
+                canvas.drawText("$$subTotalshow", finalPosition2 - 24, startY + 70, paintInfoDocumento)
+            }
+
             if(tF=="Factura"){
 
             }else{
@@ -1574,15 +1833,25 @@ class PDF_CFActivity : AppCompatActivity() {
             val ivaRete1 = 0.00
             val ivaRete1show = ivaRete1?.toBigDecimal()
                 ?.setScale(2, RoundingMode.HALF_UP).toString()
-            canvas.drawText("IVA Retenido:", finalPosition1 - paintTITULO.measureText("IVA Retenido:"), startY + 92, paintTITULO)
-            canvas.drawText("$$ivaRete1show", finalPosition2 - 24, startY + 92, paintInfoDocumento)
+            if (tF=="Factura"){
+                canvas.drawText("IVA Retenido:", finalPosition1 - paintTITULO.measureText("IVA Retenido:"), startY + 70, paintTITULO)
+                canvas.drawText("$$ivaRete1show", finalPosition2 - 24, startY + 70, paintInfoDocumento)
+            } else{
+                canvas.drawText("IVA Retenido:", finalPosition1 - paintTITULO.measureText("IVA Retenido:"), startY + 92, paintTITULO)
+                canvas.drawText("$$ivaRete1show", finalPosition2 - 24, startY + 92, paintInfoDocumento)
+            }
 
             // Muesta Info sobre Retención Renta
             val reteRenta = 0.00
             val reteRentashow = reteRenta?.toBigDecimal()
                 ?.setScale(2, RoundingMode.HALF_UP).toString()
-            canvas.drawText("Retención Renta:", finalPosition1 - paintTITULO.measureText("Retención Renta:"), startY + 103, paintTITULO)
-            canvas.drawText("$$reteRentashow", finalPosition2 - 24, startY + 103, paintInfoDocumento)
+            if (tF=="Factura"){
+                canvas.drawText("Retención Renta:", finalPosition1 - paintTITULO.measureText("Retención Renta:"), startY + 81, paintTITULO)
+                canvas.drawText("$$reteRentashow", finalPosition2 - 24, startY + 81, paintInfoDocumento)
+            }else{
+                canvas.drawText("Retención Renta:", finalPosition1 - paintTITULO.measureText("Retención Renta:"), startY + 103, paintTITULO)
+                canvas.drawText("$$reteRentashow", finalPosition2 - 24, startY + 103, paintInfoDocumento)
+            }
 
             var montoTotalOperacion = "0.00"
 
@@ -1596,16 +1865,27 @@ class PDF_CFActivity : AppCompatActivity() {
                 montoTotalOperacion = monto.toBigDecimal()
                     .setScale(2, RoundingMode.HALF_UP).toString()
             }
+
             // Muesta Info sobre el Monto Total de la Operación
-            canvas.drawText("Monto Total de la Operación:", finalPosition1 - paintTITULO.measureText("Monto Total de la Operación:"), startY + 114, paintTITULO)
-            canvas.drawText("$$montoTotalOperacion", finalPosition2 - 24, startY + 114, paintInfoDocumento)
+            if (tF=="Factura"){
+                canvas.drawText("Monto Total de la Operación:", finalPosition1 - paintTITULO.measureText("Monto Total de la Operación:"), startY + 92, paintTITULO)
+                canvas.drawText("$$montoTotalOperacion", finalPosition2 - 24, startY + 92, paintInfoDocumento)
+            }else{
+                canvas.drawText("Monto Total de la Operación:", finalPosition1 - paintTITULO.measureText("Monto Total de la Operación:"), startY + 114, paintTITULO)
+                canvas.drawText("$$montoTotalOperacion", finalPosition2 - 24, startY + 114, paintInfoDocumento)
+            }
 
             // Muesta Info sobre Otros montos posibles no afectos
             val totalNoGravado = 0.00
             val totalNoGravadoShow = totalNoGravado?.toBigDecimal()
                 ?.setScale(2, RoundingMode.HALF_UP).toString()
-            canvas.drawText("Total Otros montos no afectos:", finalPosition1 - paintTITULO.measureText("Total Otros montos no afectos:"), startY + 125, paintTITULO)
-            canvas.drawText("$$totalNoGravadoShow", finalPosition2 - 24, startY + 125, paintInfoDocumento)
+            if (tF=="Factura"){
+                canvas.drawText("Total Otros montos no afectos:", finalPosition1 - paintTITULO.measureText("Total Otros montos no afectos:"), startY + 103, paintTITULO)
+                canvas.drawText("$$totalNoGravadoShow", finalPosition2 - 24, startY + 103, paintInfoDocumento)
+            }else{
+                canvas.drawText("Total Otros montos no afectos:", finalPosition1 - paintTITULO.measureText("Total Otros montos no afectos:"), startY + 125, paintTITULO)
+                canvas.drawText("$$totalNoGravadoShow", finalPosition2 - 24, startY + 125, paintInfoDocumento)
+            }
 
             // Muesta Info sobre el Total a Pagar
             var totalPagar = "0.00"
@@ -1619,9 +1899,14 @@ class PDF_CFActivity : AppCompatActivity() {
                 totalPagar = totalm.toBigDecimal()
                     .setScale(2, RoundingMode.HALF_UP).toString()
             }
+            if (tF=="Factura"){
+                canvas.drawText("Total a Pagar:", finalPosition1 - paintTITULO.measureText("Total a Pagar:"), startY + 114, paintTITULO)
+                canvas.drawText("$$totalPagar", finalPosition2 - 24, startY + 114, paintInfoDocumento)
+            }else{
+                canvas.drawText("Total a Pagar:", finalPosition1 - paintTITULO.measureText("Total a Pagar:"), startY + 136, paintTITULO)
+                canvas.drawText("$$totalPagar", finalPosition2 - 24, startY + 136, paintInfoDocumento)
+            }
 
-            canvas.drawText("Total a Pagar:", finalPosition1 - paintTITULO.measureText("Total a Pagar:"), startY + 136, paintTITULO)
-            canvas.drawText("$$totalPagar", finalPosition2 - 24, startY + 136, paintInfoDocumento)
 
             // Principal 1 - Coordenadas del rectángulo que encierra valor en letras y demás información
             val rectanguloLeft1 = startX - 10
@@ -1675,26 +1960,45 @@ class PDF_CFActivity : AppCompatActivity() {
 
             //val totalLetras =precioEnLetras(intent.getStringExtra("total")?.toDouble())
             val totalLetras = precioEnLetras(totalPagar.toDouble())
-            canvas.drawText("Valor en Letras: $totalLetras", startX, startY + 5, paintTITULO)
+
+            val styledTextL1 = "Valor en Letras: "
+            val styledTextWidthL1 = paintTITULO.measureText(styledTextL1)
+            canvas.drawText(styledTextL1, startX, startY + 5, paintTITULO)
+            canvas.drawText(totalLetras, startX + styledTextWidthL1, startY + 5, paintTITULO2)
+            //canvas.drawText("Valor en Letras: $totalLetras", startX, startY + 5, paintTITULO)
 
             // Muestra Info de Condición de la Operación
             val condicionOperacion = intent.getStringExtra("condicionOperacion")?.toInt()
             if (condicionOperacion == 1) {
                 // Si la operación fue al Contado
-                canvas.drawText("Condición de la Operación: $condicionOperacion - Contado", startX, startY + 20, paintTITULO)
+                val styledTextL2 = "Condición de la Operación: "
+                val styledTextWidthL2 = paintTITULO.measureText(styledTextL2)
+                canvas.drawText(styledTextL2, startX, startY + 20, paintTITULO)
+                canvas.drawText("1 - Contado", startX + styledTextWidthL2, startY + 20, paintTITULO2)
+                //canvas.drawText("Condición de la Operación: $condicionOperacion - Contado", startX, startY + 20, paintTITULO)
+
             } else if (condicionOperacion == 2) {
                 // Si la operación fue al Crédito
-                canvas.drawText("Condición de la Operación: $condicionOperacion - A crédito", startX, startY + 20, paintTITULO)
+                val styledTextL3 = "Condición de la Operación: "
+                val styledTextWidthL3 = paintTITULO.measureText(styledTextL3)
+                canvas.drawText(styledTextL3, startX, startY + 20, paintTITULO)
+                canvas.drawText("2 - Crédito", startX + styledTextWidthL3, startY + 20, paintTITULO2)
+                //canvas.drawText("Condición de la Operación: $condicionOperacion - A crédito", startX, startY + 20, paintTITULO)
+
             } else if (condicionOperacion == 3){
                 // Si la operación fue otra
-                canvas.drawText("Condición de la Operación: $condicionOperacion - Otro", startX, startY + 20, paintTITULO)
+                val styledTextL4 = "Condición de la Operación: "
+                val styledTextWidthL4 = paintTITULO.measureText(styledTextL4)
+                canvas.drawText(styledTextL4, startX, startY + 20, paintTITULO)
+                canvas.drawText("3 - Otro", startX + styledTextWidthL4, startY + 20, paintTITULO2)
+                //canvas.drawText("Condición de la Operación: $condicionOperacion - Otro", startX, startY + 20, paintTITULO)
             }
 
 
 
             // EXTENSIÓN
             // Muestra información extra que requiere hacienda
-            canvas.drawText("EXTENSIÓN", startX + 125, startY + 42, paintTITULO)
+            canvas.drawText("EXTENSIÓN", startX + 105, startY + 42, paintTITULO)
 
             canvas.drawText("Emisor Responsable: ", startX, startY + 60, paintTITULO)
             //canvas.drawText("$nombreE", startX+80, startY + 60, paintTITULO)
@@ -1703,9 +2007,9 @@ class PDF_CFActivity : AppCompatActivity() {
 
 
             canvas.drawText("Receptor Responsable: ", startX, startY + 90, paintTITULO)
-            canvas.drawText("$nombre2", startX+87, startY + 90, paintTITULO)
+            canvas.drawText("$nombre2", startX+87, startY + 90, paintTITULO2)
             canvas.drawText("No. documento: ", startX, startY + 100, paintTITULO)
-            canvas.drawText("$nit2", startX+60, startY + 100, paintTITULO)
+            canvas.drawText("$nit2", startX+60, startY + 100, paintTITULO2)
             canvas.drawText("Observaciones:", startX, startY + 120, paintTITULO)
 
 

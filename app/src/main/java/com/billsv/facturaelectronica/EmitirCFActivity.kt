@@ -34,6 +34,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.geometry.isEmpty
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -80,6 +81,8 @@ class EmitirCFActivity : AppCompatActivity() {
     var totalExenta=0.0
     var totalGravada=0.0
     var totalIva=0.0
+    // Si el monto de la factura es igual o superior a este valor entonces se necesitan los datos del cliente
+    var montoMaximo = 1024
 
 
     var total = 0.0
@@ -196,7 +199,7 @@ class EmitirCFActivity : AppCompatActivity() {
         }
         val siguiente: Button = findViewById(R.id.Siguiente)
         siguiente.setOnClickListener {
-            if (total < 1024){
+            if (total < montoMaximo){
                 if(validarfactura()) {
                     emitirFactura()
                     enviarDatos()
@@ -418,7 +421,7 @@ class EmitirCFActivity : AppCompatActivity() {
             if (resultsC.isNotEmpty()) {
                 return true
             }else{
-                showToast("Falta la información del Cliente")
+                showToast("En ventas mayor o igual a $$montoMaximo se necesitan los datos del cliente")
                 return false
             }
         } catch (e: CouchbaseLiteException) {
