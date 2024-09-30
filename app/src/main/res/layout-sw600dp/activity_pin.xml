@@ -9,16 +9,46 @@
     <View
         android:id="@+id/view2"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="1300dp"
         android:background="@drawable/intro_design3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+    <EditText
+        android:id="@+id/pinEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="50dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="204dp"
+        android:layout_marginBottom="80dp"
+        android:hint="PIN"
+        android:inputType="numberPassword"
+        android:textAlignment="center"
+        android:textColorHint="#2E594A"
+        app:layout_constraintBottom_toTopOf="@id/confirmPinEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guardar PIN"
+        android:textSize="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.906"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.698" />
+
     <ImageView
         android:id="@+id/imgpin"
-        android:layout_width="276dp"
-        android:layout_height="325dp"
+        android:layout_width="576dp"
+        android:layout_height="661dp"
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
         android:elevation="2dp"
@@ -36,56 +66,30 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
         android:layout_marginEnd="60dp"
-        android:layout_marginBottom="312dp"
+        android:layout_marginBottom="652dp"
         android:hint="Confirma tu PIN"
         android:inputType="numberPassword"
         android:textAlignment="center"
         android:textColor="#2E594A"
         android:textColorHint="#2E594A"
+        android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/pinEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:hint="PIN"
-        android:textColorHint="#2E594A"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="40dp"
-        android:textAlignment="center"
-        android:inputType="numberPassword"
-        app:layout_constraintBottom_toTopOf="@id/confirmPinEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="204dp"
         android:text="Crea tu PIN \nde seguridad"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="40sp"
+        android:textSize="80sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Guardar PIN"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.856"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.691" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

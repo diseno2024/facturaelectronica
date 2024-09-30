@@ -9,7 +9,7 @@
     <View
         android:id="@+id/viewlogo"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="1300dp"
         android:background="@drawable/intro_design6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,15 +17,15 @@
 
     <ImageView
         android:id="@+id/imglogo"
-        android:layout_width="wrap_content"
-        android:layout_height="325dp"
+        android:layout_width="584dp"
+        android:layout_height="746dp"
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
         android:elevation="2dp"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.908"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
@@ -34,20 +34,21 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="204dp"
         android:text="Añade el logo de tu empresa (opcional)"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="40sp"
+        android:textSize="80sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="172dp"
-        android:layout_height="168dp"
+        android:layout_width="421dp"
+        android:layout_height="383dp"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:contentDescription="Botón de imagen"
@@ -55,10 +56,10 @@
         android:src="@drawable/add_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintHorizontal_bias="0.029"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.689" />
+        app:layout_constraintVertical_bias="0.589" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
