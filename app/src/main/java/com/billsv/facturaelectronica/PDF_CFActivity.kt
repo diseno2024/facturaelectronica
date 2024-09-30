@@ -1658,8 +1658,16 @@ class PDF_CFActivity : AppCompatActivity() {
 
             // Muestra Info de Valor en Letras
 
-            val totalLetras =precioEnLetras(intent.getStringExtra("total")?.toDouble())
-            canvas.drawText("Valor en Letras: $totalLetras", startX, startY + 5, paintTITULO)
+            val montoTotalOperacionDouble = montoTotalOperacion.toDoubleOrNull()
+            if (montoTotalOperacionDouble != null) {
+                val totalLetras = precioEnLetras(montoTotalOperacionDouble)
+                canvas.drawText("Valor en Letras: $totalLetras", startX, startY + 5, paintTITULO)
+            } else {
+                // Maneja el caso en que montoTotalOperacion no es un número válido
+                canvas.drawText("Error: No se pudo convertir el monto total a letra. Por favor, verifique el valor.", startX, startY + 5, paintTITULO)
+
+            }
+
 
             // Muestra Info de Condición de la Operación
             val condicionOperacion = intent.getStringExtra("condicionOperacion")?.toInt()
