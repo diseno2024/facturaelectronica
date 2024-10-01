@@ -9,7 +9,7 @@
     <View
         android:id="@+id/view2"
         android:layout_width="match_parent"
-        android:layout_height="1300dp"
+        android:layout_height="1400dp"
         android:background="@drawable/intro_design3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

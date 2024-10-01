@@ -503,6 +503,15 @@ class PDF_CFActivity : AppCompatActivity() {
                 horEmi = datos[1]
             }
         }*/
+        var numdocumento: String?
+        var tipodocumento: String?
+        if(dui==""){
+            numdocumento = nit
+            tipodocumento = "36"
+        }else{
+            numdocumento = dui
+            tipodocumento = "13"
+        }
         val app = application as MyApp
         val ambiente = app.ambiente
         val documento = Documento(
@@ -542,8 +551,8 @@ class PDF_CFActivity : AppCompatActivity() {
                 codPuntoVenta = "1"
             ),
             receptor = Receptor(
-                tipoDocumento = "13",
-                numDocumento = dui,
+                tipoDocumento = tipodocumento,
+                numDocumento = numdocumento,
                 nrc = nrc,
                 nombre = nombre,
                 codActividad = codAcEco,
