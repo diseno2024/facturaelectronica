@@ -39,6 +39,7 @@ class ConfHacienda : AppCompatActivity() {
     private lateinit var contraseña: EditText
     private lateinit var checkBoxConsumidorFinal: CheckBox
     private lateinit var checkBoxCreditoFiscal: CheckBox
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -55,6 +56,7 @@ class ConfHacienda : AppCompatActivity() {
         contraseña = findViewById(R.id.contraseña)
         checkBoxConsumidorFinal = findViewById(R.id.checkBox_consumidor_final)
         checkBoxCreditoFiscal = findViewById(R.id.checkBox_credito_fiscal)
+
         verificar()
 
         val boton: Button = findViewById(R.id.button2)
@@ -66,6 +68,13 @@ class ConfHacienda : AppCompatActivity() {
         boton2.setOnClickListener {
             habilitaredicion()
         }
+        val boton3: Button = findViewById(R.id.cert)
+        boton3.setOnClickListener {
+            val intent = Intent(this, CertificadoM::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         val toggleGroup = findViewById<MaterialButtonToggleGroup>(R.id.toggleButton)
         restoreSelectedButton()
 

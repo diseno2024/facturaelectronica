@@ -157,7 +157,20 @@
             android:text="Producción"
             app:rippleColor="#95BFB0"
             app:backgroundTint="@color/colort"/>
+
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
+    <Button
+        android:id="@+id/cert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="116dp"
+        android:background="@drawable/button_cer"
+        android:padding="10dp"
+        android:text="Ver certificados"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
