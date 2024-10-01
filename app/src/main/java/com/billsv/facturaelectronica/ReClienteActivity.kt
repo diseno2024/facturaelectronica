@@ -615,48 +615,6 @@ class ReClienteActivity : AppCompatActivity() {
         val telefonoText = telefono.text.toString().replace("-", "")
         val duiText=dui.text.toString().replace("-","")
         val nitText=nit.text.toString().replace("-","")
-        //////
-
-        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
-            .from(DataSource.database(database))
-            .where(Expression.property("dui").equalTo(Expression.string(duiText)))
-
-        try {
-            val resultSet = query.execute()
-            val results = resultSet.allResults()
-
-            if (results.isNotEmpty()) {
-                Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
-                showToast("Ya existe un cliente con ese dui")
-                return false
-            } else {
-                Log.d("Prin_Re_Cliente", "PASS")
-            }
-        } catch (e: CouchbaseLiteException) {
-            Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
-            showToast("Error al buscar el dui")
-        }
-
-        //////
-        val query2 = QueryBuilder.select(SelectResult.expression(Meta.id))
-            .from(DataSource.database(database))
-            .where(Expression.property("nit").equalTo(Expression.string(nitText)))
-
-        try {
-            val resultSet = query2.execute()
-            val results = resultSet.allResults()
-
-            if (results.isNotEmpty()) {
-                Log.d("Re_Cliente", "Datos actualizados correctamente")
-                showToast("Ya existe un cliente con ese NIT")
-                return false
-            } else {
-                Log.d("Re_Cliente", "PASS")
-            }
-        } catch (e: CouchbaseLiteException) {
-            Log.e("Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
-            showToast("Error al buscar el NIT")
-        }
 
         //////
         // Verifica que todos los campos estén llenos
@@ -686,6 +644,86 @@ class ReClienteActivity : AppCompatActivity() {
         if (!telefonoText.matches(Regex("\\d{8}"))) {
             Toast.makeText(this, "Teléfono debe ser un número válido de 8 dígitos", Toast.LENGTH_SHORT).show()
             return false
+        }
+        if(nitText.isNotEmpty() && duiText.isEmpty()){
+            val query2 = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(database))
+                .where(Expression.property("nit").equalTo(Expression.string(nitText)))
+
+            try {
+                val resultSet = query2.execute()
+                val results = resultSet.allResults()
+
+                if (results.isNotEmpty()) {
+                    Log.d("Re_Cliente", "Datos actualizados correctamente")
+                    showToast("Ya existe un cliente con ese NIT")
+                    return false
+                } else {
+                    Log.d("Re_Cliente", "PASS")
+                }
+            } catch (e: CouchbaseLiteException) {
+                Log.e("Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+                showToast("Error al buscar el NIT")
+            }
+        }else if(duiText.isNotEmpty() && nitText.isEmpty()){
+            val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(database))
+                .where(Expression.property("dui").equalTo(Expression.string(duiText)))
+
+            try {
+                val resultSet = query.execute()
+                val results = resultSet.allResults()
+
+                if (results.isNotEmpty()) {
+                    Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
+                    showToast("Ya existe un cliente con ese dui")
+                    return false
+                } else {
+                    Log.d("Prin_Re_Cliente", "PASS")
+                }
+            } catch (e: CouchbaseLiteException) {
+                Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+                showToast("Error al buscar el dui")
+            }
+        }else if(duiText.isNotEmpty() && nitText.isNotEmpty()){
+            val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(database))
+                .where(Expression.property("dui").equalTo(Expression.string(duiText)))
+
+            try {
+                val resultSet = query.execute()
+                val results = resultSet.allResults()
+
+                if (results.isNotEmpty()) {
+                    Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
+                    showToast("Ya existe un cliente con ese dui")
+                    return false
+                } else {
+                    Log.d("Prin_Re_Cliente", "PASS")
+                }
+            } catch (e: CouchbaseLiteException) {
+                Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+                showToast("Error al buscar el dui")
+            }
+            val query2 = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(database))
+                .where(Expression.property("nit").equalTo(Expression.string(nitText)))
+
+            try {
+                val resultSet = query2.execute()
+                val results = resultSet.allResults()
+
+                if (results.isNotEmpty()) {
+                    Log.d("Re_Cliente", "Datos actualizados correctamente")
+                    showToast("Ya existe un cliente con ese NIT")
+                    return false
+                } else {
+                    Log.d("Re_Cliente", "PASS")
+                }
+            } catch (e: CouchbaseLiteException) {
+                Log.e("Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
+                showToast("Error al buscar el NIT")
+            }
         }
         return true
     }
