@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="196dp"
-        android:text="¡Vamos a la\nconfiguración \ninicial!"
+        android:text="¡Vamos a la\nConfiguración \nInicial!"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="90sp"

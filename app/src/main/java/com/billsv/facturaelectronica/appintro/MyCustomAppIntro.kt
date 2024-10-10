@@ -30,6 +30,7 @@ class MyCustomAppIntro : AppIntro() {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setProgressIndicator()
@@ -38,7 +39,9 @@ class MyCustomAppIntro : AppIntro() {
             unselectedIndicatorColor = getColor(R.color.unselected_indicator_color)
         )
         setImmersiveMode()
-        setDoneText("comencemos")
+        setDoneText("COMENCEMOS")
+        setSkipText("SALTAR")
+
         // Configurar los colores de los botones
         setSeparatorColor(getColor(R.color.transparent))
         setNextArrowColor(getColor(R.color.selected_indicator_color))
@@ -60,14 +63,18 @@ class MyCustomAppIntro : AppIntro() {
 
     override fun onNextPressed(currentFragment: Fragment?) {
         super.onNextPressed(currentFragment)
-        if (currentFragment is Autentificacion){
-            currentFragment.guardarInformacion()
-        }
-        if (currentFragment is Certificado){
-            currentFragment.guardarCertificado()
-            currentFragment.guardarClavePrivada()
-        }
+
+//        if (currentFragment is Autentificacion) {
+//            currentFragment.guardarInformacionAutentificacion()
+//        }
+//
+//        if (currentFragment is Certificado) {
+//            currentFragment.guardarCertificado()
+//            currentFragment.guardarClavePrivada()
+//        }
+
     }
+
     override fun onDonePressed(currentFragment: Fragment?) {
         val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
@@ -79,79 +86,97 @@ class MyCustomAppIntro : AppIntro() {
 
     override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {
         super.onSlideChanged(oldFragment, newFragment)
-
         // Mostrar el botón "Saltar" solo en la diapositiva del logo
         if (newFragment is Logo) {
-            isSkipButtonEnabled = true // Habilitar el botón "Saltar"
+            // Habilitar el botón "Saltar"
+            isSkipButtonEnabled = true
         } else{
-            isSkipButtonEnabled = false
             // Deshabilitar el botón Saltar en los demás fragmentos
+            isSkipButtonEnabled = false
         }
+
+        // Cuando estoy en la actividad de InfoEmisor1
         if (oldFragment is InfoEmisor1) {
-            oldFragment.guardarInformacion()
+            oldFragment.guardarInformacionInfoEmisor1() // Que me guarde la información que acabo de ingresar
         }
 
+        // Cuando estoy en la actividad de InfoEmisor2
         if (oldFragment is InfoEmisor2) {
-            oldFragment.actualizarInformacion()
+            oldFragment.actualizarInformacionInfoEmisor2() // Que me guarde la información que acabo de ingresar
         }
-        if (oldFragment is Autentificacion){
-            oldFragment.guardarInformacion()
+
+        // Cuando estoy en la actividad Autentificacion
+        if (oldFragment is Autentificacion) {
+            oldFragment.guardarInformacionAutentificacion() // Que me guarde la información que acabo de ingresar
         }
-        if (oldFragment is Certificado){
-            oldFragment.guardarClavePrivada()
-            oldFragment.guardarCertificado()
+
+        // Cuando estoy en la actividad Certificado
+        if (oldFragment is Certificado) {
+            oldFragment.guardarCertificado() // Que me guarde el Certificado
+            oldFragment.guardarClavePrivada() // Que me guarde la Clave Privada
         }
+
     }
+
     override fun onCanRequestNextPage(): Boolean {
-         val currentFragment = supportFragmentManager.fragments.lastOrNull()
+        val currentFragment = supportFragmentManager.fragments.lastOrNull()
+        // LO DEMÁS DEL CODE
 
-         // Validar los campos solo si el usuario está en InfoEmisor1
-         if (currentFragment is InfoEmisor2) {
-             // Buscar el fragmento PIN
-             val pinFragment = supportFragmentManager.fragments.find { it is InfoEmisor1 } as? InfoEmisor1
-
-             // Si el fragmento PIN existe, ejecutar la función de PIN
-             pinFragment?.let {
-                 if (it.validarEntradas()) { // Llama a la función de PIN aquí
-                 } else {
-                     return false // Detener si PIN falla
-                 }
-             }
-         }
-         if (currentFragment is Logo) {
-             // Buscar el fragmento PIN
-             val pinFragment = supportFragmentManager.fragments.find { it is InfoEmisor2 } as? InfoEmisor2
-
-             // Si el fragmento PIN existe, ejecutar la función de PIN
-             pinFragment?.let {
-                 if (it.validarEntradas()) { // Llama a la función de PIN aquí
-                 } else {
-                     return false // Detener si PIN falla
-                 }
-             }
-         }
-        if (currentFragment is Certificado){
-            val authFragment= supportFragmentManager.fragments.find { it is Autentificacion } as? Autentificacion
-
-
-            authFragment?.let{
-                if (it.validarCredenciales()){
-
-
+        if (currentFragment is InfoEmisor1) {
+            val pinFragment = supportFragmentManager.fragments.find { it is PIN } as? PIN
+            pinFragment?.let {
+                if (it.PinCorrecto()) {
+                    // Si las validacinoes se cumplen, entonces se permite pasar a la siguiente diapositiva
                 }else{
+                    // Si el PIN no está correcto, entonces no avanza a la siguiente diapositiva
                     return false
                 }
             }
         }
 
-
-        if (currentFragment is DonePage){
-            val certiFragment = supportFragmentManager.fragments.find { it is Certificado } as? Certificado
-            certiFragment?.let {
-                if (it.validarCertificados() ){
-
-
+        if (currentFragment is InfoEmisor2) {
+            val pinFragment = supportFragmentManager.fragments.find { it is InfoEmisor1 } as? InfoEmisor1
+            pinFragment?.let {
+                if (it.validarEntradasInfoEmisor1()) {
+                    // Si las validacinoes se cumplen, entonces se permite pasar a la siguiente diapositiva
                 }else{
+                    // Si todos los datos no están completos, entonces no avanza a la siguiente diapositiva
+                    return false
+                }
+            }
+        }
+
+        if (currentFragment is Logo) {
+            val pinFragment = supportFragmentManager.fragments.find { it is InfoEmisor2 } as? InfoEmisor2
+            pinFragment?.let {
+                if (it.validarEntradasInfoEmisor2()) {
+                    // Si las validacinoes se cumplen, entonces se permite pasar a la siguiente diapositiva
+                }else{
+                    // Si todos los datos no están completos, entonces no avanza a la siguiente diapositiva
+                    return false
+                }
+            }
+        }
+
+        if (currentFragment is Certificado) {
+            val authFragment = supportFragmentManager.fragments.find { it is Autentificacion } as? Autentificacion
+            authFragment?.let {
+                if (it.validarCredencialesAutentificacion()) {
+                    // Si las validacinoes se cumplen, entonces se permite pasar a la siguiente diapositiva
+                }else{
+                    // Si todos los datos no están completos, entonces no avanza a la siguiente diapositiva
+                    return false
+                }
+            }
+        }
+
+        if (currentFragment is DonePage) {
+            val certFragment = supportFragmentManager.fragments.find { it is Certificado } as? Certificado
+            certFragment?.let {
+                if (it.validarCertificados()) {
+                    // Si las validacinoes se cumplen, entonces se permite pasar a la siguiente diapositiva
+                }else {
+                    // Si todos los datos no están completos, entonces no avanza a la siguiente diapositiva
                     return false
                 }
             }
@@ -164,12 +189,17 @@ class MyCustomAppIntro : AppIntro() {
     override fun onSkipPressed(currentFragment: Fragment?) {
         super.onSkipPressed(currentFragment)
         // Implementación personalizada al presionar el botón "Saltar"
+        if (currentFragment is Logo) {
+            // Navegar a la siguiente diapositiva
+            goToNextSlide()
+        }
     }
 
     private fun showErrorMessage(message: String) {
         // Mostrar un mensaje de error, puede ser un Toast o un diálogo
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
     private fun requestPermissions() {
         val permissionsToRequest = mutableListOf<String>()
 

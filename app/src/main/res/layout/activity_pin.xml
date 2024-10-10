@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:text="Crea tu PIN \nde seguridad"
+        android:text="Crea tu PIN \nde Seguridad"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="40sp"

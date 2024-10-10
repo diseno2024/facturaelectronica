@@ -399,7 +399,7 @@ class InfoEmisor1 : Fragment() {
         }
         NumT.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
-            private val mask = "####-####"
+            private val mask = "####-####" // La máscara del Teléfono
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -546,7 +546,7 @@ class InfoEmisor1 : Fragment() {
         Correo.filters = arrayOf(lowerCaseFilter)
         return view
     }
-    fun guardarInformacion() {
+    fun guardarInformacionInfoEmisor1() {
         val nombre = nombre.text.toString()
         val documentoidentidad = DUI_NIT.text.toString()
         var dui = ""
@@ -615,7 +615,19 @@ class InfoEmisor1 : Fragment() {
             showToast("Error al guardar")
         }
     }
-    fun validarEntradas(): Boolean {
+
+    // Variables para verificar si el mensaje ya se mostró
+    private var MensajeError1: Boolean = false
+    private var MensajeError2: Boolean = false
+    private var MensajeError3: Boolean = false
+    private var MensajeError4: Boolean = false
+    private var MensajeError5: Boolean = false
+    private var MensajeError6: Boolean = false
+    private var MensajeError7: Boolean = false
+    private var MensajeError8: Boolean = false
+    private var MensajeError9: Boolean = false
+
+    fun validarEntradasInfoEmisor1(): Boolean {
         val tipo = spinnerDN.selectedItem.toString()
         val nombreText = nombre.text.toString()
         val duiText = DUI_NIT.text.toString().replace("-", "")
@@ -623,39 +635,87 @@ class InfoEmisor1 : Fragment() {
         val telefonoText = NumT.text.toString().replace("-", "")
         val emailText = Correo.text.toString()
 
-        // Verifica que todos los campos estén llenos
-        if (nombreText.isEmpty() || emailText.isEmpty() || telefonoText.isEmpty()) {
-            return false
-        } else if (nitText.isEmpty() && duiText.isEmpty()) {
-            return false
-        }
+        // Validación para verificar que los campos no estén vacíos y sean válidos
+        if (nombreText.isNotEmpty() && ((duiText.isNotEmpty() && duiText.matches(Regex("\\d{9}"))) || (nitText.isNotEmpty() && nitText.matches(Regex("\\d{14}")))) && (telefonoText.isNotEmpty() && telefonoText.matches(Regex("\\d{8}"))) && (emailText.isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(emailText).matches())) {
+            return true
+        } else { // De lo contrario verificar qué es lo que el usuario no ingresó o ingresó mal
 
-        // Verifica que el correo electrónico tenga un formato válido
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
-            Toast.makeText(requireContext(), "Correo electrónico no válido", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if(tipo == "DUI"){
-            // Verifica que el DUI sea un número válido de 9 dígitos solo si no está vacío
-            if (duiText.isNotEmpty() && !duiText.matches(Regex("\\d{9}"))) {
-                Toast.makeText(requireContext(), "DUI debe ser un número válido de 9 dígitos", Toast.LENGTH_SHORT).show()
+            // Si el usuario no ingresó el nombre
+            if (nombreText.isEmpty()) {
+                // Verifica si el mensaje ya se mostró
+                if (!MensajeError1) {
+                    Toast.makeText(requireContext(), "Ingrese el Nombre", Toast.LENGTH_SHORT).show()
+                    MensajeError1 = true // El mensaje ya se mostró, no se volverá a mostrar
+                }
                 return false
             }
-        }else {
-            // Verifica que el NIT sea un número válido
-            if (nitText.isNotEmpty() && !nitText.matches(Regex("\\d{14}"))) {
-                Toast.makeText(requireContext(), "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
+
+            // Hacer la validación si seleccionó DUI o NIT
+            if (tipo == "DUI") { // Si seleccionó el DUI
+                // Si el usuario no ingresó el DUI
+                if (duiText.isEmpty()) {
+                    if (!MensajeError2) {
+                        Toast.makeText(requireContext(), "Ingrese el DUI", Toast.LENGTH_SHORT).show()
+                        MensajeError2 = true // El mensaje ya se mostró, no se volverá a mostrar
+                    }
+                    return false
+                } else if (!duiText.matches(Regex("\\d{9}"))) { // Si el DUI no es válido
+                    if (!MensajeError3) {
+                        Toast.makeText(requireContext(), "Ingrese un DUI válido", Toast.LENGTH_SHORT).show()
+                        MensajeError3 = true // El mensaje ya se mostró, no se volverá a mostrar
+                    }
+                    return false
+                }
+            } else { // Si seleccionó el NIT
+                // Si el usuario no ingresó el NIT
+                if (nitText.isEmpty()) {
+                    if (!MensajeError4) {
+                        Toast.makeText(requireContext(), "Ingrese el NIT", Toast.LENGTH_SHORT).show()
+                        MensajeError4 = true // El mensaje ya se mostró, no se volverá a mostrar
+                    }
+                    return false
+                } else if (!duiText.matches(Regex("\\d{14}"))) { // Si el NIT no es válido
+                    if (!MensajeError5) {
+                        Toast.makeText(requireContext(), "Ingrese un NIT válido", Toast.LENGTH_SHORT).show()
+                        MensajeError5 = true // El mensaje ya se mostró, no se volverá a mostrar
+                    }
+                    return false
+                }
+            }
+
+            // Si el usuario no ingresó el teléfono
+            if (telefonoText.isEmpty()) {
+                if (!MensajeError6) {
+                    Toast.makeText(requireContext(), "Ingrese el Teléfono", Toast.LENGTH_SHORT).show()
+                    MensajeError6 = true // El mensaje ya se mostró, no se volverá a mostrar
+                }
+                return false
+            } else if (!telefonoText.matches(Regex("\\d{8}"))) { // Si el teléfono no es válido
+                if (!MensajeError7) {
+                    Toast.makeText(requireContext(), "Ingrese un Teléfono válido", Toast.LENGTH_SHORT).show()
+                    MensajeError7 = true // El mensaje ya se mostró, no se volverá a mostrar
+                }
                 return false
             }
+
+            // Si el usuario no ingresó el correo electrónico
+            if (emailText.isEmpty()) {
+                if (!MensajeError8) {
+                    Toast.makeText(requireContext(), "Ingrese el Correo Electrónico", Toast.LENGTH_SHORT).show()
+                    MensajeError8 = true // El mensaje ya se mostró, no se volverá a mostrar
+                }
+                return false
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) { // Si el correo electrónico no es válido
+                if (!MensajeError9) {
+                    Toast.makeText(requireContext(), "Ingrese un Correo Electrónico válido", Toast.LENGTH_SHORT).show()
+                    MensajeError9 = true // El mensaje ya se mostró, no se volverá a mostrar
+                }
+                return false
+            }
+
         }
 
-        // Verifica que el teléfono sea un número válido de 8 dígitos
-        if (!telefonoText.matches(Regex("\\d{8}"))) {
-            Toast.makeText(requireContext(), "Teléfono debe ser un número válido de 8 dígitos", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        return true
+        return false
     }
 
     private fun showToast(message: String) {

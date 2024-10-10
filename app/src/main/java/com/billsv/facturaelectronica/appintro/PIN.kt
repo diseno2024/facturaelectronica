@@ -18,6 +18,9 @@ class PIN : Fragment() {
     private lateinit var confirmPinEditText: EditText
     private lateinit var saveButton: Button
 
+    // Declaramos la variable PinIngresadoCorrecto a nivel de la clase
+    private var PinIngresadoCorrecto: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,8 +37,8 @@ class PIN : Fragment() {
         saveButton = view.findViewById(R.id.saveButton)
 
         // Limitar la longitud del PIN a 6 dígitos
-        pinEditText.filters = arrayOf(InputFilter.LengthFilter(6))
-        confirmPinEditText.filters = arrayOf(InputFilter.LengthFilter(6))
+        //pinEditText.filters = arrayOf(InputFilter.LengthFilter(6))
+        //confirmPinEditText.filters = arrayOf(InputFilter.LengthFilter(6))
 
         // Configurar el botón de guardar
         saveButton.setOnClickListener {
@@ -44,7 +47,13 @@ class PIN : Fragment() {
 
             // Verificar que ambos campos no estén vacíos
             if (pin.isEmpty() || confirmPin.isEmpty()) {
-                Toast.makeText(context, "Por favor, ingrese y confirme el PIN", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Ingrese y confirme el PIN", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Verificar que ambos pin no sean mayores a  6 dígitos
+            if (pin.length > 6 || confirmPin.length > 6) {
+                Toast.makeText(context, "El PIN debe tener a lo mucho 6 dígitos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -54,14 +63,21 @@ class PIN : Fragment() {
                 return@setOnClickListener
             }
 
-            // Guardar el PIN en SharedPreferences
+            // Guardar si todo está bien
             savePin(pin)
 
             // Mostrar mensaje de éxito
-            Toast.makeText(context, "PIN creado correctamente", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "¡PIN creado correctamente!", Toast.LENGTH_SHORT).show()
 
-            // Aquí podrías agregar la lógica para redirigir a otra pantalla si es necesario
+            // Verifica en la variable global que el PIN está correcto
+            PinIngresadoCorrecto = true
+
         }
+    }
+
+    // Función para verificar si el PIN es correcto
+    fun PinCorrecto(): Boolean {
+        return PinIngresadoCorrecto
     }
 
     private fun savePin(pin: String) {

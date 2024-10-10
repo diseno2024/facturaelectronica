@@ -48,7 +48,7 @@ class Autentificacion : Fragment() {
         return view
     }
 
-    fun guardarInformacion() {
+    fun guardarInformacionAutentificacion() {
         val userpText = userp.text.toString()
         val contrapText = contrap.text.toString()
         val userprText = userpr.text.toString()
@@ -96,18 +96,68 @@ class Autentificacion : Fragment() {
             Toast.makeText(requireContext(), "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
-    fun validarCredenciales(): Boolean{
+
+    // Variables para verificar si el mensaje ya se mostró
+    private var MensajeError1: Boolean = false
+    private var MensajeError2: Boolean = false
+    private var MensajeError3: Boolean = false
+    private var MensajeError4: Boolean = false
+
+    fun validarCredencialesAutentificacion(): Boolean{
         val userPrueba=userp.text.toString()
         val contraPrueba=contrap.text.toString()
         val userProduccion=userpr.text.toString()
         val contraProduccion=contrapr.text.toString()
 
-        if (userPrueba.isEmpty() || contraPrueba.isEmpty() || userProduccion.isEmpty() || contraProduccion.isEmpty()){
+        // Validar que todos los campos estén llenos
+        if (userPrueba.isNotEmpty() && contraPrueba.isNotEmpty() && userProduccion.isNotEmpty() && contraProduccion.isNotEmpty()) {
+            // Si todos los campos están correctos, entonces que avance
+            return true
+        } else { // De lo contrario verificar qué es lo que el usuario aún no ha completado
 
-            return false
+            // Verificar si el usuario ingresó el usuario de prueba
+            if (userPrueba.isEmpty()) {
+                // Verifica si el mensaje ya se mostró
+                if (!MensajeError1) {
+                    Toast.makeText(requireContext(), "Ingrese el usuario de prueba", Toast.LENGTH_SHORT).show()
+                    MensajeError1 = true // El mensaje ya se mostró, no se volverá a mostrar
+                }
+                return false
+            }
+
+            // Verificar si el usuario ingresó la contraseña de pruebas
+            if (contraPrueba.isEmpty()) {
+                // Verifica si el mensaje ya se mostró
+                if (!MensajeError2) {
+                    Toast.makeText(requireContext(), "Ingrese la contraseña de prueba", Toast.LENGTH_SHORT).show()
+                    MensajeError2 = true // El mensaje ya se mostró, no se volverá a mostrar
+                }
+                return false
+            }
+
+            // Verificar si el usuario ingresó el usuario de producción
+            if (userProduccion.isEmpty()) {
+                // Verifica si el mensaje ya se mostró
+                if (!MensajeError3) {
+                    Toast.makeText(requireContext(), "Ingrese el usuario de producción", Toast.LENGTH_SHORT).show()
+                    MensajeError3 = true // El mensaje ya se mostró, no se volverá a mostrar
+                }
+                return false
+            }
+
+            // Verificar si el usuario ingresó la contraseña de producción
+            if (contraProduccion.isEmpty()) {
+                // Verifica si el mensaje ya se mostró
+                if (!MensajeError4) {
+                    Toast.makeText(requireContext(), "Ingrese la contraseña de producción", Toast.LENGTH_SHORT).show()
+                    MensajeError4 = true // El mensaje ya se mostró, no se volverá a mostrar
+                }
+                return false
+            }
+
         }
+        return false
 
-        return true
     }
 
     companion object {

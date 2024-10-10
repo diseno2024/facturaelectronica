@@ -122,7 +122,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:text="¡Ya casi\nterminamos!"
+        android:text="¡Ya casi\nTerminamos!"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="40sp"

@@ -235,11 +235,18 @@ class Certificado : Fragment() {
             Toast.makeText(context, "Por favor selecciona una clave antes de guardar", Toast.LENGTH_SHORT).show()
         }
     }
+
+    // Variable para verificar si el mensaje ya se mostró
+    private var MensajeError1: Boolean = false
+
     fun validarCertificados() :Boolean{
         if (::selectedKeyPrivUri.isInitialized && ::selectedCerUri.isInitialized) {
 
         } else {
-
+            if (!MensajeError1) {
+                Toast.makeText(context, "Selecciona un certificado y una clave privada", Toast.LENGTH_SHORT).show()
+                MensajeError1 = true // El mensaje ya se mostró, no se volverá a mostrar
+            }
             return false
         }
         return true
