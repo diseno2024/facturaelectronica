@@ -20,6 +20,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import com.couchbase.lite.CouchbaseLiteException
+import com.couchbase.lite.Ordering
 
 
 class FacturaFragment : Fragment() {
@@ -165,9 +166,11 @@ class FacturaFragment : Fragment() {
         val app = requireActivity().application as MyApp
         val database = app.database
 
+        // Ordenar las facturas por numeroControl de forma descendente para CF
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
             .where(Expression.property("tipoD").equalTo(Expression.string("Factura Consumidor Final")))
+            .orderBy(Ordering.property("numeroControl").descending())  // Ordenar de mayor a menor
             .limit(Expression.intValue(limit), Expression.intValue(offset))
 
         val result = query.execute()
@@ -182,7 +185,7 @@ class FacturaFragment : Fragment() {
             dataList.add(factura)
         }
 
-        // Actualizar el total de resultados cuando se cargan nuevos datos
+        // Actualizar el total de resultados
         totalResults = obtenerTotalResultados()
 
         return dataList
