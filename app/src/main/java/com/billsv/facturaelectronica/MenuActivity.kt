@@ -11,16 +11,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import android.content.Intent
 import android.text.InputFilter
 import android.text.InputType
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.couchbase.lite.Database
-import com.getkeepsafe.taptargetview.TapTarget
-import com.getkeepsafe.taptargetview.TapTargetView
+import android.util.Log
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
@@ -151,7 +148,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
-
     private fun showCreatePinDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Crear Nuevo PIN")
@@ -164,7 +160,8 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         builder.setPositiveButton("Guardar") { dialog, _ ->
             val newPin = input.text.toString()
             if (newPin.length == 6) {
-                savePin(newPin)
+                val pinManager = PinManager(this) // Crear instancia de PinManager
+                pinManager.addPin(newPin) // Agregar el nuevo PIN
                 Toast.makeText(this, "Nuevo PIN guardado correctamente", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             } else {
@@ -172,33 +169,9 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-        builder.setNegativeButton("Cancelar") { dialog, _ ->
-            dialog.dismiss()
-        }
+        builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.dismiss() }
 
         builder.show()
     }
 
-    private fun savePin(newPin: String) {
-        val savedPins = loadPins()
-        savedPins.add(newPin)
-        savePins(savedPins)
-    }
-
-    private fun loadPins(): MutableList<String> {
-        val sharedPreferences = getSharedPreferences(PIN_PREFS_NAME, MODE_PRIVATE)
-        val pinsString = sharedPreferences.getString("pins", null)
-        return if (pinsString != null) {
-            Gson().fromJson(pinsString, object : TypeToken<List<String>>() {}.type)
-        } else {
-            mutableListOf()
-        }
-    }
-
-    private fun savePins(pins: MutableList<String>) {
-        val sharedPreferences = getSharedPreferences(PIN_PREFS_NAME, MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("pins", Gson().toJson(pins))
-        editor.apply()
-    }
 }
