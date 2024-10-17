@@ -19,9 +19,6 @@ import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Environment
 import android.os.ParcelFileDescriptor
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
@@ -30,7 +27,6 @@ import androidx.core.net.toUri
 import com.billsv.facturaelectronica.databinding.ActivityPdfCfactivityBinding
 import com.billsv.signer.cargarClavePrivada
 import com.billsv.signer.firmarDatos
-import com.billsv.signer.obtenerClavePrivada
 import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.DataSource
 import com.couchbase.lite.Expression
@@ -57,6 +53,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.math.RoundingMode
 import org.json.JSONObject
+import com.google.zxing.BarcodeFormat
+import com.journeyapps.barcodescanner.BarcodeEncoder
 
 class PDF_CFActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
@@ -180,7 +178,7 @@ class PDF_CFActivity : AppCompatActivity() {
                             saveJsonToExternalStorage(updatedJsonString, codigoGeneracion)
                             if (JSON != null) {
                                 generarPdf("PDF",fecEmi,horEmi)
-                                guardarDatosF(JSON)
+                                guardarDatosF(JSON, fecEmi, horEmi)
                                 borrararticulos(JSON)
                                 borrarDui(JSON)
                                 borrarClienteTemporal()
@@ -1150,7 +1148,6 @@ class PDF_CFActivity : AppCompatActivity() {
                 val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 150, 112, false)
                 canvas.drawBitmap(scaledBitmap, 40f, 50f, null)
             }
-
             // IDENTIFICACIÓN
             /*   Lado izquierdo   */
             val codigoGeneracion = intent.getStringExtra("codGeneracion")
@@ -1225,7 +1222,16 @@ class PDF_CFActivity : AppCompatActivity() {
             canvas.drawText(styledTextI5, 375f, 195f, paintInfoContribuyentes2)
             canvas.drawText(fechaYhora, 375f + styledTextWidthI5, 195f, paintInfoContribuyentes)
             //canvas.drawText("Fecha y Hora de Generación: $fecEmi $horEmi", 375f, 195f, paintInfoDocumento)
-
+            val app = application as MyApp
+            val ambiente = app.ambiente
+            val database = app.database
+            //CODIGO QR
+            if(letra=="PDF") {
+                val qrCodeBitmap = generateQRCode(ambiente, codigoGeneracion, fecha)
+                qrCodeBitmap?.let {
+                    canvas.drawBitmap(it, 250f, 45f, null)  // Dibuja el QR en la posición deseada
+                }
+            }
             // SELLO DE RECEPCIÓN
 
             if (letra=="PDF"){
@@ -1609,9 +1615,6 @@ class PDF_CFActivity : AppCompatActivity() {
             canvas.drawText("Ventas", startX + 505, startY, paintTITULO)
             canvas.drawText("Gravadas", startX + 505, startY + 10, paintTITULO)
             startY += 25
-
-            val app = application as MyApp
-            val database = app.database
             val JSON = intent.getStringExtra("JSON")
             var Articulo:String=""
             if(JSON=="Factura"){
@@ -2251,7 +2254,7 @@ class PDF_CFActivity : AppCompatActivity() {
             Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
-    private fun guardarDatosF(l:String) {
+    private fun guardarDatosF(l: String, fecEmi: String, horEmi: String) {
         var tipoDC: String = ""
         val selloRecibido = sello()
         val app = application as MyApp
@@ -2262,21 +2265,31 @@ class PDF_CFActivity : AppCompatActivity() {
         var nit=""
         var dui=""
         var nrc = ""
+        var articulos : List<String>
+        val articulosF = obtenerDatosGuardados("F")
+        val articulosCF = obtenerDatosGuardados("CF")
         val totalExenta= intent.getStringExtra("totalExenta")?.toDouble()
         val totalGravada= intent.getStringExtra("totalGravada")?.toDouble()
         val totalNoSuj= intent.getStringExtra("totalNoSuj")?.toDouble()
-        val fechayhora=FyH_emicion()
-        var fecEmi=""
-        if (fechayhora.isNotEmpty()) {
-            fechayhora.let {
-                val datos = it.split("\n")
-                fecEmi = datos[0]
-            }
-        }
+        val iva = intent.getStringExtra("Iva")?.toDouble()?:0.00
+        val condiciondeOperacion = intent.getStringExtra("condicionOperacion")
+        val fecha = fecEmi
+        val hora = horEmi
+        val fechaYhora = "$fecha $hora"
+        var telefono=""
+        var departamento=""
+        var municipio=""
+        var complemento=""
+        var correo=""
+        var codAcEco=""
+        var desAcEco=""
+
         if(l=="Factura"){
             tipoDC = "Factura Consumidor Final"
+            articulos = articulosF
         }else{
             tipoDC = "Comprobante Crédito Fiscal"
+            articulos = articulosCF
         }
         val subTotalVentas= totalExenta!! + totalGravada!! + totalNoSuj!!
         val cliente=intent.getStringExtra("Cliente")
@@ -2289,7 +2302,20 @@ class PDF_CFActivity : AppCompatActivity() {
                     nombre = datos[0]
                     nit = datos[11]
                     dui = datos[12]
-                    nrc = datos[9]
+                    telefono = datos[6]
+                    departamento = datos[14]
+                    municipio = datos[15]
+                    complemento = datos[3]
+                    correo = datos[2]
+                    if(datos[9]=="null"){
+                        nrc = ""
+                        codAcEco = ""
+                        desAcEco = ""
+                    }else{
+                        nrc = datos[9]
+                        codAcEco = datos[10]
+                        desAcEco = datos[10]
+                    }
                 } else {
                     // Maneja el caso donde los datos no están completos o el formato no es el esperado
                     println("Los datos del cliente no están en el formato esperado.")
@@ -2300,21 +2326,31 @@ class PDF_CFActivity : AppCompatActivity() {
             println("No se recibió información del cliente.")
         }
 
-
+        Log.e("ARTICULOSSSSS", articulos.toString())
         val document = MutableDocument()
             .setString("nombre",nombre)
             .setString("nit",nit)
             .setString("dui",dui)
+            .setDouble("iva",iva)
             .setDouble("totalNoSuj", totalNoSuj)
             .setDouble("totalExenta", totalExenta)
             .setDouble("totalGravada", totalGravada)
             .setDouble("total",subTotalVentas)
             .setString("selloRecibido",selloRecibido)
             .setString("numeroControl",numeroControl)
-            .setString("fechaEmi",fecEmi)
+            .setString("fechaEmi",fechaYhora)
             .setString("tipoD",tipoDC)
             .setString("nrc",nrc)
+            .setString("telefono",telefono)//
+            .setString("departamento",departamento)
+            .setString("municipio",municipio)
+            .setString("complemento",complemento)
+            .setString("correo",correo)
+            .setString("codAcEco",codAcEco)
+            .setString("desAcEco",desAcEco)//
+            .setString("articulos", articulos.toString())
             .setString("codigoGeneracion",codigoG)
+            .setString("condicionOp",condiciondeOperacion)
         try {
             // Guardar el documento en la base de datos
             database.save(document)
@@ -2343,6 +2379,16 @@ class PDF_CFActivity : AppCompatActivity() {
             result?.getString("URI")
         } catch (e: CouchbaseLiteException) {
             Log.e("Prin_Re_Cliente", "Error al obtener la URI de la base de datos: ${e.message}", e)
+            null
+        }
+    }
+    fun generateQRCode(ambiente: String, codgeneracion: String?, fechaEmi: String): Bitmap? {
+        val url = "https://admin.factura.gob.sv/consultaPublica?ambiente=$ambiente&codGen=$codgeneracion&fechaEmi=$fechaEmi"
+        return try {
+            val barcodeEncoder = BarcodeEncoder()
+            barcodeEncoder.encodeBitmap(url, BarcodeFormat.QR_CODE, 120, 120)
+        } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
     }

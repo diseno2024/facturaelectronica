@@ -176,12 +176,31 @@ class CFiscalFragment : Fragment() {
         val result = query.execute()
         val dataList = mutableListOf<Factura>()
 
-        result.allResults().forEach { result ->
-            val dict = result.getDictionary(database.name)
+        result.allResults().forEach { results ->
+            val dict = results.getDictionary(database.name)
             val nombre = dict?.getString("nombre") ?: ""
+            val telefono = dict?.getString("telefono") ?: ""
             val numeroControl = dict?.getString("numeroControl") ?: ""
             val dui = dict?.getString("dui") ?: ""
-            val factura = Factura(nombre, numeroControl, dui)
+            val nit = dict?.getString("nit") ?: ""
+            val nrc = dict?.getString("nrc") ?: ""
+            val fecha = dict?.getString("fechaEmi") ?: ""
+            val codActividad = dict?.getString("codAcEco") ?: ""
+            val desAcEco = dict?.getString("desAcEco") ?: ""
+            val correo = dict?.getString("correo") ?: ""
+            val departamento = dict?.getString("departamento") ?: ""
+            val municipio = dict?.getString("municipio") ?: ""
+            val complemento = dict?.getString("complemento") ?: ""
+            val sello = dict?.getString("selloRecibido") ?: ""
+            val articulos = dict?.getString("articulos")
+            val codigoG = dict?.getString("codigoGeneracion") ?: ""
+            val totalNosuj = dict?.getDouble("totalNoSuj")?.toDouble() ?: 0.00
+            val totalExenta = dict?.getDouble("totalExenta")?.toDouble() ?: 0.00
+            val totalGravada = dict?.getDouble("totalGravada")?.toDouble() ?: 0.00
+            val total = dict?.getDouble("total")?.toDouble() ?: 0.00
+            val iva = dict?.getDouble("iva")?.toDouble() ?: 0.00
+            val condicion = dict?.getString("condicionOp") ?: ""
+            val factura = Factura(nombre, numeroControl, dui, nit, nrc, fecha, codActividad, desAcEco, correo, departamento, municipio, complemento, sello, articulos, codigoG, telefono, totalNosuj, totalExenta, totalGravada, total, iva, condicion)
             dataList.add(factura)
         }
 
@@ -202,12 +221,31 @@ class CFiscalFragment : Fragment() {
         val result = query.execute()
         val dataList = mutableListOf<Factura>()
 
-        result.allResults().forEach { result ->
-            val dict = result.getDictionary(database.name)
+        result.allResults().forEach { results ->
+            val dict = results.getDictionary(database.name)
             val nombre = dict?.getString("nombre") ?: ""
+            val telefono = dict?.getString("telefono") ?: ""
             val numeroControl = dict?.getString("numeroControl") ?: ""
             val duiResult = dict?.getString("dui") ?: ""
-            val factura = Factura(nombre, numeroControl, dui)
+            val nit = dict?.getString("nit") ?: ""
+            val nrc = dict?.getString("nrc") ?: ""
+            val fecha = dict?.getString("fechaEmi") ?: ""
+            val codActividad = dict?.getString("codAcEco") ?: ""
+            val desAcEco = dict?.getString("desAcEco") ?: ""
+            val correo = dict?.getString("correo") ?: ""
+            val departamento = dict?.getString("departamento") ?: ""
+            val municipio = dict?.getString("municipio") ?: ""
+            val complemento = dict?.getString("complemento") ?: ""
+            val sello = dict?.getString("selloRecibido") ?: ""
+            val articulos = dict?.getString("articulos")
+            val codigoG = dict?.getString("codigoGeneracion") ?: ""
+            val totalNosuj = dict?.getDouble("totalNoSuj")?.toDouble() ?: 0.00
+            val totalExenta = dict?.getDouble("totalExenta")?.toDouble() ?: 0.00
+            val totalGravada = dict?.getDouble("totalGravada")?.toDouble() ?: 0.00
+            val total = dict?.getDouble("total")?.toDouble() ?: 0.00
+            val iva = dict?.getDouble("iva")?.toDouble() ?: 0.00
+            val condicion = dict?.getString("condicionOp") ?: ""
+            val factura = Factura(nombre, numeroControl, dui, nit, nrc, fecha, codActividad, desAcEco, correo, departamento, municipio, complemento, sello, articulos, codigoG, telefono, totalNosuj, totalExenta, totalGravada, total, iva, condicion)
             dataList.add(factura)
         }
 
