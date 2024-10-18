@@ -72,6 +72,22 @@
         android:maxLines="1"/>
 
 
+    <ImageButton
+        android:id="@+id/btnBorrarCer"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:layout_marginEnd="-25dp"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/click_effect"
+        android:clickable="true"
+        android:contentDescription="bottom"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/selected_cer"
+        app:layout_constraintEnd_toEndOf="@+id/selected_cer"
+        app:srcCompat="@drawable/icons8_delete_32_1_"
+        app:tint="#00b861" />
+
     <Button
         android:id="@+id/btn_select_cer"
         android:layout_width="99dp"
@@ -112,6 +128,21 @@
         app:layout_constraintWidth_percent="0.7"
         android:ellipsize="end"
         android:maxLines="1"/>
+    <ImageButton
+        android:id="@+id/btnBorrarClave"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:layout_marginEnd="-25dp"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/click_effect"
+        android:clickable="true"
+        android:contentDescription="bottom"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/selected_clave"
+        app:layout_constraintEnd_toEndOf="@+id/selected_clave"
+        app:srcCompat="@drawable/icons8_delete_32_1_"
+        app:tint="#00b861" />
 
     <Button
         android:id="@+id/btn_select_clave"
@@ -124,5 +155,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selected_clave" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
