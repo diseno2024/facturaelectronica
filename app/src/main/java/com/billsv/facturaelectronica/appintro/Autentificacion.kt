@@ -110,7 +110,7 @@ class Autentificacion : Fragment() {
         val contraProduccion=contrapr.text.toString()
 
         // Validar que todos los campos estén llenos
-        if (userPrueba.isNotEmpty() && contraPrueba.isNotEmpty() && userProduccion.isNotEmpty() && contraProduccion.isNotEmpty()) {
+        if (userPrueba.isNotEmpty() && contraPrueba.isNotEmpty()) {
             // Si todos los campos están correctos, entonces que avance
             return true
         } else { // De lo contrario verificar qué es lo que el usuario aún no ha completado

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ResMensualCCFActivity">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -35,7 +34,7 @@
             android:id="@+id/title_factura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Resumen Mensual"
+            android:text="Resumen Contable"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:textStyle="bold"

@@ -27,6 +27,9 @@
             android:name=".CertificadoM"
             android:exported="false" />
         <activity
+            android:name=".ResumenesActivity"
+            android:exported="false" />
+        <activity
             android:name=".appintro.DonePage"
             android:exported="false" />
         <activity
@@ -54,10 +57,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-        <activity
-            android:name=".ResMensualCCFActivity"
-            android:exported="false" />
         <activity
             android:name=".ConfHacienda"
             android:exported="false" />
