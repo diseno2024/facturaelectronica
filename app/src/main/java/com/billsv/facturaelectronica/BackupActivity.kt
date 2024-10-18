@@ -161,7 +161,7 @@ class BackupActivity : AppCompatActivity() {
 
     private fun createBackupFolder() {
         val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-        val backupDirectoryName = "respaldo_factura2024"
+        val backupDirectoryName = "Respaldo_Billsv"
         val backupDirectory = File(parentDir, backupDirectoryName)
 
         // Verificar si el directorio de respaldo existe y manejar errores de creación
@@ -210,22 +210,15 @@ class BackupActivity : AppCompatActivity() {
         val database = Database("my_database")  // Corrige el nombre de la base de datos
 
         val dbDir = File(database.path)
-        val backupDirDb = File(backupDir, dbDir.name)
 
         try {
-            // Verificar si el archivo de destino ya existe y eliminarlo si es necesario
-            if (backupDirDb.exists()) {
-                backupDirDb.deleteRecursively()  // Utiliza deleteRecursively para eliminar directorios
-            }
-            // Copiar todos los archivos al directorio de respaldo
-            copyDirectory(dbDir, backupDirDb)
-            val directoryPath = getFriendlyPath(backupDirDb.absolutePath)
-            Log.d("BackupActivity", "Respaldo realizado con éxito en: $directoryPath")
-            Toast.makeText(this, "Respaldo realizado con éxito en: $directoryPath", Toast.LENGTH_SHORT).show()
+
+            val currentDate = getCurrentDate()//Obtener la fecha actual en formato dd_MM_yyyy
 
             // Crear archivo zip
-            val zipFile = File(backupDir, "${backupDirDb.name}.zip")
-            zipDirectory(backupDirDb, zipFile)
+            val zipFileName = "${currentDate}_Billsv.zip"
+            val zipFile = File(backupDir, zipFileName)
+            zipDirectory(dbDir, zipFile)
             val zipFilePath = getFriendlyPath(zipFile.absolutePath)
             Log.d("BackupActivity", "Archivos comprimidos con éxito en: $zipFilePath")
             Toast.makeText(this, "Archivos comprimidos con éxito en: $zipFilePath", Toast.LENGTH_SHORT).show()
@@ -235,10 +228,15 @@ class BackupActivity : AppCompatActivity() {
             textFecha.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
         } catch (e: IOException) {
             e.printStackTrace()
-            val directoryPath = getFriendlyPath(backupDirDb.absolutePath)
+            val directoryPath = getFriendlyPath(dbDir.absolutePath)
             Log.e("BackupActivity", "Error al realizar el respaldo en: $directoryPath - ${e.message}")
             Toast.makeText(this, "Error al realizar el respaldo en: $directoryPath", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("dd_MM_yyyy", Locale.getDefault())
+        return dateFormat.format(Date())
     }
 
     @Throws(IOException::class)
@@ -247,12 +245,8 @@ class BackupActivity : AppCompatActivity() {
             if (!destDir.exists()) {
                 destDir.mkdirs()
             }
-
-            val children = srcDir.list()
-            if (children != null) {
-                for (i in children.indices) {
-                    copyDirectory(File(srcDir, children[i]), File(destDir, children[i]))
-                }
+            srcDir.listFiles()?.forEach { file ->
+                copyDirectory(file, File(destDir, file.name))
             }
         } else {
             FileInputStream(srcDir).use { input ->
@@ -273,11 +267,8 @@ class BackupActivity : AppCompatActivity() {
     @Throws(IOException::class)
     private fun zipFile(srcFile: File, fileName: String, zos: ZipOutputStream) {
         if (srcFile.isDirectory) {
-            val children = srcFile.list()
-            if (children != null) {
-                for (child in children) {
-                    zipFile(File(srcFile, child), "$fileName/$child", zos)
-                }
+            srcFile.listFiles()?.forEach { file ->
+                zipFile(file, "$fileName/${file.name}", zos)
             }
         } else {
             FileInputStream(srcFile).use { fis ->
