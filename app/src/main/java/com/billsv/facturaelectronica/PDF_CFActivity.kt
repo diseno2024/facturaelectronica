@@ -185,11 +185,11 @@ class PDF_CFActivity : AppCompatActivity() {
                                 borrarNCCG(JSON)
                             }
                             if(JSON=="CreditoFiscal") {
-                                val intent = Intent(applicationContext, EmitirCCFActivity::class.java)
+                                val intent = Intent(applicationContext, MenuActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }else{
-                                val intent = Intent(applicationContext, EmitirCFActivity::class.java)
+                                val intent = Intent(applicationContext, MenuActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }
