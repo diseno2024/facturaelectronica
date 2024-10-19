@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class FacturaAdaptercf(
     private val context: Context,
-    private var facturaList: MutableList<Factura>
+    private var facturaList: MutableList<Factura>,
+    private val onItemClickListener: (Factura) -> Unit // Callback para manejar el clic
 ) : RecyclerView.Adapter<FacturaAdaptercf.FacturaViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FacturaViewHolder {
@@ -22,8 +23,12 @@ class FacturaAdaptercf(
     override fun onBindViewHolder(holder: FacturaViewHolder, position: Int) {
         val factura = facturaList[position]
         holder.textViewNombre.text = factura.nombre
-        holder.textViewTelefono.text = factura.telefono
-        holder.textViewDui.text = "DUI: ${factura.dui}"
+        holder.textViewTelefono.text = factura.numeroControl
+        val fecha = factura.fecha.split(" ")[0]
+        holder.textViewDui.text = "Fecha: ${fecha}"
+        holder.itemView.setOnClickListener {
+            onItemClickListener(factura) // Llamar al callback cuando se haga clic en el item
+        }
     }
 
     override fun getItemCount(): Int {

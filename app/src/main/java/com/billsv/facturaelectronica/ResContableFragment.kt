@@ -248,13 +248,49 @@ class ResContableFragment : Fragment() {
             var fechE: String = ""
             var claseDocumento: String = ""
             var tipoDocumento: String = ""
-            // (Más campos aquí, según el tipo de documento)
+            var codGen: String = ""//D
+            var sello: String = ""//E
+            var numC: String = ""//F
+            var numCI: String = ""//G
+            var nrc:String=""//H
+            var nombre: String = ""//I
+            var totalEx: String = ""//J
+            var totalNS: String = ""//K
+            var totalG: String = ""//L
+            var debito: String = "0.00"//M
+            var ventasCTD: String = "0.00"//N
+            var debitoFVCT: String = "0.00"//O
+            var total: String = ""//P
+            var dui: String = ""//Q
+            var nit: String = ""//
+            var Anexo: String = ""//R
+            var maquina: String=""
+            var InternasExentas: String = ""
+            var ExDCA: String = "0.00"
+            var ExFCA: String = "0.00"
+            var ExSer: String = "0.00"
+            var VeZFyDPA: String = "0.00" // (Más campos aquí, según el tipo de documento)
 
             if (tipoDSeleccionado == "Comprobante Crédito Fiscal") {
                 // Extrae los valores de los campos del documento y los loguea
                 fechE = dict?.getString("fechaEmi") ?: ""
                 claseDocumento = "4"
                 tipoDocumento = "03"
+                codGen = dict?.getString("codigoGeneracion")?.replace("-","").toString()
+                sello = dict?.getString("selloRecibido") ?: "N/A"
+                numC = dict?.getString("numeroControl")?.replace("-","").toString()
+                numCI = ""
+                nrc= dict?.getString("nrc")?.replace("-","").toString()
+                nombre  = dict?.getString("nombre") ?: ""
+                totalEx = (dict?.getDouble("totalExenta")).toString()
+                totalNS = (dict?.getDouble("totalNoSuj")).toString()
+                totalG = (dict?.getDouble("totalGravada")).toString()
+                debito = "0.00"
+                ventasCTD = "0.00"
+                debitoFVCT = "0.00"
+                total = (dict?.getDouble("total")).toString()
+                dui = ""
+                Anexo = "1"
                 // Otros campos según corresponda...
 
                 tableLayout2?.visibility = View.GONE
@@ -263,7 +299,24 @@ class ResContableFragment : Fragment() {
                 // Agrega la fila a la tabla
                 if (tableLayout != null) {
                     addRowToTable(
-                        tableLayout, fechE, claseDocumento, tipoDocumento, /*otros parámetros*/
+                        tableLayout,fechE,
+                        claseDocumento,
+                        tipoDocumento,
+                        codGen,
+                        sello,
+                        numC,
+                        numCI,
+                        nrc,
+                        nombre,
+                        totalEx,
+                        totalNS,
+                        totalG,
+                        debito,
+                        ventasCTD,
+                        debitoFVCT,
+                        total,
+                        dui,
+                        Anexo
                     )
                 }
 
@@ -272,13 +325,98 @@ class ResContableFragment : Fragment() {
                     "fechaEmi" to fechE,
                     "claseDoc" to claseDocumento,
                     "tipoDoc" to tipoDocumento,
-                    // Otros campos aquí...
+                    "numR" to codGen,
+                    "serieD" to sello,
+                    "numD" to numC,
+                    "numeroControl" to numCI,
+                    "nit" to nrc,
+                    "nombre" to  nombre,
+                    "totalExenta" to totalEx,
+                    "totalNoSuj" to totalNS,
+                    "totalGravada" to totalG,
+                    "debitoFiscal" to debito,
+                    "ventasTerceros" to ventasCTD,
+                    "debitoFiscalTerceros" to debitoFVCT,
+                    "total" to total,
+                    "dui" to dui,
+                    "numAnexo" to Anexo
                 )
                 documentosList.add(documento)
 
             } else {
-                // Lógica para documentos que no son "Comprobante Crédito Fiscal"
-                // (misma lógica pero para `tableLayout2`)
+                fechE = dict?.getString("fechaEmi") ?: ""
+                claseDocumento = "4"
+                tipoDocumento = "01"
+                codGen = "N/A"
+                sello = dict?.getString("selloRecibido") ?: "N/A"
+                numC = "N/A"
+                numCI = "N/A"
+                nrc= dict?.getString("codigoGeneracion")?.replace("-","").toString()
+                nombre  = dict?.getString("codigoGeneracion")?.replace("-","").toString()
+                maquina = ""
+                totalEx = (dict?.getDouble("totalExenta")).toString()
+                InternasExentas = "0.00"
+                totalNS = (dict?.getDouble("totalNoSuj")).toString()
+                totalG = (dict?.getDouble("totalGravada")).toString()
+                ExDCA = "0.00"
+                ExFCA = "0.00"
+                ExSer = "0.00"
+                VeZFyDPA = "0.00"
+                ventasCTD = "0.00"
+                total = (dict?.getDouble("total")).toString()
+                Anexo = "2"
+                tableLayout?.visibility = View.GONE
+                tableLayout2?.visibility = View.VISIBLE
+                // Crea y agrega una fila a la tabla con los datos del documento
+                if (tableLayout2 != null) {
+                    addRowToTable(
+                        tableLayout2, fechE,
+                        claseDocumento,
+                        tipoDocumento,
+                        codGen,
+                        sello,
+                        numC,
+                        numCI,
+                        nrc,
+                        nombre,
+                        maquina,
+                        totalEx,
+                        InternasExentas,
+                        totalNS,
+                        totalG,
+                        ExDCA,
+                        ExFCA,
+                        ExSer,
+                        VeZFyDPA,
+                        ventasCTD,
+                        total,
+                        Anexo
+                    )
+                }
+                val documento = mapOf(
+                    "fechaEmi" to fechE,
+                    "claseDoc" to claseDocumento,
+                    "tipoDoc" to tipoDocumento,
+                    "numR" to codGen,
+                    "serieD" to sello,
+                    "numControlDel" to numC, // Asumiendo numC es Número de Control Interno DEL
+                    "numControlAl" to numCI, // Asumiendo numCI es Número de Control Interno AL
+                    "numDocDel" to nrc, // Asumiendo numD es Número de Documento (DEL)
+                    "numDocAl" to nombre, // Asumiendo numDA es Número de Documento (AL)
+                    "numMaquina" to maquina, // Asumiendo numMaquina es Número de Maquina Registradora
+                    "totalExenta" to totalEx,
+                    "ventasInternasExentas" to InternasExentas,
+                    "totalNoSuj" to totalNS,
+                    "totalGravada" to totalG,
+                    "exportCentroAmerica" to ExDCA,
+                    "exportFueraCentroAmerica" to ExFCA,
+                    "exportServicios" to ExSer,
+                    "ventasZonasFrancas" to VeZFyDPA,
+                    "ventasTerceros" to ventasCTD,
+                    "total" to total,
+                    "numAnexo" to Anexo
+                )
+                documentosList.add(documento)
             }
         }
 
