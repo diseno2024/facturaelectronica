@@ -25,6 +25,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="6dp">
+
+            <!-- Ícono del documento -->
             <ImageView
                 android:id="@+id/iconoCard"
                 android:layout_width="70dp"
@@ -38,14 +40,17 @@
                 android:layout_alignParentLeft="true"
                 app:tint="@color/verde_menta_1" />
 
+            <!-- Contenedor de textos -->
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="4dp"
+                android:layout_marginEnd="6dp"
                 android:layout_marginTop="2dp"
                 android:layout_toEndOf="@+id/iconoCard"
+                android:layout_toStartOf="@+id/linearLayoutBotonesGmailWhatsApp"
                 android:orientation="vertical"
                 android:layout_marginLeft="4dp"
                 android:layout_toRightOf="@id/iconoCard">
@@ -69,6 +74,47 @@
                     android:layout_height="wrap_content"
                     android:textSize="18sp"/>
             </LinearLayout>
+
+            <!-- Contenedor para los botones apilados -->
+            <LinearLayout
+                android:id="@+id/linearLayoutBotonesGmailWhatsApp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                android:layout_marginEnd="10dp">
+
+                <!-- Botón para enviar por Gmail -->
+                <ImageButton
+                    android:id="@+id/btnEnviarPorGmail"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/gmail"
+                    android:contentDescription="Enviar Documentos por Gmail"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"
+                    android:padding="0dp" />
+
+                <!-- Espaciado entre los botones -->
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp" />
+
+                <!-- Botón para enviar por WhatsApp -->
+                <ImageButton
+                    android:id="@+id/btnEnviarPorWhatsApp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/whatsapp"
+                    android:contentDescription="Enviar Documentos por WhatsApp"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"
+                    android:padding="0dp" />
+            </LinearLayout>
+
         </RelativeLayout>
 
     </LinearLayout>
