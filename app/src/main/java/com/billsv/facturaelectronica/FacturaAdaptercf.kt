@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -93,7 +92,41 @@ class FacturaAdaptercf(
 
         // Configurar el botón WhatsApp para enviar los documentos adjuntos
         holder.btnEnviarPorWhatsapp.setOnClickListener {
-            Toast.makeText(context, "Enviar vía WhatsApp CCF", Toast.LENGTH_SHORT).show()
+
+            // Obtener las rutas de los archivos adjuntos
+            val pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/${factura.codigoG}.pdf"
+            val jsonFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/${factura.codigoG}.json"
+
+            // Crear objetos File para los archivos
+            val pdfFile = File(pdfFilePath)
+            val jsonFile = File(jsonFilePath)
+
+            // Crear el Intent para enviar múltiples archivos
+            val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                // Tipo de archivo
+                type = "*/*"
+                // Crear una lista de Uri para los archivos
+                val fileUris = ArrayList<Uri>()
+                fileUris.add(FileProvider.getUriForFile(context, context.packageName + ".fileprovider", pdfFile))
+                fileUris.add(FileProvider.getUriForFile(context, context.packageName + ".fileprovider", jsonFile))
+                putParcelableArrayListExtra(Intent.EXTRA_STREAM, fileUris)
+                setPackage("com.whatsapp") // Limitar a WhatsApp
+            }
+
+            // Conceder permisos temporales para compartir los archivos
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+            // Iniciar la actividad de WhatsApp
+            try { // Intent para compartir archivos
+                context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_with)))
+            } catch (e: ActivityNotFoundException) {
+                // Manejar el caso en que WhatsApp no esté instalado
+                Toast.makeText(context, "WhatsApp no está instalado.", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                // Manejar otras excepciones
+                Toast.makeText(context, "Error al intentar compartir los archivos.", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
         }
     }
 
