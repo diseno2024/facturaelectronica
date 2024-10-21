@@ -18,6 +18,7 @@ import com.couchbase.lite.Expression
 import com.couchbase.lite.Meta
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
+import java.text.Normalizer
 
 class ImportarClientes : AppCompatActivity() {
     private var letra:String?=null
@@ -140,25 +141,41 @@ class ImportarClientes : AppCompatActivity() {
         // Limpiar resultados anteriores
         linearLayout.removeAllViews()
 
-        // Normalizar la entrada del usuario eliminando guiones y espacios
-        val cleanedQuery = query.replace("-", "").replace(" ", "").trim()
+        // Normalizar la entrada del usuario eliminando tildes y espacios en exceso
+        val cleanedQuery = removeAccents(query.trim()).split(Regex("\\s+")) // Divide la query en palabras separadas por espacios
 
         val filteredList = dataList.filter { data ->
             val datos = data.split("\n")
+            val nombre = removeAccents(datos[0].replace("-", "").trim())  // Asumiendo que el nombre completo está en la posición 0
             val dui = datos[8].replace("-", "").replace(" ", "").trim()  // Asumiendo que el DUI está en la posición 8
             val nit = datos[11].replace("-", "").replace(" ", "").trim() // Asumiendo que el NIT está en la posición 11
             val nrc = datos[9].replace("-", "").replace(" ", "").trim()  // Asumiendo que el NRC está en la posición 9
 
-            // Comparar la entrada con los datos normalizados
-            dui.contains(cleanedQuery, ignoreCase = true) ||
-                    nit.contains(cleanedQuery, ignoreCase = true) ||
-                    nrc.contains(cleanedQuery, ignoreCase = true)
+            // Separar el nombre completo en palabras (nombres y apellidos)
+            val nombrePalabras = nombre.split(Regex("\\s+"))
+
+            // Comparar la entrada con los nombres normalizados
+            val nombreCoincide = cleanedQuery.all { queryWord ->
+                nombrePalabras.any { it.contains(queryWord, ignoreCase = true) }
+            }
+
+            // Verificar si el nombre completo coincide, o si el DUI, NIT o NRC coinciden (sin tildes, ya que son números)
+            nombreCoincide ||
+                    dui.contains(query, ignoreCase = true) ||
+                    nit.contains(query, ignoreCase = true) ||
+                    nrc.contains(query, ignoreCase = true)
         }
 
         // Mostrar los datos filtrados
         filteredList.forEach { data ->
             agregarItemALinearLayout(data, letra)
         }
+    }
+
+    // Función para remover acentos de una cadena.
+    fun removeAccents(text: String): String {
+        return Normalizer.normalize(text, Normalizer.Form.NFD)
+            .replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
     }
 
     private fun agregarItemALinearLayout(data: String, letra: String) {

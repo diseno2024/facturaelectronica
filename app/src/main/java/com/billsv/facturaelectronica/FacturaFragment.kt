@@ -83,11 +83,21 @@ class FacturaFragment : Fragment() {
         etDui = view.findViewById(R.id.etDui)
         btnBuscar = view.findViewById(R.id.btnBuscar)
         btnBuscar.setOnClickListener {
-            val dui = etDui.text.toString()
-            if(dui!="" && dui.length >= 10) {
-                buscarPorDui(dui)
-            }else{
-                Toast.makeText(context, "ingrese un dui valido", Toast.LENGTH_SHORT).show()
+            val input = etDui.text.toString().trim()
+
+            if (input.isNotEmpty()) {
+                // Verificar si es un número (DUI) o un texto (nombre)
+                if (input.matches(Regex("\\d+"))) {
+                    if (input.length >= 10) {
+                        buscarPorDui(input)
+                    } else {
+                        Toast.makeText(context, "Ingrese un DUI válido", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    buscarPorNombre(input)
+                }
+            } else {
+                Toast.makeText(context, "Ingrese un DUI o nombre", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -321,6 +331,54 @@ class FacturaFragment : Fragment() {
             btnBuscar.visibility = View.GONE // Ocultar el botón de buscar
         } else {
             Toast.makeText(context, "No se encontraron facturas con ese DUI", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun buscarPorNombre(nombre: String) {
+        val app = requireActivity().application as MyApp
+        val database = app.database
+
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("nombre").like(Expression.string("%$nombre%"))) // Buscar nombre similar
+
+        val result = query.execute()
+        val dataList = mutableListOf<Factura>()
+
+        result.allResults().forEach { result ->
+            val dict = result.getDictionary(database.name)
+            val nombre = dict?.getString("nombre") ?: ""
+            val telefono = dict?.getString("telefono") ?: ""
+            val numeroControl = dict?.getString("numeroControl") ?: ""
+            val dui = dict?.getString("dui") ?: ""
+            val nit = dict?.getString("nit") ?: ""
+            val nrc = dict?.getString("nrc") ?: ""
+            val fecha = dict?.getString("fechaEmi") ?: ""
+            val codActividad = dict?.getString("codAcEco") ?: ""
+            val desAcEco = dict?.getString("desAcEco") ?: ""
+            val correo = dict?.getString("correo") ?: ""
+            val departamento = dict?.getString("departamento") ?: ""
+            val municipio = dict?.getString("municipio") ?: ""
+            val complemento = dict?.getString("complemento") ?: ""
+            val sello = dict?.getString("selloRecibido") ?: ""
+            val articulos = dict?.getString("articulos")
+            val codigoG = dict?.getString("codigoGeneracion") ?: ""
+            val totalNosuj = dict?.getDouble("totalNoSuj")?: 0.00
+            val totalExenta = dict?.getDouble("totalExenta")?: 0.00
+            val totalGravada = dict?.getDouble("totalGravada")?: 0.00
+            val total = dict?.getDouble("total")?: 0.00
+            val iva = dict?.getDouble("iva")?: 0.00
+            val condicion = dict?.getString("condicionOp") ?: ""
+            val factura = Factura(nombre, numeroControl, dui, nit, nrc, fecha, codActividad, desAcEco, correo, departamento, municipio, complemento, sello, articulos, codigoG, telefono, totalNosuj, totalExenta, totalGravada, total, iva, condicion)
+            dataList.add(factura)
+        }
+
+        if (dataList.isNotEmpty()) {
+            currentData = dataList
+            facturaAdapter.setFacturas(currentData)
+            btnClearFilter.visibility = View.VISIBLE // Mostrar el botón de limpiar filtro
+        } else {
+            Toast.makeText(context, "No se encontraron facturas con ese nombre", Toast.LENGTH_SHORT).show()
         }
     }
 
