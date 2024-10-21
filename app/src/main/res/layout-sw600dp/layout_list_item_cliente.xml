@@ -68,7 +68,7 @@
                         android:layout_weight="1"
                         android:padding="3dp"
                         android:textSize="30dp"
-                        android:text="NRC:"
+                        android:text="DUI:"
                         android:textAlignment="center" />
 
                     <TextView
@@ -119,6 +119,7 @@
             android:elevation="5dp"
             android:focusable="true"
             android:visibility="visible"
+            android:scaleType="fitXY"
             app:srcCompat="@drawable/icons8_delete_32_1_"
             app:tint="#00b861" />
 
@@ -133,6 +134,7 @@
             android:elevation="5dp"
             android:focusable="true"
             android:visibility="visible"
+            android:scaleType="fitXY"
             app:srcCompat="@drawable/editar"
             app:tint="#00b861" />
 

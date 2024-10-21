@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="90dp"
         android:background="#4a8c74"
         android:minHeight="?attr/actionBarSize"
         android:elevation="4dp"
@@ -22,13 +22,14 @@
 
         <ImageButton
             android:id="@+id/atras"
-            android:layout_width="51dp"
-            android:layout_height="51dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:background="@drawable/click_effect"
             android:clickable="true"
             android:contentDescription="bottom"
             android:focusable="true"
             android:layout_gravity="start"
+            android:scaleType="fitXY"
             app:srcCompat="@drawable/icons8_back_arrow_48"
             app:tint="#FFFFFF" />
 
@@ -38,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="Autentificación Hacienda"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="50sp"
             android:textStyle="bold"
             android:layout_gravity="center"/>
 
@@ -50,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Usuario"
+        android:textSize="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
@@ -59,6 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Contraseña"
+        android:textSize="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usuario" />
@@ -70,6 +73,7 @@
         android:ems="10"
         android:inputType="text"
         android:text=""
+        android:textSize="35dp"
         app:layout_constraintEnd_toEndOf="@+id/textView55"
         app:layout_constraintStart_toStartOf="@+id/textView55"
         app:layout_constraintTop_toBottomOf="@+id/textView55" />
@@ -81,6 +85,7 @@
         android:ems="10"
         android:inputType="text"
         android:text=""
+        android:textSize="35dp"
         app:layout_constraintEnd_toEndOf="@+id/textView57"
         app:layout_constraintStart_toStartOf="@+id/textView57"
         app:layout_constraintTop_toBottomOf="@+id/textView57" />
@@ -89,8 +94,10 @@
         android:id="@+id/checkBox_consumidor_final"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Consumidor Final"
-        android:visibility="gone"
+        android:textSize="30dp"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/contraseña"
         app:layout_constraintEnd_toStartOf="@+id/checkBox_credito_fiscal"
         app:layout_constraintStart_toStartOf="parent" />
@@ -99,8 +106,10 @@
         android:id="@+id/checkBox_credito_fiscal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Credito Fiscal"
-        android:visibility="gone"
+        android:textSize="30dp"
+        android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/checkBox_consumidor_final"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/contraseña"/>
@@ -109,7 +118,9 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Guardar"
+        android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkBox_credito_fiscal" />
@@ -118,7 +129,9 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Editar"
+        android:textSize="30dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -127,11 +140,12 @@
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/toggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="500dp"
+        android:layout_height="100dp"
         android:layout_marginStart="100dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="100dp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:singleSelection="true"
@@ -142,9 +156,10 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPrueba"
             style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:text="Prueba"
+            android:textSize="25dp"
             app:strokeColor="@color/btn_color"
             app:strokeWidth="5dp"
             app:rippleColor="#95BFB0"
@@ -154,9 +169,10 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnProduccion"
             style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:text="Producción"
+            android:textSize="25dp"
             app:strokeColor="@color/btn_color"
             app:strokeWidth="5dp"
             app:rippleColor="#95BFB0"
@@ -172,6 +188,7 @@
         android:background="@drawable/button_cer"
         android:padding="10dp"
         android:text="Ver certificados"
+        android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
