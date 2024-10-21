@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getString
@@ -144,7 +145,7 @@ class FacturaAdapter(
         val textViewNombre: TextView = itemView.findViewById(R.id.textViewNombre)
         val textViewTelefono: TextView = itemView.findViewById(R.id.textViewTelefono)
         val textViewDui: TextView = itemView.findViewById(R.id.textViewDui)
-        val btnEnviarPorGmail: ImageButton = itemView.findViewById(R.id.btnEnviarPorGmail)          // El botón para enviar documentos por Gmail
-        val btnEnviarPorWhatsapp: ImageButton = itemView.findViewById(R.id.btnEnviarPorWhatsApp)    // El botón para enviar documentos por WhatsApp
+        val btnEnviarPorGmail: ImageView = itemView.findViewById(R.id.btnEnviarPorGmail)          // El botón para enviar documentos por Gmail
+        val btnEnviarPorWhatsapp: ImageView = itemView.findViewById(R.id.btnEnviarPorWhatsApp)    // El botón para enviar documentos por WhatsApp
     }
 }
