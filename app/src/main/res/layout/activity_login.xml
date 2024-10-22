@@ -68,6 +68,19 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/recoverPinButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="@color/verde_menta_1"
+            android:strokeColor="@color/black"
+            android:text="Recuperación de PIN"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <!-- link-->
         <TextView
             android:id="@+id/linkTextView"

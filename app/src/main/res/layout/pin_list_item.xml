@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/pinTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="PIN"
+        android:textSize="16sp" />
+
+    <!-- Botón de editar con un icono -->
+    <ImageButton
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/editar"
+        android:background="?attr/selectableItemBackground"
+        android:padding="10dp" />
+
+    <!-- Botón de eliminar con un icono -->
+    <ImageButton
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/quitar"
+        android:background="?attr/selectableItemBackground"
+        android:padding="10dp" />
+</LinearLayout>
+

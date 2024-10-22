@@ -18,13 +18,32 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.couchbase.lite.Database
 import android.util.Log
+import android.content.Context
+import android.content.SharedPreferences
+import android.graphics.Color
+import android.widget.ArrayAdapter
+import android.widget.TextView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.util.*
+import com.couchbase.lite.*
+import android.widget.Button
+import android.widget.ListView
+import android.view.ViewGroup
+import android.widget.ImageButton
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
     private val PIN_PREFS_NAME = "pins_prefs"
     private lateinit var database: Database
+    private var pinsListDialog: AlertDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val app = application as MyApp
+        database = app.database
+
         setContentView(R.layout.activity_menu)
         // Configura tu NavigationView
         drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
@@ -87,7 +106,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_home -> supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment()).commit()
 
-            R.id.nav_crear_pin -> showCreatePinDialog()
+            R.id.nav_crear_pin -> showPinsDialog()
 
             R.id.nav_restauracion -> {
                 // Iniciar la actividad correspondiente para la restauración de datos
@@ -148,30 +167,245 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
-    private fun showCreatePinDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Crear Nuevo PIN")
 
+    private fun showPinsDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_recover_pin, null)
+        val nameCommercialEditText: EditText = dialogView.findViewById(R.id.nameCommercialEditText)
+        val nrcEditText: EditText = dialogView.findViewById(R.id.nrcEditText)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Administrar PINs")
+        builder.setView(dialogView)
+        builder.setCancelable(false)
+
+        // Botón Cancelar
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        // Botón Comprobar
+        builder.setPositiveButton("Comprobar", null) // Lo dejamos en null para manejarlo luego
+        val dialog = builder.create()
+
+        dialog.show()
+
+        val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        positiveButton.setOnClickListener {
+            val nameCommercial = nameCommercialEditText.text.toString()
+            val nrc = nrcEditText.text.toString()
+
+            // Validar datos introducidos
+            if (validateData(nameCommercial, nrc)) {
+                // Si los datos son correctos, mostrar un cuadro de diálogo con la lista de PINs
+                showPinsListDialog()
+                dialog.dismiss() // Cerramos el diálogo actual
+            } else {
+                // Si los datos son incorrectos, mostrar un mensaje de error
+                Toast.makeText(this, "Datos incorrectos. Inténtelo nuevamente.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // Validar los datos introducidos contra los almacenados en la base de datos
+    private fun validateData(nameCommercial: String, nrc: String): Boolean {
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(
+                Expression.property("tipo").equalTo(Expression.string("ConfEmisor"))
+                    .and(Expression.property("nombreC").equalTo(Expression.string(nameCommercial)))
+                    .and(Expression.property("nrc").equalTo(Expression.string(nrc)))
+            )
+
+        try {
+            val resultSet = query.execute()
+            return resultSet.count() > 0  // Si se encuentra el documento, los datos son correctos
+        } catch (e: CouchbaseLiteException) {
+            Log.e("PinManager", "Error al validar los datos de recuperación de PIN", e)
+            return false
+        }
+    }
+
+    private fun showPinsListDialog() {
+        val pinManager = PinManager(this)
+
+        // Obtener la lista de PINs almacenados
+        val pinsList = pinManager.loadPins()
+
+        // Mostrar el diálogo con la lista de PINs
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Lista de PINs")
+
+        val inflater = layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_pin_list, null)
+        val listView = dialogView.findViewById<ListView>(R.id.pinsListView)
+
+        // Adaptador personalizado para la lista de PINs
+        val adapter = object : ArrayAdapter<String>(this, R.layout.pin_list_item, pinsList) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = convertView ?: inflater.inflate(R.layout.pin_list_item, parent, false)
+                val pinTextView = view.findViewById<TextView>(R.id.pinTextView)
+                val editButton = view.findViewById<ImageButton>(R.id.editButton)
+                val deleteButton = view.findViewById<ImageButton>(R.id.deleteButton)
+
+                val pin = getItem(position)
+                pinTextView.text = pin
+
+                // Asignar funcionalidad al botón de eliminar
+                deleteButton.setOnClickListener {
+                    showDeletePinDialog(pin!!, pinManager)
+                }
+
+                // Asignar funcionalidad al botón de editar
+                editButton.setOnClickListener {
+                    // Cerrar el diálogo de lista de PINs antes de editar
+                    pinsListDialog?.dismiss()
+                    showEditPinDialog(pin!!, pinManager)
+                }
+
+                return view
+            }
+        }
+
+        listView.adapter = adapter
+
+        // Añadir la vista al diálogo
+        builder.setView(dialogView)
+
+        // Botón para crear nuevo PIN
+        builder.setPositiveButton("Crear nuevo PIN") { dialog, _ ->
+            // Llamar a la función para crear un nuevo PIN
+            showCreatePinDialog(pinManager)
+        }
+
+        // Botón de cerrar
+        builder.setNegativeButton("Cerrar") { dialog, _ -> dialog.dismiss() }
+
+        // Crear y mostrar el diálogo, y guardar la referencia
+        pinsListDialog = builder.create()
+        pinsListDialog?.show()
+    }
+
+    private fun showCreatePinDialog(pinManager: PinManager) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Crear nuevo PIN")
+
+        // Crear una vista para el diálogo con un EditText
         val input = EditText(this)
+        input.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(6))
         input.inputType = InputType.TYPE_CLASS_NUMBER
-        input.filters = arrayOf(InputFilter.LengthFilter(6)) // Limita la entrada a 6 caracteres
         builder.setView(input)
 
-        builder.setPositiveButton("Guardar") { dialog, _ ->
-            val newPin = input.text.toString()
-            if (newPin.length == 6) {
-                val pinManager = PinManager(this) // Crear instancia de PinManager
-                pinManager.addPin(newPin) // Agregar el nuevo PIN
-                Toast.makeText(this, "Nuevo PIN guardado correctamente", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
-            } else {
-                Toast.makeText(this, "El PIN debe tener exactamente 6 dígitos", Toast.LENGTH_SHORT).show()
+        // Botón para confirmar la creación
+        builder.setPositiveButton("Crear") { dialog, _ -> }
+
+        // Botón de cancelar
+        builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.dismiss() }
+
+        // Mostrar el diálogo
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val newPin = input.text.toString()
+
+                // Validar si el nuevo PIN tiene exactamente 6 dígitos
+                if (newPin.length == 6) {
+                    // Agregar el nuevo PIN en la base de datos
+                    pinManager.addPin(newPin)
+
+                    // Notificar al usuario que el PIN fue creado
+                    Toast.makeText(this, "Nuevo PIN creado", Toast.LENGTH_SHORT).show()
+
+                    // Cerrar el diálogo de creación
+                    dialog.dismiss()
+
+                    // Volver a mostrar la lista de PINs actualizada
+                    showPinsListDialog()
+                } else {
+                    Toast.makeText(this, "El PIN debe tener exactamente 6 dígitos", Toast.LENGTH_SHORT).show()
+                }
             }
+        }
+
+        dialog.show()
+    }
+
+    private fun showDeletePinDialog(pin: String, pinManager: PinManager) {
+        // Cierra el diálogo de la lista de PINs antes de mostrar el diálogo de eliminación
+        pinsListDialog?.dismiss()
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Eliminar PIN")
+        builder.setMessage("¿Estás seguro de que deseas eliminar este PIN?")
+
+        builder.setPositiveButton("Eliminar") { dialog, _ ->
+            // Eliminar el PIN de la base de datos
+            pinManager.removePin(pin)
+
+            // Notificar al usuario que el PIN fue eliminado
+            Toast.makeText(this, "PIN eliminado", Toast.LENGTH_SHORT).show()
+
+            // Volver a mostrar la lista de PINs actualizada
+            showPinsListDialog()
+            dialog.dismiss() // Opcional: puedes dejar esto si deseas cerrarlo
         }
 
         builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.dismiss() }
 
         builder.show()
+    }
+
+
+    private fun showEditPinDialog(pin: String, pinManager: PinManager) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Editar PIN")
+
+        // Crear una vista para el diálogo con un EditText
+        val input = EditText(this)
+        input.setText(pin) // Prellenar con el valor actual del PIN
+
+        // Limitar la longitud máxima a 6 caracteres
+        input.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(6))
+
+        // Configurar el EditText para que acepte solo números y muestre el teclado numérico
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+
+        builder.setView(input)
+
+        // Botón para confirmar la edición
+        builder.setPositiveButton("Guardar") { dialog, _ -> }
+
+        // Botón de cancelar
+        builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.dismiss() }
+
+        // Mostrar el diálogo
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val newPin = input.text.toString()
+
+                // Validar si el nuevo PIN tiene exactamente 6 dígitos
+                if (newPin.length == 6) {
+                    // Actualizar el PIN en la base de datos
+                    pinManager.updatePin(pin, newPin)
+
+                    // Notificar al usuario que el PIN fue actualizado
+                    Toast.makeText(this, "PIN actualizado", Toast.LENGTH_SHORT).show()
+
+                    // Cerrar el diálogo de edición
+                    dialog.dismiss()
+
+                    // Cerrar el diálogo de la lista de PINs si está abierto
+                    pinsListDialog?.dismiss()
+
+                    // Mostrar nuevamente la lista de PINs
+                    showPinsListDialog()
+                } else {
+                    Toast.makeText(this, "El PIN debe tener exactamente 6 dígitos", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        dialog.show()
     }
 
 }

@@ -116,6 +116,10 @@ class MyCustomAppIntro : AppIntro() {
             oldFragment.guardarClavePrivada() // Que me guarde la Clave Privada
         }
 
+        if (oldFragment is PIN && !oldFragment.PinCorrecto()) {
+            oldFragment.validarYGuardarPin() // Guarda el PIN automáticamente
+        }
+
     }
 
     override fun onCanRequestNextPage(): Boolean {
@@ -125,12 +129,17 @@ class MyCustomAppIntro : AppIntro() {
         if (currentFragment is InfoEmisor1) {
             val pinFragment = supportFragmentManager.fragments.find { it is PIN } as? PIN
             pinFragment?.let {
-                if (it.PinCorrecto()) {
-                    // Si las validacinoes se cumplen, entonces se permite pasar a la siguiente diapositiva
-                }else{
-                    // Si el PIN no está correcto, entonces no avanza a la siguiente diapositiva
-                    return false
+                if (!it.PinCorrecto()) {
+                    // Si el PIN no es correcto, validamos y lo guardamos antes de permitir avanzar
+                    it.validarYGuardarPin()
+                    // Verificamos de nuevo después de la validación
+                    if (!it.PinCorrecto()) {
+                        // Si el PIN no es correcto después de validarlo, no avanzamos
+                        return false
+                    }
                 }
+                // Si el PIN es correcto, permitimos avanzar
+                return true
             }
         }
 
