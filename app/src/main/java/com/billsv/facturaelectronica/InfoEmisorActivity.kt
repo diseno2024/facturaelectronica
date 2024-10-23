@@ -42,6 +42,7 @@ import android.util.Base64.encodeToString
 import androidx.annotation.RequiresApi
 
 import com.billsv.signer.*;
+import okhttp3.internal.format
 import java.io.ByteArrayInputStream
 import java.io.FileNotFoundException
 import java.security.Key
@@ -624,9 +625,12 @@ class InfoEmisorActivity : AppCompatActivity() {
                 return formatted.toString()
             }
         })
+        NRC.filters = arrayOf(InputFilter.LengthFilter(9))
+
         NRC.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
-            private val mask = "#######"
+            private val masks = arrayOf("#", "#-#", "##-#", "###-#", "####-#", "#####-#", "######-#", "#######-#")//Array de mascaras
+            private val maxDigits = 9
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -635,15 +639,28 @@ class InfoEmisorActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (isUpdating) return
 
+                val rawText = s.toString().replace("-","")//Eliminar cualquier guion antes de formatear
+                if (rawText.length > maxDigits) return
                 isUpdating = true
-                val formatted = formatPhoneNumber(s.toString())
+
+                val mask = when (rawText.length) {
+                    1 -> masks[0]
+                    2 -> masks[1]
+                    3 -> masks[2]
+                    4 -> masks[3]
+                    5 -> masks[4]
+                    6 -> masks[5]
+                    7 -> masks[6]
+                    8 -> masks[7]
+                    else -> masks[7]
+                }
+                val formatted = formatNRC(rawText, mask)
                 NRC.setText(formatted)
                 NRC.setSelection(formatted.length)
                 isUpdating = false
             }
 
-            private fun formatPhoneNumber(phone: String): String {
-                val digits = phone.replace(Regex("\\D"), "")
+            private fun formatNRC(nrc: String, mask: String): String {
                 val formatted = StringBuilder()
 
                 var i = 0
@@ -652,13 +669,12 @@ class InfoEmisorActivity : AppCompatActivity() {
                         formatted.append(m)
                         continue
                     }
-                    if (i >= digits.length) break
-                    formatted.append(digits[i])
+                    if (i >= nrc.length) break
+                    formatted.append(nrc[i])
                     i++
                 }
                 return formatted.toString()
             }
-
         })
         val clave = intent.getStringExtra("clave")
         if(clave=="faltacf" || clave=="faltaccf"){
@@ -805,12 +821,14 @@ class InfoEmisorActivity : AppCompatActivity() {
             val Numtdato = datos[6]
             val correodato = datos[7]
 
+            val maskedNRC = formatNRC(nrcdato)
+
             //pasar la data a los edittext
             nombre.setText(nombredato)
             nombrec.setText(nombrecdato)
             dui.setText(duidato)
             nit.setText(nitdato)
-            nrc.setText(nrcdato)
+            nrc.setText(maskedNRC)
             AcEco.setText(AcEcodato)
             direccion.setText(direcciondato)
             NumT.setText(Numtdato)
@@ -829,6 +847,34 @@ class InfoEmisorActivity : AppCompatActivity() {
             NumT.isEnabled = false
             correo.isEnabled = false
         }
+    }
+    private fun formatNRC(nrc: String): String { //Agregar mascaras para las vistas de mostrardata
+        val masks = arrayOf("#", "#-#", "##-#", "###-#", "####-#", "#####-#", "######-#", "#######-#")
+        val rawText = nrc.replace("-", "") // Eliminar cualquier guion antes de formatear
+        val mask = when (rawText.length) {
+            1 -> masks[0]
+            2 -> masks[1]
+            3 -> masks[2]
+            4 -> masks[3]
+            5 -> masks[4]
+            6 -> masks[5]
+            7 -> masks[6]
+            8 -> masks[7]
+            else -> rawText // Si es más largo o no aplica, devolver el texto original sin formatear
+        }
+
+        val formatted = StringBuilder()
+        var i = 0
+        for (m in mask.toCharArray()) {
+            if (m != '#') {
+                formatted.append(m)
+                continue
+            }
+            if (i >= rawText.length) break
+            formatted.append(rawText[i])
+            i++
+        }
+        return formatted.toString()
     }
 
     private fun mostrarImagen() {
@@ -995,7 +1041,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         val nombreC = nombreC.text.toString()
         val dui = DUI.text.toString()
         val nit = NIT.text.toString()
-        val nrc = NRC.text.toString()
+        val nrc = NRC.text.toString().replace("-","")
         val AcEco = AcEco.text.toString()
         val departamento = spinnerDep.selectedItem.toString()
         val municipio = spinnerMun.selectedItem.toString()
@@ -1119,7 +1165,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         val nombrecText = nombreC.text.toString()
         val duiText = DUI.text.toString().replace("-", "")
         val nitText = NIT.text.toString().replace("-", "")
-        val nrcText = NRC.text.toString()
+        val nrcText = NRC.text.toString().replace("-","")
         val AcEco = AcEco.text.toString()
         val direccionText = Direccion.text.toString()
         val telefonoText = NumT.text.toString().replace("-", "")
@@ -1151,8 +1197,8 @@ class InfoEmisorActivity : AppCompatActivity() {
             return false
         }
 
-        if (!nrcText.matches(Regex("\\d{7}"))) {
-            Toast.makeText(this, "NRC debe ser un número válido", Toast.LENGTH_SHORT).show()
+        if (!nrcText.matches(Regex("^\\d{1,8}$"))) {
+            Toast.makeText(this, "NRC debe ser un número válido de 1 a 8", Toast.LENGTH_SHORT).show()
             return false
         }
 

@@ -489,9 +489,11 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
                 return formatted.toString()
             }
         })
+        nrc.filters = arrayOf(InputFilter.LengthFilter(9))
         nrc.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
-            private val mask = "#######"
+            private val masks = arrayOf("#", "#-#", "##-#", "###-#", "####-#", "#####-#", "######-#", "#######-#")//Array de mascaras
+            private val maxDigits = 9
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -500,14 +502,27 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (isUpdating) return
 
+                val rawText = s.toString().replace("_","")//Eliminar cualquier guion antes de formatear
+                if (rawText.length > maxDigits) return
                 isUpdating = true
-                val formatted = formatNrc(s.toString())
+                val mask = when (rawText.length) {
+                    1 -> masks[0]
+                    2 -> masks[1]
+                    3 -> masks[2]
+                    4 -> masks[3]
+                    5 -> masks[4]
+                    6 -> masks[5]
+                    7 -> masks[6]
+                    8 -> masks[7]
+                    else -> masks[7]
+                }
+                val formatted = formatNrc(rawText, mask)
                 nrc.setText(formatted)
                 nrc.setSelection(formatted.length)
                 isUpdating = false
             }
 
-            private fun formatNrc(nrc: String): String {
+            private fun formatNrc(nrc: String, mask: String): String {
                 val digits = nrc.replace(Regex("\\D"), "")
                 val formatted = StringBuilder()
 
@@ -623,7 +638,7 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         val duiText = dui.text.toString().replace("-", "")
         val nitText = nit.text.toString().replace("-", "")
         val actividadEconomicaText = actividadEconomica.text.toString()
-        val nrcText = nrc.text.toString()
+        val nrcText = nrc.text.toString().replace("-","")
         val direccionText = direccion.text.toString()
         val emailText = email.text.toString().trim()
         val telefonoText = telefono.text.toString().replace("-", "")
@@ -682,7 +697,7 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         val duiText = dui.text.toString().replace("-", "")
         val nitText = nit.text.toString().replace("-", "")
         val actividadEconomicaText = actividadEconomica.text.toString()
-        val nrcText = nrc.text.toString()
+        val nrcText = nrc.text.toString().replace("-","")
         val direccionText = direccion.text.toString()
         val emailText = email.text.toString().trim()
         val telefonoText = telefono.text.toString().replace("-", "")
@@ -743,7 +758,7 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         val app = application as MyApp///////
         val database = app.database///////
         val actividadEconomicaText = actividadEconomica.text.toString()
-        val nrcText = nrc.text.toString()
+        val nrcText = nrc.text.toString().replace("-","")
         val razonSocialText = razonSocial.text.toString()
         //val nombreComercialText = nombreComercial.text.toString()
         val nitText = nit.text.toString().replace("-", "")
@@ -774,7 +789,7 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
         //////
 
         // Verifica que todos los campos estén llenos
-        if (nrcText.isEmpty() || actividadEconomicaText.isEmpty() || nitText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() || razonSocialText.isEmpty()) {
+        if (nrcText.isEmpty() || actividadEconomicaText.isEmpty() || emailText.isEmpty() ||  telefonoText.isEmpty() || razonSocialText.isEmpty()) {
             Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
             return false
         }

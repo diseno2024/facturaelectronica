@@ -2,6 +2,7 @@ package com.billsv.facturaelectronica.appintro
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
@@ -39,11 +40,11 @@ class InfoEmisor2 : Fragment() {
         NRC = view.findViewById(R.id.nrc)
         AcEco = view.findViewById(R.id.AcEco)
         Direccion = view.findViewById(R.id.Direccion)
+        NRC.filters = arrayOf(InputFilter.LengthFilter(9))
         NRC.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
-            //private val mask = "#######"
-            private val mask4Digits = "###-#"
-            private val mask7Digits = "######-#"
+            private val masks = arrayOf("#", "#-#", "##-#", "###-#", "####-#", "#####-#", "######-#", "#######-#")//Array de mascaras
+            private val maxDigits = 9
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -52,18 +53,23 @@ class InfoEmisor2 : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 if (isUpdating) return
 
+                val rawText = s.toString().replace("-","")//Eliminar cualquier guion antes de formatear
+                if (rawText.length > maxDigits) return
                 isUpdating = true
 
-                val digitsOnly = s.toString().replace(Regex("\\D"), "") // Remover cualquier carácter no numérico
-
-                // Determinar qué máscara usar según la cantidad de dígitos ingresados
-                val mask = when (digitsOnly.length) {
-                    in 1..4 -> mask4Digits
-                    in 5..7 -> mask7Digits
-                    else -> mask7Digits // Si se excede, aplica la máscara de 7 dígitos
+                val mask = when (rawText.length) {
+                    1 -> masks[0]
+                    2 -> masks[1]
+                    3 -> masks[2]
+                    4 -> masks[3]
+                    5 -> masks[4]
+                    6 -> masks[5]
+                    7 -> masks[6]
+                    8 -> masks[7]
+                    else -> masks[7]
                 }
 
-                val formatted = formatNRC(digitsOnly, mask)
+                val formatted = formatNRC(rawText, mask)
                 NRC.setText(formatted)
                 NRC.setSelection(formatted.length)
                 isUpdating = false
@@ -91,7 +97,7 @@ class InfoEmisor2 : Fragment() {
 
     fun actualizarInformacionInfoEmisor2() {
         val nombreC = nombreC.text.toString()
-        val nrc = NRC.text.toString()
+        val nrc = NRC.text.toString().replace("-","")
         val AcEco = AcEco.text.toString()
         val direccion = Direccion.text.toString()
         // Buscar si ya existe un documento del tipo "ConfEmisor"
@@ -141,7 +147,7 @@ class InfoEmisor2 : Fragment() {
         val direccionText = Direccion.text.toString()
 
         // Verificar que todos los campos estén completos
-        if (acEcoText.isNotEmpty() && nombrecText.isNotEmpty() && direccionText.isNotEmpty() && (nrcText.matches(Regex("\\d{7}")) || nrcText.matches(Regex("\\d{4}")))) {
+        if (acEcoText.isNotEmpty() && nombrecText.isNotEmpty() && direccionText.isNotEmpty() && (nrcText.matches(Regex("^\\d{1,8}$")))) {
             return true
         }else{ // De lo contrario verificar qué es lo que el usuario no ingresó o ingresó mal
 
@@ -163,7 +169,7 @@ class InfoEmisor2 : Fragment() {
                     MensajeError2 = true // El mensaje ya se mostró, no se volverá a mostrar
                 }
                 return false
-            } else if (!nrcText.matches(Regex("\\d{7}")) && !nrcText.matches(Regex("\\d{4}"))) {
+            } else if (!nrcText.matches(Regex("^\\d{1,8}$"))) {
                 // Verifica si el mensaje ya se mostró
                 if (!MensajeError3) {
                     Toast.makeText(requireContext(), "Ingrese un NRC válido", Toast.LENGTH_SHORT).show()

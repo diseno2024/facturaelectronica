@@ -5,17 +5,28 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.billsv.facturaelectronica.MenuActivity
+import com.billsv.facturaelectronica.MyApp
 import com.billsv.facturaelectronica.R
+import com.couchbase.lite.CouchbaseLiteException
+import com.couchbase.lite.DataSource
+import com.couchbase.lite.Database
+import com.couchbase.lite.Expression
+import com.couchbase.lite.Meta
+import com.couchbase.lite.MutableDocument
+import com.couchbase.lite.QueryBuilder
+import com.couchbase.lite.SelectResult
 import com.github.appintro.AppIntro
 
 class MyCustomAppIntro : AppIntro() {
     private val REQUEST_CODE_PERMISSIONS = 1001
     private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
+    private lateinit var database: Database
 
     // Lista de permisos adaptada según la versión de Android
     private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 33) {
@@ -76,6 +87,7 @@ class MyCustomAppIntro : AppIntro() {
     }
 
     override fun onDonePressed(currentFragment: Fragment?) {
+        guardar()
         val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
         requestPermissions()
@@ -226,6 +238,48 @@ class MyCustomAppIntro : AppIntro() {
             )
         } else {
 
+        }
+    }
+
+    private fun guardar() {
+        val app = application as MyApp
+        database = app.database
+        val condicion = "si"
+        // Buscar si ya existe un documento del tipo "ConfEmisor"
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("intro")))
+
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
+
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
+                        }
+                    }
+                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+
+            // Crear un nuevo documento
+            val document = MutableDocument()
+                .setString("valor", condicion)
+                .setString("tipo", "intro")
+
+            // Guardar el nuevo documento
+            database.save(document)
+            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
+        } catch (e: CouchbaseLiteException) {
+            Log.e("ReClienteActivity", "Error al guardar los datos en la base de datos: ${e.message}", e)
+            Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
         }
     }
 

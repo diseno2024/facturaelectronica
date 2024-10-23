@@ -28,6 +28,7 @@ import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
 import android.text.InputFilter
 import android.text.Spanned
+import okhttp3.internal.format
 
 
 class PrinReClienteActivity : AppCompatActivity() {
@@ -614,9 +615,11 @@ class PrinReClienteActivity : AppCompatActivity() {
                 return formatted.toString()
             }
         })
+        nrc.filters = arrayOf(InputFilter.LengthFilter(9))
         nrc.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
-            private val mask = "#######"
+            private val masks = arrayOf("#", "#-#", "##-#", "###-#", "####-#", "#####-#", "######-#", "#######-#")//Array de mascaras
+            private val maxDigits = 9
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -625,14 +628,28 @@ class PrinReClienteActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (isUpdating) return
 
+                val rawText = s.toString().replace("-","")//Eliminar cualquier guion antes de formatear
+                if (rawText.length > maxDigits) return
                 isUpdating = true
-                val formatted = formatNrc(s.toString())
+
+                val mask = when (rawText.length) {
+                    1 -> masks[0]
+                    2 -> masks[1]
+                    3 -> masks[2]
+                    4 -> masks[3]
+                    5 -> masks[4]
+                    6 -> masks[5]
+                    7 -> masks[6]
+                    8 -> masks[7]
+                    else -> ""
+                }
+                val formatted = formatNrc(rawText, mask)
                 nrc.setText(formatted)
                 nrc.setSelection(formatted.length)
                 isUpdating = false
             }
 
-            private fun formatNrc(nrc: String): String {
+            private fun formatNrc(nrc: String, mask: String): String {
                 val digits = nrc.replace(Regex("\\D"), "")
                 val formatted = StringBuilder()
 
@@ -737,6 +754,8 @@ class PrinReClienteActivity : AppCompatActivity() {
             val nrcd = dato[9]
             val actividadEconomicad = dato[10]
 
+            val maskedNRC = formatNRC(nrcd)
+
             nombre.setText(nombred)
             dui.setText(duid)
             //spinnerDep.setSelection()
@@ -746,7 +765,7 @@ class PrinReClienteActivity : AppCompatActivity() {
             telefono.setText(telefonod)
             //tipoC.setSelection()
             nit.setText(nitd)
-            nrc.setText(nrcd)
+            nrc.setText(maskedNRC)
             actividadEconomica.setText(actividadEconomicad)
 
 
@@ -760,6 +779,34 @@ class PrinReClienteActivity : AppCompatActivity() {
             }
         }
     }
+    private fun formatNRC(nrc: String): String { //Agregar mascaras para las vistas de edicion
+        val masks = arrayOf("#", "#-#", "##-#", "###-#", "####-#", "#####-#", "######-#", "#######-#")
+        val rawText = nrc.replace("-", "") // Eliminar cualquier guion antes de formatear
+        val mask = when (rawText.length) {
+            1 -> masks[0]
+            2 -> masks[1]
+            3 -> masks[2]
+            4 -> masks[3]
+            5 -> masks[4]
+            6 -> masks[5]
+            7 -> masks[6]
+            8 -> masks[7]
+            else -> rawText // Si es más largo o no aplica, devolver el texto original sin formatear
+        }
+
+        val formatted = StringBuilder()
+        var i = 0
+        for (m in mask.toCharArray()) {
+            if (m != '#') {
+                formatted.append(m)
+                continue
+            }
+            if (i >= rawText.length) break
+            formatted.append(rawText[i])
+            i++
+        }
+        return formatted.toString()
+    }
 
     private fun validaractu(): Boolean {
         val app = application as MyApp///////
@@ -770,7 +817,7 @@ class PrinReClienteActivity : AppCompatActivity() {
         val direccionText = direccion.text.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
         val duiText=dui.text.toString().replace("-","")
-        val nrcText= nrc.text.toString()
+        val nrcText= nrc.text.toString().replace("-","")
         val actividadEcoText=actividadEconomica.text.toString()
         val tipoCText=tipoC.selectedItem.toString()
 
@@ -832,9 +879,9 @@ class PrinReClienteActivity : AppCompatActivity() {
                 Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
                 return false
             }
-            // Verifica que el nrc sea un número válido de 8 dígitos
-            if (!nrcText.matches(Regex("\\d{7}"))) {
-                Toast.makeText(this, "NRC debe ser un número válido de 7 dígitos", Toast.LENGTH_SHORT).show()
+            // Verifica que el nrc sea un número válido
+            if (!nrcText.matches(Regex("^\\d{1,8}$"))) {
+                Toast.makeText(this, "NRC debe ser un número válido de 1 a 8 dígitos", Toast.LENGTH_SHORT).show()
                 return false
             }
 
@@ -861,7 +908,7 @@ class PrinReClienteActivity : AppCompatActivity() {
         val departamentoCodigo = departamentosMap[departamentoText]
         val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
         val duiText=dui.text.toString().replace("-", "")
-        val nrcText=nrc.text.toString()
+        val nrcText=nrc.text.toString().replace("-","")
         val actividadEcoText=actividadEconomica.text.toString()
         val telefonoMostrar = telefono.text.toString()
         val duiMostrar=dui.text.toString()
@@ -927,7 +974,7 @@ class PrinReClienteActivity : AppCompatActivity() {
         val direccionText = direccion.text.toString()
         val telefonoText = telefono.text.toString().replace("-", "")
         val duiText=dui.text.toString().replace("-","")
-        val nrcText= nrc.text.toString()
+        val nrcText= nrc.text.toString().replace("-","")
         val actividadEcoText=actividadEconomica.text.toString()
         val tipoCText=tipoC.selectedItem.toString()
 
@@ -1038,8 +1085,8 @@ class PrinReClienteActivity : AppCompatActivity() {
                 return false
             }
             // Verifica que el nrc sea un número válido de 8 dígitos
-            if (!nrcText.matches(Regex("\\d{7}"))) {
-                Toast.makeText(this, "NRC debe ser un número válido de 7 dígitos", Toast.LENGTH_SHORT).show()
+            if (!nrcText.matches(Regex("^\\d{1,8}$"))) {
+                Toast.makeText(this, "NRC debe ser un número válido de 1 a 8 dígitos", Toast.LENGTH_SHORT).show()
                 return false
             }
 
@@ -1063,7 +1110,7 @@ class PrinReClienteActivity : AppCompatActivity() {
         val municipioCodigo = municipiosMap[departamentoText]?.firstOrNull { it.first == municipioText }?.second
         val duiText=dui.text.toString().replace("-", "")
         var nrcText:String?
-        nrcText=nrc.text.toString()
+        nrcText=nrc.text.toString().replace("-","")
         if(nrcText==""){
             nrcText= null
         }
