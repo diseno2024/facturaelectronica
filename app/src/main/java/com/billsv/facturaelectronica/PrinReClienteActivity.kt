@@ -736,7 +736,7 @@ class PrinReClienteActivity : AppCompatActivity() {
         agregarButton.visibility = View.GONE
 
         cancelarButton = findViewById(R.id.btnCancelar)
-        cancelarButton.visibility = View.GONE
+        cancelarButton.visibility = View.VISIBLE
 
         val guardar: Button = findViewById(R.id.btnGuardar)
         guardar.visibility = View.VISIBLE

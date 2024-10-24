@@ -22,10 +22,11 @@
           app:layout_constraintTop_toBottomOf="@+id/bordeSup"
           app:layout_constraintWidth_percent="0.8" />
 
+
       <androidx.constraintlayout.widget.ConstraintLayout
           android:id="@+id/bordeSup"
           android:layout_width="0dp"
-          android:layout_height="66dp"
+          android:layout_height="150dp"
           android:background="#4A8C74"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +61,7 @@
                 android:text="Restauracion de Datos"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
-                android:textSize="26sp"
+                android:textSize="50dp"
 
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -71,8 +72,8 @@
 
             <ImageView
                 android:id="@+id/imageRespaldoDatos"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_alignParentTop="true"
                 android:layout_toStartOf="@+id/textRespaldoDeDatos"
                 android:contentDescription="Icono de respaldo de datos"
@@ -85,9 +86,6 @@
                 app:layout_constraintVertical_bias="0.5" />
       </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
       <TextView
           android:id="@+id/textInformacionRespaldo"
           android:layout_width="0dp"
@@ -95,14 +93,14 @@
           android:text="Información de Datos:"
           android:textAlignment="center"
           android:textColor="#2E594A"
-          android:textSize="@dimen/textSize_bordeback"
+          android:textSize="60sp"
           app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
           app:layout_constraintEnd_toEndOf="@+id/fondoDato"
           app:layout_constraintHeight_percent="0.05"
           app:layout_constraintHorizontal_bias="0.0"
           app:layout_constraintStart_toStartOf="@+id/fondoDato"
           app:layout_constraintTop_toTopOf="@+id/fondoDato"
-          app:layout_constraintVertical_bias="0.051"
+          app:layout_constraintVertical_bias="0.053"
           app:layout_constraintWidth_percent="0.8" />
 
       <TextView
@@ -112,7 +110,7 @@
           android:text="a recuperar:"
           android:textAlignment="center"
           android:textColor="#2E594A"
-          android:textSize="@dimen/textSize_bordeback"
+          android:textSize="60dp"
           app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
           app:layout_constraintEnd_toEndOf="@+id/fondoDato"
           app:layout_constraintHeight_percent="0.05"
@@ -124,15 +122,15 @@
 
       <androidx.constraintlayout.widget.ConstraintLayout
           android:id="@+id/nuevoFondoDato"
-          android:layout_width="282dp"
-          android:layout_height="123dp"
+          android:layout_width="642dp"
+          android:layout_height="336dp"
           android:background="@drawable/rounded_background_green_ligth"
           app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
           app:layout_constraintEnd_toEndOf="@+id/fondoDato"
           app:layout_constraintHeight_percent="0.15"
           app:layout_constraintStart_toStartOf="@+id/fondoDato"
           app:layout_constraintTop_toBottomOf="@+id/textInformacionRespaldo"
-          app:layout_constraintVertical_bias="0.147"
+          app:layout_constraintVertical_bias="0.151"
           app:layout_constraintWidth_percent="0.6">
 
             <TextView
@@ -149,7 +147,7 @@
                 android:text="Fecha último respaldo:"
                 android:textAlignment="center"
                 android:textColor="#2E594A"
-                android:textSize="@dimen/textSize_bordeup"
+                android:textSize="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -161,12 +159,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="116dp"
                 android:text="12/04/2024"
                 android:textAlignment="center"
                 android:textColor="#000000"
-                android:textSize="@dimen/textSize_bordeup"
+                android:textSize="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -180,7 +179,7 @@
                 android:text="Estado:"
                 android:textAlignment="center"
                 android:textColor="#2E594A"
-                android:textSize="@dimen/textSize_bordeup"
+                android:textSize="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.35"
@@ -198,27 +197,28 @@
                 android:text="Exito"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="@dimen/textSize_bordeup"
+                android:textSize="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.659"
+                app:layout_constraintHorizontal_bias="0.65"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textFecha"
-                app:layout_constraintVertical_bias="0.545" />
+                app:layout_constraintVertical_bias="0.5" />
 
       </androidx.constraintlayout.widget.ConstraintLayout>
 
       <androidx.constraintlayout.widget.ConstraintLayout
           android:id="@+id/nuevoFondoDato1"
-          android:layout_width="273dp"
-          android:layout_height="162dp"
+          android:layout_width="636dp"
+          android:layout_height="361dp"
           android:background="@drawable/rounded_background_green_ligth"
           app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
           app:layout_constraintEnd_toEndOf="@+id/fondoDato"
           app:layout_constraintHeight_percent="0.15"
+          app:layout_constraintHorizontal_bias="0.507"
           app:layout_constraintStart_toStartOf="@+id/fondoDato"
           app:layout_constraintTop_toBottomOf="@+id/textInformacionRespaldo"
-          app:layout_constraintVertical_bias="0.579"
+          app:layout_constraintVertical_bias="0.728"
           app:layout_constraintWidth_percent="0.6">
 
             <TextView
@@ -231,7 +231,7 @@
                 android:text="Rango de restauracion:"
                 android:textAlignment="center"
                 android:textColor="#2E594A"
-                android:textSize="@dimen/textSize_bordeup"
+                android:textSize="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -240,13 +240,13 @@
 
             <TextView
                 android:id="@+id/textFecha1"
-                android:layout_width="129dp"
-                android:layout_height="44dp"
+                android:layout_width="233dp"
+                android:layout_height="70dp"
                 android:layout_marginTop="26dp"
                 android:text="Fecha inicio"
                 android:textAlignment="center"
                 android:textColor="#000000"
-                android:textSize="@dimen/textSize_bordeup"
+                android:textSize="50dp"
                 app:layout_constraintBottom_toTopOf="@+id/textFecha11"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -261,7 +261,7 @@
                 android:text="Fecha fin"
                 android:textAlignment="center"
                 android:textColor="#000000"
-                android:textSize="@dimen/textSize_bordeup"
+                android:textSize="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -277,7 +277,7 @@
                 android:text="al"
                 android:textAlignment="center"
                 android:textColor="#2E594A"
-                android:textSize="@dimen/textSize_bordeup"
+                android:textSize="50dp"
                 app:layout_constraintBottom_toTopOf="@+id/textFecha2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -296,8 +296,8 @@
 
       <Button
           android:id="@+id/buttonSelectTime"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
+          android:layout_width="409dp"
+          android:layout_height="118dp"
           android:layout_alignParentStart="true"
           android:layout_alignParentTop="true"
           android:layout_alignParentEnd="true"
@@ -305,7 +305,7 @@
           android:backgroundTint="#4A8C74"
           android:text="Realizar Recuperacion"
           android:textColor="@color/white"
-          android:textSize="@dimen/textSize_bordeup"
+          android:textSize="40dp"
           app:cornerRadius="10dp"
           app:layout_constraintBottom_toBottomOf="@+id/fondoDato"
           app:layout_constraintEnd_toEndOf="@+id/fondoDato"
