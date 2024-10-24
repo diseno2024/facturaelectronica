@@ -47,7 +47,7 @@ class CertificadoM : AppCompatActivity() {
 
         // Acceder a la base de datos
         val app = application as MyApp
-        database = app.database
+        database = app.personalDB
 
         // Inicializa los botones y textviews
         btnSelectCer = findViewById(R.id.btn_select_cer)

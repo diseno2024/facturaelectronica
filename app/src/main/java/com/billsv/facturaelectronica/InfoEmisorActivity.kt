@@ -409,7 +409,7 @@ class InfoEmisorActivity : AppCompatActivity() {
             insets
         }
         val app = application as MyApp
-        database = app.database
+        database = app.personalDB
         verificar()
         contarDocumentosConfEmisor()
         // Inicializa el Spinner de departamento
@@ -1106,7 +1106,7 @@ class InfoEmisorActivity : AppCompatActivity() {
     private fun obtenerDatosGuardados(): List<String> {
         // Obtén la instancia de la base de datos desde la aplicación
         val app = application as MyApp
-        val database = app.database
+        val database = app.personalDB
 
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
         val query = QueryBuilder.select(SelectResult.all())

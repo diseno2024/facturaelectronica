@@ -31,7 +31,7 @@ class Logo : Fragment() {
         val view = inflater.inflate(R.layout.activity_logo, container, false)
 
         // Inicializa la base de datos desde la aplicación
-        database = (requireActivity().application as MyApp).database
+        database = (requireActivity().application as MyApp).personalDB
 
         // Configura el ImageButton para seleccionar una imagen
         val imageButton: ImageButton = view.findViewById(R.id.imageButton)

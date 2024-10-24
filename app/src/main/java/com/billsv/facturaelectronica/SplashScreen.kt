@@ -27,7 +27,7 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
         val app = application as MyApp
-        database = app.database
+        database = app.personalDB
         condicion = mostrado()
         Handler().postDelayed({
             if(condicion=="si") {

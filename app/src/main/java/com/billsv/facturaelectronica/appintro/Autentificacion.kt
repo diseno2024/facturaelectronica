@@ -34,7 +34,7 @@ class Autentificacion : Fragment() {
     ): View? {
 
         // Inicializa la base de datos desde la aplicación
-        database = (requireActivity().application as MyApp).database
+        database = (requireActivity().application as MyApp).personalDB
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.activity_autentificacion, container, false)

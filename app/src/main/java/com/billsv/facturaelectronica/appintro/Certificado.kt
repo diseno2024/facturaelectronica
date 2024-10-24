@@ -47,7 +47,7 @@ class Certificado : Fragment() {
 
         // Acceder a la base de datos
         val app = requireActivity().application as MyApp
-        database = app.database
+        database = app.personalDB
 
         // Inicializa los elementos de la vista
         val btnSelectCer = view.findViewById<Button>(R.id.btn_select_cer)

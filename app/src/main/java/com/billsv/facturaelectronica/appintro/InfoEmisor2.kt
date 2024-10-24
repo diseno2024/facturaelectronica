@@ -35,7 +35,7 @@ class InfoEmisor2 : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.activity_info_emisor2, container, false)
         val app = requireActivity().application as MyApp
-        database = app.database
+        database = app.personalDB
         nombreC = view.findViewById(R.id.nombreC)
         NRC = view.findViewById(R.id.nrc)
         AcEco = view.findViewById(R.id.AcEco)

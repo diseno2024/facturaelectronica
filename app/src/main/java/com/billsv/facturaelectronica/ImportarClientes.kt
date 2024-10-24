@@ -18,6 +18,7 @@ import com.couchbase.lite.Expression
 import com.couchbase.lite.Meta
 import com.couchbase.lite.QueryBuilder
 import com.couchbase.lite.SelectResult
+import com.couchbase.lite.Where
 import java.text.Normalizer
 
 class ImportarClientes : AppCompatActivity() {
@@ -412,10 +413,18 @@ class ImportarClientes : AppCompatActivity() {
         val app = application as MyApp
         val database = app.database
         val datos = data.split("\n")
-        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+        val querydui = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
             .where(Expression.property("dui").equalTo(Expression.string(datos[8])))
-
+        val querynit = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("nit").equalTo(Expression.string(datos[1])))
+        var query: Where
+        if(datos[8]==""){
+            query = querynit
+        }else{
+            query = querydui
+        }
         try {
             val resultSet = query.execute()
             val results = resultSet.allResults()

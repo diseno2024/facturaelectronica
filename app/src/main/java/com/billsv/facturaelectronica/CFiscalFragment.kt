@@ -1083,7 +1083,7 @@ class CFiscalFragment : Fragment() {
     private fun obtenerEmisor(): List<String> {
         // Obtén la instancia de la base de datos desde la aplicación
         val app = requireActivity().application as MyApp
-        database = app.database
+        database = app.personalDB
 
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
         val query = QueryBuilder.select(SelectResult.all())
@@ -1126,7 +1126,7 @@ class CFiscalFragment : Fragment() {
     }
     private fun obtenerUriGuardada(): String? {
         val app = requireActivity().application as MyApp
-        database = app.database
+        database = app.personalDB
 
         val query = QueryBuilder.select(SelectResult.property("URI"))
             .from(DataSource.database(database))

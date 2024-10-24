@@ -561,9 +561,10 @@ class EmitirCCFActivity : AppCompatActivity() {
     private fun validarfactura(): Boolean {
         val app = application as MyApp
         val database = app.database
+        val databaseper = app.personalDB
 
         val queryEmisor = QueryBuilder.select(SelectResult.expression(Meta.id))
-            .from(DataSource.database(database))
+            .from(DataSource.database(databaseper))
             .where(Expression.property("tipo").equalTo(Expression.string("ConfEmisor")))
         val queryArticulos = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))

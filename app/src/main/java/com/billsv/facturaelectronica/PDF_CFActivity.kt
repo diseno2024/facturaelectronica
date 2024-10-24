@@ -58,6 +58,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 
 class PDF_CFActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
+    private lateinit var apiServiceR: ApiServiceR
     private lateinit var binding: ActivityPdfCfactivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -158,8 +159,12 @@ class PDF_CFActivity : AppCompatActivity() {
         binding.VistaPdf.show()
 
     }
-    private fun enviarRecepcionDTE(token: String, ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?, fecEmi: String,horEmi: String){
-        val apiServiceR = RetrofitClient0.getInstance(token).create(ApiServiceR::class.java)
+    private fun enviarRecepcionDTE(token: String, ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?, fecEmi: String,horEmi: String, letra: String){
+        if(letra=="P"){
+            apiServiceR = RetrofitClient1.getInstance(token).create(ApiServiceR::class.java)
+        }else{
+            apiServiceR = RetrofitClient0.getInstance(token).create(ApiServiceR::class.java)
+        }
         //Parametros a enviar en la api recepcion se tomaran del json que se esta generando
         val recepcionRequest = RecepcionRequest(ambiente,idenvio,version,tipoDTE,documento,codigoGeneracion)
         apiServiceR.reception(recepcionRequest).enqueue(object : Callback<RecepcionResponse> {
@@ -253,9 +258,9 @@ class PDF_CFActivity : AppCompatActivity() {
 
     private fun enviaraMH(ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?,user:String,pwd:String, fecEmi: String,horEmi: String,letra: String){
                 if(letra=="P"){
-                    apiService = RetrofitClient.instance.create(ApiService::class.java)
-                }else{
                     apiService = RetrofitClient2.instance.create(ApiService::class.java)
+                }else{
+                    apiService = RetrofitClient.instance.create(ApiService::class.java)
                 }
                 val authRequest = AuthRequest(user, pwd)
                 Log.d("API_REQUEST", "Enviando solicitud a la API")
@@ -269,7 +274,7 @@ class PDF_CFActivity : AppCompatActivity() {
                                     Toast.makeText(this@PDF_CFActivity, "Token: ${authBody?.token}", Toast.LENGTH_LONG).show()
                                     Log.d("API_RESPONSE", "Token: ${authBody?.token}")
                                     savestate(false)
-                                    enviarRecepcionDTE(authBody?.token.toString(),ambiente, idenvio, version, tipoDTE, documento, codigoGeneracion, fecEmi, horEmi)
+                                    enviarRecepcionDTE(authBody?.token.toString(),ambiente, idenvio, version, tipoDTE, documento, codigoGeneracion, fecEmi, horEmi, letra)
                                 } else {
                                     handleErrorResponse(response)
                                     savestate(true)
@@ -334,7 +339,7 @@ class PDF_CFActivity : AppCompatActivity() {
     private fun obtenerUsuarioAPI(): List<String> {
         // Obtén la instancia de la base de datos desde la aplicación
         val app = application as MyApp
-        val database = app.database
+        val database = app.personalDB
 
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
         val query = QueryBuilder.select(SelectResult.all())
@@ -754,8 +759,7 @@ class PDF_CFActivity : AppCompatActivity() {
     // Obtener la clave desde la base de datos
     private fun obtenerClaveDesdeDB(): String? {
         val app = application as MyApp
-        val database = app.database
-
+        val database = app.personalDB
         val query = QueryBuilder
             .select(SelectResult.property("clave_privada_uri"))
             .from(DataSource.database(database))
@@ -890,7 +894,7 @@ class PDF_CFActivity : AppCompatActivity() {
     private fun obtenerEmisor(): List<String> {
         // Obtén la instancia de la base de datos desde la aplicación
         val app = application as MyApp
-        val database = app.database
+        val database = app.personalDB
 
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
         val query = QueryBuilder.select(SelectResult.all())
@@ -2366,7 +2370,7 @@ class PDF_CFActivity : AppCompatActivity() {
     }
     private fun obtenerUriGuardada(): String? {
         val app = application as MyApp
-        val database = app.database
+        val database = app.personalDB
 
         val query = QueryBuilder.select(SelectResult.property("URI"))
             .from(DataSource.database(database))

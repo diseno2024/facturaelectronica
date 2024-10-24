@@ -243,7 +243,7 @@ class MyCustomAppIntro : AppIntro() {
 
     private fun guardar() {
         val app = application as MyApp
-        database = app.database
+        database = app.personalDB
         val condicion = "si"
         // Buscar si ya existe un documento del tipo "ConfEmisor"
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))

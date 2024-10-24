@@ -356,7 +356,7 @@ class InfoEmisor1 : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.activity_info_emisor1, container, false)
         val app = requireActivity().application as MyApp
-        database = app.database
+        database = app.personalDB
         nombre = view.findViewById(R.id.nombre)
         DUI_NIT = view.findViewById(R.id.duionit)
         //Spiner Tipos

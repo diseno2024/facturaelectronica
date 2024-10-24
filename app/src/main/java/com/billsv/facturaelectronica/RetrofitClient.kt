@@ -5,7 +5,21 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient0 {
-    private const val BASE_URL = "http://192.168.0.10:3000/recepciondte/"
+    private const val BASE_URL = "https://apitest.dtes.mh.gob.sv/fesv/recepciondte/" //TEST private const val BASE_URL = "http://10.41.11.228:3000/recepciondte/"(Bakend)
+    fun getInstance(token: String): Retrofit {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(token))
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL) // Reemplaza con tu base URL
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+}
+object RetrofitClient1 {
+    private const val BASE_URL = "https://api.dtes.mh.gob.sv/fesv/recepciondte/" //PROD private const val BASE_URL = "http://192.168.1.17:3000/recepciondte/"(Bakend)
     fun getInstance(token: String): Retrofit {
         val client = OkHttpClient.Builder()
             .addInterceptor(AuthInterceptor(token))
@@ -20,11 +34,7 @@ object RetrofitClient0 {
 }
 
 object RetrofitClient {
-    //real private const val BASE_URL = "https://api.dtes.mh.gob.sv/seguridad/authw/"
-    //prueba backend fake
-    val url = "http://192.168.0.10:3000/auth"
-
-    private const val BASE_URL = "http://192.168.0.10:3000/auth/"
+    private const val BASE_URL = "https://apitest.dtes.mh.gob.sv/seguridad/auth/"//TEST private const val BASE_URL = "http://10.41.11.228:3000/auth/"(Bakend)
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
@@ -42,8 +52,7 @@ object RetrofitClient {
     }
 }
 object RetrofitClient2 {
-    //real private const val BASE_URL = "https://apitest.dtes.mh.gob.sv/seguridad/auth/"
-    private const val BASE_URL = "http://192.168.0.10:3000/auth/"
+    private const val BASE_URL = "https://api.dtes.mh.gob.sv/seguridad/auth/"//PROD private const val BASE_URL = "http://10.41.11.228:3000/auth/"(Bakend)
     //prueba backend fake
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY

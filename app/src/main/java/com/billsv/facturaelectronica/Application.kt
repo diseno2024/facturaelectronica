@@ -6,7 +6,10 @@ import com.couchbase.lite.DatabaseConfiguration
 
 class MyApp : Application() {
     lateinit var database: Database
+    lateinit var personalDB: Database
     var ambiente: String = "00" // Valor por defecto
+    var ambienteCF: String = "00" // Valor por defecto
+    var ambienteCCF: String = "00" // Valor por defecto
     override fun onCreate() {
         super.onCreate()
 
@@ -16,6 +19,7 @@ class MyApp : Application() {
         // Inicializar la base de datos
         val config = DatabaseConfiguration()
         database = Database("my_database", config)
+        personalDB = Database("Info_personal", config)
     }
 
 }

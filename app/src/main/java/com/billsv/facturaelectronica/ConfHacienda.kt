@@ -265,7 +265,7 @@ class ConfHacienda : AppCompatActivity() {
 
     private fun guardarInformacion() {
         val app = application as MyApp
-        val database = app.database
+        val database = app.personalDB
         val usuario = usuario.text.toString()
         val contraseña = contraseña.text.toString()
 
@@ -320,7 +320,7 @@ class ConfHacienda : AppCompatActivity() {
     private fun obtenerDatosGuardados(): List<String> {
         // Obtén la instancia de la base de datos desde la aplicación
         val app = application as MyApp
-        val database = app.database
+        val database = app.personalDB
         //val tipoAutenticacion = if (app.ambiente == "00") "AutenticacionPrueba" else "AutenticacionProduccion"
 
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
