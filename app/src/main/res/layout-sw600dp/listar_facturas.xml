@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_factura"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    app:cardCornerRadius="30dp"
+    app:cardElevation="20dp"
+    app:cardUseCompatPadding="false"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="25dp"
+    android:layout_marginStart="25dp"
+    android:layout_marginEnd="25dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="146dp"
+            android:orientation="horizontal">
+
+            <!-- Ícono del documento -->
+            <ImageView
+                android:id="@+id/iconoCard"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:paddingStart="12dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_factura"
+                android:layout_alignParentLeft="true"
+                app:tint="#43826C" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/iconoCard"
+                android:layout_toStartOf="@id/btnEnviarPorGmail"
+                android:layout_marginEnd="4dp"
+                android:orientation="vertical"
+                android:layout_marginStart="4dp">
+
+                <TextView
+                    android:id="@+id/textViewNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/textViewTelefono"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"/>
+                <TextView
+                    android:id="@+id/textViewDui"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/btnEnviarPorGmail"
+                android:layout_width="70dp"
+                android:layout_height="73dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                app:srcCompat="@drawable/gmail"/>
+            <ImageView
+                android:id="@+id/btnEnviarPorWhatsApp"
+                android:layout_width="70dp"
+                android:layout_height="73dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/whatsapp"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

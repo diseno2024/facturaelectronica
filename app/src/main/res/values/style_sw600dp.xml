@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Estilo personalizado para tabletas -->
+    <style name="CustomBottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconSize">40dp</item>
+        <item name="itemTextAppearanceActive">@style/BottomNavigationTextAppearanceTablet</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationTextAppearanceTablet</item>
+    </style>
+
+    <!-- Estilo para el texto en tabletas -->
+    <style name="BottomNavigationTextAppearanceTablet" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">25sp</item>
+    </style>
+</resources>

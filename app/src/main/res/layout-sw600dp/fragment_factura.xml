@@ -20,7 +20,7 @@
         android:textSize="30dp"
         android:backgroundTint="#2E594A"
         android:hint="Buscar por DUI"
-        android:inputType="number"
+        android:inputType="text"
         android:textColor="#4A8C74"
         android:textColorHint="#4A8C74"
         app:layout_constraintEnd_toEndOf="@id/btnBuscar"
