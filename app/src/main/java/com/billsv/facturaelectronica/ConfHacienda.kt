@@ -56,8 +56,10 @@ class ConfHacienda : AppCompatActivity() {
         contraseña = findViewById(R.id.contraseña)
         checkBoxConsumidorFinal = findViewById(R.id.checkBox_consumidor_final)
         checkBoxCreditoFiscal = findViewById(R.id.checkBox_credito_fiscal)
+       
 
         verificar()
+
 
         val boton: Button = findViewById(R.id.button2)
         boton.setOnClickListener {
@@ -293,7 +295,6 @@ class ConfHacienda : AppCompatActivity() {
                 document = MutableDocument()
                 document.setString("tipo","Autentificacion") //Un solo tipo general
             }
-
             //dependiendo del entorno, guardamos las credenciales en diferentes campos
             if (app.ambiente == "00") {//Entorno Prueba
                 document.setString("usuarioPrueba",usuario)
@@ -303,8 +304,17 @@ class ConfHacienda : AppCompatActivity() {
                 document.setString("contraseñaProduccion", contraseña)
                 document.setBoolean("consumidorFinal", checkBoxConsumidorFinal.isChecked)
                 document.setBoolean("creditoFiscal", checkBoxCreditoFiscal.isChecked)
+                if (checkBoxConsumidorFinal.isChecked){
+                    document.setString("ambienteCF","01")
+                }else{
+                    document.setString("ambienteCF","00")
+                }
+                if (checkBoxCreditoFiscal.isChecked){
+                    document.setString("ambienteCCF","01")
+                }else{
+                    document.setString("ambienteCCF","00")
+                }
             }
-
             // Guardar el nuevo documento
             database.save(document)
             Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
@@ -344,6 +354,7 @@ class ConfHacienda : AppCompatActivity() {
             val contraseña = if (app.ambiente == "00") dict?.getString("contraseñaPrueba") else dict?.getString("contraseñaProduccion")
             val consumidorFinal = dict?.getBoolean("consumidorFinal") ?: false
             val creditoFiscal = dict?.getBoolean("creditoFiscal") ?: false
+
 
             // Formatea los datos como una cadena y la agrega a la lista
             val dataString = "$usuario\n$contraseña\n$consumidorFinal\n$creditoFiscal"

@@ -425,10 +425,16 @@ class ResContableFragment : Fragment() {
 
     private fun escribirDatosEnCSV(datosList: List<Map<String, String>>, fileName: String) {
         // Verifica los permisos de escritura
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
             requireContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
             return
+        }*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Solicitar permisos de notificación
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_NOTIFICATION_PERMISSION)
+            }
         }
 
         // Obtén el directorio de descargas

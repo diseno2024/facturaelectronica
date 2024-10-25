@@ -515,12 +515,22 @@ class PDF_CFActivity : AppCompatActivity() {
             numdocumento = dui
             tipodocumento = "13"
         }
-        val app = application as MyApp
-        val ambiente = app.ambiente
+
+        var ambienteCF:String="00"
+        var ambienteCCF:String="00"
+        val dataList=obtenerAmbiente()
+        dataList.forEach { data ->
+            // Dividir la cadena por saltos de línea para obtener cada dato
+            val dato = data.split("\n")
+            ambienteCF=dato[0]
+            ambienteCCF= dato[1]
+
+        }
+
         val documento = Documento(
             identificacion = Identificacion(
                 version = 1,
-                ambiente = ambiente,
+                ambiente = ambienteCF,
                 tipoDte = "01",
                 numeroControl = numeroContol,
                 codigoGeneracion = codigoGeneracion,
@@ -610,7 +620,7 @@ class PDF_CFActivity : AppCompatActivity() {
         val documento2 = DocumentoC(
             identificacion = IdentificacionC(
                 version = 1,
-                ambiente = ambiente,
+                ambiente = ambienteCCF,
                 tipoDte = "03",
                 numeroControl = numeroContol,
                 codigoGeneracion = codigoGeneracion,
@@ -729,7 +739,7 @@ class PDF_CFActivity : AppCompatActivity() {
                     val mapper = ObjectMapper().registerModule(KotlinModule())
                     mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
                     jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
-                    enviaraMH(ambiente,"Bill-01", 1, "01" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
+                    enviaraMH(ambienteCF,"Bill-01", 1, "01" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
                 } else if (JSON == "CreditoFiscal") {
                     // Firmar el JSON de crédito fiscal
                     val articulos = obtenerDatosGuardados("CF")
@@ -746,7 +756,7 @@ class PDF_CFActivity : AppCompatActivity() {
                     val mapper = ObjectMapper().registerModule(KotlinModule())
                     mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
                     jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento2)
-                    enviaraMH(ambiente,"Bill-01", 1, "03" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
+                    enviaraMH(ambienteCCF,"Bill-01", 1, "03" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
                 }
             } ?: run {
                 Log.d("PDF_CFActivity", "No se pudo obtener la clave privada.")
@@ -985,6 +995,32 @@ class PDF_CFActivity : AppCompatActivity() {
             dataList.add(dataString)
         }
 
+        // Devuelve la lista de datos
+        return dataList
+    }
+    private fun obtenerAmbiente(): List<String> {
+        // Obtén la instancia de la base de datos desde la aplicación
+        val app = application as MyApp
+        val database = app.personalDB
+        // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
+        val query = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacion")))
+        // Ejecuta la consulta
+        val result = query.execute()
+        // Lista para almacenar los datos obtenidos
+        val dataList = mutableListOf<String>()
+        // Itera sobre todos los resultados de la consulta
+        result.allResults().forEach { results ->
+            // Obtiene el diccionario del documento del resultado actual
+            val dict = results.getDictionary(database.name)
+            // Extrae los valores de los campos del documento
+            val ambienteCF = dict?.getString("ambienteCF")
+            val ambienteCCF = dict?.getString("ambienteCCF")
+            // Formatea los datos como una cadena y la agrega a la lista
+            val dataString = "$ambienteCF\n$ambienteCCF"
+            dataList.add(dataString)
+        }
         // Devuelve la lista de datos
         return dataList
     }
