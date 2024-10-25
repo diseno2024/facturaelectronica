@@ -111,27 +111,36 @@ class PDF_CFActivity : AppCompatActivity() {
                     var user = ""
                     var pwd = ""
                     var entorno = ""
+                    var ambienteCF:String="00"
+                    var ambienteCCF:String="00"
+                    val dataList=obtenerAmbiente()
+                    dataList.forEach { data ->
+                        // Dividir la cadena por saltos de línea para obtener cada dato
+                        val dato = data.split("\n")
+                        ambienteCF=dato[0]
+                        ambienteCCF= dato[1]
+
+                    }
                     auth.forEach(){data->
                         val credenciales = data.split("\n")
-                        val FacturaPro = credenciales[4]
-                        val CreditoPro = credenciales[5]
+
                         if(JSON=="Factura"){
-                            if(FacturaPro=="true"){
-                                entorno = "P"
+                            if(ambienteCF=="01"){
+                                entorno="P"
                                 user = credenciales[2]
                                 pwd = credenciales[3]
-                            }else{
-                                entorno = "N"
+                            }else if(ambienteCF=="00"){
+                                entorno="T"
                                 user = credenciales[0]
                                 pwd = credenciales[1]
                             }
-                        }else{
-                            if(CreditoPro=="true"){
-                                entorno = "P"
+                        }else if(JSON=="CreditoFiscal"){
+                            if(ambienteCCF=="01"){
+                                entorno="P"
                                 user = credenciales[2]
                                 pwd = credenciales[3]
-                            }else{
-                                entorno = "N"
+                            }else if (ambienteCCF=="00"){
+                                entorno="T"
                                 user = credenciales[0]
                                 pwd = credenciales[1]
                             }
@@ -164,7 +173,7 @@ class PDF_CFActivity : AppCompatActivity() {
     private fun enviarRecepcionDTE(token: String, ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?, fecEmi: String,horEmi: String, letra: String){
         if(letra=="P"){
             apiServiceR = RetrofitClient1.getInstance(token).create(ApiServiceR::class.java)
-        }else{
+        }else if(letra=="T"){
             apiServiceR = RetrofitClient0.getInstance(token).create(ApiServiceR::class.java)
         }
         //Parametros a enviar en la api recepcion se tomaran del json que se esta generando
@@ -261,7 +270,7 @@ class PDF_CFActivity : AppCompatActivity() {
     private fun enviaraMH(ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?,user:String,pwd:String, fecEmi: String,horEmi: String,letra: String){
                 if(letra=="P"){
                     apiService = RetrofitClient2.instance.create(ApiService::class.java)
-                }else{
+                }else if (letra=="T"){
                     apiService = RetrofitClient.instance.create(ApiService::class.java)
                 }
                 val authRequest = AuthRequest(user, pwd)

@@ -290,17 +290,17 @@ class FacturaFragment : Fragment() {
 
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("dui").equalTo(Expression.string(dui)))
+            .where(Expression.property("dui").like(Expression.string("%$dui%"))) // Buscar DUI similar
 
         val result = query.execute()
         val dataList = mutableListOf<Factura>()
 
-        result.allResults().forEach { results ->
-            val dict = results.getDictionary(database.name)
+        result.allResults().forEach { result ->
+            val dict = result.getDictionary(database.name)
             val nombre = dict?.getString("nombre") ?: ""
             val telefono = dict?.getString("telefono") ?: ""
             val numeroControl = dict?.getString("numeroControl") ?: ""
-            val duiResult = dict?.getString("dui") ?: ""
+            val dui = dict?.getString("dui") ?: ""
             val nit = dict?.getString("nit") ?: ""
             val nrc = dict?.getString("nrc") ?: ""
             val fecha = dict?.getString("fechaEmi") ?: ""
@@ -313,22 +313,20 @@ class FacturaFragment : Fragment() {
             val sello = dict?.getString("selloRecibido") ?: ""
             val articulos = dict?.getString("articulos")
             val codigoG = dict?.getString("codigoGeneracion") ?: ""
-            val totalNosuj = dict?.getDouble("totalNoSuj")?: 0.00
-            val totalExenta = dict?.getDouble("totalExenta")?: 0.00
-            val totalGravada = dict?.getDouble("totalGravada")?: 0.00
-            val total = dict?.getDouble("total")?: 0.00
-            val iva = dict?.getDouble("iva")?: 0.00
+            val totalNosuj = dict?.getDouble("totalNoSuj") ?: 0.00
+            val totalExenta = dict?.getDouble("totalExenta") ?: 0.00
+            val totalGravada = dict?.getDouble("totalGravada") ?: 0.00
+            val total = dict?.getDouble("total") ?: 0.00
+            val iva = dict?.getDouble("iva") ?: 0.00
             val condicion = dict?.getString("condicionOp") ?: ""
             val factura = Factura(nombre, numeroControl, dui, nit, nrc, fecha, codActividad, desAcEco, correo, departamento, municipio, complemento, sello, articulos, codigoG, telefono, totalNosuj, totalExenta, totalGravada, total, iva, condicion)
             dataList.add(factura)
-            Log.e("Articulos", articulos.toString())
         }
 
         if (dataList.isNotEmpty()) {
             currentData = dataList
             facturaAdapter.setFacturas(currentData)
-            btnClearFilter.visibility = View.VISIBLE // Mostrar el botón de limpiar filtro
-            btnBuscar.visibility = View.GONE // Ocultar el botón de buscar
+            btnClearFilter.visibility = View.VISIBLE
         } else {
             Toast.makeText(context, "No se encontraron facturas con ese DUI", Toast.LENGTH_SHORT).show()
         }

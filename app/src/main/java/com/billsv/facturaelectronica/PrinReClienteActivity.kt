@@ -812,6 +812,7 @@ class PrinReClienteActivity : AppCompatActivity() {
     private fun validaractu(datos: String): Boolean {
         val app = application as MyApp///////
         val database = app.database///////
+        val databaseper = app.personalDB///////
         val dato = datos.split("\n")
         val nombreText = nombre.text.toString()
         val nitText = nit.text.toString().replace("-", "")
@@ -822,24 +823,42 @@ class PrinReClienteActivity : AppCompatActivity() {
         val nrcText= nrc.text.toString().replace("-","")
         val actividadEcoText=actividadEconomica.text.toString()
         val tipoCText=tipoC.selectedItem.toString()
+
+        val queryEnrc = QueryBuilder
+            .select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(databaseper))
+            .where(
+                Expression.property("nrc").equalTo(Expression.string(nrcText))
+                    .and(Expression.property("nrc").notEqualTo(Expression.string(dato[9])))
+            )
+
         val query3 = QueryBuilder
             .select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
             .where(
                 Expression.property("nrc").equalTo(Expression.string(nrcText))
-                    .and(Expression.property("nrc").notEqualTo(Expression.string("")))
+                    .and(Expression.property("nrc").notEqualTo(Expression.string(dato[9])))
             )
+
         try {
             val resultSet = query3.execute()
             val results = resultSet.allResults()
 
+            val resultSetE = queryEnrc.execute()
+            val resultsE = resultSetE.allResults()
+
             if (results.isNotEmpty()) {
-                Log.d("Re_Cliente", "Datos actualizados correctamente")
+                Log.d("Re_Cliente", "Datos no actualizados")
                 showToast("Ya existe un cliente con ese NRC")
+                return false
+            } else if(resultsE.isNotEmpty()){
+                Log.d("Re_Cliente", "Datos actualizados")
+                showToast("El NRC es igual al del emisor")
                 return false
             } else {
                 Log.d("Re_Cliente", "PASS")
             }
+
         } catch (e: CouchbaseLiteException) {
             Log.e("Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
             showToast("Error al buscar el NRC")
@@ -889,6 +908,10 @@ class PrinReClienteActivity : AppCompatActivity() {
             return true
         }
         if(nitText.isNotEmpty() && duiText.isEmpty()){
+            val queryEnit = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(databaseper))
+                .where(Expression.property("nit").equalTo(Expression.string(nitText)))
+
             val query2 = QueryBuilder.select(SelectResult.expression(Meta.id))
                 .from(DataSource.database(database))
                 .where(Expression.property("nit").equalTo(Expression.string(nitText))
@@ -897,10 +920,16 @@ class PrinReClienteActivity : AppCompatActivity() {
             try {
                 val resultSet = query2.execute()
                 val results = resultSet.allResults()
+                val resultSetE = queryEnit.execute()
+                val resultsE = resultSetE.allResults()
 
                 if (results.isNotEmpty()) {
                     Log.d("Re_Cliente", "Datos actualizados correctamente")
                     showToast("Ya existe un cliente con ese NIT")
+                    return false
+                } else if(resultsE.isNotEmpty()){
+                    Log.d("Re_Cliente", "Datos actualizados")
+                    showToast("El NIT es igual al del emisor")
                     return false
                 } else {
                     Log.d("Re_Cliente", "PASS")
@@ -910,6 +939,10 @@ class PrinReClienteActivity : AppCompatActivity() {
                 showToast("Error al buscar el NIT")
             }
         }else if(duiText.isNotEmpty() && nitText.isEmpty()){
+            val queryEdui = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(databaseper))
+                .where(Expression.property("dui").equalTo(Expression.string(duiText)))
+
             val query = QueryBuilder.select(SelectResult.expression(Meta.id))
                 .from(DataSource.database(database))
                 .where(Expression.property("dui").equalTo(Expression.string(duiText))
@@ -918,10 +951,16 @@ class PrinReClienteActivity : AppCompatActivity() {
             try {
                 val resultSet = query.execute()
                 val results = resultSet.allResults()
+                val resultSetE = queryEdui.execute()
+                val resultsE = resultSetE.allResults()
 
                 if (results.isNotEmpty()) {
                     Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
                     showToast("Ya existe un cliente con ese dui")
+                    return false
+                } else if(resultsE.isNotEmpty()){
+                    Log.d("Re_Cliente", "Datos actualizados")
+                    showToast("El DUI es igual al del emisor")
                     return false
                 } else {
                     Log.d("Prin_Re_Cliente", "PASS")
@@ -931,6 +970,10 @@ class PrinReClienteActivity : AppCompatActivity() {
                 showToast("Error al buscar el dui")
             }
         }else if(duiText.isNotEmpty() && nitText.isNotEmpty()){
+            val queryEdui = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(databaseper))
+                .where(Expression.property("dui").equalTo(Expression.string(duiText)))
+
             val query = QueryBuilder.select(SelectResult.expression(Meta.id))
                 .from(DataSource.database(database))
                 .where(Expression.property("dui").equalTo(Expression.string(duiText))
@@ -939,10 +982,16 @@ class PrinReClienteActivity : AppCompatActivity() {
             try {
                 val resultSet = query.execute()
                 val results = resultSet.allResults()
+                val resultSetE = queryEdui.execute()
+                val resultsE = resultSetE.allResults()
 
                 if (results.isNotEmpty()) {
                     Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
                     showToast("Ya existe un cliente con ese dui2")
+                    return false
+                } else if(resultsE.isNotEmpty()){
+                    Log.d("Re_Cliente", "Datos actualizados")
+                    showToast("El DUI es igual al del emisor")
                     return false
                 } else {
                     Log.d("Prin_Re_Cliente", "PASS")
@@ -951,6 +1000,10 @@ class PrinReClienteActivity : AppCompatActivity() {
                 Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
                 showToast("Error al buscar el dui")
             }
+            val queryEnit = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(databaseper))
+                .where(Expression.property("nit").equalTo(Expression.string(nitText)))
+
             val query2 = QueryBuilder.select(SelectResult.expression(Meta.id))
                 .from(DataSource.database(database))
                 .where(Expression.property("nit").equalTo(Expression.string(nitText))
@@ -959,10 +1012,16 @@ class PrinReClienteActivity : AppCompatActivity() {
             try {
                 val resultSet = query2.execute()
                 val results = resultSet.allResults()
+                val resultSetE = queryEnit.execute()
+                val resultsE = resultSetE.allResults()
 
                 if (results.isNotEmpty()) {
                     Log.d("Re_Cliente", "Datos actualizados correctamente")
                     showToast("Ya existe un cliente con ese NIT2")
+                    return false
+                } else if(resultsE.isNotEmpty()){
+                    Log.d("Re_Cliente", "Datos actualizados")
+                    showToast("El NIT es igual al del emisor")
                     return false
                 } else {
                     Log.d("Re_Cliente", "PASS")
@@ -1061,6 +1120,7 @@ class PrinReClienteActivity : AppCompatActivity() {
     private fun validarEntradas(): Boolean {
         val app = application as MyApp///////
         val database = app.database///////
+        val databaseper = app.personalDB///////
         val nombreText = nombre.text.toString()
         val nitText = nit.text.toString().replace("-", "")
         val emailText = email.text.toString()
@@ -1071,6 +1131,14 @@ class PrinReClienteActivity : AppCompatActivity() {
         val actividadEcoText=actividadEconomica.text.toString()
         val tipoCText=tipoC.selectedItem.toString()
 
+        val queryEnrc = QueryBuilder
+            .select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(databaseper))
+            .where(
+                Expression.property("nrc").equalTo(Expression.string(nrcText))
+                    .and(Expression.property("nrc").notEqualTo(Expression.string("")))
+            )
+
         val query3 = QueryBuilder
             .select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
@@ -1078,17 +1146,26 @@ class PrinReClienteActivity : AppCompatActivity() {
                 Expression.property("nrc").equalTo(Expression.string(nrcText))
                     .and(Expression.property("nrc").notEqualTo(Expression.string("")))
             )
+
         try {
             val resultSet = query3.execute()
             val results = resultSet.allResults()
 
+            val resultSetE = queryEnrc.execute()
+            val resultsE = resultSetE.allResults()
+
             if (results.isNotEmpty()) {
-                Log.d("Re_Cliente", "Datos actualizados correctamente")
+                Log.d("Re_Cliente", "Datos no actualizados")
                 showToast("Ya existe un cliente con ese NRC")
+                return false
+            } else if(resultsE.isNotEmpty()){
+                Log.d("Re_Cliente", "Datos actualizados")
+                showToast("El NRC es igual al del emisor")
                 return false
             } else {
                 Log.d("Re_Cliente", "PASS")
             }
+
         } catch (e: CouchbaseLiteException) {
             Log.e("Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
             showToast("Error al buscar el NRC")
@@ -1139,17 +1216,26 @@ class PrinReClienteActivity : AppCompatActivity() {
             return true
         }
         if(nitText.isNotEmpty() && duiText.isEmpty()){
+            val queryEnit = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(databaseper))
+                .where(Expression.property("nit").equalTo(Expression.string(nitText)))
+
             val query2 = QueryBuilder.select(SelectResult.expression(Meta.id))
                 .from(DataSource.database(database))
                 .where(Expression.property("nit").equalTo(Expression.string(nitText)))
-
             try {
                 val resultSet = query2.execute()
                 val results = resultSet.allResults()
+                val resultSetE = queryEnit.execute()
+                val resultsE = resultSetE.allResults()
 
                 if (results.isNotEmpty()) {
                     Log.d("Re_Cliente", "Datos actualizados correctamente")
                     showToast("Ya existe un cliente con ese NIT")
+                    return false
+                } else if(resultsE.isNotEmpty()){
+                    Log.d("Re_Cliente", "Datos actualizados")
+                    showToast("El NIT es igual al del emisor")
                     return false
                 } else {
                     Log.d("Re_Cliente", "PASS")
@@ -1159,17 +1245,26 @@ class PrinReClienteActivity : AppCompatActivity() {
                 showToast("Error al buscar el NIT")
             }
         }else if(duiText.isNotEmpty() && nitText.isEmpty()){
+            val queryEdui = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(databaseper))
+                .where(Expression.property("dui").equalTo(Expression.string(duiText)))
+
             val query = QueryBuilder.select(SelectResult.expression(Meta.id))
                 .from(DataSource.database(database))
                 .where(Expression.property("dui").equalTo(Expression.string(duiText)))
-
             try {
                 val resultSet = query.execute()
                 val results = resultSet.allResults()
+                val resultSetE = queryEdui.execute()
+                val resultsE = resultSetE.allResults()
 
                 if (results.isNotEmpty()) {
                     Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
                     showToast("Ya existe un cliente con ese dui")
+                    return false
+                } else if(resultsE.isNotEmpty()){
+                    Log.d("Re_Cliente", "Datos actualizados")
+                    showToast("El DUI es igual al del emisor")
                     return false
                 } else {
                     Log.d("Prin_Re_Cliente", "PASS")
@@ -1179,6 +1274,10 @@ class PrinReClienteActivity : AppCompatActivity() {
                 showToast("Error al buscar el dui")
             }
         }else if(duiText.isNotEmpty() && nitText.isNotEmpty()){
+            val queryEdui = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(databaseper))
+                .where(Expression.property("dui").equalTo(Expression.string(duiText)))
+
             val query = QueryBuilder.select(SelectResult.expression(Meta.id))
                 .from(DataSource.database(database))
                 .where(Expression.property("dui").equalTo(Expression.string(duiText)))
@@ -1186,10 +1285,16 @@ class PrinReClienteActivity : AppCompatActivity() {
             try {
                 val resultSet = query.execute()
                 val results = resultSet.allResults()
+                val resultSetE = queryEdui.execute()
+                val resultsE = resultSetE.allResults()
 
                 if (results.isNotEmpty()) {
                     Log.d("Prin_Re_Cliente", "Datos actualizados correctamente")
-                    showToast("Ya existe un cliente con ese dui")
+                    showToast("Ya existe un cliente con ese dui2")
+                    return false
+                } else if(resultsE.isNotEmpty()){
+                    Log.d("Re_Cliente", "Datos actualizados")
+                    showToast("El DUI es igual al del emisor")
                     return false
                 } else {
                     Log.d("Prin_Re_Cliente", "PASS")
@@ -1198,6 +1303,10 @@ class PrinReClienteActivity : AppCompatActivity() {
                 Log.e("Prin_Re_Cliente", "Error al actualizar el documento: ${e.message}", e)
                 showToast("Error al buscar el dui")
             }
+            val queryEnit = QueryBuilder.select(SelectResult.expression(Meta.id))
+                .from(DataSource.database(databaseper))
+                .where(Expression.property("nit").equalTo(Expression.string(nitText)))
+
             val query2 = QueryBuilder.select(SelectResult.expression(Meta.id))
                 .from(DataSource.database(database))
                 .where(Expression.property("nit").equalTo(Expression.string(nitText)))
@@ -1205,10 +1314,16 @@ class PrinReClienteActivity : AppCompatActivity() {
             try {
                 val resultSet = query2.execute()
                 val results = resultSet.allResults()
+                val resultSetE = queryEnit.execute()
+                val resultsE = resultSetE.allResults()
 
                 if (results.isNotEmpty()) {
                     Log.d("Re_Cliente", "Datos actualizados correctamente")
-                    showToast("Ya existe un cliente con ese NIT")
+                    showToast("Ya existe un cliente con ese NIT2")
+                    return false
+                } else if(resultsE.isNotEmpty()){
+                    Log.d("Re_Cliente", "Datos actualizados")
+                    showToast("El NIT es igual al del emisor")
                     return false
                 } else {
                     Log.d("Re_Cliente", "PASS")
