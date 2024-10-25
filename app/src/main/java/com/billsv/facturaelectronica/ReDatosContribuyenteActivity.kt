@@ -502,9 +502,10 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (isUpdating) return
 
-                val rawText = s.toString().replace("_","")//Eliminar cualquier guion antes de formatear
+                val rawText = s.toString().replace("-","")//Eliminar cualquier guion antes de formatear
                 if (rawText.length > maxDigits) return
                 isUpdating = true
+
                 val mask = when (rawText.length) {
                     1 -> masks[0]
                     2 -> masks[1]
@@ -516,29 +517,29 @@ class ReDatosContribuyenteActivity : AppCompatActivity() {
                     8 -> masks[7]
                     else -> masks[7]
                 }
-                val formatted = formatNrc(rawText, mask)
+
+                val formatted = formatNRC(rawText, mask)
                 nrc.setText(formatted)
                 nrc.setSelection(formatted.length)
                 isUpdating = false
             }
 
-            private fun formatNrc(nrc: String, mask: String): String {
-                val digits = nrc.replace(Regex("\\D"), "")
+            private fun formatNRC(nrc: String, mask: String): String {
                 val formatted = StringBuilder()
-
                 var i = 0
+
+                // Aplicar la máscara a los dígitos ingresados
                 for (m in mask.toCharArray()) {
                     if (m != '#') {
                         formatted.append(m)
                         continue
                     }
-                    if (i >= digits.length) break
-                    formatted.append(digits[i])
+                    if (i >= nrc.length) break
+                    formatted.append(nrc[i])
                     i++
                 }
                 return formatted.toString()
             }
-
         })
 
         val Check: CheckBox = findViewById(R.id.checkGuardar)

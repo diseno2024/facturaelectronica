@@ -196,7 +196,7 @@ class EmitirCCFActivity : AppCompatActivity() {
                     cliente.forEach{info->
                         val infocliente = info.split("\n")
                         Nombre.text = infocliente[0]
-                        NRC.text = infocliente[9]
+                        NRC.text = formatearNRC(infocliente[9])
                         /*= datos[14]
                         = datos[15]
                         = datos[3]
@@ -1506,5 +1506,44 @@ class EmitirCCFActivity : AppCompatActivity() {
     }
     private fun isTablet(): Boolean {
         return (resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
+    }
+    private fun formatearNRC(nrc: String): String {
+        // Aquí utilizas la misma lógica que usas en el TextWatcher, pero solo para formatear el NRC.
+        val rawNrc = nrc.replace("-", "") // Eliminar cualquier guion antes de formatear
+        val maxDigits = 9
+        val masks = arrayOf("#", "#-#", "##-#", "###-#", "####-#", "#####-#", "######-#", "#######-#") // Array de máscaras
+
+        if (rawNrc.length > maxDigits) return rawNrc // Si excede la longitud, retorna el texto sin formatear
+
+        val mask = when (rawNrc.length) {
+            1 -> masks[0]
+            2 -> masks[1]
+            3 -> masks[2]
+            4 -> masks[3]
+            5 -> masks[4]
+            6 -> masks[5]
+            7 -> masks[6]
+            8 -> masks[7]
+            else -> ""
+        }
+        return aplicarMascara(rawNrc, mask)
+    }
+
+    private fun aplicarMascara(nrc: String, mask: String): String {
+        val formatted = StringBuilder()
+
+        var i = 0
+        for (m in mask.toCharArray()) {
+            if (m != '#') {
+                if (i < nrc.length){
+                    formatted.append(m)
+                }
+                continue
+            }
+            if (i >= nrc.length) break
+            formatted.append(nrc[i])
+            i++
+        }
+        return formatted.toString()
     }
 }

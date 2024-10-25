@@ -642,31 +642,31 @@ class PrinReClienteActivity : AppCompatActivity() {
                     6 -> masks[5]
                     7 -> masks[6]
                     8 -> masks[7]
-                    else -> ""
+                    else -> masks[7]
                 }
-                val formatted = formatNrc(rawText, mask)
+
+                val formatted = formatNRC(rawText, mask)
                 nrc.setText(formatted)
                 nrc.setSelection(formatted.length)
                 isUpdating = false
             }
 
-            private fun formatNrc(nrc: String, mask: String): String {
-                val digits = nrc.replace(Regex("\\D"), "")
+            private fun formatNRC(nrc: String, mask: String): String {
                 val formatted = StringBuilder()
-
                 var i = 0
+
+                // Aplicar la máscara a los dígitos ingresados
                 for (m in mask.toCharArray()) {
                     if (m != '#') {
                         formatted.append(m)
                         continue
                     }
-                    if (i >= digits.length) break
-                    formatted.append(digits[i])
+                    if (i >= nrc.length) break
+                    formatted.append(nrc[i])
                     i++
                 }
                 return formatted.toString()
             }
-
         })
 
 

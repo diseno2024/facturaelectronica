@@ -536,7 +536,7 @@ class CFiscalFragment : Fragment() {
                     complementoE = datos[5]
                     correoE = datos[7]
                     nitE = datos[2].replace("-","")
-                    nrcE = datos[3]
+                    nrcE = formatearNRC(datos[3])
                     codAcEcoE = datos[4]
                     desAcEcoE = datos[4]
 
@@ -648,7 +648,7 @@ class CFiscalFragment : Fragment() {
             // RECEPTOR
             var nombre2 = factura.nombre
             var nit2 = factura.nit
-            var nrc2 = factura.nrc
+            var nrc2 = formatearNRC(factura.nrc)
             var descActividad2 = factura.desAcEco
             var municipio2 = factura.municipio
             var departamento2 = factura.departamento
@@ -1151,5 +1151,44 @@ class CFiscalFragment : Fragment() {
             e.printStackTrace()
             null
         }
+    }
+    private fun formatearNRC(nrc: String): String {
+        // Aquí utilizas la misma lógica que usas en el TextWatcher, pero solo para formatear el NRC.
+        val rawNrc = nrc.replace("-", "") // Eliminar cualquier guion antes de formatear
+        val maxDigits = 9
+        val masks = arrayOf("#", "#-#", "##-#", "###-#", "####-#", "#####-#", "######-#", "#######-#") // Array de máscaras
+
+        if (rawNrc.length > maxDigits) return rawNrc // Si excede la longitud, retorna el texto sin formatear
+
+        val mask = when (rawNrc.length) {
+            1 -> masks[0]
+            2 -> masks[1]
+            3 -> masks[2]
+            4 -> masks[3]
+            5 -> masks[4]
+            6 -> masks[5]
+            7 -> masks[6]
+            8 -> masks[7]
+            else -> ""
+        }
+        return aplicarMascara(rawNrc, mask)
+    }
+
+    private fun aplicarMascara(nrc: String, mask: String): String {
+        val formatted = StringBuilder()
+
+        var i = 0
+        for (m in mask.toCharArray()) {
+            if (m != '#') {
+                if (i < nrc.length){
+                    formatted.append(m)
+                }
+                continue
+            }
+            if (i >= nrc.length) break
+            formatted.append(nrc[i])
+            i++
+        }
+        return formatted.toString()
     }
 }

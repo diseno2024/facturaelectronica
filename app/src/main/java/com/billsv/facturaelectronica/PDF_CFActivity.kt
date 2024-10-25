@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -23,6 +24,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.billsv.facturaelectronica.databinding.ActivityPdfCfactivityBinding
 import com.billsv.signer.cargarClavePrivada
@@ -1111,6 +1113,45 @@ class PDF_CFActivity : AppCompatActivity() {
         val paginaInfo = PdfDocument.PageInfo.Builder(612, 792, 1).create() // Tamaño carta
         val pagina1 = pdfDocument.startPage(paginaInfo)
         val canvas = pagina1.canvas
+        // Obtener el drawable de la marca de agua
+        val drawable = ContextCompat.getDrawable(this, R.drawable.watermark)!!
+        val originalBitmap = Bitmap.createBitmap(
+            drawable.intrinsicWidth,
+            drawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+
+
+        // Dibuja el drawable en el bitmap original
+        val canvasBitmap = Canvas(originalBitmap)
+        drawable.setBounds(0, 0, canvasBitmap.width, canvasBitmap.height)
+        drawable.draw(canvasBitmap)
+
+
+        //Definir el tamaño deseado para la marca de agua
+        val scaleFactor = 0.5f // Ajusta este valor según sea necesario
+        val scaledWidth = (originalBitmap.width * scaleFactor).toInt()
+        val scaledHeight = (originalBitmap.height * scaleFactor).toInt()
+
+
+        // Crear un bitmap escalado
+        val watermarkBitmap = Bitmap.createScaledBitmap(originalBitmap, scaledWidth, scaledHeight, false)
+
+
+        // Calcular la posición para centrar la marca de agua
+        val x = (612 - watermarkBitmap.width) / 2f // Asegúrate de que sea Float
+        val y = (792 - watermarkBitmap.height) / 2f // Asegúrate de que sea Float
+
+
+        // Crear el objeto Paint con la opacidad deseada
+        val paint = Paint().apply {
+            alpha = 50 // Ajusta la opacidad de la marca de agua
+        }
+
+
+        // Dibujar la marca de agua en el canvas
+        canvas.drawBitmap(watermarkBitmap, x, y, paint)
+
 
         // Estilo de Letra 1 - Para el encabezado del documento
         val paintEncabezado = Paint().apply {
@@ -1313,7 +1354,7 @@ class PDF_CFActivity : AppCompatActivity() {
                     complementoE = datos[5]
                     correoE = datos[7]
                     nitE = datos[2].replace("-","")
-                    nrcE = datos[3]
+                    nrcE = formatearNRC(datos[3])
                     codAcEcoE = datos[4]
                     desAcEcoE = datos[4]
 
@@ -1454,7 +1495,7 @@ class PDF_CFActivity : AppCompatActivity() {
                             codAcEco = null
                             desAcEco = null
                         }else{
-                            nrc = datos[9]
+                            nrc = formatearNRC(datos[9])
                             codAcEco = datos[10]
                             desAcEco = datos[10]
                         }
@@ -2431,6 +2472,43 @@ class PDF_CFActivity : AppCompatActivity() {
             e.printStackTrace()
             null
         }
+    }
+    private fun formatearNRC(nrc: String): String {
+        // Aquí utilizas la misma lógica que usas en el TextWatcher, pero solo para formatear el NRC.
+        val rawNrc = nrc.replace("-", "") // Eliminar cualquier guion antes de formatear
+        val maxDigits = 9
+        val masks = arrayOf("#", "#-#", "##-#", "###-#", "####-#", "#####-#", "######-#", "#######-#") // Array de máscaras
+
+        if (rawNrc.length > maxDigits) return rawNrc // Si excede la longitud, retorna el texto sin formatear
+
+        val mask = when (rawNrc.length) {
+            1 -> masks[0]
+            2 -> masks[1]
+            3 -> masks[2]
+            4 -> masks[3]
+            5 -> masks[4]
+            6 -> masks[5]
+            7 -> masks[6]
+            8 -> masks[7]
+            else -> ""
+        }
+        return aplicarMascara(rawNrc, mask)
+    }
+
+    private fun aplicarMascara(nrc: String, mask: String): String {
+        val formatted = StringBuilder()
+
+        var i = 0
+        for (m in mask.toCharArray()) {
+            if (m != '#') {
+                formatted.append(m)
+                continue
+            }
+            if (i >= nrc.length) break
+            formatted.append(nrc[i])
+            i++
+        }
+        return formatted.toString()
     }
 
 }
