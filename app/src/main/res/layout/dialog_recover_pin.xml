@@ -34,9 +34,9 @@
         android:id="@+id/nrcEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="number"
         android:hint="NRC"
-        android:textSize="16sp"
-        android:inputType="text" />
+        android:textSize="16sp" />
 
     <!-- Campo para el nuevo PIN (inicialmente oculto) -->
     <TextView

@@ -458,7 +458,7 @@ class ImportarClientes : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-    private fun formatearNRC(nrc: String): String {
+    fun formatearNRC(nrc: String): String {
         // Aquí utilizas la misma lógica que usas en el TextWatcher, pero solo para formatear el NRC.
         val rawNrc = nrc.replace("-", "") // Eliminar cualquier guion antes de formatear
         val maxDigits = 9

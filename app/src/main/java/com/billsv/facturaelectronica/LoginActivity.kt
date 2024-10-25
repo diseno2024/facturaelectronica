@@ -15,6 +15,10 @@ import android.util.Log
 import com.couchbase.lite.*
 import android.text.InputType
 import android.text.TextUtils
+import android.text.Editable
+import android.text.TextWatcher
+import com.billsv.facturaelectronica.ImportarClientes
+import android.text.InputFilter
 
 class LoginActivity : AppCompatActivity() {
 
@@ -72,12 +76,13 @@ class LoginActivity : AppCompatActivity() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_recover_pin, null)
         val nameCommercialEditText: EditText = dialogView.findViewById(R.id.nameCommercialEditText)
         val nrcEditText: EditText = dialogView.findViewById(R.id.nrcEditText)
-        val newPinEditText: EditText = dialogView.findViewById(R.id.newPinEditText)
-        val newPinLabel: TextView = dialogView.findViewById(R.id.newPinLabel)
 
-        // Inicialmente ocultamos el campo para crear el nuevo PIN
-        newPinEditText.visibility = View.GONE
-        newPinLabel.visibility = View.GONE
+        // Limitar el número de caracteres en el EditText a 9
+        val maxDigits = 9
+        nrcEditText.filters = arrayOf(InputFilter.LengthFilter(maxDigits))
+
+        // Instancia de ImportarClientes para llamar a las funciones
+        val importarClientes = ImportarClientes()
 
         val dialog = AlertDialog.Builder(this)
             .setTitle("Recuperación de PIN")
@@ -86,12 +91,32 @@ class LoginActivity : AppCompatActivity() {
             .setNegativeButton("Cancelar") { dialogInterface: DialogInterface, _ ->
                 dialogInterface.dismiss()
             }
-            .setPositiveButton("Comprobar", null) // Usamos null para no cerrar automáticamente el diálogo
+            .setPositiveButton("Comprobar", null) // Usamos null para manejar el botón más adelante
             .create()
 
         dialog.show()
 
-        // Configuramos el botón de "Comprobar"
+        // Agregar el TextWatcher al campo NRC para aplicar el formateo
+        nrcEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let {
+                    val formattedNrc = importarClientes.formatearNRC(it.toString())
+                    // Si el NRC formateado es diferente al texto actual, actualizar el campo
+                    if (formattedNrc != it.toString() && formattedNrc.length <= maxDigits) {
+                        nrcEditText.removeTextChangedListener(this)
+                        nrcEditText.setText(formattedNrc)
+                        nrcEditText.setSelection(formattedNrc.length)
+                        nrcEditText.addTextChangedListener(this)
+                    }
+                }
+            }
+        })
+
+        // Configurar el botón de "Comprobar"
         val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         positiveButton.setOnClickListener {
             val nameCommercial = nameCommercialEditText.text.toString()
@@ -99,32 +124,16 @@ class LoginActivity : AppCompatActivity() {
 
             // Validar los datos introducidos
             if (validateData(nameCommercial, nrc)) {
-                // Si los datos son correctos, mostrar el campo para el nuevo PIN
-                newPinEditText.visibility = View.VISIBLE
-                newPinLabel.visibility = View.VISIBLE
-
-                // Cambiar el botón "Comprobar" por "Guardar PIN" y actualizamos su funcionalidad
-                positiveButton.setText("Guardar PIN")
-                positiveButton.setOnClickListener {
-                    val newPin = newPinEditText.text.toString()
-
-                    // Validar el nuevo PIN
-                    if (!TextUtils.isEmpty(newPin) && newPin.length == 6) {
-                        pinManager.addPin(newPin)
-                        Toast.makeText(this, "Nuevo PIN guardado correctamente", Toast.LENGTH_SHORT).show()
-
-                        // Cerrar el diálogo después de guardar el PIN
-                        dialog.dismiss()
-                    } else {
-                        Toast.makeText(this, "El PIN debe tener exactamente 6 dígitos", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                // Si los datos son correctos, mostrar el diálogo para crear el nuevo PIN
+                dialog.dismiss() // Cerramos el diálogo actual
+                showCreatePinDialog1() // Llamar al diálogo de creación de PIN
             } else {
                 // Mostrar mensaje de error si los datos son incorrectos
                 Toast.makeText(this, "Datos incorrectos. Inténtelo nuevamente.", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     // Validar los datos introducidos contra los almacenados en la base de datos
     private fun validateData(nameCommercial: String, nrc: String): Boolean {
@@ -144,4 +153,49 @@ class LoginActivity : AppCompatActivity() {
             return false
         }
     }
+
+    private fun showCreatePinDialog1() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Crear nuevo PIN")
+
+        // Crear una vista para el diálogo con un EditText
+        val input = EditText(this)
+        input.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(6))
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        builder.setView(input)
+
+        // Botón para confirmar la creación
+        builder.setPositiveButton("Crear", null)
+
+        // Botón de cancelar
+        builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.dismiss() }
+
+        // Mostrar el diálogo
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val newPin = input.text.toString()
+
+                // Validar si el nuevo PIN tiene exactamente 6 dígitos
+                if (newPin.length == 6) {
+                    // Agregar el nuevo PIN en la base de datos
+                    pinManager.addPin(newPin)
+
+                    // Notificar al usuario que el PIN fue creado correctamente
+                    Toast.makeText(this, "Nuevo PIN creado correctamente", Toast.LENGTH_SHORT).show()
+
+                    // Cerrar el diálogo de creación
+                    dialog.dismiss()
+
+                    // Volver a mostrar la lista de PINs actualizada
+                } else {
+                    // Mostrar un mensaje de error si el PIN no es válido
+                    Toast.makeText(this, "El PIN debe tener exactamente 6 dígitos. Inténtelo nuevamente.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        dialog.show()
+    }
+
 }

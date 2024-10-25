@@ -31,6 +31,10 @@ import android.widget.Button
 import android.widget.ListView
 import android.view.ViewGroup
 import android.widget.ImageButton
+import com.billsv.facturaelectronica.ImportarClientes
+import android.text.Editable
+import android.text.TextWatcher
+
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
@@ -173,6 +177,16 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val nameCommercialEditText: EditText = dialogView.findViewById(R.id.nameCommercialEditText)
         val nrcEditText: EditText = dialogView.findViewById(R.id.nrcEditText)
 
+        // Limitar el número de caracteres en el EditText a 9
+        val maxDigits = 9
+        nrcEditText.filters = arrayOf(InputFilter.LengthFilter(maxDigits))
+
+        // Instancia de ImportarClientes para llamar a las funciones de formateo
+        val importarClientes = ImportarClientes()
+
+        // Establecer el input type para solo permitir números
+        nrcEditText.inputType = InputType.TYPE_CLASS_NUMBER
+
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Administrar PINs")
         builder.setView(dialogView)
@@ -188,6 +202,26 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val dialog = builder.create()
 
         dialog.show()
+
+        // Agregar el TextWatcher al campo NRC para aplicar el formateo
+        nrcEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let {
+                    val formattedNrc = importarClientes.formatearNRC(it.toString())
+                    // Si el NRC formateado es diferente al texto actual y no excede el máximo de dígitos, actualizar el campo
+                    if (formattedNrc != it.toString() && formattedNrc.length <= maxDigits) {
+                        nrcEditText.removeTextChangedListener(this) // Eliminar temporalmente el TextWatcher
+                        nrcEditText.setText(formattedNrc) // Establecer el texto formateado
+                        nrcEditText.setSelection(formattedNrc.length) // Mover el cursor al final
+                        nrcEditText.addTextChangedListener(this) // Volver a agregar el TextWatcher
+                    }
+                }
+            }
+        })
 
         val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         positiveButton.setOnClickListener {
@@ -205,6 +239,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
+
 
     // Validar los datos introducidos contra los almacenados en la base de datos
     private fun validateData(nameCommercial: String, nrc: String): Boolean {
@@ -353,7 +388,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         builder.show()
     }
-
 
     private fun showEditPinDialog(pin: String, pinManager: PinManager) {
         val builder = AlertDialog.Builder(this)
