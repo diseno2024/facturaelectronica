@@ -21,11 +21,12 @@
             android:id="@+id/toolbar"
             android:elevation="5dp"
             android:background="@color/verde_menta_2"/>
+
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -38,7 +39,7 @@
         app:theme="@style/NavigationViewStyle"
         app:itemIconTint="@color/verde_menta_1"
         app:itemTextColor="@color/verde_menta_2"
-        app:itemIconSize="20dp"
-        app:itemVerticalPadding="15dp"/>
+        app:itemIconSize="40dp"
+        app:itemVerticalPadding="12dp"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
