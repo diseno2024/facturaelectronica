@@ -19,6 +19,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 class BackupActivity : AppCompatActivity() {
 
@@ -159,7 +161,7 @@ class BackupActivity : AppCompatActivity() {
         }
     }
 
-    private fun createBackupFolder() {
+    private fun createBackupFolder(): File? {
         val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
         val backupDirectoryName = "Respaldo_Billsv"
         val backupDirectory = File(parentDir, backupDirectoryName)
@@ -175,22 +177,24 @@ class BackupActivity : AppCompatActivity() {
                     val directoryPath = getFriendlyPath(backupDirectory.absolutePath)
                     Log.e("BackupActivity", "Error al crear el directorio de respaldo en: $directoryPath")
                     Toast.makeText(this, "Error al crear el directorio de respaldo en: $directoryPath", Toast.LENGTH_SHORT).show()
-                    return
+                    return null
                 }
             } catch (e: Exception) {
                 val directoryPath = getFriendlyPath(backupDirectory.absolutePath)
                 Log.e("BackupActivity", "Excepción al crear el directorio de respaldo en: $directoryPath - ${e.message}")
                 Toast.makeText(this, "Excepción al crear el directorio de respaldo en: $directoryPath", Toast.LENGTH_SHORT).show()
-                return
+                return null
             }
         } else {
             val directoryPath = getFriendlyPath(backupDirectory.absolutePath)
             Log.d("BackupActivity", "El directorio de respaldo ya existe en: $directoryPath")
             Toast.makeText(this, "El directorio de respaldo ya existe en: $directoryPath", Toast.LENGTH_SHORT).show()
+            // Llama al respaldo en JSON si el directorio ya existe
+            backupDatabaseAsJson(backupDirectory)
         }
 
-        // Realizar respaldo de la base de datos después de crear el directorio
-        backupDatabase(backupDirectory)
+        // Retornar el directorio de respaldo si fue exitoso
+        return backupDirectory
     }
 
 
@@ -432,6 +436,48 @@ class BackupActivity : AppCompatActivity() {
             val notificationManager: NotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun backupDatabaseAsJson(backupDir: File) {
+        val database = Database("my_database")  // Ajusta el nombre de la base de datos
+        val jsonFileName = "${getCurrentDate()}_Billsv_backup.json"
+        val jsonFile = File(backupDir, jsonFileName)
+
+        try {
+            val jsonArray = JSONArray()
+
+            // Iterar sobre todos los documentos de la base de datos
+            database.createQuery("SELECT META().id AS docId, * FROM my_database").execute().use { query ->
+                query.forEach { result ->
+                    val documentId = result.getString("docId") ?: ""
+                    val documentData = result.toMap()
+
+                    // Guardar el documento y su ID para la restauración
+                    val jsonObject = JSONObject(documentData).apply {
+                        put("docId", documentId)
+                    }
+                    jsonArray.put(jsonObject)
+                }
+            }
+
+            // Escribir JSON al archivo
+            FileWriter(jsonFile).use { writer ->
+                writer.write(jsonArray.toString())
+            }
+
+            val jsonFilePath = getFriendlyPath(jsonFile.absolutePath)
+            Log.d("BackupActivity", "Datos exportados a JSON con éxito en: $jsonFilePath")
+            Toast.makeText(this, "Respaldo JSON creado en: $jsonFilePath", Toast.LENGTH_SHORT).show()
+
+            // Actualizar la fecha del último respaldo
+            actualizarFechaUltimoRespaldo(Date())
+            textFecha.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("BackupActivity", "Error al exportar datos a JSON - ${e.message}")
+            Toast.makeText(this, "Error al exportar datos a JSON", Toast.LENGTH_SHORT).show()
         }
     }
 }

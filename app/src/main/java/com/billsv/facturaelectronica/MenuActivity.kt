@@ -46,7 +46,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
 
         val app = application as MyApp
-        database = app.database
+        database = app.personalDB
 
         setContentView(R.layout.activity_menu)
         // Configura tu NavigationView

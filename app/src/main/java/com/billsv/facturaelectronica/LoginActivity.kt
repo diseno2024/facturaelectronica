@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
         pinManager = PinManager(this)
         val app = application as MyApp
-        database = app.database
+        database = app.personalDB
         pinEditText = findViewById(R.id.pinEditText)
         loginButton = findViewById(R.id.loginButton)
         recoverPinButton = findViewById(R.id.recoverPinButton)
