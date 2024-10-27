@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
-    app:cardCornerRadius="30dp"
-    app:cardElevation="20dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="15dp"
     app:cardUseCompatPadding="false"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="25dp"
@@ -46,9 +46,9 @@
                 android:layout_alignParentBottom="true"
                 android:layout_toEndOf="@+id/iconoCard"
                 android:layout_toStartOf="@id/btnEnviarPorGmail"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="5dp"
                 android:orientation="vertical"
-                android:layout_marginStart="4dp">
+                android:layout_marginStart="5dp">
 
                 <TextView
                     android:id="@+id/textViewNombre"
@@ -70,6 +70,7 @@
                     android:textSize="18sp"/>
             </LinearLayout>
 
+            <!-- Botón de Gmail -->
             <ImageView
                 android:id="@+id/btnEnviarPorGmail"
                 android:layout_width="50dp"
@@ -81,6 +82,8 @@
                 android:paddingEnd="10dp"
                 android:paddingStart="0dp"
                 app:srcCompat="@drawable/gmail"/>
+
+            <!-- Botón de WhatsApp -->
             <ImageView
                 android:id="@+id/btnEnviarPorWhatsApp"
                 android:layout_width="50dp"

@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
-    app:cardCornerRadius="30dp"
-    app:cardElevation="20dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="15dp"
     app:cardUseCompatPadding="false"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="25dp"
@@ -22,14 +22,14 @@
         android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="146dp"
+            android:layout_height="219dp"
             android:orientation="horizontal">
 
             <!-- Ícono del documento -->
             <ImageView
                 android:id="@+id/iconoCard"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="102dp"
+                android:layout_height="102dp"
                 android:paddingStart="12dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
@@ -46,9 +46,9 @@
                 android:layout_alignParentBottom="true"
                 android:layout_toEndOf="@+id/iconoCard"
                 android:layout_toStartOf="@id/btnEnviarPorGmail"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="10dp"
                 android:orientation="vertical"
-                android:layout_marginStart="4dp">
+                android:layout_marginStart="10dp">
 
                 <TextView
                     android:id="@+id/textViewNombre"
@@ -56,24 +56,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
                     android:textColor="@color/black"
-                    android:textSize="30sp"
+                    android:textSize="44sp"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/textViewTelefono"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"/>
+                    android:textSize="35sp"/>
                 <TextView
                     android:id="@+id/textViewDui"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"/>
+                    android:textSize="35sp"/>
             </LinearLayout>
 
+            <!-- Botón de Gmail -->
             <ImageView
                 android:id="@+id/btnEnviarPorGmail"
-                android:layout_width="70dp"
-                android:layout_height="73dp"
+                android:layout_width="102dp"
+                android:layout_height="109dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
@@ -81,10 +82,12 @@
                 android:paddingEnd="10dp"
                 android:paddingStart="0dp"
                 app:srcCompat="@drawable/gmail"/>
+
+            <!-- Botón de WhatsApp -->
             <ImageView
                 android:id="@+id/btnEnviarPorWhatsApp"
-                android:layout_width="70dp"
-                android:layout_height="73dp"
+                android:layout_width="102dp"
+                android:layout_height="109dp"
                 android:paddingEnd="10dp"
                 android:paddingStart="0dp"
                 android:paddingBottom="10dp"

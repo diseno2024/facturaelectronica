@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
-    app:cardCornerRadius="30dp"
-    app:cardElevation="20dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="15dp"
     app:cardUseCompatPadding="false"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="25dp"
@@ -20,41 +20,35 @@
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
         android:orientation="vertical">
-
         <RelativeLayout
-            android:layout_width="900dp"
-            android:layout_height="225dp"
-            android:orientation="horizontal"
-            android:padding="6dp">
+            android:layout_width="match_parent"
+            android:layout_height="219dp"
+            android:orientation="horizontal">
 
             <!-- Ícono del documento -->
             <ImageView
                 android:id="@+id/iconoCard"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
+                android:layout_width="102dp"
+                android:layout_height="102dp"
+                android:paddingStart="12dp"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp"
-                app:srcCompat="@drawable/ic_factura"
-                app:tint="@color/verde_menta_1" />
+                app:srcCompat="@drawable/ic_credit_card"
+                android:layout_alignParentLeft="true"
+                app:tint="#43826C" />
 
-            <!-- Contenedor de textos -->
             <LinearLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="6dp"
-                android:layout_toStartOf="@+id/linearLayoutBotonesGmailWhatsApp"
+                android:layout_alignParentBottom="true"
                 android:layout_toEndOf="@+id/iconoCard"
-                android:layout_toRightOf="@id/iconoCard"
-                android:orientation="vertical">
+                android:layout_toStartOf="@id/btnEnviarPorGmail"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp">
 
                 <TextView
                     android:id="@+id/textViewNombre"
@@ -62,62 +56,47 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
                     android:textColor="@color/black"
-                    android:textSize="24sp"
+                    android:textSize="44sp"
                     android:textStyle="bold" />
-
                 <TextView
                     android:id="@+id/textViewTelefono"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp" />
-
+                    android:textSize="35sp"/>
                 <TextView
                     android:id="@+id/textViewDui"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp" />
+                    android:textSize="35sp"/>
             </LinearLayout>
 
-            <!-- Contenedor para los botones apilados -->
-            <LinearLayout
-                android:id="@+id/linearLayoutBotonesGmailWhatsApp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <!-- Botón de Gmail -->
+            <ImageView
+                android:id="@+id/btnEnviarPorGmail"
+                android:layout_width="102dp"
+                android:layout_height="109dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:orientation="vertical">
+                android:layout_gravity="center"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                app:srcCompat="@drawable/gmail"/>
 
-                <!-- Botón para enviar por Gmail -->
-                <ImageButton
-                    android:id="@+id/btnEnviarPorGmail"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:adjustViewBounds="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Enviar Documentos por Gmail"
-                    android:padding="0dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/gmail" />
-
-                <!-- Espaciado entre los botones -->
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="15dp" />
-
-                <!-- Botón para enviar por WhatsApp -->
-                <ImageButton
-                    android:id="@+id/btnEnviarPorWhatsApp"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:adjustViewBounds="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Enviar Documentos por WhatsApp"
-                    android:padding="0dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/whatsapp" />
-            </LinearLayout>
-
+            <!-- Botón de WhatsApp -->
+            <ImageView
+                android:id="@+id/btnEnviarPorWhatsApp"
+                android:layout_width="102dp"
+                android:layout_height="109dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/whatsapp"/>
         </RelativeLayout>
 
     </LinearLayout>
