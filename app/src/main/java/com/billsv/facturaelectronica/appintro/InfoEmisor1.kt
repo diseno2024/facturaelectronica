@@ -399,30 +399,39 @@ class InfoEmisor1 : Fragment() {
         }
         NumT.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
-            private val mask = "####-####" // La máscara del Teléfono
+            private var previousText = ""
+            private val mask = "####-####" // La máscara para el número de teléfono
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                previousText = s.toString()
+            }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
                 if (isUpdating) return
 
+                val currentText = s.toString()
+                if (currentText == previousText) return
                 isUpdating = true
-                val formatted = formatPhoneNumber(s.toString())
+                val deleting = currentText.length < previousText.length
+                val formatted = formatPhoneNumber(currentText, deleting)
                 NumT.setText(formatted)
                 NumT.setSelection(formatted.length)
                 isUpdating = false
             }
 
-            private fun formatPhoneNumber(phone: String): String {
+            private fun formatPhoneNumber(phone: String, deleting: Boolean): String {
+                // Eliminar todos los caracteres no numéricos del teléfono
                 val digits = phone.replace(Regex("\\D"), "")
                 val formatted = StringBuilder()
 
                 var i = 0
                 for (m in mask.toCharArray()) {
                     if (m != '#') {
-                        formatted.append(m)
+                        if (!deleting || (i < digits.length)) {
+                            formatted.append(m)
+                        }
                         continue
                     }
                     if (i >= digits.length) break
@@ -447,30 +456,41 @@ class InfoEmisor1 : Fragment() {
                 currentTextWatcher = if (selectedItem == "DUI") {
                     object : TextWatcher {
                         private var isUpdating = false
+                        private var previousText = ""
                         private val mask = "########-#" // La máscara del DUI
 
-                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                            previousText = s.toString()
+                        }
 
                         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
                         override fun afterTextChanged(s: Editable?) {
                             if (isUpdating) return
 
+                            val currentText = s.toString()
+                            if (currentText == previousText) return
+
                             isUpdating = true
-                            val formatted = formatDui(s.toString())
+
+                            val deleting = currentText.length < previousText.length
+                            val formatted = formatDui(currentText, deleting)
                             DUI_NIT.setText(formatted)
                             DUI_NIT.setSelection(formatted.length)
                             isUpdating = false
                         }
 
-                        private fun formatDui(dui: String): String {
+                        private fun formatDui(dui: String, deleting: Boolean): String {
+                            // Eliminar todos los caracteres no numéricos del DUI
                             val digits = dui.replace(Regex("\\D"), "")
                             val formatted = StringBuilder()
 
                             var i = 0
                             for (m in mask.toCharArray()) {
                                 if (m != '#') {
-                                    formatted.append(m)
+                                    if (!deleting || (i < digits.length)) {
+                                        formatted.append(m)
+                                    }
                                     continue
                                 }
                                 if (i >= digits.length) break
@@ -483,30 +503,46 @@ class InfoEmisor1 : Fragment() {
                 } else {
                     object : TextWatcher {
                         private var isUpdating = false
-                        private val mask = "####-######-###-#" // La máscara del NIT
+                        private var previousText = ""
+                        private val oldMask = "####-######-###-#" // La máscara antigua del NIT
+                        private val newMask = "########-#" // La máscara moderna del NIT
 
-                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                            previousText = s.toString()
+                        }
 
                         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
                         override fun afterTextChanged(s: Editable?) {
                             if (isUpdating) return
 
+                            val currentText = s.toString()
+                            if (currentText == previousText) return
+
                             isUpdating = true
-                            val formatted = formatNIT(s.toString())
+
+                            // Detectar si el usuario está eliminando caracteres
+                            val deleting = currentText.length < previousText.length
+                            val formatted = formatNIT(currentText, deleting)
                             DUI_NIT.setText(formatted)
                             DUI_NIT.setSelection(formatted.length)
                             isUpdating = false
                         }
 
-                        private fun formatNIT(nit: String): String {
+                        private fun formatNIT(nit: String, deleting: Boolean): String {
+                            // Eliminar todos los caracteres no numéricos del NIT
                             val digits = nit.replace(Regex("\\D"), "")
+
+                            val mask = if (digits.length > 9) oldMask else newMask
                             val formatted = StringBuilder()
 
                             var i = 0
                             for (m in mask.toCharArray()) {
                                 if (m != '#') {
-                                    formatted.append(m)
+
+                                    if (!deleting || (i < digits.length)) {
+                                        formatted.append(m)
+                                    }
                                     continue
                                 }
                                 if (i >= digits.length) break
@@ -636,7 +672,7 @@ class InfoEmisor1 : Fragment() {
         val emailText = Correo.text.toString()
 
         // Validación para verificar que los campos no estén vacíos y sean válidos
-        if (nombreText.isNotEmpty() && ((duiText.isNotEmpty() && duiText.matches(Regex("\\d{9}"))) || (nitText.isNotEmpty() && nitText.matches(Regex("\\d{14}")))) && (telefonoText.isNotEmpty() && telefonoText.matches(Regex("\\d{8}"))) && (emailText.isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(emailText).matches())) {
+        if (nombreText.isNotEmpty() && ((duiText.isNotEmpty() && duiText.matches(Regex("\\d{9}"))) || (nitText.isNotEmpty() && nitText.matches(Regex("\\d{9}|\\d{14}")))) && (telefonoText.isNotEmpty() && telefonoText.matches(Regex("\\d{8}"))) && (emailText.isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(emailText).matches())) {
             return true
         } else { // De lo contrario verificar qué es lo que el usuario no ingresó o ingresó mal
 
@@ -674,7 +710,7 @@ class InfoEmisor1 : Fragment() {
                         MensajeError4 = true // El mensaje ya se mostró, no se volverá a mostrar
                     }
                     return false
-                } else if (!duiText.matches(Regex("\\d{14}"))) { // Si el NIT no es válido
+                } else if (!nitText.matches(Regex("\\d{9}|\\d{14}"))) { // Si el NIT es de 9 o 14 dígitos
                     if (!MensajeError5) {
                         Toast.makeText(requireContext(), "Ingrese un NIT válido", Toast.LENGTH_SHORT).show()
                         MensajeError5 = true // El mensaje ya se mostró, no se volverá a mostrar

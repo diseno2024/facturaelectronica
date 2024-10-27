@@ -519,30 +519,40 @@ class InfoEmisorActivity : AppCompatActivity() {
 
         NumT.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
-            private val mask = "####-####"
+            private var previousText = ""
+            private val mask = "####-####" // La máscara para el número de teléfono
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                previousText = s.toString()
+            }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
                 if (isUpdating) return
 
+                val currentText = s.toString()
+                if (currentText == previousText) return
                 isUpdating = true
-                val formatted = formatPhoneNumber(s.toString())
+                val deleting = currentText.length < previousText.length
+                val formatted = formatPhoneNumber(currentText, deleting)
                 NumT.setText(formatted)
                 NumT.setSelection(formatted.length)
                 isUpdating = false
             }
 
-            private fun formatPhoneNumber(phone: String): String {
+            private fun formatPhoneNumber(phone: String, deleting: Boolean): String {
+                // Eliminar todos los caracteres no numéricos del teléfono
                 val digits = phone.replace(Regex("\\D"), "")
                 val formatted = StringBuilder()
 
                 var i = 0
                 for (m in mask.toCharArray()) {
                     if (m != '#') {
-                        formatted.append(m)
+
+                        if (!deleting || (i < digits.length)) {
+                            formatted.append(m)
+                        }
                         continue
                     }
                     if (i >= digits.length) break
@@ -555,31 +565,42 @@ class InfoEmisorActivity : AppCompatActivity() {
         })
         DUI.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
-            private val mask = "########-#" // La máscara del NIT
+            private var previousText = ""
+            private val mask = "########-#" // La máscara del DUI
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                previousText = s.toString()
+            }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
                 if (isUpdating) return
 
+                val currentText = s.toString()
+                if (currentText == previousText) return
+
                 isUpdating = true
-                val formatted = formatDui(s.toString())
+
+                val deleting = currentText.length < previousText.length
+                val formatted = formatDui(currentText, deleting)
                 DUI.setText(formatted)
                 DUI.setSelection(formatted.length)
                 isUpdating = false
             }
 
-            private fun formatDui(dui: String): String {
-                // Eliminar todos los caracteres no numéricos del NIT
+            private fun formatDui(dui: String, deleting: Boolean): String {
+                // Eliminar todos los caracteres no numéricos del DUI
                 val digits = dui.replace(Regex("\\D"), "")
                 val formatted = StringBuilder()
 
                 var i = 0
                 for (m in mask.toCharArray()) {
                     if (m != '#') {
-                        formatted.append(m)
+                        // Solo agregar el guion si no estamos borrando o si el índice coincide con el formato
+                        if (!deleting || (i < digits.length)) {
+                            formatted.append(m)
+                        }
                         continue
                     }
                     if (i >= digits.length) break
@@ -591,31 +612,47 @@ class InfoEmisorActivity : AppCompatActivity() {
         })
         NIT.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
-            private val mask = "####-######-###-#" // La máscara del NIT
+            private var previousText = ""
+            private val oldMask = "####-######-###-#" // La máscara antigua del NIT
+            private val newMask = "########-#" // La máscara moderna del NIT
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                previousText = s.toString()
+            }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
                 if (isUpdating) return
 
+                val currentText = s.toString()
+                if (currentText == previousText) return
+
                 isUpdating = true
-                val formatted = formatNIT(s.toString())
+
+                // Detectar si el usuario está eliminando caracteres
+                val deleting = currentText.length < previousText.length
+                val formatted = formatNIT(currentText, deleting)
                 NIT.setText(formatted)
                 NIT.setSelection(formatted.length)
                 isUpdating = false
             }
 
-            private fun formatNIT(nit: String): String {
+            private fun formatNIT(nit: String, deleting: Boolean): String {
                 // Eliminar todos los caracteres no numéricos del NIT
                 val digits = nit.replace(Regex("\\D"), "")
+
+                // Determinar qué máscara usar en función de la longitud
+                val mask = if (digits.length > 9) oldMask else newMask
                 val formatted = StringBuilder()
 
                 var i = 0
                 for (m in mask.toCharArray()) {
                     if (m != '#') {
-                        formatted.append(m)
+
+                        if (!deleting || (i < digits.length)) {
+                            formatted.append(m)
+                        }
                         continue
                     }
                     if (i >= digits.length) break
@@ -1192,7 +1229,7 @@ class InfoEmisorActivity : AppCompatActivity() {
         }
 
         // Verifica que el NIT sea un número válido
-        if (nitText.isNotEmpty() && !nitText.matches(Regex("\\d{14}"))) {
+        if (nitText.isNotEmpty() && !nitText.matches(Regex("\\d{9}|\\d{14}"))) {
             Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
             return false
         }
