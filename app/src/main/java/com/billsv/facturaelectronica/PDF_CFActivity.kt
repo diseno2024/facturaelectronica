@@ -117,10 +117,15 @@ class PDF_CFActivity : AppCompatActivity() {
                     dataList.forEach { data ->
                         // Dividir la cadena por saltos de línea para obtener cada dato
                         val dato = data.split("\n")
-                        ambienteCF=dato[0]
-                        ambienteCCF= dato[1]
+                        if(dato[0]!="null") {
+                            ambienteCF = dato[0]
+                        }
+                        if(dato[1]!="null") {
+                            ambienteCCF = dato[1]
+                        }
 
                     }
+                    Log.e("AMBIEN","$ambienteCF,$ambienteCCF")
                     auth.forEach(){data->
                         val credenciales = data.split("\n")
 
@@ -148,6 +153,7 @@ class PDF_CFActivity : AppCompatActivity() {
                         }
                         Log.e("Credenciales", "${user},${pwd}")
                     }
+                    Log.e("ENTORNO", "Estoy en $entorno")
                     json(fecEmi,horEmi,user,pwd, entorno)
                 }
                 dialogoGenerar.dismiss()
@@ -202,10 +208,12 @@ class PDF_CFActivity : AppCompatActivity() {
                             }
                             if(JSON=="CreditoFiscal") {
                                 val intent = Intent(applicationContext, MenuActivity::class.java)
+                                intent.putExtra("navigateTo", "CFiscalFragment")
                                 startActivity(intent)
                                 finish()
                             }else{
                                 val intent = Intent(applicationContext, MenuActivity::class.java)
+                                intent.putExtra("navigateTo", "FacturaFragment")
                                 startActivity(intent)
                                 finish()
                             }
@@ -268,6 +276,8 @@ class PDF_CFActivity : AppCompatActivity() {
     }
 
     private fun enviaraMH(ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?,user:String,pwd:String, fecEmi: String,horEmi: String,letra: String){
+                Log.e("ESTOY AUTH", "$user,$pwd")
+                Log.e("ESTOY AUTH", "AMBIENTE $letra")
                 if(letra=="P"){
                     apiService = RetrofitClient2.instance.create(ApiService::class.java)
                 }else if (letra=="T"){
@@ -355,29 +365,38 @@ class PDF_CFActivity : AppCompatActivity() {
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacion")))
+            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacionpru")))
+        val query2 = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacionpro")))
 
         // Ejecuta la consulta
         val result = query.execute()
-
+        val result2 = query2.execute()
         // Lista para almacenar los datos obtenidos
         val dataList = mutableListOf<String>()
 
         // Itera sobre todos los resultados de la consulta
-        result.allResults().forEach { result ->
+        result.allResults().forEach { results ->
+            var usuarioprod: String? = ""
+            var contraseñaprod: String? = ""
             // Obtiene el diccionario del documento del resultado actual
-            val dict = result.getDictionary(database.name)
+            val dict = results.getDictionary(database.name)
+            result2.allResults().forEach { result ->
+                // Obtiene el diccionario del documento del resultado actual
+                val dicta = result.getDictionary(database.name)
+                usuarioprod = dicta?.getString("usuario")
+                contraseñaprod = dicta?.getString("contraseña")
+            }
 
             // Extrae los valores de los campos del documento
-            val usuarioP = dict?.getString("usuarioPrueba")
-            val contraseñaP = dict?.getString("contraseñaPrueba")
-            val usuarioPro = dict?.getString("usuarioProduccion")
-            val contraseñaPro = dict?.getString("contraseñaProduccion")
-            val checkF = dict?.getString("consumidorFinal")
-            val checkCF = dict?.getString("creditoFiscal")
+            val usuarioP = dict?.getString("usuario")
+            val contraseñaP = dict?.getString("contraseña")
+            val usuarioPro = usuarioprod
+            val contraseñaPro = contraseñaprod
 
             // Formatea los datos como una cadena y la agrega a la lista
-            val dataString = "$usuarioP\n$contraseñaP\n$usuarioPro\n$contraseñaPro\n$checkF\n$checkCF"
+            val dataString = "$usuarioP\n$contraseñaP\n$usuarioPro\n$contraseñaPro"
             dataList.add(dataString)
         }
 
@@ -533,8 +552,12 @@ class PDF_CFActivity : AppCompatActivity() {
         dataList.forEach { data ->
             // Dividir la cadena por saltos de línea para obtener cada dato
             val dato = data.split("\n")
-            ambienteCF=dato[0]
-            ambienteCCF= dato[1]
+            if(dato[0]!="null") {
+                ambienteCF = dato[0]
+            }
+            if(dato[1]!="null") {
+                ambienteCCF = dato[1]
+            }
 
         }
 
@@ -1016,7 +1039,7 @@ class PDF_CFActivity : AppCompatActivity() {
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacion")))
+            .where(Expression.property("tipo").equalTo(Expression.string("Ambiente")))
         // Ejecuta la consulta
         val result = query.execute()
         // Lista para almacenar los datos obtenidos

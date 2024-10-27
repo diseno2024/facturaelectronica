@@ -53,7 +53,6 @@
         android:id="@+id/FacturacheckP"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -64,9 +63,10 @@
         app:strokeColor="#9E9E9E"
         app:strokeWidth="2dp"
         app:cardCornerRadius="7dp"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewPrueba">
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toBottomOf="@id/textViewPrueba"
+        app:layout_constraintEnd_toEndOf="@id/imgAuth">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -101,7 +101,6 @@
         android:id="@+id/CreditocheckP"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="35dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -112,9 +111,10 @@
         app:strokeColor="#9E9E9E"
         app:strokeWidth="2dp"
         app:cardCornerRadius="7dp"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/FacturacheckP"
-        app:layout_constraintTop_toBottomOf="@id/textViewPrueba">
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toBottomOf="@id/textViewPrueba"
+        app:layout_constraintEnd_toEndOf="@id/imgAuth">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -151,7 +151,6 @@
         android:id="@+id/FacturacheckPro"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -162,9 +161,10 @@
         app:strokeColor="#9E9E9E"
         app:strokeWidth="2dp"
         app:cardCornerRadius="7dp"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewProduc">
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toBottomOf="@id/textViewProduc"
+        app:layout_constraintEnd_toEndOf="@id/imgAuth">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -199,7 +199,6 @@
         android:id="@+id/CreditocheckPro"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="35dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -210,9 +209,10 @@
         app:strokeColor="#9E9E9E"
         app:strokeWidth="2dp"
         app:cardCornerRadius="7dp"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/FacturacheckPro"
-        app:layout_constraintTop_toBottomOf="@id/textViewProduc">
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toBottomOf="@id/textViewProduc"
+        app:layout_constraintEnd_toEndOf="@id/imgAuth">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

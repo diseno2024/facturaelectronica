@@ -25,6 +25,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Recuperar el argumento "navigateTo" para la navegación inicial
+        val navigateTo = arguments?.getString("navigateTo", "")
+        if (savedInstanceState == null) { // Solo ejecutar la primera vez
+            when (navigateTo) {
+                "CFiscalFragment" -> (activity as MenuActivity).navigateToFragment(CFiscalFragment())
+                "FacturaFragment" -> (activity as MenuActivity).navigateToFragment(FacturaFragment())
+            }
+        }
 
         // Maneja la navegación a través de BottomNavigationView
         val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.boton_navegacion)

@@ -92,7 +92,18 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
         )*/
-        if (savedInstanceState == null) {
+        val navigateTo = intent.getStringExtra("navigateTo") ?: ""
+        if(navigateTo.isNotEmpty()) {
+            val homeFragment = HomeFragment().apply {
+                arguments = Bundle().apply {
+                    putString("navigateTo", navigateTo)  // Pasamos el dato al fragment
+                }
+            }
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, homeFragment)
+                .commit()
+            navigationView.setCheckedItem(R.id.nav_home)
+        }else {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment()).commit()
             navigationView.setCheckedItem(R.id.nav_home)

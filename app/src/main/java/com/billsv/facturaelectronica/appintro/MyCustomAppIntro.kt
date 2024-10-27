@@ -49,7 +49,7 @@ class MyCustomAppIntro : AppIntro() {
             selectedIndicatorColor = getColor(R.color.selected_indicator_color),
             unselectedIndicatorColor = getColor(R.color.unselected_indicator_color)
         )
-        setImmersiveMode()
+
         setDoneText("COMENCEMOS")
         setSkipText("SALTAR")
 
@@ -119,7 +119,7 @@ class MyCustomAppIntro : AppIntro() {
 
         // Cuando estoy en la actividad Autentificacion
         if (oldFragment is Autentificacion) {
-            oldFragment.guardarInformacionAutentificacion() // Que me guarde la información que acabo de ingresar
+            oldFragment.guardarAmbiente() // Que me guarde la información que acabo de ingresar
         }
 
         // Cuando estoy en la actividad Certificado
@@ -182,7 +182,7 @@ class MyCustomAppIntro : AppIntro() {
         if (currentFragment is Certificado) {
             val authFragment = supportFragmentManager.fragments.find { it is Autentificacion } as? Autentificacion
             authFragment?.let {
-                if (it.validarCredencialesAutentificacion()) {
+                if (it.validarCHECKS()) {
                     // Si las validacinoes se cumplen, entonces se permite pasar a la siguiente diapositiva
                 }else{
                     // Si todos los datos no están completos, entonces no avanza a la siguiente diapositiva
