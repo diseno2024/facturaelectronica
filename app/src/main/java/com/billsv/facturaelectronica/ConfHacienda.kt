@@ -21,6 +21,7 @@ import com.couchbase.lite.Expression
 import com.couchbase.lite.Meta
 import com.couchbase.lite.MutableDocument
 import com.couchbase.lite.QueryBuilder
+import com.couchbase.lite.ResultSet
 import com.couchbase.lite.SelectResult
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -39,6 +40,7 @@ class ConfHacienda : AppCompatActivity() {
     private lateinit var contraseña: EditText
     private lateinit var checkBoxConsumidorFinal: CheckBox
     private lateinit var checkBoxCreditoFiscal: CheckBox
+    private lateinit var results: ResultSet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -277,13 +279,27 @@ class ConfHacienda : AppCompatActivity() {
         // Buscar si ya existe un documento del tipo "ConfEmisor"
         val query = QueryBuilder.select(SelectResult.expression(Meta.id))
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacion")))
+            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacionpro")))
+        val query2 = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacionpru")))
+        val query3 = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Ambiente")))
 
         try {
             val resultSet = query.execute()
             val results = resultSet.allResults()
 
+            val resultSet2 = query2.execute()
+            val results2 = resultSet2.allResults()
+
+            val resultSet3 = query3.execute()
+            val results3 = resultSet3.allResults()
+
             var document : MutableDocument
+            var document2 : MutableDocument
+            var document3 : MutableDocument
 
             if (results.isNotEmpty()) {
                 // Si ya existe un documento, obten su ID
@@ -291,33 +307,59 @@ class ConfHacienda : AppCompatActivity() {
                 val existingDoc = database.getDocument(docId!!)
                 document = existingDoc?.toMutable() ?: MutableDocument()
             } else {
-                // Crear un nuevo documento si no existe
                 document = MutableDocument()
-                document.setString("tipo","Autentificacion") //Un solo tipo general
+                document.setString("tipo","Autentificacionpro") //Un solo tipo general
+            }
+            if(results2.isNotEmpty()){
+                val docId = results2[0].getString(0)
+                val existingDoc2 = database.getDocument(docId!!)
+                document2 = existingDoc2?.toMutable() ?: MutableDocument()
+            } else{
+                document2 = MutableDocument()
+                document2.setString("tipo","Autentificacionpru") //Un solo tipo general
             }
             //dependiendo del entorno, guardamos las credenciales en diferentes campos
             if (app.ambiente == "00") {//Entorno Prueba
-                document.setString("usuarioPrueba",usuario)
-                document.setString("contraseñaPrueba", contraseña)
+                document2.setString("usuario",usuario)
+                document2.setString("contraseña", contraseña)
             }else{//Entorno Produccion
-                document.setString("usuarioProduccion", usuario)
-                document.setString("contraseñaProduccion", contraseña)
-                document.setBoolean("consumidorFinal", checkBoxConsumidorFinal.isChecked)
-                document.setBoolean("creditoFiscal", checkBoxCreditoFiscal.isChecked)
-                if (checkBoxConsumidorFinal.isChecked){
-                    document.setString("ambienteCF","01")
-                }else{
-                    document.setString("ambienteCF","00")
+                document.setString("usuario", usuario)
+                document.setString("contraseña", contraseña)
+            }
+            if (results3.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results3) {
+                    val docId = result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val documenta = database.getDocument(it)
+                        documenta?.let {
+                            database.delete(it)
+                        }
+                    }
                 }
-                if (checkBoxCreditoFiscal.isChecked){
-                    document.setString("ambienteCCF","01")
-                }else{
-                    document.setString("ambienteCCF","00")
-                }
+                Log.d("ReClienteActivity", "Documento existente borrado")
+            }
+            document3 = MutableDocument()
+            document3.setString("tipo","Ambiente")
+            document3.setBoolean("consumidorFinal", checkBoxConsumidorFinal.isChecked)
+            document3.setBoolean("creditoFiscal", checkBoxCreditoFiscal.isChecked)
+            if (checkBoxConsumidorFinal.isChecked){
+                document3.setString("ambienteCF","01")
+            }else{
+                document3.setString("ambienteCF","00")
+            }
+            if (checkBoxCreditoFiscal.isChecked){
+                document3.setString("ambienteCCF","01")
+            }else{
+                document3.setString("ambienteCCF","00")
             }
             // Guardar el nuevo documento
             database.save(document)
-            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document")
+            database.save(document2)
+            database.save(document3)
+            Log.d("ReClienteActivity", "Datos guardados correctamente: \n $document  \n" +
+                    " $document2  \n" +
+                    " $document3")
             Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show()
 
             verificarEstadoEdicion() //Actualiza la interfaz de usuario despues de guardar
@@ -336,31 +378,43 @@ class ConfHacienda : AppCompatActivity() {
         // Crea una consulta para seleccionar todos los documentos con tipo = "cliente"
         val query = QueryBuilder.select(SelectResult.all())
             .from(DataSource.database(database))
-            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacion")))
-
+            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacionpru")))
+        val query2 = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Autentificacionpro")))
+        val query3 = QueryBuilder.select(SelectResult.all())
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("Ambiente")))
         // Ejecuta la consulta
-        val result = query.execute()
-
+        if (app.ambiente=="00"){
+            results = query.execute()
+        }else if(app.ambiente=="01"){
+            results = query2.execute()
+        }
         // Lista para almacenar los datos obtenidos
         val dataList = mutableListOf<String>()
-
-        // Itera sobre todos los resultados de la consulta
-        result.allResults().forEach { result ->
+        val resulta = query3.execute()
+        results.allResults().forEach { result ->
+            var valorCF: Boolean? = false
+            var valorCCF: Boolean? = false
+            resulta.allResults().forEach { resultsa ->
+                val dicta = resultsa.getDictionary(database.name)
+                valorCF = dicta?.getBoolean("consumidorFinal")
+                valorCCF = dicta?.getBoolean("creditoFiscal")
+            }
             // Obtiene el diccionario del documento del resultado actual
             val dict = result.getDictionary(database.name)
 
             // Extrae los valores de los campos del documento
-            val usuario = if (app.ambiente == "00") dict?.getString("usuarioPrueba") else dict?.getString("usuarioProduccion")
-            val contraseña = if (app.ambiente == "00") dict?.getString("contraseñaPrueba") else dict?.getString("contraseñaProduccion")
-            val consumidorFinal = dict?.getBoolean("consumidorFinal") ?: false
-            val creditoFiscal = dict?.getBoolean("creditoFiscal") ?: false
-
+            val usuario = dict?.getString("usuario")
+            val contraseña = dict?.getString("contraseña")
+            val consumidorFinal = valorCF
+            val creditoFiscal = valorCCF
 
             // Formatea los datos como una cadena y la agrega a la lista
             val dataString = "$usuario\n$contraseña\n$consumidorFinal\n$creditoFiscal"
             dataList.add(dataString)
         }
-
         // Devuelve la lista de datos
         return dataList
     }
