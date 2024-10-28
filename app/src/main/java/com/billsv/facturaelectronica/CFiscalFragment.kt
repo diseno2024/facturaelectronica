@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -28,6 +29,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.billsv.facturaelectronica.databinding.ActivityVerPdfCcfBinding
 import com.couchbase.lite.CouchbaseLiteException
@@ -362,6 +364,44 @@ class CFiscalFragment : Fragment() {
         val paginaInfo = PdfDocument.PageInfo.Builder(612, 792, 1).create() // Tamaño carta
         val pagina1 = pdfDocument.startPage(paginaInfo)
         val canvas = pagina1.canvas
+        // Obtener el drawable de la marca de agua
+        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.watermark)!!
+        val originalBitmap = Bitmap.createBitmap(
+            drawable.intrinsicWidth,
+            drawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+
+
+        // Dibuja el drawable en el bitmap original
+        val canvasBitmap = Canvas(originalBitmap)
+        drawable.setBounds(0, 0, canvasBitmap.width, canvasBitmap.height)
+        drawable.draw(canvasBitmap)
+
+
+        // Definir el tamaño deseado para la marca de agua
+        val scaleFactor = 0.5f // Ajusta este valor según sea necesario
+        val scaledWidth = (originalBitmap.width * scaleFactor).toInt()
+        val scaledHeight = (originalBitmap.height * scaleFactor).toInt()
+
+
+        // Crear un bitmap escalado
+        val watermarkBitmap = Bitmap.createScaledBitmap(originalBitmap, scaledWidth, scaledHeight, false)
+
+
+        // Calcular la posición para centrar la marca de agua
+        val x = (612 - watermarkBitmap.width) / 2f // Asegúrate de que sea Float
+        val y = (792 - watermarkBitmap.height) / 2f // Asegúrate de que sea Float
+
+
+        // Crear el objeto Paint con la opacidad deseada
+        val paint = Paint().apply {
+            alpha = 50 // Ajusta la opacidad de la marca de agua
+        }
+
+
+        // Dibujar la marca de agua en el canvas
+        canvas.drawBitmap(watermarkBitmap, x, y, paint)
         // Estilo de Letra 1 - Para el encabezado del documento
         val paintEncabezado = Paint().apply {
             color = Color.BLACK
