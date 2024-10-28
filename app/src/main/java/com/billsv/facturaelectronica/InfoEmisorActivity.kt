@@ -1309,4 +1309,11 @@ class InfoEmisorActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MenuActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }

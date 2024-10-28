@@ -130,30 +130,39 @@ class RestauracionActivity : AppCompatActivity() {
 
     // Función para mostrar la fecha del último respaldo y el rango de fechas de restauración
     private fun mostrarFechas() {
-        val fechaUltimoRespaldo = leerFechaUltimoRespaldo()
+        // Leer la fecha del último respaldo y el rango de fechas desde SharedPreferences
+        val fechaUltimoRespaldo = leerFechaUltimoRespaldo() 
         val textFecha: TextView = findViewById(R.id.textFecha)
         val textFecha1: TextView = findViewById(R.id.textFecha1)
         val textFecha2: TextView = findViewById(R.id.textFecha2)
         val dateFormat = android.icu.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
+        val sharedPrefs = getSharedPreferences("BackupPrefs", MODE_PRIVATE)
+
+        // Leer las fechas de inicio y fin de restauración
+        val fechaInicioTimestamp = sharedPrefs.getLong("fechaFin", -1L)
+        val fechaFinTimestamp = sharedPrefs.getLong("fechaInicio", -1L)
+
         if (fechaUltimoRespaldo != null) {
             textFecha.text = dateFormat.format(fechaUltimoRespaldo)
-
-            // Obtener el rango de fechas de restauración
-            val rangoRestauracion = obtenerRangoRestauracion()
-            if (rangoRestauracion != null) {
-                textFecha1.text = dateFormat.format(rangoRestauracion.first)
-                textFecha2.text = dateFormat.format(rangoRestauracion.second)
-            } else {
-                textFecha1.text = "N/A"
-                textFecha2.text = "N/A"
-            }
         } else {
             textFecha.text = "Ninguna"
+        }
+
+        // Mostrar las fechas de inicio y fin si están guardadas
+        if (fechaInicioTimestamp != -1L && fechaFinTimestamp != -1L) {
+            val fechaInicio = Date(fechaInicioTimestamp)
+            val fechaFin = Date(fechaFinTimestamp)
+            textFecha1.text = dateFormat.format(fechaInicio)
+            textFecha2.text = dateFormat.format(fechaFin)
+        } else {
             textFecha1.text = "N/A"
             textFecha2.text = "N/A"
         }
     }
+
+
+
 
     // Función para leer la fecha del último respaldo
     private fun leerFechaUltimoRespaldo(): Date? {
@@ -173,21 +182,37 @@ class RestauracionActivity : AppCompatActivity() {
         }
     }
     // Función para obtener el rango de fechas de restauración
-    private fun obtenerRangoRestauracion(): Pair<Date, Date>? {
-        // Aquí deberías implementar la lógica para obtener el rango de fechas de restauración
-        // Por ejemplo, podrías obtenerlas desde SharedPreferences o cualquier otra fuente de datos
-        // Aquí se muestra un ejemplo simple de cómo podrías obtener un rango de fechas ficticio
 
-        val fechaInicio = Calendar.getInstance()
-        fechaInicio.set(2024, Calendar.APRIL, 10) // Fecha de inicio ficticia
+    private fun obtenerRangoRestauracion(fechaInicio: Date, fechaFin: Date) {
+        val fechaUltimoRespaldo = leerFechaUltimoRespaldo()
+        val textFecha: TextView = findViewById(R.id.textFecha)
+        val textFecha1: TextView = findViewById(R.id.textFecha1)
+        val textFecha2: TextView = findViewById(R.id.textFecha2)
+        val dateFormat = android.icu.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
-        val fechaFin = Calendar.getInstance()
-        fechaFin.set(2024, Calendar.APRIL, 12) // Fecha de fin ficticia
+        if (fechaUltimoRespaldo != null) {
+            textFecha.text = dateFormat.format(fechaUltimoRespaldo)
 
-        return fechaInicio.time to fechaFin.time
+            // Usar las fechas pasadas a la función
+            textFecha1.text = dateFormat.format(fechaFin)
+            textFecha2.text = dateFormat.format(fechaInicio)
+
+            // Guardar las fechas en SharedPreferences
+            val sharedPrefs = getSharedPreferences("BackupPrefs", MODE_PRIVATE)
+            sharedPrefs.edit().apply {
+                putLong("fechaInicio", fechaInicio.time)
+                putLong("fechaFin", fechaFin.time)
+                apply()
+            }
+        } else {
+            textFecha.text = "Ninguna"
+            textFecha1.text = "N/A"
+            textFecha2.text = "N/A"
+        }
     }
 
-    private fun requestPermissions() {
+
+        private fun requestPermissions() {
         val permissionsToRequest = mutableListOf<String>()
 
         for (permission in permissionList) {
@@ -245,8 +270,8 @@ class RestauracionActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error al restaurar datos", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Log.e("RestauracionActivity", "La carpeta de respaldo no existe")
-            Toast.makeText(this, "La carpeta de respaldo no existe", Toast.LENGTH_SHORT).show()
+            Log.e("RestauracionActivity", "Busca el JSON a restaurar")
+            Toast.makeText(this, "Busca el JSON a restaurar", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -345,6 +370,10 @@ class RestauracionActivity : AppCompatActivity() {
             val gson = Gson()
             val documentListType = object : TypeToken<List<DocumentWrapper>>() {}.type
             val documents: List<DocumentWrapper> = gson.fromJson(jsonString, documentListType)
+            val fechasEmi = mutableListOf<Date>() // Lista para almacenar las fechas de emisión
+
+            // Formato para parsear las fechas
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
             for (document in documents) {
                 Log.d("RestauracionActivity", "Procesando documento con ID: ${document.docId}") // Log para cada documento
@@ -352,6 +381,16 @@ class RestauracionActivity : AppCompatActivity() {
                 // Verifica si es un documento de tipo ComprobanteCreditoFiscal
                 if (document.my_database.has("tipoD")) {
                     val comprobante = gson.fromJson(document.my_database, ComprobanteCreditoFiscal::class.java)
+
+                    // Verifica si fechaEmi es un String y conviértelo a Date
+                    val fechaEmiString = comprobante.fechaEmi // Asegúrate de que esto sea un String
+                    val fechaEmi: Date? = dateFormat.parse(fechaEmiString) // Conversión
+
+                    if (fechaEmi != null) {
+                        fechasEmi.add(fechaEmi) // Agrega fechaEmi a la lista solo si es válida
+                    } else {
+                        Log.e("RestauracionActivity", "Fecha de emisión inválida: $fechaEmiString")
+                    }
 
                     val mutableDoc = MutableDocument(document.docId)
                     mutableDoc.setValue("totalNoSuj", comprobante.totalNoSuj)
@@ -381,7 +420,6 @@ class RestauracionActivity : AppCompatActivity() {
                     database.save(mutableDoc)
                     Log.d("RestauracionActivity", "Documento Comprobante guardado con ID: ${document.docId}") // Confirmación de guardado
 
-                    // Verifica si es un documento de tipo Cliente
                 } else if (document.my_database.has("tipoCliente")) {
                     val cliente = gson.fromJson(document.my_database, Cliente::class.java)
 
@@ -411,6 +449,18 @@ class RestauracionActivity : AppCompatActivity() {
                     Log.d("RestauracionActivity", "Documento sin tipoD o tipoCliente, ID: ${document.docId}")
                 }
             }
+
+            // Ahora determina la fecha más reciente y la más antigua
+            if (fechasEmi.isNotEmpty()) {
+                val fechaInicio = fechasEmi.maxOrNull() // Fecha más reciente
+                val fechaFin = fechasEmi.minOrNull() // Fecha más antigua
+
+                // Llama a la función para mostrar fechas con el rango obtenido
+                if (fechaInicio != null && fechaFin != null) {
+                    obtenerRangoRestauracion(fechaInicio, fechaFin) // Actualiza aquí según lo que necesites
+                }
+            }
+
             Toast.makeText(this, "Datos restaurados con éxito desde JSON", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -419,11 +469,14 @@ class RestauracionActivity : AppCompatActivity() {
         }
     }
 
-
-
     override fun onDestroy() {
         super.onDestroy()
         database.close()  // Cierra la base de datos al salir de la actividad
     }
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MenuActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }

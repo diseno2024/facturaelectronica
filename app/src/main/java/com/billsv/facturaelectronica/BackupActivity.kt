@@ -172,6 +172,7 @@ class BackupActivity : AppCompatActivity() {
                 if (backupDirectory.mkdirs()) {
                     val directoryPath = getFriendlyPath(backupDirectory.absolutePath)
                     Log.d("BackupActivity", "Directorio de respaldo creado en: $directoryPath")
+                    backupDatabaseAsJson(backupDirectory)
                     Toast.makeText(this, "Directorio de respaldo creado en: $directoryPath", Toast.LENGTH_SHORT).show()
                 } else {
                     val directoryPath = getFriendlyPath(backupDirectory.absolutePath)
