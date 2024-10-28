@@ -1249,7 +1249,7 @@ class PrinReClienteActivity : AppCompatActivity() {
             }
 
             // Verifica que el NIT sea un número válido
-            if (nitText.isNotEmpty() && !nitText.matches(Regex("\\d{14}"))) {
+            if (nitText.isNotEmpty() && !nitText.matches(Regex("\\d{9}|\\d{14}"))) {
                 Toast.makeText(this, "NIT debe ser un número válido", Toast.LENGTH_SHORT).show()
                 return false
             }
