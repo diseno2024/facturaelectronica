@@ -46,18 +46,38 @@ class FacturaAdapter(
         // Configurar el botón Gmail para enviar los documentos adjuntos
         holder.btnEnviarPorGmail.setOnClickListener {
 
-            //Verificar que hay una dirección a la cual enviar el correo
+            // Verificar que hay una dirección a la cual enviar el correo
             if (factura.correo.isEmpty()) {
                 Toast.makeText(context, "No hay dirección de correo asociada a esta factura.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else {
-                // Obtener las rutas de los archivos adjuntos
-                val pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/${factura.codigoG}.pdf"
-                val jsonFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/${factura.codigoG}.json"
+
+                // Obtener la ruta del directorio de Documentos y agregar la estructura de carpetas deseada
+                val documentsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString()
+                val facturasCFDir = "$documentsDir/Billsv_DTEs/Facturas Consumidor Final"
+
+                // Obtener las rutas de los archivos adjuntos en la nueva ubicación
+                val pdfFilePath = "$facturasCFDir/${factura.codigoG}.pdf"
+                val jsonFilePath = "$facturasCFDir/${factura.codigoG}.json"
 
                 // Crear objetos File para los archivos
                 val pdfFile = File(pdfFilePath)
                 val jsonFile = File(jsonFilePath)
+
+                // Verificar si los archivos existen
+                if (!pdfFile.exists() || !jsonFile.exists()) {
+                    if (!pdfFile.exists() && !jsonFile.exists()) {
+                        // Si no se encontró ninguno de los dos archivos
+                        Toast.makeText(context, "Archivo PDF y JSON no encontrado", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    } else if (!pdfFile.exists()) { // Verificar si es el pdf el que no se encontró
+                        Toast.makeText(context, "Archivo PDF no encontrado", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    } else if (!jsonFile.exists()) { // Verificar si es el json el que no se encontró
+                        Toast.makeText(context, "Archivo JSON no encontrado", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+                }
 
                 // Crear objetos Uri para los archivos
                 val pdfUri = FileProvider.getUriForFile(context, context.packageName + ".fileprovider", pdfFile)
@@ -94,15 +114,34 @@ class FacturaAdapter(
         // Configurar el botón WhatsApp para enviar los documentos adjuntos
         holder.btnEnviarPorWhatsapp.setOnClickListener {
 
-            // Obtener las rutas de los archivos adjuntos
-            val pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/${factura.codigoG}.pdf"
-            val jsonFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/${factura.codigoG}.json"
+            // Obtener la ruta del directorio de Documentos y agregar la estructura de carpetas deseada
+            val documentsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString()
+            val facturasCFDir = "$documentsDir/Billsv_DTEs/Facturas Consumidor Final"
+
+            // Obtener las rutas de los archivos adjuntos en la nueva ubicación
+            val pdfFilePath = "$facturasCFDir/${factura.codigoG}.pdf"
+            val jsonFilePath = "$facturasCFDir/${factura.codigoG}.json"
 
             // Crear objetos File para los archivos
             val pdfFile = File(pdfFilePath)
             val jsonFile = File(jsonFilePath)
 
-            // Crear el Intent para enviar múltiples archivos
+            // Verificar si los archivos existen
+            if (!pdfFile.exists() || !jsonFile.exists()) {
+                if (!pdfFile.exists() && !jsonFile.exists()) {
+                    // Si no se encontró ninguno de los dos archivos
+                    Toast.makeText(context, "Archivo PDF y JSON no encontrado", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                } else if (!pdfFile.exists()) { // Verificar si es el pdf el que no se encontró
+                    Toast.makeText(context, "Archivo PDF no encontrado", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                } else if (!jsonFile.exists()) { // Verificar si es el json el que no se encontró
+                    Toast.makeText(context, "Archivo JSON no encontrado", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            }
+
+            // Crear el Intent para enviar múltiples archivos por WhatsApp
             val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
                 // Tipo de archivo
                 type = "*/*"

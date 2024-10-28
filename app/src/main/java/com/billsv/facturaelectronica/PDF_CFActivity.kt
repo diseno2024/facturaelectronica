@@ -187,10 +187,10 @@ class PDF_CFActivity : AppCompatActivity() {
         apiServiceR.reception(recepcionRequest).enqueue(object : Callback<RecepcionResponse> {
             override fun onResponse(call: Call<RecepcionResponse>, response: Response<RecepcionResponse>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(this@PDF_CFActivity, "Recepción exitosa", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@PDF_CFActivity, "Recepción Exitosa", Toast.LENGTH_SHORT).show()
                     response.body()?.let { recepcionResponse ->
                         if (recepcionResponse.estado == "PROCESADO") {
-                            Toast.makeText(this@PDF_CFActivity, "SelloRecibido: ${recepcionResponse.selloRecibido}", Toast.LENGTH_LONG).show()
+                            //Toast.makeText(this@PDF_CFActivity, "SelloRecibido: ${recepcionResponse.selloRecibido}", Toast.LENGTH_LONG).show()
                             Log.d("API_RESPONSE", "SelloRecibido: ${recepcionResponse.selloRecibido}")
                             guardarSello(recepcionResponse.selloRecibido)
                             val JSON = intent.getStringExtra("JSON")
@@ -292,7 +292,7 @@ class PDF_CFActivity : AppCompatActivity() {
                             response.body()?.let { authResponse ->
                                 if (authResponse.status == "OK") {
                                     val authBody = authResponse.body
-                                    Toast.makeText(this@PDF_CFActivity, "Token: ${authBody?.token}", Toast.LENGTH_LONG).show()
+                                    //Toast.makeText(this@PDF_CFActivity, "Token: ${authBody?.token}", Toast.LENGTH_LONG).show()
                                     Log.d("API_RESPONSE", "Token: ${authBody?.token}")
                                     savestate(false)
                                     enviarRecepcionDTE(authBody?.token.toString(),ambiente, idenvio, version, tipoDTE, documento, codigoGeneracion, fecEmi, horEmi, letra)
@@ -920,21 +920,59 @@ class PDF_CFActivity : AppCompatActivity() {
     // Los Parámetros que estaban antes, cuando se guardaba con el numero de control
     //jsonData: String,numeroControl:String?
     private fun saveJsonToExternalStorage(jsonData: String,codigoGeneracion:String?) {
+
         // El json ahora se guarda con el código de generación por igual
         val fileName = "$codigoGeneracion.json"
-        val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val file = File(directory, fileName)
 
-        try {
-            FileWriter(file).use {
-                it.write(jsonData)
+        // Accede al directorio de Documentos del dispositivo
+        val documentsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+
+        // Crea una carpeta en el directorio de Documentos llamada Billsv_DTEs y verifica si ya existe
+        val BillsvDir = File(documentsDir, "Billsv_DTEs")
+        if (!BillsvDir.exists()) {
+            BillsvDir.mkdirs()
+        }
+
+        // Ahora crea dos carpetas en esa misma dirección para los CF y CCF y verifica si ya existen
+        val CFDir = File(BillsvDir, "Facturas Consumidor Final")
+        if (!CFDir.exists()) {
+            CFDir.mkdirs()
+        }
+        val CCFDir = File(BillsvDir, "Comprobantes de Crédito Fiscal")
+        if (!CCFDir.exists()) {
+            CCFDir.mkdirs()
+        }
+
+        // Verifica si el documento es un CF o un CCF
+        val TIPO = intent.getStringExtra("JSON")
+
+        if (TIPO == "Factura") {
+            // Guarda el archivo JSON en la carpeta de Facturas Consumidor Final
+            val file = File(CFDir, fileName)
+            try {
+                FileWriter(file).use {
+                    it.write(jsonData)
+                }
+                //Toast.makeText(this, "Archivo JSON guardado en: ${file.absolutePath}", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "Error al guardar el archivo JSON", Toast.LENGTH_SHORT).show()
             }
-            Toast.makeText(this, "Archivo JSON guardado en: ${file.absolutePath}", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Error al guardar el archivo JSON", Toast.LENGTH_SHORT).show()
+        } else {
+            // Guarda el archivo JSON en la carpeta de Comprobantes de Crédito Fiscal
+            val file = File(CCFDir, fileName)
+            try {
+                FileWriter(file).use {
+                    it.write(jsonData)
+                }
+                //Toast.makeText(this, "Archivo JSON guardado en: ${file.absolutePath}", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "Error al guardar el archivo JSON", Toast.LENGTH_SHORT).show()
+            }
         }
     }
+
     private fun obtenerEmisor(): List<String> {
         // Obtén la instancia de la base de datos desde la aplicación
         val app = application as MyApp
@@ -2147,40 +2185,65 @@ class PDF_CFActivity : AppCompatActivity() {
             // Valida si hubo algún problema para poder validar el archivo json
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "Error al procesar el JSON: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Error al procesar el JSON", Toast.LENGTH_SHORT).show()
         }
 
         // Aquí dejan de generarse páginas del pdf
         pdfDocument.finishPage(pagina1)
+
         if(letra=="PDF") {
-            // Accede al directorio de descargas del dispositivo, ya sea virtual o físico
-            // El acceso lo hace através del directorio de la descargas
-            val downloadsDir =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            // Con ese nombre se le va a guardar el PDF - Usando el código de generación
-            // El número de control ya no se va a guardar para guardar el PDF en CCF
-            //val numeroControl = intent.getStringExtra("numeroControl")
-            val codeGeneracionPDF = intent.getStringExtra("codGeneracion")
-            val outputFilePath = File(downloadsDir, "$codeGeneracionPDF.pdf")
 
-            // Valida si el PDF no tuvo errores para generarse
-            try {
-                pdfDocument.writeTo(FileOutputStream(outputFilePath))
-                Toast.makeText(
-                    this,
-                    "Se creó el PDF correctamente en: ${outputFilePath.absolutePath}",
-                    Toast.LENGTH_LONG
-                ).show()
+            // Accede al directorio de Documentos del dispositivo
+            val documentsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
 
-                val intentCF = Intent(applicationContext, VerPdfCF::class.java)
-                startActivity(intentCF)
-
-            } catch (e: Exception) {
-                // En caso de que los haya habido muestra un mensaje
-                e.printStackTrace()
-                Toast.makeText(this, "Error al crear el PDF: ${e.message}", Toast.LENGTH_LONG)
-                    .show()
+            // Crea una carpeta en el directorio de Documentos llamada Billsv_DTEs y verifica si ya existe
+            val BillsvDir = File(documentsDir, "Billsv_DTEs")
+            if (!BillsvDir.exists()) {
+                BillsvDir.mkdirs()
             }
+
+            // Ahora crea dos carpetas en esa misma dirección para los CF y CCF y verifica si ya existen
+            val CFDir = File(BillsvDir, "Facturas Consumidor Final")
+            if (!CFDir.exists()) {
+                CFDir.mkdirs()
+            }
+
+            val CCFDir = File(BillsvDir, "Comprobantes de Crédito Fiscal")
+            if (!CCFDir.exists()) {
+                CCFDir.mkdirs()
+            }
+
+            // Verifica si el documento es una CF o un CCF
+            val TIPO = intent.getStringExtra("JSON")
+
+            if (TIPO == "Factura") {
+                // Guarda el PDF en la carpeta de Factura Consumidor Final
+                val codeGeneracionPDF = intent.getStringExtra("codGeneracion")
+                val outputFilePath = File(CFDir, "$codeGeneracionPDF.pdf")
+                // Valida si el PDF no tuvo errores para generarse
+                try {
+                    pdfDocument.writeTo(FileOutputStream(outputFilePath))
+                    //Toast.makeText(this, "Se creó el PDF correctamente en: ${outputFilePath.absolutePath}", Toast.LENGTH_LONG).show()
+                } catch (e: Exception) {
+                    // En caso de que los haya habido muestra un mensaje
+                    e.printStackTrace()
+                    Toast.makeText(this, "Error al crear el PDF", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                // Guarda el PDF en la carpeta de Comprobante de Crédito Fiscal
+                val codeGeneracionPDF = intent.getStringExtra("codGeneracion")
+                val outputFilePath = File(CCFDir, "$codeGeneracionPDF.pdf")
+                // Valida si el PDF no tuvo errores para generarse
+                try {
+                    pdfDocument.writeTo(FileOutputStream(outputFilePath))
+                    //Toast.makeText(this, "Se creó el PDF correctamente en: ${outputFilePath.absolutePath}", Toast.LENGTH_LONG).show()
+                } catch (e: Exception) {
+                    // En caso de que los haya habido muestra un mensaje
+                    e.printStackTrace()
+                    Toast.makeText(this, "Error al crear el PDF", Toast.LENGTH_SHORT).show()
+                }
+            }
+
             // Aquí finaliza la generación del documento pdf
             pdfDocument.close()
         }
