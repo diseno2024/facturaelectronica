@@ -165,11 +165,11 @@ class ResContableFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_NOTIFICATION_PERMISSION) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Log.d("Permissions", "Notification permission granted")
+                Log.d("Permissions", "Permiso de notificación concedido")
             } else {
                 Toast.makeText(
                     requireContext(),
-                    "Notification permission is required to show notifications",
+                    "El permiso de notificación es requerido para mostrar notificaciones",
                     Toast.LENGTH_SHORT
                 ).show()
                 Log.d("Permissions", "Notification permission denied")
@@ -429,16 +429,21 @@ class ResContableFragment : Fragment() {
             requireContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
             return
-        }*/
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Solicitar permisos de notificación
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_NOTIFICATION_PERMISSION)
             }
+        }*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            requestNotificationPermission()
+            return
         }
 
         // Obtén el directorio de descargas
-        val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val downloadsDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
         val csvFile = File(downloadsDir, fileName)
         val tipoDSeleccionado = tipoD.selectedItem.toString()
 

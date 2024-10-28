@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <View
         android:id="@+id/view2"
@@ -21,10 +20,9 @@
 
     <ImageView
         android:id="@+id/imgAuth"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintWidth_percent="1"
-        app:layout_constraintHeight_percent="0.9"
+        app:layout_constraintHeight_percent="1"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="25dp"
         android:background="@android:color/transparent"
@@ -35,145 +33,251 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
+    <!-- PRUEBA-->
 
     <TextView
         android:id="@+id/textViewPrueba"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:elevation="2dp"
         android:text="Prueba"
         android:textAlignment="center"
         android:textColor="#4A8C74"
-        android:textSize="60sp"
-
-        android:textStyle="normal"
+        android:textSize="40sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imgAuth"
         app:layout_constraintEnd_toEndOf="@id/imgAuth"
         app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="@id/imgAuth"
         app:layout_constraintTop_toTopOf="@id/imgAuth"
-        app:layout_constraintVertical_bias="0.289" />
+        app:layout_constraintVertical_bias="0.3" />
 
-    <EditText
-        android:id="@+id/userp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
-        android:backgroundTint="#4A8C74"
-        android:elevation="2dp"
-        android:ellipsize="end"
-        android:hint="Usuario"
-        android:inputType="text"
-        android:maxLines="1"
-        android:textSize="40dp"
-        android:textAlignment="center"
-        android:textColorHint="#95BFB0"
-        app:layout_constraintEnd_toEndOf="@+id/imgAuth"
-        app:layout_constraintHorizontal_bias="0.28"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/FacturacheckP"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:translationZ="5dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white"
+        app:strokeColor="#9E9E9E"
+        app:strokeWidth="2dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="@id/imgAuth"
-        app:layout_constraintTop_toTopOf="@id/textViewPrueba"
-        app:layout_constraintWidth_percent="0.6" />
+        app:layout_constraintTop_toBottomOf="@id/textViewPrueba"
+        app:layout_constraintEnd_toEndOf="@id/imgAuth">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/Facturatext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:text="Factura"
+                android:textStyle="bold"
+                android:textColor="#9E9E9E"
+                android:textSize="35sp" />
 
-    <EditText
-        android:id="@+id/contrap"
-        android:layout_width="0dp"
-        android:inputType="textPassword"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="130dp"
-        android:layout_marginEnd="115dp"
-        android:backgroundTint="#4A8C74"
-        android:elevation="2dp"
-        android:textSize="40dp"
-        android:hint="Contraseña"
-        android:textAlignment="center"
-        android:textColorHint="#95BFB0"
-        app:layout_constraintEnd_toEndOf="@+id/imgAuth"
+            <ImageView
+                android:id="@+id/iconoCardf"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                app:srcCompat="@drawable/ic_factura"
+                app:tint="#9E9E9E" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/CreditocheckP"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:translationZ="5dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white"
+        app:strokeColor="#9E9E9E"
+        app:strokeWidth="2dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="@id/imgAuth"
-        app:layout_constraintTop_toTopOf="@id/userp"
-        app:layout_constraintWidth_percent="0.6"
-        app:layout_constraintHorizontal_bias="0.28"
-        android:ellipsize="end"
-        android:maxLines="1"/>
+        app:layout_constraintTop_toBottomOf="@id/textViewPrueba"
+        app:layout_constraintEnd_toEndOf="@id/imgAuth">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/Creditotext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:text="Crédito \nFiscal"
+                android:textStyle="bold"
+                android:textColor="#9E9E9E"
+                android:textSize="35sp" />
+
+            <ImageView
+                android:id="@+id/iconoCardc"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="13dp"
+                android:gravity="center"
+                app:srcCompat="@drawable/ic_credit_card"
+                app:tint="#9E9E9E" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+    <!-- PRODUCCION-->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/FacturacheckPro"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:translationZ="5dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white"
+        app:strokeColor="#9E9E9E"
+        app:strokeWidth="2dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toBottomOf="@id/textViewProduc"
+        app:layout_constraintEnd_toEndOf="@id/imgAuth">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/Facturatext2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:text="Factura"
+                android:textStyle="bold"
+                android:textColor="#9E9E9E"
+                android:textSize="35sp" />
+
+            <ImageView
+                android:id="@+id/iconoCardf2"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                app:srcCompat="@drawable/ic_factura"
+                app:tint="#9E9E9E" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/CreditocheckPro"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:translationZ="5dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white"
+        app:strokeColor="#9E9E9E"
+        app:strokeWidth="2dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="@id/imgAuth"
+        app:layout_constraintTop_toBottomOf="@id/textViewProduc"
+        app:layout_constraintEnd_toEndOf="@id/imgAuth">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/Creditotext2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:text="Crédito \nFiscal"
+                android:textStyle="bold"
+                android:textColor="#9E9E9E"
+                android:textSize="35sp" />
+
+            <ImageView
+                android:id="@+id/iconoCardc2"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="13dp"
+                android:gravity="center"
+                app:srcCompat="@drawable/ic_credit_card"
+                app:tint="#9E9E9E" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/textViewProduc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="125dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="190dp"
         android:elevation="2dp"
         android:text="Producción"
         android:textAlignment="center"
         android:textColor="#4A8C74"
-        android:textSize="60sp"
-        android:textStyle="normal"
-        app:layout_constraintHorizontal_bias="0.38"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="@id/imgAuth"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="@id/imgAuth"
-        app:layout_constraintTop_toBottomOf="@+id/contrap" />
-
-    <EditText
-        android:id="@+id/userpr"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="130dp"
-        android:layout_marginEnd="115dp"
-        android:inputType="text"
-        android:elevation="2dp"
-        android:hint="Usuario"
-        android:textAlignment="center"
-        android:textColorHint="#95BFB0"
-        android:backgroundTint="#4A8C74"
-        android:textSize="40sp"
-        app:layout_constraintEnd_toEndOf="@+id/imgAuth"
-        app:layout_constraintStart_toStartOf="@id/imgAuth"
-        app:layout_constraintTop_toTopOf="@id/textViewProduc"
-        app:layout_constraintWidth_percent="0.6"
-        app:layout_constraintHorizontal_bias="0.28"
-        android:ellipsize="end"
-        android:maxLines="1"/>
-
-    <EditText
-        android:id="@+id/contrapr"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="130dp"
-        android:layout_marginEnd="115dp"
-        android:backgroundTint="#4A8C74"
-        android:elevation="2dp"
-        android:textSize="40sp"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
-        android:textAlignment="center"
-        android:textColorHint="#95BFB0"
-        app:layout_constraintEnd_toEndOf="@+id/imgAuth"
-        app:layout_constraintStart_toStartOf="@id/imgAuth"
-        app:layout_constraintTop_toTopOf="@id/userpr"
-        app:layout_constraintWidth_percent="0.6"
-        app:layout_constraintHorizontal_bias="0.28"
-        android:ellipsize="end"
-        android:maxLines="1"/>
+        app:layout_constraintTop_toTopOf="@+id/imgAuth"
+        app:layout_constraintVertical_bias="0.75" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Configurar \nCredenciales de \nFacturación Hacienda"
+        android:layout_marginTop="75dp"
+        android:text="Selecciona el Ambiente\n de Emisión de tus\n DTE'S"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="80sp"
+        android:textSize="60sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.12" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

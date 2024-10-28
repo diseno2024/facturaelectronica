@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/border"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/textViewPrueba"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:elevation="2dp"
         android:text="Prueba"
         android:textAlignment="center"
@@ -69,10 +70,12 @@
         android:textColor="#FFFFFF"
         android:textSize="40sp"
         android:textStyle="bold"
-        app:cornerRadius="10dp"
+        app:cornerRadius="20dp"
+        android:paddingVertical="15dp"
+        android:paddingHorizontal="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contrap"
         app:strokeColor="#4a8c74"
-        app:strokeWidth="3dp" />
+        app:strokeWidth="5dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
