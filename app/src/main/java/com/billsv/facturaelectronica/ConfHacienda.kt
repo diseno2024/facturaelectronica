@@ -79,8 +79,33 @@ class ConfHacienda : AppCompatActivity() {
             finish()
         }
 
-        val toggleGroup = findViewById<MaterialButtonToggleGroup>(R.id.toggleButton)
         restoreSelectedButton()
+
+        // Configura el toggleGroup después de restaurar el botón
+        val toggleGroup = findViewById<MaterialButtonToggleGroup>(R.id.toggleButton)
+        toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if (isChecked) {
+                saveSelectedButton(checkedId)
+                when (checkedId) {
+                    R.id.btnPrueba -> {
+                        app.ambiente = "00"
+                        checkBoxConsumidorFinal.visibility = View.GONE
+                        checkBoxCreditoFiscal.visibility = View.GONE
+                    }
+                    R.id.btnProduccion -> {
+                        app.ambiente = "01"
+                        checkBoxConsumidorFinal.visibility = View.VISIBLE
+                        checkBoxCreditoFiscal.visibility = View.VISIBLE
+                    }
+                }
+                // Cargar Datos del Entorno
+                cargarDatosDelEntorno()
+                // Reiniciar el estado de edición dependiendo de los datos
+                verificarEstadoEdicion()
+                // Mostrar el nuevo estado para confirmar
+                Toast.makeText(this, "Entorno: ${app.ambiente}", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         restoreCheckboxState()
 
@@ -111,6 +136,50 @@ class ConfHacienda : AppCompatActivity() {
             }
         }
         cargarDatosDelEntorno()
+
+        val datos = obtenerDatosGuardados()
+
+// Verifica si hay datos guardados
+        if (datos.isNotEmpty()) {
+            val dato = datos[0].split("\n")
+            val usuario = dato[0]
+            val contrasena = dato[1]
+
+            // Verifica si hay usuario y contraseña
+            if (usuario.isNotEmpty() && contrasena.isNotEmpty()) {
+                // Verifica si ambos checkboxes están seleccionados
+                if (findViewById<CheckBox>(R.id.checkBox_consumidor_final).isChecked && findViewById<CheckBox>(R.id.checkBox_credito_fiscal).isChecked) {
+                    // Selecciona el botón de producción si ambos checkboxes están seleccionados
+                    app.ambiente = "01"
+                    findViewById<MaterialButton>(R.id.btnProduccion).isChecked = true
+                } else {
+                    // Si solo hay datos en el entorno de prueba, selecciona el botón de prueba
+                    app.ambiente = "00"
+                    findViewById<MaterialButton>(R.id.btnPrueba).isChecked = true
+                }
+            } else {
+                // Si no hay usuario y contraseña, selecciona el botón de producción por defecto
+                app.ambiente = "01"
+                findViewById<MaterialButton>(R.id.btnProduccion).isChecked = true
+            }
+        } else {
+            // Si no hay datos, selecciona el botón de producción por defecto
+            app.ambiente = "01"
+            findViewById<MaterialButton>(R.id.btnProduccion).isChecked = true
+        }
+
+// Validación adicional para el botón de producción
+        if (app.ambiente == "01" && datos.isNotEmpty()) {
+            val dato = datos[0].split("\n")
+            val usuario = dato[0]
+            val contrasena = dato[1]
+
+            if (usuario.isNotEmpty() && contrasena.isNotEmpty()) {
+                // Si hay usuario y contraseña en producción, mantiene seleccionado el botón de producción
+                findViewById<MaterialButton>(R.id.btnProduccion).isChecked = true
+            }
+        }
+
 
         val atras = findViewById<ImageButton>(R.id.atras)
         atras.setOnClickListener {
