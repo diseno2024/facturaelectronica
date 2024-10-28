@@ -107,6 +107,7 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation ("com.google.zxing:core:3.4.1")//codigoQR
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
-
+    //Restauracion
+    implementation ("com.google.code.gson:gson:2.10.1") // O la última versión disponible
 
 }

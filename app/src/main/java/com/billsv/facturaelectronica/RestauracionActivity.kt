@@ -1,7 +1,6 @@
 package com.billsv.facturaelectronica
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -23,12 +22,26 @@ import java.util.zip.ZipOutputStream
 import java.util.Locale
 import java.util.Date
 import java.text.SimpleDateFormat
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.provider.OpenableColumns
+import com.couchbase.lite.Database
+import com.couchbase.lite.MutableDocument
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.util.*
 
 
 class RestauracionActivity : AppCompatActivity() {
 
     private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 101
+    private val FILE_SELECT_CODE = 102  // Código para el selector de archivos
+    private lateinit var database: Database // Inicializa Couchbase Lite y tu base de datos
     private val permissionList: List<String> = if (Build.VERSION.SDK_INT >= 33) {
         listOf(
             Manifest.permission.READ_MEDIA_AUDIO,
@@ -41,10 +54,62 @@ class RestauracionActivity : AppCompatActivity() {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
     }
+    // Definición de las clases necesarias dentro de RestauracionActivity.kt
+    data class DocumentWrapper(
+        val docId: String,
+        val my_database: JsonObject
+    )
+    data class ComprobanteCreditoFiscal(
+        val totalNoSuj: Double,
+        val numeroControl: String,
+        val tipoD: String,
+        val articulos: String,
+        val municipio: String,
+        val fechaEmi: String,
+        val nombre: String,
+        val condicionOp: String,
+        val codigoGeneracion: String,
+        val total: Double,
+        val complemento: String,
+        val iva: Double,
+        val totalGravada: Double,
+        val correo: String,
+        val desAcEco: String,
+        val nit: String,
+        val selloRecibido: String,
+        val departamento: String,
+        val dui: String,
+        val codAcEco: String,
+        val totalExenta: Double,
+        val telefono: String,
+        val nrc: String?
+    )
+    data class Cliente(
+        val municipioT: String,
+        val tipo: String,
+        val municipio: String,
+        val nitM: String,
+        val direccion: String,
+        val nombre: String,
+        val actividadEconomica: String,
+        val tipoCliente: String,
+        val nit: String,
+        val departamentoT: String,
+        val departamento: String,
+        val dui: String,
+        val duiM: String,
+        val telefono: String,
+        val telefonoM: String,
+        val nrc: String,
+        val email: String
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restauracion)
+
+        database = Database("my_database")
 
         val btnAtras: ImageButton = findViewById(R.id.atras)
         btnAtras.setOnClickListener {
@@ -56,6 +121,7 @@ class RestauracionActivity : AppCompatActivity() {
         val btnRealizarRecuperacion: Button = findViewById(R.id.buttonSelectTime)
         btnRealizarRecuperacion.setOnClickListener {
             requestPermissions()
+            openFileSelector()
         }
 
         // Mostrar la fecha del último respaldo y el rango de fechas de restauración
@@ -250,4 +316,114 @@ class RestauracionActivity : AppCompatActivity() {
             }
         }
     }
+    // Función para abrir el selector de archivos
+    private fun openFileSelector() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            type = "application/json"
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        startActivityForResult(intent, FILE_SELECT_CODE)
+    }
+    // Método para manejar el resultado del selector de archivos
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == FILE_SELECT_CODE && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                restoreDataFromJson(uri)
+            }
+        }
+    }
+    private fun restoreDataFromJson(uri: Uri) {
+        try {
+            val inputStream = contentResolver.openInputStream(uri)
+            val reader = BufferedReader(InputStreamReader(inputStream))
+            val jsonString = reader.readText()
+            reader.close()
+
+            Log.d("RestauracionActivity", "Contenido del JSON: $jsonString") // Verificar el contenido del JSON
+
+            val gson = Gson()
+            val documentListType = object : TypeToken<List<DocumentWrapper>>() {}.type
+            val documents: List<DocumentWrapper> = gson.fromJson(jsonString, documentListType)
+
+            for (document in documents) {
+                Log.d("RestauracionActivity", "Procesando documento con ID: ${document.docId}") // Log para cada documento
+
+                // Verifica si es un documento de tipo ComprobanteCreditoFiscal
+                if (document.my_database.has("tipoD")) {
+                    val comprobante = gson.fromJson(document.my_database, ComprobanteCreditoFiscal::class.java)
+
+                    val mutableDoc = MutableDocument(document.docId)
+                    mutableDoc.setValue("totalNoSuj", comprobante.totalNoSuj)
+                    mutableDoc.setValue("numeroControl", comprobante.numeroControl)
+                    mutableDoc.setValue("tipoD", comprobante.tipoD)
+                    mutableDoc.setValue("articulos", comprobante.articulos)
+                    mutableDoc.setValue("municipio", comprobante.municipio)
+                    mutableDoc.setValue("fechaEmi", comprobante.fechaEmi)
+                    mutableDoc.setValue("nombre", comprobante.nombre)
+                    mutableDoc.setValue("condicionOp", comprobante.condicionOp)
+                    mutableDoc.setValue("codigoGeneracion", comprobante.codigoGeneracion)
+                    mutableDoc.setValue("total", comprobante.total)
+                    mutableDoc.setValue("complemento", comprobante.complemento)
+                    mutableDoc.setValue("iva", comprobante.iva)
+                    mutableDoc.setValue("totalGravada", comprobante.totalGravada)
+                    mutableDoc.setValue("correo", comprobante.correo)
+                    mutableDoc.setValue("desAcEco", comprobante.desAcEco)
+                    mutableDoc.setValue("nit", comprobante.nit)
+                    mutableDoc.setValue("selloRecibido", comprobante.selloRecibido)
+                    mutableDoc.setValue("departamento", comprobante.departamento)
+                    mutableDoc.setValue("dui", comprobante.dui)
+                    mutableDoc.setValue("codAcEco", comprobante.codAcEco)
+                    mutableDoc.setValue("totalExenta", comprobante.totalExenta)
+                    mutableDoc.setValue("telefono", comprobante.telefono)
+                    mutableDoc.setValue("nrc", comprobante.nrc)
+
+                    database.save(mutableDoc)
+                    Log.d("RestauracionActivity", "Documento Comprobante guardado con ID: ${document.docId}") // Confirmación de guardado
+
+                    // Verifica si es un documento de tipo Cliente
+                } else if (document.my_database.has("tipoCliente")) {
+                    val cliente = gson.fromJson(document.my_database, Cliente::class.java)
+
+                    val mutableDoc = MutableDocument(document.docId)
+                    mutableDoc.setValue("municipioT", cliente.municipioT)
+                    mutableDoc.setValue("tipo", cliente.tipo)
+                    mutableDoc.setValue("municipio", cliente.municipio)
+                    mutableDoc.setValue("nitM", cliente.nitM)
+                    mutableDoc.setValue("direccion", cliente.direccion)
+                    mutableDoc.setValue("nombre", cliente.nombre)
+                    mutableDoc.setValue("actividadEconomica", cliente.actividadEconomica)
+                    mutableDoc.setValue("tipoCliente", cliente.tipoCliente)
+                    mutableDoc.setValue("nit", cliente.nit)
+                    mutableDoc.setValue("departamentoT", cliente.departamentoT)
+                    mutableDoc.setValue("departamento", cliente.departamento)
+                    mutableDoc.setValue("dui", cliente.dui)
+                    mutableDoc.setValue("duiM", cliente.duiM)
+                    mutableDoc.setValue("telefono", cliente.telefono)
+                    mutableDoc.setValue("telefonoM", cliente.telefonoM)
+                    mutableDoc.setValue("nrc", cliente.nrc)
+                    mutableDoc.setValue("email", cliente.email)
+
+                    database.save(mutableDoc)
+                    Log.d("RestauracionActivity", "Documento Cliente guardado con ID: ${document.docId}")
+
+                } else {
+                    Log.d("RestauracionActivity", "Documento sin tipoD o tipoCliente, ID: ${document.docId}")
+                }
+            }
+            Toast.makeText(this, "Datos restaurados con éxito desde JSON", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("RestauracionActivity", "Error al restaurar datos: ${e.message}")
+            Toast.makeText(this, "Error al restaurar datos: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        database.close()  // Cierra la base de datos al salir de la actividad
+    }
+
 }
