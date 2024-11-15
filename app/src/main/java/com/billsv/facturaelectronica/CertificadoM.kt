@@ -390,7 +390,7 @@ class CertificadoM : AppCompatActivity() {
             data?.data?.let { uri ->
                 val fileName = getFileName(uri)
 
-                if (fileName != null && (fileName.endsWith(".pem") || fileName.endsWith(".key"))) {
+                if (fileName != null && (fileName.endsWith(".pem") || fileName.endsWith(".key") || fileName.endsWith(".crt"))) {
                     when (requestCode) {
                         PICK_CERTIFICATE_REQUEST_CODE -> {
                             selectedCerUri = uri

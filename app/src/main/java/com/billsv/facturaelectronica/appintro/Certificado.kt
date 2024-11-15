@@ -82,7 +82,7 @@ class Certificado : Fragment() {
             data?.data?.let { uri ->
                 val fileName = getFileName(uri)
 
-                if (fileName != null && (fileName.endsWith(".pem") || fileName.endsWith(".key"))) {
+                if (fileName != null && (fileName.endsWith(".pem") || fileName.endsWith(".key") || fileName.endsWith(".crt"))) {
                     when (requestCode) {
                         PICK_CERTIFICATE_REQUEST_CODE -> {
                             selectedCerUri = uri
@@ -99,7 +99,7 @@ class Certificado : Fragment() {
                     }
                 } else {
                     // Mostrar error si no se puede obtener el nombre del archivo
-                    Toast.makeText(context, "Por favor selecciona un archivo .pem válido", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Por favor selecciona un archivo .pem .crt o .key válido", Toast.LENGTH_SHORT).show()
                 }
             }
         }

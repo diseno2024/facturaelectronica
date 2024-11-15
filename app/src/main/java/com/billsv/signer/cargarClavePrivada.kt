@@ -34,10 +34,17 @@ fun cargarClavePrivada(context: Context, uri: Uri): PrivateKey {
                 .replace("-----END RSA PRIVATE KEY-----", "")
                 .replace("\\s+".toRegex(), "")
         }
+        keyContent.contains("-----BEGIN CERTIFICATE-----") -> {
+            keyContent
+                .replace("-----BEGIN CERTIFICATE-----", "")
+                .replace("-----END CERTIFICATE-----", "")
+                .replace("\\s+".toRegex(), "")
+        }
         else -> {
-            throw IllegalArgumentException("Formato de clave desconocido. El archivo debe contener una clave PEM o KEY válida.")
+            throw IllegalArgumentException("Formato desconocido. El archivo debe contener una clave PEM, KEY, o un certificado CRT válido.")
         }
     }
+
 
     //Log.d("CargarClavePrivada", "Base64: $base64Key")
 
