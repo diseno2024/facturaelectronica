@@ -33,7 +33,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_select_clave" />
+        app:layout_constraintTop_toBottomOf="@id/selected_clave" />
 
 
     <TextView
@@ -85,14 +85,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selected_cer" />
 
-    <TextView
+    <EditText
         android:id="@+id/selected_clave"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginTop="100dp"
         android:background="@drawable/picker_cer"
         android:padding="11dp"
-        android:text="Agregue su Clave Privada"
+        android:hint="Agregue su Clave Privada"
+        android:textColorHint="@color/white"
         android:textAlignment="center"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,18 +103,6 @@
         app:layout_constraintWidth_percent="0.7"
         android:ellipsize="end"
         android:maxLines="1"/>
-
-    <Button
-        android:id="@+id/btn_select_clave"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="25dp"
-        app:layout_constraintHorizontal_bias="0.5"
-        android:background="@drawable/button_cer"
-        android:text="Examinar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selected_clave" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

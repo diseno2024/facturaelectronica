@@ -27,6 +27,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.billsv.facturaelectronica.databinding.ActivityPdfCfactivityBinding
+import com.billsv.signer.cargarCertificado
 import com.billsv.signer.cargarClavePrivada
 import com.billsv.signer.firmarDatos
 import com.couchbase.lite.CouchbaseLiteException
@@ -750,12 +751,13 @@ class PDF_CFActivity : AppCompatActivity() {
         var jsonString: String? = null
 
         // Usar la clave almacenado para firmar
-        val claveUriString = obtenerClaveDesdeDB()
-        val claveUri = Uri.parse(claveUriString)  // Convertir a Uri
-        Log.d("Clave URI", "URI recuperada: $claveUri")
-        if (claveUri != null) {
-            val clavePrivada = cargarClavePrivada(this, claveUri)  // Función para leer clave del .pem o .key
-
+        val crtUriString = obtenerCertificadoDesdeDB()
+        val crtUri = Uri.parse(crtUriString)  // Convertir a Uri
+        val clavePrivadaST = obtenerClaveDesdeDB()
+        Log.d("Clave URI", "URI recuperada: $crtUri")
+        if (crtUri != null) {
+            val clavePrivada = cargarClavePrivada(clavePrivadaST.toString())  // Función para leer clave del .pem o .key
+            val certificado = cargarCertificado(this, crtUri)
             clavePrivada?.let {
                 if (JSON == "Factura") {
                     // Firmar el JSON de la factura
@@ -767,7 +769,7 @@ class PDF_CFActivity : AppCompatActivity() {
                     val firma = firmarDatos(documento, clavePrivada)
 
                     // Agregar la firma al documento
-                    documento.firmaElectronica = firma
+                    documento.firmaElectronica = firma.toString()
 
                     // Convertir el objeto a JSON
                     val mapper = ObjectMapper().registerModule(KotlinModule())
@@ -784,7 +786,7 @@ class PDF_CFActivity : AppCompatActivity() {
                     val firma = firmarDatos(documento2, clavePrivada)
 
                     // Agregar la firma al documento
-                    documento2.firmaElectronica = firma
+                    documento2.firmaElectronica = firma.toString()
 
                     // Convertir el objeto a JSON
                     val mapper = ObjectMapper().registerModule(KotlinModule())
@@ -801,6 +803,21 @@ class PDF_CFActivity : AppCompatActivity() {
     }
 
     // Obtener la clave desde la base de datos
+    private fun obtenerCertificadoDesdeDB(): String? {
+        val app = application as MyApp
+        val database = app.personalDB
+        val query = QueryBuilder
+            .select(SelectResult.property("certificado_uri"))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("certificado")))
+
+        val result = query.execute().allResults()
+        return if (result.isNotEmpty()) {
+            result[0].getString("certificado_uri")
+        } else {
+            null
+        }
+    }
     private fun obtenerClaveDesdeDB(): String? {
         val app = application as MyApp
         val database = app.personalDB

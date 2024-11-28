@@ -16,6 +16,7 @@ import com.billsv.facturaelectronica.R
 import com.couchbase.lite.Database
 import com.couchbase.lite.MutableDocument
 import android.util.Log
+import android.widget.EditText
 import android.widget.Toast
 import com.couchbase.lite.Blob
 import com.couchbase.lite.CouchbaseLiteException
@@ -29,12 +30,9 @@ import com.couchbase.lite.SelectResult
 class Certificado : Fragment() {
 
     private val PICK_CERTIFICATE_REQUEST_CODE = 1
-    private val PICK_PUBLIC_KEY_REQUEST_CODE = 2
     private lateinit var selectedCerUri: Uri
-    private lateinit var selectedKeyUri: Uri
-    private lateinit var selectedKeyPrivUri: Uri
     private lateinit var selectedCerTextView: TextView
-    private lateinit var selectedClaveTextView: TextView
+    private lateinit var selectedClave: EditText
     private lateinit var database: Database
     private var cerLoaded = false
     private var keyLoaded = false
@@ -53,14 +51,11 @@ class Certificado : Fragment() {
         val btnSelectCer = view.findViewById<Button>(R.id.btn_select_cer)
         val btnSelectClave = view.findViewById<Button>(R.id.btn_select_clave)
         selectedCerTextView = view.findViewById(R.id.selected_cer)
-        selectedClaveTextView = view.findViewById(R.id.selected_clave)
+        selectedClave = view.findViewById(R.id.selected_clave)
 
         // Maneja el evento de clic de los botones "Examinar"
         btnSelectCer.setOnClickListener {
             openFilePicker(PICK_CERTIFICATE_REQUEST_CODE)
-        }
-        btnSelectClave.setOnClickListener {
-            openFilePicker(PICK_PUBLIC_KEY_REQUEST_CODE)
         }
 
         return view
@@ -88,12 +83,6 @@ class Certificado : Fragment() {
                             selectedCerUri = uri
                             selectedCerTextView.text = fileName
                             cerLoaded = true // Indica que se ha cargado el certificado
-
-                        }
-                        PICK_PUBLIC_KEY_REQUEST_CODE -> {
-                            selectedKeyPrivUri = uri
-                            selectedClaveTextView.text = fileName
-                            keyLoaded = true // Indica que se ha cargado la clave pública
 
                         }
                     }
@@ -176,71 +165,52 @@ class Certificado : Fragment() {
 
     // Guardar Clave privada en la base de datos
     fun guardarClavePrivada() {
-        if (::selectedKeyPrivUri.isInitialized) {
-            // Conceder permisos de lectura persistentes
-            try {
-                context?.contentResolver?.takePersistableUriPermission(
-                    selectedKeyPrivUri,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION
-                )
-            } catch (e: Exception) {
-                Log.e("Clave", "Error al conceder permisos persistentes: ${e.message}")
-                Toast.makeText(context, "Error al conceder permisos persistentes", Toast.LENGTH_SHORT).show()
-                return
-            }
-            // Buscar si ya existe un documento del tipo "Clave privada"
-            val query = QueryBuilder.select(SelectResult.expression(Meta.id))
-                .from(DataSource.database(database))
-                .where(Expression.property("tipo").equalTo(Expression.string("clave_privada")))
+        val clavepriv = selectedClave.text.toString()        // Buscar si ya existe un documento del tipo "Clave privada"
+        val query = QueryBuilder.select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(database))
+            .where(Expression.property("tipo").equalTo(Expression.string("clave_privada")))
 
-            try {
-                val resultSet = query.execute()
-                val results = resultSet.allResults()
+        try {
+            val resultSet = query.execute()
+            val results = resultSet.allResults()
 
-                if (results.isNotEmpty()) {
-                    // Iterar sobre los resultados y eliminar cada documento
-                    for (result in results) {
-                        val docId =
-                            result.getString(0) // Obtenemos el ID del documento en el índice 0
-                        docId?.let {
-                            val document = database.getDocument(it)
-                            document?.let {
-                                database.delete(it)
-                            }
+            if (results.isNotEmpty()) {
+                // Iterar sobre los resultados y eliminar cada documento
+                for (result in results) {
+                    val docId =
+                        result.getString(0) // Obtenemos el ID del documento en el índice 0
+                    docId?.let {
+                        val document = database.getDocument(it)
+                        document?.let {
+                            database.delete(it)
                         }
                     }
-                    Log.d("Clave Privada", "Documento existente borrado")
                 }
+                Log.d("Clave Privada", "Documento existente borrado")
+            }
 
-                val fileName = getFileName(selectedKeyPrivUri)
+            val document = MutableDocument()
+            document.setString("tipo", "clave_privada")  // Establecer el tipo
+            document.setString("clave_privada_fileName", clavepriv)
+            document.setString("clave_privada_uri", clavepriv)  // Guardar la URI
 
-                val document = MutableDocument()
-                document.setString("tipo", "clave_privada")  // Establecer el tipo
-                document.setString("clave_privada_fileName", fileName)
-                document.setString(
-                    "clave_privada_uri",
-                    selectedKeyPrivUri.toString()
-                )  // Guardar la URI
+            Log.d("Clave Privada", "Clave privada guardada: $document")
 
-                Log.d("Clave Privada", "Clave privada guardada: $document")
+            // Guarda el documento en Couchbase Lite
+            database.save(document)
+            Toast.makeText(context, "Clave privada guardada correctamente ", Toast.LENGTH_SHORT)
+                .show()
+        }catch (e:CouchbaseLiteException){
+                Log.e("Certificado", "Error en la operación: ${e.message}")
+            }
 
-                // Guarda el documento en Couchbase Lite
-                database.save(document)
-                Toast.makeText(context, "Clave privada guardada correctamente ", Toast.LENGTH_SHORT)
-                    .show()
-            }catch (e:CouchbaseLiteException){
-                    Log.e("Certificado", "Error en la operación: ${e.message}")
-                }
-            } else {
-            Toast.makeText(context, "Por favor selecciona una clave antes de guardar", Toast.LENGTH_SHORT).show()
-        }
     }
 
     // Variable para verificar si el mensaje ya se mostró
     private var MensajeError1: Boolean = false
 
     fun validarCertificados() :Boolean{
-        if (::selectedKeyPrivUri.isInitialized && ::selectedCerUri.isInitialized) {
+        if (::selectedCerUri.isInitialized) {
 
         } else {
             if (!MensajeError1) {
