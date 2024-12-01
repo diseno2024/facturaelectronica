@@ -50,9 +50,9 @@ data class ErrorBody(
 @JsonPropertyOrder("ambiente", "idenvio", "version", "tipoDTE", "documento", "codigoGeneracion")
 data class RecepcionRequest(
     val ambiente: String,
-    val idenvio: Int,
+    val idEnvio: Int,
     val version: Int,
-    val tipoDTE: String,
+    val tipoDte: String,
     val documento: String,
     val codigoGeneracion: String
 )
