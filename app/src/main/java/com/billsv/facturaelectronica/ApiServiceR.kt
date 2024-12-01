@@ -10,6 +10,6 @@ interface ApiServiceR {
         "Content-Type: application/json",
         "User-Agent: Billsv/1.0",
     )
-    @POST("/recepciondte")
+    @POST("fesv/recepciondte/")
     fun reception(@Body request: RecepcionRequest): Call<RecepcionResponse>
 }

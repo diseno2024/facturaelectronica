@@ -1,10 +1,12 @@
 package com.billsv.facturaelectronica
+
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
+
 //auth
-data class AuthRequest(val user: String, val pwd: String)
 
 data class AuthResponse(
     val status: String,
-    val body: AuthBody?
+    val body: AuthBody?,
 )
 
 data class AuthBody(
@@ -12,7 +14,13 @@ data class AuthBody(
     val token: String,
     val rol: Rol,
     val roles: List<String>,
-    val tokenType: String
+    val tokenType: String,
+    val estado: String,
+    val fhProcesamiento: String?,
+    val codigoMsg: String,
+    val descripcionMsg: String,
+    val observaciones: String?,
+    val clasificaMsg: String
 )
 
 data class Rol(
@@ -27,17 +35,26 @@ data class Rol(
 
 data class ErrorResponse(
     val status: String,
-    val error: String,
-    val message: String
+    val body: ErrorBody?
+)
+
+data class ErrorBody(
+    val estado: String,
+    val fhProcesamiento: String?,
+    val codigoMsg: String,
+    val descripcionMsg: String,
+    val observaciones: String?,
+    val clasificaMsg: String
 )
 //recepcion
+@JsonPropertyOrder("ambiente", "idenvio", "version", "tipoDTE", "documento", "codigoGeneracion")
 data class RecepcionRequest(
     val ambiente: String,
-    val idenvio: String,
+    val idenvio: Int,
     val version: Int,
     val tipoDTE: String,
     val documento: String,
-    val codigoGeneracion: String?
+    val codigoGeneracion: String
 )
 data class RecepcionResponse(
     val version: Int,

@@ -177,14 +177,14 @@ class PDF_CFActivity : AppCompatActivity() {
         binding.VistaPdf.show()
 
     }
-    private fun enviarRecepcionDTE(token: String, ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?, fecEmi: String,horEmi: String, letra: String){
+    private fun enviarRecepcionDTE(token: String, ambiente:String, idenvio:Int, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?, fecEmi: String,horEmi: String, letra: String){
         if(letra=="P"){
             apiServiceR = RetrofitClient1.getInstance(token).create(ApiServiceR::class.java)
         }else if(letra=="T"){
             apiServiceR = RetrofitClient0.getInstance(token).create(ApiServiceR::class.java)
         }
         //Parametros a enviar en la api recepcion se tomaran del json que se esta generando
-        val recepcionRequest = RecepcionRequest(ambiente,idenvio,version,tipoDTE,documento,codigoGeneracion)
+        val recepcionRequest = RecepcionRequest(ambiente,idenvio,version,tipoDTE,documento,codigoGeneracion.toString())
         apiServiceR.reception(recepcionRequest).enqueue(object : Callback<RecepcionResponse> {
             override fun onResponse(call: Call<RecepcionResponse>, response: Response<RecepcionResponse>) {
                 if (response.isSuccessful) {
@@ -276,7 +276,7 @@ class PDF_CFActivity : AppCompatActivity() {
         }
     }
 
-    private fun enviaraMH(ambiente:String, idenvio:String, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?,user:String,pwd:String, fecEmi: String,horEmi: String,letra: String){
+    private fun enviaraMH(ambiente:String, idenvio:Int, version:Int, tipoDTE:String, documento:String, codigoGeneracion: String?,user:String,pwd:String, fecEmi: String,horEmi: String,letra: String){
                 Log.e("ESTOY AUTH", "$user,$pwd")
                 Log.e("ESTOY AUTH", "AMBIENTE $letra")
                 if(letra=="P"){
@@ -284,10 +284,8 @@ class PDF_CFActivity : AppCompatActivity() {
                 }else if (letra=="T"){
                     apiService = RetrofitClient.instance.create(ApiService::class.java)
                 }
-                val authRequest = AuthRequest(user, pwd)
                 Log.d("API_REQUEST", "Enviando solicitud a la API")
-
-                apiService.authenticate(authRequest).enqueue(object : Callback<AuthResponse> {
+                apiService.authenticate(user = user,pwd = pwd).enqueue(object : Callback<AuthResponse> {
                     override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                         if (response.isSuccessful) {
                             response.body()?.let { authResponse ->
@@ -296,9 +294,13 @@ class PDF_CFActivity : AppCompatActivity() {
                                     //Toast.makeText(this@PDF_CFActivity, "Token: ${authBody?.token}", Toast.LENGTH_LONG).show()
                                     Log.d("API_RESPONSE", "Token: ${authBody?.token}")
                                     savestate(false)
-                                    enviarRecepcionDTE(authBody?.token.toString(),ambiente, idenvio, version, tipoDTE, documento, codigoGeneracion, fecEmi, horEmi, letra)
+                                    val token = authBody?.token?.replace("Bearer ", "")
+                                    enviarRecepcionDTE(token.toString(),ambiente, idenvio, version, tipoDTE, documento, codigoGeneracion, fecEmi, horEmi, letra)
                                 } else {
-                                    handleErrorResponse(response)
+                                    // Manejar el caso de error con ErrorResponse
+                                    val bodyError = authResponse.body // Suponiendo que body es el objeto para "ERROR"
+                                    Toast.makeText(this@PDF_CFActivity, "Error en Autentificación: ${bodyError?.descripcionMsg}", Toast.LENGTH_LONG).show()
+                                    Log.e("API_ERROR_RESPONSE", "Error: ${bodyError?.descripcionMsg}")
                                     savestate(true)
                                 }
                             }
@@ -407,15 +409,33 @@ class PDF_CFActivity : AppCompatActivity() {
 
     private fun handleErrorResponse(response: Response<AuthResponse>) {
         try {
-            val errorResponse = Gson().fromJson(response.errorBody()?.charStream(), ErrorResponse::class.java)
-            Toast.makeText(this, "Error: ${errorResponse.message}", Toast.LENGTH_LONG).show()
-            Toast.makeText(this, "Usuario no valido por favor verifique su usuario", Toast.LENGTH_LONG).show()
-            Log.e("API_ERROR_RESPONSE", "Error: ${errorResponse.message}")
+            // Verificar si el cuerpo del error no es nulo
+            val errorBody = response.errorBody()
+            if (errorBody != null) {
+                // Deserializar el cuerpo del error usando Gson
+                val errorResponse = Gson().fromJson(errorBody.charStream(), ErrorResponse::class.java)
+
+                // Mostrar el mensaje de error de forma clara al usuario
+                Toast.makeText(this, "Error: ${errorResponse.body?.descripcionMsg}", Toast.LENGTH_LONG).show()
+                Log.e("API_ERROR_RESPONSE", "Error: ${errorResponse.body?.descripcionMsg}")
+            } else {
+                // Manejo de casos donde no hay cuerpo de error
+                Toast.makeText(this, "Error: Respuesta vacía del servidor", Toast.LENGTH_LONG).show()
+                Log.e("API_ERROR_RESPONSE", "Error: Respuesta vacía del servidor")
+            }
         } catch (e: JsonSyntaxException) {
-            Toast.makeText(this, "Error desconocido", Toast.LENGTH_LONG).show()
-            Log.e("API_ERROR_RESPONSE", "Error desconocido", e)
+            // Manejo de errores de deserialización
+            Toast.makeText(this, "Error inesperado: Formato de respuesta inválido", Toast.LENGTH_LONG).show()
+            Log.e("API_ERROR_RESPONSE", "Error inesperado: Formato de respuesta inválido", e)
+        } catch (e: Exception) {
+            // Manejo de excepciones genéricas
+            Toast.makeText(this, "Error inesperado al manejar la respuesta", Toast.LENGTH_LONG).show()
+            Log.e("API_ERROR_RESPONSE", "Error inesperado al manejar la respuesta", e)
         }
     }
+
+
+
     private fun handleErrorRResponse(response: Response<RecepcionResponse>) {
         try {
             val errorResponse = Gson().fromJson(response.errorBody()?.charStream(), RecepcionResponse::class.java)
@@ -757,7 +777,6 @@ class PDF_CFActivity : AppCompatActivity() {
         Log.d("Clave URI", "URI recuperada: $crtUri")
         if (crtUri != null) {
             val clavePrivada = cargarClavePrivada(clavePrivadaST.toString())  // Función para leer clave del .pem o .key
-            val certificado = cargarCertificado(this, crtUri)
             clavePrivada?.let {
                 if (JSON == "Factura") {
                     // Firmar el JSON de la factura
@@ -775,7 +794,8 @@ class PDF_CFActivity : AppCompatActivity() {
                     val mapper = ObjectMapper().registerModule(KotlinModule())
                     mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
                     jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento)
-                    enviaraMH(ambienteCF,"Bill-01", 1, "01" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
+                    val jsonEscapado = "\"$jsonString\""
+                    enviaraMH(ambienteCF,1, 1, "01" , jsonEscapado, codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
                 } else if (JSON == "CreditoFiscal") {
                     // Firmar el JSON de crédito fiscal
                     val articulos = obtenerDatosGuardados("CF")
@@ -792,7 +812,7 @@ class PDF_CFActivity : AppCompatActivity() {
                     val mapper = ObjectMapper().registerModule(KotlinModule())
                     mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
                     jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(documento2)
-                    enviaraMH(ambienteCCF,"Bill-01", 1, "03" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
+                    enviaraMH(ambienteCCF,1, 1, "03" , jsonString .toString(), codigoGeneracion,user,pwd , fecEmi,horEmi, entorno)
                 }
             } ?: run {
                 Log.d("PDF_CFActivity", "No se pudo obtener la clave privada.")
